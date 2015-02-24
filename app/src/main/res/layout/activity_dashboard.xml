@@ -1,0 +1,57 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DashboardActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:scaleType="centerCrop"
+        android:layout_alignBottom="@+id/indicator_V" />
+
+    <android.support.v4.view.ViewPager
+        android:layout_marginTop="102dp"
+        android:id="@+id/dashboard_VP"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/profileContainer_V"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="@color/primary"
+            android:minHeight="?attr/actionBarSize"
+            android:elevation="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--<com.quipper.school.assignment.ui.views.CollapsibleProfileView-->
+                <!--android:id="@+id/collapsibleProfile_V"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+        </android.support.v7.widget.Toolbar>
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/sliding_PSTS"
+            android:layout_below="@id/toolbar"
+            android:background="@color/primary"
+            android:elevation="10dp"
+            app:pstsTabBackground="@drawable/tab_selector"
+            app:pstsIndicatorColor="#fff"
+            app:pstsIndicatorHeight="4dp"
+            app:pstsDividerColor="#00000000"
+            app:pstsShouldExpand="true"
+            app:pstsTextAlpha="1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dashboard_tab_height"
+            />
+    </RelativeLayout>
+</FrameLayout>
