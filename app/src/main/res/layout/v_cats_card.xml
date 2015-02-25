@@ -4,7 +4,7 @@
     android:id="@+id/catContainer"
     android:background="@color/background_material_light"
     android:layout_margin="4dp"
-    android:elevation="4dp"
+    android:elevation="5dp"
     android:foreground="@drawable/tab_selector"
     app:cardCornerRadius="4dp"
     android:orientation="vertical"

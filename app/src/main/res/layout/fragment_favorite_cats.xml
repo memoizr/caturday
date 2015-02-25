@@ -4,7 +4,8 @@
 
     <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
         android:id="@+id/fav_cats_RV"
-        android:background="@color/button_material_light"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:layout_height="match_parent"
         android:layout_width="match_parent"/>
 

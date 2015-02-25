@@ -4,5 +4,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="dashboard_toolbar_height">208dp</dimen>
     <dimen name="dashboard_tab_height">48dp</dimen>
+
     <dimen name="fab_size">56dp</dimen>
+    <dimen name="title_height">168dp</dimen>
+    <dimen name="dashboard_image_height">264dp</dimen>
+
+
+    <dimen name="display_name_min_margin">30dp</dimen>
+    <dimen name="display_name_max_margin">10dp</dimen>
 </resources>

@@ -1,17 +1,19 @@
 package com.lovecats.catlover;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.adapters.NewCatsAdapter;
 import com.lovecats.catlover.data.CatModel;
 import com.lovecats.catlover.helpers.XMLParser;
@@ -27,12 +29,42 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatImage;
 
-public class NewCatsFragment extends Fragment {
-    @InjectView(R.id.new_cats_RV) RecyclerView new_cats_RV;
+public class NewCatsFragment extends Fragment implements ObservableScrollViewCallbacks {
+    @InjectView(R.id.new_cats_RV) ObservableRecyclerView new_cats_RV;
     public List<String> catUrlList;
+    private Callback catScrollCallback;
 
     public NewCatsFragment() {
         // Required empty public constructor
+    }
+
+    public interface Callback {
+        void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
+
+        void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof Callback) {
+            catScrollCallback = (Callback) activity;
+        }
+    }
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        catScrollCallback.onScroll(this, scrollY, firstScroll, dragging);
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        catScrollCallback.onUpOrCancelMotionEvent(this, scrollState);
     }
 
     @Override
@@ -54,6 +86,8 @@ public class NewCatsFragment extends Fragment {
         if (CatModel.getCount(getActivity()) == 0) {
             getCatImageUrls(getActivity());
         }
+
+        new_cats_RV.setScrollViewCallbacks(this);
 
         List<CatImage> catImages = CatModel.getAllCatImages(getActivity());
         new_cats_RV.setAdapter(new NewCatsAdapter(getActivity(), catImages));
