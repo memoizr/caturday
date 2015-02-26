@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -42,6 +43,8 @@ public class NewCatsFragment extends Fragment implements ObservableScrollViewCal
         void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
 
         void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState);
+
+        public void onScrollStateChanged(Fragment fragment, int scrollState);
     }
 
     @Override
@@ -78,6 +81,8 @@ public class NewCatsFragment extends Fragment implements ObservableScrollViewCal
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final Fragment that = this;
+
         StaggeredGridLayoutManager staggeredGrid = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         staggeredGrid.setOrientation(StaggeredGridLayoutManager.VERTICAL);
 
@@ -88,6 +93,13 @@ public class NewCatsFragment extends Fragment implements ObservableScrollViewCal
         }
 
         new_cats_RV.setScrollViewCallbacks(this);
+        new_cats_RV.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                catScrollCallback.onScrollStateChanged(that, newState);
+            }
+        });
 
         List<CatImage> catImages = CatModel.getAllCatImages(getActivity());
         new_cats_RV.setAdapter(new NewCatsAdapter(getActivity(), catImages));

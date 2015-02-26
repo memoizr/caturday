@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.lovecats.catlover.R;
 
@@ -20,8 +19,8 @@ import lombok.Getter;
  * Created by user on 24/02/15.
  */
 public class CollapsibleView extends FrameLayout {
-    @InjectView(R.id.profileContainer_RL) ViewGroup profileContainer_RL;
-//    @InjectView(R.id.title_TV) TextView title_TV;
+    @InjectView(R.id.titleContainer_RL) ViewGroup profileContainer_RL;
+    @InjectView(R.id.logo_IV) ImageView logo_IV;
 
     // From 0 to 1, how much should it be open, 1 = fully open
 
@@ -30,8 +29,12 @@ public class CollapsibleView extends FrameLayout {
 
     @Getter private final int minHeight;
     @Getter private final int maxHeight;
-    private final int displayNameMaxMargin;
-    private final int displayNameMinMargin;
+    private int logoMaxLeftMargin;
+    private int logoMinLeftMargin;
+    private int logoMaxTopMargin;
+    private int logoMinTopMargin;
+    private int logoMaxHeight;
+    private int logoMinHeight;
 
     public CollapsibleView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -49,10 +52,26 @@ public class CollapsibleView extends FrameLayout {
         context.getTheme().resolveAttribute(R.attr.actionBarSize, tv, true);
         minHeight = getResources().getDimensionPixelSize(tv.resourceId);
 
-        maxHeight = resources.getDimensionPixelSize(R.dimen.title_height);
 
-        displayNameMaxMargin = resources.getDimensionPixelSize(R.dimen.display_name_max_margin);
-        displayNameMinMargin = resources.getDimensionPixelSize(R.dimen.display_name_min_margin);
+        logoMinLeftMargin = resources.getDimensionPixelSize(R.dimen.logo_min_left_margin);
+        logoMinTopMargin = resources.getDimensionPixelSize(R.dimen.logo_min_top_margin);
+
+        logoMaxTopMargin = resources.getDimensionPixelSize(R.dimen.logo_max_top_margin);
+        logoMinTopMargin = resources.getDimensionPixelSize(R.dimen.logo_min_top_margin);
+
+        logoMinHeight = resources.getDimensionPixelSize(R.dimen.logo_min_height);
+        logoMaxHeight = resources.getDimensionPixelSize(R.dimen.logo_max_height);
+
+        int logoWidth = resources.getDimensionPixelSize(R.dimen.logo_max_width);
+
+        int displayWidth = context.getResources().getDisplayMetrics().widthPixels;
+        MarginLayoutParams params =
+                (MarginLayoutParams) logo_IV.getLayoutParams();
+        logo_IV.setLayoutParams(params);
+        logoMaxLeftMargin = (displayWidth - logoWidth ) / 2;
+
+        maxHeight = resources.getDimensionPixelSize(R.dimen.title_height);
+        updateLogo();
 
         updateLayoutParams();
     }
@@ -65,7 +84,23 @@ public class CollapsibleView extends FrameLayout {
         if (level != collapseLevel) {
             collapseLevel = level;
             updateLayoutParams();
+            updateLogo();
         }
+    }
+
+    private void updateLogo() {
+        MarginLayoutParams params =
+                (MarginLayoutParams) logo_IV.getLayoutParams();
+        params.topMargin =
+                (int) interpolate(logoMinTopMargin, logoMaxTopMargin, collapseLevel);
+        params.leftMargin =
+                (int) interpolate(logoMinLeftMargin, logoMaxLeftMargin, collapseLevel);
+        logo_IV.setLayoutParams(params);
+
+        logo_IV.setPivotX(0);
+        logo_IV.setPivotY(0);
+        logo_IV.setScaleX(interpolate(logoMinHeight, logoMaxHeight, collapseLevel)/logoMaxHeight);
+        logo_IV.setScaleY(interpolate(logoMinHeight, logoMaxHeight, collapseLevel)/logoMaxHeight);
     }
 
     private void updateLayoutParams() {

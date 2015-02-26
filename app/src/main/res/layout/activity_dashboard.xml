@@ -26,20 +26,18 @@
         android:id="@+id/title_container_RL"
         android:clipToPadding="false"
         android:background="@transition/background_transition"
+        android:elevation="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:minHeight="?attr/actionBarSize"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--<com.quipper.school.assignment.ui.views.CollapsibleProfileView-->
-                <!--android:id="@+id/collapsibleProfile_V"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
         </android.support.v7.widget.Toolbar>
 
         <com.astuetz.PagerSlidingTabStrip

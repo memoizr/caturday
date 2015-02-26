@@ -1,17 +1,28 @@
 package com.lovecats.catlover;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.AvoidXfermode;
+import android.graphics.Bitmap;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,6 +30,9 @@ import android.widget.ImageView;
 import com.diegocarloslima.byakugallery.lib.TouchImageView;
 import com.lovecats.catlover.data.CatModel;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -75,6 +89,15 @@ public class CatDetailActivity extends ActionBarActivity {
         favorite_B.setClipToOutline(true);
 
         updateButton();
+        toolbar.setOnMenuItemClickListener(
+        new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle menu item click event
+                shareTextUrl();
+                return true;
+            }
+        });
     }
 
     private void updateButton() {
@@ -92,6 +115,18 @@ public class CatDetailActivity extends ActionBarActivity {
         }
     }
 
+    private void shareTextUrl() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "Check out this cat!");
+        share.putExtra(Intent.EXTRA_TEXT, url);
+
+        startActivity(Intent.createChooser(share, "Share link!"));
+    }
+
+
     @OnClick(R.id.favorite_B)
     void favoriteImage() {
         CatImage catImage = new CatImage();
@@ -104,6 +139,14 @@ public class CatDetailActivity extends ActionBarActivity {
         }
         CatModel.insertOrUpdate(this, catImage);
         updateButton();
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_clockwise);
+        favorite_B.startAnimation(animation);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail_cat, menu);
+        return true;
     }
 
 }

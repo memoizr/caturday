@@ -10,6 +10,19 @@
     <dimen name="dashboard_image_height">264dp</dimen>
 
 
+    <dimen name="logo_max_height">32dp</dimen>
+    <dimen name="logo_min_height">22dp</dimen>
+
+    <dimen name="logo_max_width">160dp</dimen>
+
+    <dimen name="logo_min_left_margin">72dp</dimen>
+
+    <dimen name="logo_max_top_margin">96dp</dimen>
+    <dimen name="logo_min_top_margin">18dp</dimen>
+
+    <dimen name="logo_max_bottom_margin">56dp</dimen>
+    <dimen name="logo_min_bottom_margin">16dp</dimen>
+
     <dimen name="display_name_min_margin">30dp</dimen>
     <dimen name="display_name_max_margin">10dp</dimen>
 </resources>

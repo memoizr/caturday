@@ -7,10 +7,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -76,6 +82,29 @@ public class DashboardActivity extends ActionBarActivity implements NewCatsFragm
         getWindow().setExitTransition(fade);
         getWindow().setEnterTransition(fade);
 
+        AnimationSet zoomIn = new AnimationSet(true);
+        dashboard_background_IV.setPivotY(1);
+        dashboard_background_IV.setPivotX(0);
+        float rand = (float) (Math.random()/1.3) + 1;
+        float randAfter = (float) (Math.random()/1.3) + 1;
+
+        ScaleAnimation mScale = new ScaleAnimation(
+                rand,
+                randAfter,
+                rand,
+                randAfter,
+                ScaleAnimation.RELATIVE_TO_PARENT,
+                (float) Math.random(),
+                ScaleAnimation.RELATIVE_TO_PARENT,
+                (float) Math.random());
+        mScale.setDuration(15000);
+
+        zoomIn.addAnimation(mScale);
+        zoomIn.setFillAfter(true);
+        zoomIn.setFillEnabled(true);
+
+        dashboard_background_IV.startAnimation(zoomIn);
+
     }
     private boolean transparent = true;
 
@@ -93,15 +122,12 @@ public class DashboardActivity extends ActionBarActivity implements NewCatsFragm
         int scrollDelta = scrollY - oldScrollY;
         oldScrollY = scrollY;
 
-        if (scrollDelta == 0 && !dragging) {
-
-            // End of inertia scroll
-            adjustToolbarOnEndOfScroll();
-        } else if (scrollY < titleMaxHeight - titleMinHeight) {
+        if (scrollY < titleMaxHeight - titleMinHeight) {
             collapsibleView.setCollapseLevel(
                     Math.max(1f - scrollY / (float) (titleMaxHeight - titleMinHeight), 0));
             if(!transparent) {
                 transitionDrawable.reverseTransition(200);
+                title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_transparent));
                 transparent = true;
             }
             title_container_RL.setTranslationY(0);
@@ -120,6 +146,7 @@ public class DashboardActivity extends ActionBarActivity implements NewCatsFragm
             if(transparent && scrollY > titleMaxHeight + titleMinHeight) {
                 transitionDrawable.startTransition(200);
                 transparent = false;
+                title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_primary));
                 title_container_RL.setTranslationZ(5);
                 title_container_RL.setElevation(5);
             }
@@ -137,18 +164,26 @@ public class DashboardActivity extends ActionBarActivity implements NewCatsFragm
         adjustToolbarOnEndOfScroll();
     }
 
+    @Override
+    public void onScrollStateChanged(Fragment fragment, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            adjustToolbarOnEndOfScroll();
+        }
+
+    }
+
     private void adjustToolbarOnEndOfScroll() {
         float shiftY = -title_container_RL.getTranslationY();
 
         float targetShiftY = 0;
         if (shiftY > titleMinHeight &&
                 oldScrollY >= titleMaxHeight) {
-            targetShiftY = titleMinHeight;
-
+            targetShiftY = titleMinHeight + slidingTabs_PSTS.getHeight();
         }
 
         if(transparent && shiftY > 0) {
             transitionDrawable.startTransition(200);
+            title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_primary));
             transparent = false;
         }
         title_container_RL.animate().cancel();
