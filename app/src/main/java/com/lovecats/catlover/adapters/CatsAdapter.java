@@ -24,13 +24,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatImage;
 
-public class NewCatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     public List<CatImage> mCatImages;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    public NewCatsAdapter(Context context, List<CatImage> catImages) {
+    public CatsAdapter(Context context, List<CatImage> catImages) {
         mContext = context;
         mCatImages = catImages;
     }

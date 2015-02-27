@@ -11,16 +11,28 @@
         android:foreground="@color/primary_transparent"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/dashboard_background_IV"
+            android:id="@+id/dashboard_background_1_IV"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dashboard_image_height"
+            android:scaleType="centerCrop" />
+        <ImageView
+            android:id="@+id/dashboard_background_0_IV"
+            android:layout_width="match_parent"
+            android:visibility="visible"
             android:layout_height="@dimen/dashboard_image_height"
             android:scaleType="centerCrop" />
     </FrameLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/dashboard_VP"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/dashboard_VP"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <RelativeLayout
         android:id="@+id/title_container_RL"

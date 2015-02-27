@@ -44,6 +44,14 @@ public class CatModel {
         getCatImageDao(context).load(id).setFavorite(true);
     }
 
+    public static List<CatImage> getLastFourtyImages(Context context) {
+        List<CatImage> latest = getCatImageDao(context).queryBuilder()
+                .limit(40)
+                .orderDesc(CatImageDao.Properties.Id)
+                .list();
+        return latest;
+    }
+
     public static void toggleFavoriteCatImage(Context context, long id) {
         CatImage catImage = getCatImageDao(context).load(id);
         if (!catImage.getFavorite()){

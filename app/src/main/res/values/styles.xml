@@ -13,6 +13,7 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="popupTheme">@style/PopupStyle</item>
+        <item name="android:colorEdgeEffect">@color/accent</item>
     </style>
 
     <style name="PopupStyle">
