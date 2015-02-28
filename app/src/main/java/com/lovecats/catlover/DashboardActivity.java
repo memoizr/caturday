@@ -1,10 +1,13 @@
 package com.lovecats.catlover;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -72,6 +77,22 @@ public class DashboardActivity extends ActionBarActivity
         setupCollapsibleToolbar();
 
         dashboard_background_0_IV.setColorFilter(getResources().getColor(R.color.primary_dark), PorterDuff.Mode.SCREEN);
+
+
+        toolbar.setOnMenuItemClickListener(
+                new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.action_login) {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                            startActivity(intent);
+                        }
+                        return true;
+                    }
+                });
 
         String url = CatModel.getCatImageForId(this, (long) Math.ceil(40 * Math.random())).getUrl();
         Picasso.with(this).load(url).into(dashboard_background_0_IV);
@@ -177,7 +198,6 @@ public class DashboardActivity extends ActionBarActivity
     @Override
     public void onScroll(Fragment fragment, int scrollY,
                          boolean firstScroll, boolean dragging) {
-
         if (scrollY == 0) {
             swipe_container.setEnabled(true);
         } else {
@@ -261,34 +281,79 @@ public class DashboardActivity extends ActionBarActivity
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         swipe_container.setEnabled(false);
-
     }
+
+    private int selectedPage = 0;
 
     @Override
     public void onPageSelected(int position) {
+        selectedPage = position;
         swipe_container.setEnabled(true);
-        if (position == 0) {
-            ((CatStreamFragment)pagerAdapter.getItem(1)).setScrollPosition(titleMinHeight);
-            onScroll(pagerAdapter.getItem(1), titleMinHeight, false, false);
-        } else {
-            ((CatStreamFragment)pagerAdapter.getItem(0)).setScrollPosition(titleMinHeight);
-            onScroll(pagerAdapter.getItem(1), titleMinHeight, false, false);
-        }
     }
+
+    int currentScrollPosition;
+    CatStreamFragment otherCatStreamFragment;
 
     @Override
     public void onPageScrollStateChanged(int state) {
         float targetShiftY = 0;
+        CatStreamFragment catStreamFragment;
 
-        title_container_RL.animate().cancel();
-        title_container_RL.animate()
-                .translationY(-targetShiftY).setDuration(200).start();
+        if (state == 1) {
+            if (selectedPage == 0) {
+                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
+                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
+                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
+                    currentScrollPosition = catStreamFragment.getScrollPosition();
+                }
+                if (currentScrollPosition > 224) {
+                    currentScrollPosition = 224;
+
+                    title_container_RL.animate().cancel();
+                    title_container_RL.animate()
+                            .translationY(-targetShiftY).setDuration(200).start();
+                } else {
+                    onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
+                }
+
+            } else {
+                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
+                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
+                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
+                    currentScrollPosition = catStreamFragment.getScrollPosition();
+                }
+                if (currentScrollPosition > 224) {
+                    currentScrollPosition = 224;
+
+                    title_container_RL.animate().cancel();
+                    title_container_RL.animate()
+                            .translationY(-targetShiftY).setDuration(200).start();
+                } else {
+                    onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
+                }
+            }
+            otherCatStreamFragment.setScrollPosition(currentScrollPosition);
+        }
     }
 
     @Override
     public void onFetchComplete(List<CatImage> catImages) {
-        System.out.println("fetch complete from dashboard");
         swipe_container.setRefreshing(false);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }
+
+    @Override
+    public void onResume(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String url = prefs.getString("example_text",null);
+        System.out.println("=============================================");
+        System.out.println(url);
+        super.onResume();
     }
 }

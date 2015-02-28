@@ -1,11 +1,9 @@
 package com.lovecats.catlover;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -18,13 +16,6 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.adapters.CatsAdapter;
 import com.lovecats.catlover.data.CatFetcher;
 import com.lovecats.catlover.data.CatModel;
-import com.lovecats.catlover.helpers.XMLParser;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -41,9 +32,7 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     public static final int NEW_STREAM_TYPE = 0;
     public static final int FAVORITES_STREAM_TYPE = 1;
 
-    public List<String> catUrlList;
     private Callback catScrollCallback;
-    private static final String request = "http://thecatapi.com/api/images/get?format=xml&type=jpg&results_per_page=60";
     private int streamType;
     private List<CatImage> catImages;
     private CatsAdapter catsAdapter;
@@ -55,7 +44,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     @Override
     public void onFetchComplete(List<CatImage> catImages) {
         catsAdapter.mCatImages = catImages;
-        System.out.println("fetch callback called from fragment");
         notifyAdapter();
 
     }
@@ -106,7 +94,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     public void fetchCats() {
 
         catFetcher = new CatFetcher(getActivity(), this);
-        System.out.println("fetch cats from fragment");
         catFetcher.getCatImageUrls();
     }
 
@@ -145,56 +132,16 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     }
 
     private void notifyAdapter(){
-
-        System.out.println("adapter notified");
         cats_stream_RV.getAdapter().notifyDataSetChanged();
     }
 
-//    private void fetchImages(List<String> urls) {
-//        for (String image : urls) {
-//            CatImage catImage = new CatImage();
-//            catImage.setUrl(image);
-//            CatModel.insertOrUpdate(getActivity(), catImage);
-//        }
-//    }
-//
-//    public List<String> getCatImageUrls(Context context) {
-//        final List<String> urls = new ArrayList<>();
-//
-//        Thread thread = new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    String response;
-//                    response = XMLParser.getIt(request);
-//                    Document doc = XMLParser.getDomElement(response);
-//                    NodeList nl = doc.getElementsByTagName("url");
-//
-//                    for (int i = 0; i < nl.getLength(); i++) {
-//                        Element e = (Element) nl.item(i);
-//                        urls.add(e.getTextContent());
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                } finally {
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            notifyAdapter(urls);
-//                        }
-//                    });
-//                }
-//            }
-//        };
-//        thread.start();
-//        return urls;
-//    }
+    public int getScrollPosition() {
+
+        return cats_stream_RV.getCurrentScrollY();
+    }
 
     public void setScrollPosition(int position) {
-        if (cats_stream_RV != null) {
-            cats_stream_RV.scrollVerticallyTo(position);
-        }
+        ((StaggeredGridLayoutManager)cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1,440 - position);
     }
 
     @Override

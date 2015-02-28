@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">CatLover</string>
+    <string name="app_name">Caturday</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_login">Login</string>
+    <string name="action_share">Share</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_detail_cat">DetailCatActivity</string>
-    <string name="action_share">share</string>
+    <string name="title_activity_login">Login</string>
 </resources>
