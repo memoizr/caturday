@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:src="@drawable/ic_whatshot_black_48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
+    <TextView
+        android:id="@+id/text1"
+        android:textColor="#000"
+        android:layout_marginLeft="32dp"
+        android:text="sample"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="72dp"
+        />
+</LinearLayout>

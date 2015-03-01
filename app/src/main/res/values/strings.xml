@@ -10,4 +10,6 @@
     <string name="title_activity_profile">ProfileActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="pref_title_server_address">Server address</string>
 </resources>

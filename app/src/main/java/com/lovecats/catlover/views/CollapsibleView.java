@@ -35,6 +35,7 @@ public class CollapsibleView extends FrameLayout {
     private int logoMinTopMargin;
     private int logoMaxHeight;
     private int logoMinHeight;
+    private int offset;
 
     public CollapsibleView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -62,13 +63,15 @@ public class CollapsibleView extends FrameLayout {
         logoMinHeight = resources.getDimensionPixelSize(R.dimen.logo_min_height);
         logoMaxHeight = resources.getDimensionPixelSize(R.dimen.logo_max_height);
 
+        offset = resources.getDimensionPixelSize(R.dimen.size_xlarge);
+
         int logoWidth = resources.getDimensionPixelSize(R.dimen.logo_max_width);
 
         int displayWidth = context.getResources().getDisplayMetrics().widthPixels;
         MarginLayoutParams params =
                 (MarginLayoutParams) logo_IV.getLayoutParams();
         logo_IV.setLayoutParams(params);
-        logoMaxLeftMargin = (displayWidth - logoWidth ) / 2;
+        logoMaxLeftMargin = ((displayWidth - logoWidth ) / 2) - offset;
 
         maxHeight = resources.getDimensionPixelSize(R.dimen.title_height);
         updateLogo();

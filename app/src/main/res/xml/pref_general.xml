@@ -2,11 +2,10 @@
 
     <EditTextPreference
         android:key="example_text"
-        android:title="@string/pref_title_display_name"
+        android:title="@string/pref_title_server_address"
         android:defaultValue="@string/pref_default_display_name"
         android:selectAllOnFocus="true"
-        android:inputType="textCapWords"
-        android:capitalize="words"
+        android:inputType="number"
         android:singleLine="true"
         android:maxLines="1" />
 

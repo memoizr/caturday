@@ -32,11 +32,12 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     public static final int NEW_STREAM_TYPE = 0;
     public static final int FAVORITES_STREAM_TYPE = 1;
 
-    private Callback catScrollCallback;
+    private ScrollCallback catScrollCallback;
     private int streamType;
     private List<CatImage> catImages;
     private CatsAdapter catsAdapter;
     private CatFetcher catFetcher;
+    private StaggeredGridLayoutManager staggeredGrid;
 
     public CatStreamFragment() {
     }
@@ -48,7 +49,7 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
 
     }
 
-    public interface Callback {
+    public interface ScrollCallback {
         void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
 
         void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState);
@@ -60,8 +61,8 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        if (activity instanceof Callback) {
-            catScrollCallback = (Callback) activity;
+        if (activity instanceof ScrollCallback) {
+            catScrollCallback = (ScrollCallback) activity;
         }
     }
 
@@ -103,7 +104,11 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
 
         final Fragment that = this;
 
-        StaggeredGridLayoutManager staggeredGrid = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        if (streamType == 0) {
+            staggeredGrid = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        } else {
+            staggeredGrid = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        }
         staggeredGrid.setOrientation(StaggeredGridLayoutManager.VERTICAL);
 
         cats_stream_RV.setLayoutManager(staggeredGrid);
@@ -141,7 +146,7 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     }
 
     public void setScrollPosition(int position) {
-        ((StaggeredGridLayoutManager)cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1,440 - position);
+        ((StaggeredGridLayoutManager)cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
     }
 
     @Override

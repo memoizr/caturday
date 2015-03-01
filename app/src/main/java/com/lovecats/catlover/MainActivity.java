@@ -2,23 +2,19 @@ package com.lovecats.catlover;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -29,7 +25,6 @@ import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.adapters.DashboardPageAdapter;
 import com.lovecats.catlover.data.CatFetcher;
 import com.lovecats.catlover.data.CatModel;
 import com.lovecats.catlover.views.CollapsibleView;
@@ -40,45 +35,54 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatImage;
+import lombok.Getter;
+import lombok.Setter;
 
-public class DashboardActivity extends ActionBarActivity
-        implements CatStreamFragment.Callback, ViewPager.OnPageChangeListener,
-        SwipeRefreshLayout.OnRefreshListener, CatFetcher.FetcherCallback {
+public class MainActivity extends ActionBarActivity
+        implements NavigationFragment.OnFragmentInteractionListener,
+        CatStreamFragment.ScrollCallback, CatFetcher.FetcherCallback {
+
     @InjectView(R.id.toolbar) Toolbar toolbar;
-    @InjectView(R.id.dashboard_VP) ViewPager dashboard_VP;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
-    @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.dashboard_background_0_IV) ImageView dashboard_background_0_IV;
     @InjectView(R.id.dashboard_image_container_V) View dashboard_image_container;
-    @InjectView(R.id.swipe_container) SwipeRefreshLayout swipe_container;
+    @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
+    @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
 
-    private DashboardPageAdapter pagerAdapter;
     private CollapsibleView collapsibleView;
-    private int oldScrollY;
+
     private int titleMaxHeight;
     private int titleMinHeight;
+    @Getter private int oldScrollY;
     private TransitionDrawable transitionDrawable;
     private boolean transparent = true;
+    public PagerSlidingTabStrip slidingTabs;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DashboardFragment dashboardFragment;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_main);
 
         ButterKnife.inject(this);
 
+        dashboardFragment = new DashboardFragment();
 
-        swipe_container.setOnRefreshListener(this);
-        swipe_container.setColorSchemeColors(
-                getResources().getColor(R.color.primary),
-                getResources().getColor(R.color.accent));
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, dashboardFragment)
+                    .commit();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.left_drawer_V, new NavigationFragment())
+                    .commit();
+        }
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        setupPager();
         setupCollapsibleToolbar();
-
+        slidingTabs = slidingTabs_PSTS;
         dashboard_background_0_IV.setColorFilter(getResources().getColor(R.color.primary_dark), PorterDuff.Mode.SCREEN);
-
-
         toolbar.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
@@ -93,29 +97,30 @@ public class DashboardActivity extends ActionBarActivity
                         return true;
                     }
                 });
-
+        setDrawer();
+        dashboard_background_0_IV.setColorFilter(getResources().getColor(R.color.primary_dark), PorterDuff.Mode.SCREEN);
         String url = CatModel.getCatImageForId(this, (long) Math.ceil(40 * Math.random())).getUrl();
         Picasso.with(this).load(url).into(dashboard_background_0_IV);
-        setupActivityTransitions();
         cycleBackgroundImage();
     }
 
-    private static boolean supportsAPI(int targetAPI) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= targetAPI)
-            return true;
-        else
-            return false;
-    }
-
-    @Override
-    public void onRefresh() {
-        ((CatStreamFragment)pagerAdapter.getItem(0)).fetchCats();
+    public void setDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.action_settings, R.string.action_login);
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     private void setupCollapsibleToolbar() {
+
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle("");
 
         collapsibleView = new CollapsibleView(this);
         toolbar.addView(collapsibleView);
@@ -126,13 +131,18 @@ public class DashboardActivity extends ActionBarActivity
         transitionDrawable = (TransitionDrawable) title_container_RL.getBackground();
     }
 
-    private void setupPager() {
-        pagerAdapter = new DashboardPageAdapter(getSupportFragmentManager());
-        dashboard_VP.setAdapter(pagerAdapter);
+    @Override
+    public void onFragmentInteraction(int position) {
+        switch(position) {
+            case 0:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new DashboardFragment())
+                        .commit();
+                break;
+            default:
+                break;
+        }
 
-        slidingTabs_PSTS.setViewPager(dashboard_VP);
-        slidingTabs_PSTS.setTextColor(getResources().getColor(R.color.white));
-        slidingTabs_PSTS.setOnPageChangeListener(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -147,6 +157,14 @@ public class DashboardActivity extends ActionBarActivity
                 getWindow().setEnterTransition(fade);
             }
         }
+    }
+
+    private static boolean supportsAPI(int targetAPI) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= targetAPI)
+            return true;
+        else
+            return false;
     }
 
     private void cycleBackgroundImage() {
@@ -194,15 +212,15 @@ public class DashboardActivity extends ActionBarActivity
         view.startAnimation(zoomIn);
     }
 
-    // Hide profile by scrolling
+    public void animateTitleContainer(float targetShiftY) {
+        title_container_RL.animate().cancel();
+        title_container_RL.animate()
+                .translationY(-targetShiftY).setDuration(200).start();
+    }
+
     @Override
     public void onScroll(Fragment fragment, int scrollY,
                          boolean firstScroll, boolean dragging) {
-        if (scrollY == 0) {
-            swipe_container.setEnabled(true);
-        } else {
-            swipe_container.setEnabled(false);
-        }
 
         dashboard_image_container.setTranslationY(-(float) (scrollY * 0.8));
 
@@ -211,6 +229,12 @@ public class DashboardActivity extends ActionBarActivity
         // Note: positive delta means scrolling up
         int scrollDelta = scrollY - oldScrollY;
         oldScrollY = scrollY;
+
+        if (scrollY == 0) {
+            dashboardFragment.enableSwipeToRefresh(true);
+        } else {
+            dashboardFragment.enableSwipeToRefresh(false);
+        }
 
         if (scrollY < titleMaxHeight - titleMinHeight) {
             collapsibleView.setCollapseLevel(
@@ -236,7 +260,7 @@ public class DashboardActivity extends ActionBarActivity
                 transitionDrawable.startTransition(200);
                 transparent = false;
                 title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_primary));
-                title_container_RL.setElevation(5);
+                title_container_RL.setElevation(24);
             }
 
             // To avoid confusion about sign, use shiftY instead of transitionY.
@@ -279,81 +303,13 @@ public class DashboardActivity extends ActionBarActivity
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        swipe_container.setEnabled(false);
-    }
-
-    private int selectedPage = 0;
-
-    @Override
-    public void onPageSelected(int position) {
-        selectedPage = position;
-        swipe_container.setEnabled(true);
-    }
-
-    int currentScrollPosition;
-    CatStreamFragment otherCatStreamFragment;
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        float targetShiftY = 0;
-        CatStreamFragment catStreamFragment;
-
-        if (state == 1) {
-            if (selectedPage == 0) {
-                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-                    currentScrollPosition = catStreamFragment.getScrollPosition();
-                }
-                if (currentScrollPosition > 224) {
-                    currentScrollPosition = 224;
-
-                    title_container_RL.animate().cancel();
-                    title_container_RL.animate()
-                            .translationY(-targetShiftY).setDuration(200).start();
-                } else {
-                    onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-                }
-
-            } else {
-                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-                    currentScrollPosition = catStreamFragment.getScrollPosition();
-                }
-                if (currentScrollPosition > 224) {
-                    currentScrollPosition = 224;
-
-                    title_container_RL.animate().cancel();
-                    title_container_RL.animate()
-                            .translationY(-targetShiftY).setDuration(200).start();
-                } else {
-                    onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-                }
-            }
-            otherCatStreamFragment.setScrollPosition(currentScrollPosition);
-        }
-    }
-
-    @Override
-    public void onFetchComplete(List<CatImage> catImages) {
-        swipe_container.setRefreshing(false);
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
         return true;
     }
 
     @Override
-    public void onResume(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String url = prefs.getString("example_text",null);
-        System.out.println("=============================================");
-        System.out.println(url);
-        super.onResume();
+    public void onFetchComplete(List<CatImage> catImages) {
+        dashboardFragment.swipe_container.setRefreshing(false);
     }
 }
