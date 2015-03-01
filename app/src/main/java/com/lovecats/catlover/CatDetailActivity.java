@@ -27,7 +27,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.diegocarloslima.byakugallery.lib.TouchImageView;
 import com.lovecats.catlover.data.CatModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;

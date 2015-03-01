@@ -7,4 +7,7 @@
 
     <string name="title_activity_detail_cat">DetailCatActivity</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
