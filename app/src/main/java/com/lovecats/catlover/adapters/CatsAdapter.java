@@ -12,9 +12,12 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.lovecats.catlover.CatDetailActivity;
+import com.lovecats.catlover.MainActivity;
 import com.lovecats.catlover.R;
 import com.squareup.picasso.Picasso;
 
@@ -62,6 +65,7 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
             final int j = i;
 
+            setAnimation(myViewHolder.catContainer, i);
             final String transitionName = "catTransition" + i;
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
@@ -69,6 +73,7 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myViewHolder.catContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ((MainActivity)mContext).toggleArrow(true);
                     Intent intent = new Intent(mContext, CatDetailActivity.class);
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -114,6 +119,19 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public CatsCardViewHolder(View v) {
             super(v);
             ButterKnife.inject(this, v);
+        }
+    }
+
+    int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_up);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
         }
     }
 }

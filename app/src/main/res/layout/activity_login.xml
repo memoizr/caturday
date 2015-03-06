@@ -1,20 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/primary"
+    android:id="@+id/login_reveal_V"
     android:layout_height="match_parent">
-    <EditText
-        android:id="@+id/username_TV"
-        android:layout_width="match_parent"
-        android:layout_height="56dp" />
 
-    <EditText
-        android:id="@+id/password_TV"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:paddingTop="24dp"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/login_submit_B"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <LinearLayout
+            android:paddingTop="72dp"
+            android:paddingLeft="72dp"
+            android:paddingRight="72dp"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Login"
+                android:textSize="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:gravity="bottom"
+                android:text="email"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <EditText
+                android:id="@+id/username_TV"
+                android:layout_width="match_parent"
+                android:layout_height="56dp" />
+
+            <TextView
+                android:gravity="bottom"
+                android:text="password"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <EditText
+                android:id="@+id/password_TV"
+                android:layout_width="match_parent"
+                android:layout_height="56dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="56dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="Sign Up"
+                android:id="@+id/signup_B"
+                android:background="@drawable/tab_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp" />
+
+            <Button
+                android:text="Login"
+                android:id="@+id/login_submit_B"
+                android:background="@drawable/tab_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

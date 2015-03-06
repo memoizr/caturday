@@ -1,5 +1,7 @@
 package com.lovecats.catlover;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -11,11 +13,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
@@ -28,6 +33,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.data.CatFetcher;
 import com.lovecats.catlover.data.CatModel;
 import com.lovecats.catlover.views.CollapsibleView;
+import com.lovecats.catlover.views.SlideShowView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -44,18 +50,20 @@ public class MainActivity extends ActionBarActivity
 
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
-    @InjectView(R.id.dashboard_background_0_IV) ImageView dashboard_background_0_IV;
-    @InjectView(R.id.dashboard_image_container_V) View dashboard_image_container;
+    @InjectView(R.id.slide_show_V) SlideShowView slide_show_V;
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
+    @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
 
     private CollapsibleView collapsibleView;
 
     private int titleMaxHeight;
     private int titleMinHeight;
-    @Getter private int oldScrollY;
+    @Getter
+    private int oldScrollY;
     private TransitionDrawable transitionDrawable;
     private boolean transparent = true;
+    private boolean statusTransparent = true;
     public PagerSlidingTabStrip slidingTabs;
     private ActionBarDrawerToggle mDrawerToggle;
     private DashboardFragment dashboardFragment;
@@ -68,7 +76,18 @@ public class MainActivity extends ActionBarActivity
         ButterKnife.inject(this);
 
         dashboardFragment = new DashboardFragment();
+        slidingTabs = slidingTabs_PSTS;
 
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        setUpFragments(savedInstanceState);
+
+        setupCollapsibleToolbar();
+        setDrawer();
+    }
+
+    private void setUpFragments(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, dashboardFragment)
@@ -77,31 +96,24 @@ public class MainActivity extends ActionBarActivity
                     .add(R.id.left_drawer_V, new NavigationFragment())
                     .commit();
         }
-        getWindow().getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
 
-        setupCollapsibleToolbar();
-        slidingTabs = slidingTabs_PSTS;
-        dashboard_background_0_IV.setColorFilter(getResources().getColor(R.color.primary_dark), PorterDuff.Mode.SCREEN);
-        toolbar.setOnMenuItemClickListener(
-                new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.action_login) {
-                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                            startActivity(intent);
-                        }
-                        return true;
-                    }
-                });
-        setDrawer();
-        dashboard_background_0_IV.setColorFilter(getResources().getColor(R.color.primary_dark), PorterDuff.Mode.SCREEN);
-        String url = CatModel.getCatImageForId(this, (long) Math.ceil(40 * Math.random())).getUrl();
-        Picasso.with(this).load(url).into(dashboard_background_0_IV);
-        cycleBackgroundImage();
+    public void toggleArrow(boolean toggle) {
+        ValueAnimator va;
+        if (toggle) {
+            va = new ObjectAnimator().ofFloat(0, 1);
+        } else {
+            va = new ObjectAnimator().ofFloat(1, 0);
+        }
+        va.setDuration(200);
+        va.setInterpolator(new AccelerateDecelerateInterpolator());
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mDrawerToggle.onDrawerSlide(mDrawerLayout, Float.parseFloat(animation.getAnimatedValue().toString()));
+            }
+        });
+        va.start();
     }
 
     public void setDrawer() {
@@ -129,11 +141,26 @@ public class MainActivity extends ActionBarActivity
         titleMinHeight = collapsibleView.getMinHeight();
 
         transitionDrawable = (TransitionDrawable) title_container_RL.getBackground();
+
+        toolbar.setOnMenuItemClickListener(
+                new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.action_login) {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                            startActivity(intent);
+                        }
+                        return true;
+                    }
+                });
     }
 
     @Override
     public void onFragmentInteraction(int position) {
-        switch(position) {
+        switch (position) {
             case 0:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new DashboardFragment())
@@ -142,7 +169,6 @@ public class MainActivity extends ActionBarActivity
             default:
                 break;
         }
-
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -167,51 +193,6 @@ public class MainActivity extends ActionBarActivity
             return false;
     }
 
-    private void cycleBackgroundImage() {
-        String url = CatModel.getCatImageForId(this, (long) Math.ceil(40 * Math.random())).getUrl();
-        Picasso.with(this).load(url).into(dashboard_background_0_IV);
-        animateBackgroundImage(dashboard_background_0_IV);
-    }
-
-    private void animateBackgroundImage(ImageView view){
-        AnimationSet zoomIn = new AnimationSet(true);
-        view.setPivotY(1);
-        view.setPivotX(0);
-        float rand = (float) (Math.random()/1.3) + 1;
-        float randAfter = (float) (Math.random()/1.3) + 1;
-
-        ScaleAnimation mScale = new ScaleAnimation(
-                rand,
-                randAfter,
-                rand,
-                randAfter,
-                ScaleAnimation.RELATIVE_TO_PARENT,
-                (float) Math.random(),
-                ScaleAnimation.RELATIVE_TO_PARENT,
-                (float) Math.random());
-        mScale.setDuration(15000);
-        zoomIn.addAnimation(mScale);
-        zoomIn.setFillBefore(true);
-        zoomIn.setFillAfter(true);
-        zoomIn.setFillEnabled(true);
-
-        mScale.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                cycleBackgroundImage();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-        });
-
-        view.startAnimation(zoomIn);
-    }
-
     public void animateTitleContainer(float targetShiftY) {
         title_container_RL.animate().cancel();
         title_container_RL.animate()
@@ -222,7 +203,7 @@ public class MainActivity extends ActionBarActivity
     public void onScroll(Fragment fragment, int scrollY,
                          boolean firstScroll, boolean dragging) {
 
-        dashboard_image_container.setTranslationY(-(float) (scrollY * 0.8));
+        slide_show_V.setTranslationY(-(float) (scrollY * 0.8));
 
         title_container_RL.animate().cancel();
 
@@ -239,15 +220,29 @@ public class MainActivity extends ActionBarActivity
         if (scrollY < titleMaxHeight - titleMinHeight) {
             collapsibleView.setCollapseLevel(
                     Math.max(1f - scrollY / (float) (titleMaxHeight - titleMinHeight), 0));
-            if(!transparent) {
-                transitionDrawable.reverseTransition(200);
-                title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_transparent));
-                transparent = true;
+            if (!transparent) {
+                animateBackground(title_container_RL,
+                        getResources().getColor(R.color.primary),
+                        getResources().getColor(R.color.primary_transparent));
+            }  if (!statusTransparent) {
+
+                animateBackground(status_bar_scrim,
+                        getResources().getColor(R.color.primary),
+                        getResources().getColor(R.color.primary_transparent));
+                transparent = statusTransparent = true;
+
+                slide_show_V.animationStart();
             }
             title_container_RL.setTranslationY(0);
 
         } else if (scrollY < titleMaxHeight && scrollDelta > 0) {
             collapsibleView.setCollapseLevel(0);
+            if (statusTransparent) {
+                animateBackground(status_bar_scrim,
+                        getResources().getColor(R.color.primary_transparent),
+                        getResources().getColor(R.color.primary));
+                statusTransparent = false;
+            }
 
             float shiftY = (scrollY - titleMaxHeight + titleMinHeight);
             shiftY = Math.min(Math.max(shiftY, 0), 208);
@@ -256,11 +251,14 @@ public class MainActivity extends ActionBarActivity
         } else {
             collapsibleView.setCollapseLevel(0);
 
-            if(transparent && scrollY > titleMaxHeight + titleMinHeight) {
-                transitionDrawable.startTransition(200);
+            if (transparent && scrollY > titleMaxHeight + titleMinHeight) {
+                animateBackground(title_container_RL,
+                        getResources().getColor(R.color.primary_transparent),
+                        getResources().getColor(R.color.primary));
+
+                System.out.println("paused");
+                slide_show_V.animationPause();
                 transparent = false;
-                title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_primary));
-                title_container_RL.setElevation(24);
             }
 
             // To avoid confusion about sign, use shiftY instead of transitionY.
@@ -292,9 +290,12 @@ public class MainActivity extends ActionBarActivity
             targetShiftY = titleMinHeight + slidingTabs_PSTS.getHeight();
         }
 
-        if(transparent && shiftY > 0) {
-            transitionDrawable.startTransition(200);
-            title_container_RL.setBackground(getResources().getDrawable(R.drawable.solid_primary));
+        if (transparent && shiftY > 0) {
+            animateBackground(title_container_RL,
+                    getResources().getColor(R.color.primary_transparent),
+                    getResources().getColor(R.color.primary));
+            System.out.println("paused");
+            slide_show_V.animationPause();
             transparent = false;
         }
         title_container_RL.animate().cancel();
@@ -302,6 +303,24 @@ public class MainActivity extends ActionBarActivity
                 .translationY(-targetShiftY).setDuration(200).start();
     }
 
+    private void animateBackground(View view, int colorFrom, int colorTo) {
+        final View mView = view;
+        final ValueAnimator va = ObjectAnimator.ofArgb(
+                colorFrom,
+                colorTo);
+        va.setDuration(300);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+
+                             {
+                                 @Override
+                                 public void onAnimationUpdate (ValueAnimator animation){
+                                     mView.setBackgroundColor((Integer) animation.getAnimatedValue());
+                                 }
+                             }
+
+        );
+        va.start();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
@@ -311,5 +330,11 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onFetchComplete(List<CatImage> catImages) {
         dashboardFragment.swipe_container.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        toggleArrow(false);
     }
 }

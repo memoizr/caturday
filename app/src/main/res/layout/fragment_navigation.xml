@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:src="@drawable/default_profile_cover"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="192dp" />
-
+    <RelativeLayout
+        android:id="@+id/profile_container_V"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/default_profile_cover"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="192dp" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/navigation_LV"

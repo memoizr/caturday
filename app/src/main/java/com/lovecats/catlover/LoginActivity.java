@@ -1,10 +1,14 @@
 package com.lovecats.catlover;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,13 +33,13 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by user on 27/02/15.
- */
-public class LoginActivity extends Activity {
+public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.username_TV) EditText username_TV;
     @InjectView(R.id.password_TV) EditText password_TV;
     @InjectView(R.id.login_submit_B) Button login_submit_B;
+    @InjectView(R.id.login_reveal_V) View login_reveal;
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
     private String rootUrl;
     private String url;
@@ -49,12 +53,13 @@ public class LoginActivity extends Activity {
 
         ButterKnife.inject(this);
 
+        setUpToolbar();
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         rootUrl = prefs.getString("example_text", null);
         url = rootUrl + "/api/v1/token.json";
 
         loginUrl = rootUrl + "/api/v1/user.json";
-
 
         login_submit_B.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +68,20 @@ public class LoginActivity extends Activity {
             }
         });
 
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
 
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        login_reveal.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                reveal();
+            }
+        });
     }
 
     String requested;
@@ -120,6 +138,25 @@ public class LoginActivity extends Activity {
         thread.start();
     }
 
+    public void reveal() {
+        // previously invisible view
+
+        // get the center for the clipping circle
+        int cx = login_reveal.getRight();
+        int cy = login_reveal.getTop();
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(login_reveal.getWidth(), login_reveal.getHeight());
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(login_reveal, cx, cy, 0, finalRadius);
+
+        // make the view visible and start the animation
+        login_reveal.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
     public void login() {
         final HttpClient httpclient = new DefaultHttpClient();
         final HttpPost httppost = new HttpPost(url);
@@ -157,8 +194,11 @@ public class LoginActivity extends Activity {
             }
         });
         thread.start();
-
     }
 
-
+    private void setUpToolbar(){
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 }

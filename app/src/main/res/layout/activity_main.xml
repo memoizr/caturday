@@ -3,25 +3,16 @@
     android:id="@+id/main_container_V"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/button_material_light"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lovecats.catlover.MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <FrameLayout
-            android:id="@+id/dashboard_image_container_V"
-            android:foreground="@color/primary_transparent"
+        <com.lovecats.catlover.views.SlideShowView
+            android:id="@+id/slide_show_V"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/dashboard_background_0_IV"
-                android:visibility="visible"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dashboard_image_height"
-                android:scaleType="centerCrop" />
-        </FrameLayout>
+            android:layout_height="@dimen/dashboard_image_height"></com.lovecats.catlover.views.SlideShowView>
 
         <LinearLayout
             android:id="@+id/container"
@@ -33,11 +24,13 @@
         <RelativeLayout
             android:paddingTop="24dp"
             android:id="@+id/title_container_RL"
+            android:elevation="12dp"
             android:clipToPadding="false"
             android:background="@transition/background_transition"
-            android:elevation="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -52,8 +45,8 @@
             <com.astuetz.PagerSlidingTabStrip
                 android:id="@+id/sliding_PSTS"
                 android:layout_below="@id/toolbar"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
                 app:pstsTabBackground="@drawable/tab_selector"
                 app:pstsIndicatorColor="#fff"
                 app:pstsIndicatorHeight="2dp"
@@ -64,6 +57,12 @@
                 android:layout_height="@dimen/dashboard_tab_height"
                 />
         </RelativeLayout>
+
+        <View
+            android:id="@+id/status_bar_scrim"
+            android:elevation="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"/>
     </FrameLayout>
 
     <FrameLayout xmlns:tools="http://schemas.android.com/tools"
@@ -73,6 +72,5 @@
         android:layout_gravity="start"
         android:background="@color/background_floating_material_light"
         android:elevation="10dp" />
-
 
 </android.support.v4.widget.DrawerLayout>
