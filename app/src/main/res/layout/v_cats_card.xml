@@ -13,8 +13,10 @@
 
     <ImageView
         android:id="@+id/cardCat_IV"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="48dp"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="256dp" />
+        android:layout_height="192dp" />
 
 </android.support.v7.widget.CardView>

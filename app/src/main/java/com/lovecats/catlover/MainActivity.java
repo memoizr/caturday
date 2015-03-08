@@ -93,6 +93,13 @@ public class MainActivity extends ActionBarActivity
         setupCollapsibleToolbar();
         setDrawer();
         setUpButton();
+
+//        slide_show_V.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                slide_show_V.flash();
+//            }
+//        }, 2000);
     }
 
     private void setUpFragments(Bundle savedInstanceState) {
@@ -204,6 +211,7 @@ public class MainActivity extends ActionBarActivity
             Transition fade = new Fade();
             fade.excludeTarget(android.R.id.statusBarBackground, true);
             fade.excludeTarget(android.R.id.navigationBarBackground, true);
+            fade.excludeTarget(title_container_RL, true);
 
             if (supportsAPI(Build.VERSION_CODES.LOLLIPOP)) {
                 getWindow().setExitTransition(fade);
@@ -365,6 +373,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onFetchComplete(List<CatImage> catImages) {
         dashboardFragment.swipe_container.setRefreshing(false);
+        slide_show_V.flash();
     }
 
     @Override

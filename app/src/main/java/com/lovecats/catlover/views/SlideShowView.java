@@ -1,8 +1,11 @@
 package com.lovecats.catlover.views;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
@@ -11,6 +14,8 @@ import android.widget.ImageView;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.CatModel;
+import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
+import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -18,6 +23,7 @@ import butterknife.InjectView;
 
 public class SlideShowView extends FrameLayout {
     @InjectView(R.id.slide_0) ImageView slide_0;
+    @InjectView(R.id.reveal_V) View reveal;
 
     private Context mContext;
 
@@ -91,5 +97,62 @@ public class SlideShowView extends FrameLayout {
     }
 
     public void animationResume() {
+    }
+
+    public void flash() {
+        reveal();
+        fade();
+    }
+
+
+    private void reveal() {
+        // previously invisible view
+
+        // get the center for the clipping circle
+        int cx = reveal.getWidth() / 2 ;
+        int cy = reveal.getTop() + 96;
+
+        // get the final radius for the clipping circle
+        int finalRadius = (int) Math.sqrt(Math.pow(reveal.getWidth(),2) + Math.pow(reveal.getHeight(), 2));
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
+        anim.setDuration(400);
+        anim.setInterpolator(new HyperTanAccelerateInterpolator());
+
+        // make the view visible and start the animation
+        reveal.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    private void fade() {
+        reveal.animate()
+                .alpha(0f)
+                .setStartDelay(400)
+                .setDuration(600)
+                .setInterpolator(new HyperTanDecelerateInterpolator())
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        reveal.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .start();
     }
 }

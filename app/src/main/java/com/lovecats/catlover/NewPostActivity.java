@@ -19,6 +19,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 
 import butterknife.ButterKnife;
@@ -49,7 +50,7 @@ public class NewPostActivity extends ActionBarActivity {
                     .alpha(1f)
                     .setDuration(400)
                     .setInterpolator(new HyperTanDecelerateInterpolator())
-                    .setStartDelay(i * 100 + 500)
+                    .setStartDelay(i * 100 + 600)
                     .start();
         }
     }
@@ -67,8 +68,8 @@ public class NewPostActivity extends ActionBarActivity {
         // create the animator for this view (the start radius is zero)
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
-        anim.setDuration(300);
-        anim.setInterpolator(new AccelerateInterpolator());
+        anim.setDuration(400);
+        anim.setInterpolator(new HyperTanAccelerateInterpolator());
 
         // make the view visible and start the animation
         reveal.setVisibility(View.VISIBLE);

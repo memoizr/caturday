@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.lovecats.catlover.data.AuthModel;
 import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 
 import org.apache.http.HttpEntity;
@@ -81,7 +82,11 @@ public class LoginActivity extends ActionBarActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         login();
+        glideInAnimation();
 
+    }
+
+    private void glideInAnimation() {
         int count = glide_container.getChildCount();
         for (int i = 0; i < count; i++) {
             View view = glide_container.getChildAt(i);
@@ -92,7 +97,21 @@ public class LoginActivity extends ActionBarActivity {
                     .alpha(1f)
                     .setDuration(400)
                     .setInterpolator(new HyperTanDecelerateInterpolator())
-                    .setStartDelay(i * 150 + 500)
+                    .setStartDelay(i * 150 + 600)
+                    .start();
+        }
+    }
+
+    private void glideOutAnimation() {
+        int count = glide_container.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = glide_container.getChildAt(i);
+            view.animate()
+                    .translationYBy(400)
+                    .alpha(0f)
+                    .setDuration(300)
+                    .setInterpolator(new HyperTanAccelerateInterpolator())
+                    .setStartDelay((count - i) * 150)
                     .start();
         }
     }
@@ -174,8 +193,8 @@ public class LoginActivity extends ActionBarActivity {
         // create the animator for this view (the start radius is zero)
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(login_reveal, cx, cy, 0, finalRadius);
-        anim.setDuration(300);
-        anim.setInterpolator(new AccelerateInterpolator());
+        anim.setDuration(400);
+        anim.setInterpolator(new HyperTanAccelerateInterpolator());
 
         // make the view visible and start the animation
         login_reveal.setVisibility(View.VISIBLE);
@@ -193,7 +212,8 @@ public class LoginActivity extends ActionBarActivity {
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(login_reveal, cx, cy, finalRadius, 0);
         anim.setDuration(300);
-        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setStartDelay(500);
+        anim.setInterpolator(new HyperTanDecelerateInterpolator());
 
         // make the view visible and start the animation
         // login_reveal.setVisibility(View.INVISIBLE);
@@ -277,6 +297,7 @@ public class LoginActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
+        glideOutAnimation();
         hide();
     }
 

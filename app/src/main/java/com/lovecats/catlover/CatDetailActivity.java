@@ -30,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.lovecats.catlover.data.CatModel;
+import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -68,6 +69,20 @@ public class CatDetailActivity extends ActionBarActivity {
         setUpImageView();
         updateButton();
         setUpToolbar();
+        scaleButton();
+    }
+
+    private void scaleButton() {
+        View view = favorite_B;
+        view.setScaleX(0f);
+        view.setScaleY(0f);
+        view.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(400)
+                .setInterpolator(new HyperTanDecelerateInterpolator())
+                .setStartDelay(800)
+                .start();
     }
 
     @Override
