@@ -10,10 +10,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.lovecats.catlover.data.UserModel;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import greendao.User;
 
 /**
  * Created by user on 01/03/15.
@@ -22,6 +26,7 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
     private ListView navigationListView;
     private OnFragmentInteractionListener mListener;
     @InjectView(R.id.profile_container_V) View profileContainer;
+    @InjectView(R.id.username_TV) TextView username_TV;
 
     public NavigationFragment() {
     }
@@ -44,6 +49,9 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
         navigationListView.setAdapter(adapter);
         navigationListView.setOnItemClickListener(this);
+
+        User user = UserModel.getUserForId(getActivity(), 0);
+        username_TV.setText(user.getUsername());
 
         return rootView;
     }

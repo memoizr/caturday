@@ -5,12 +5,40 @@
     <RelativeLayout
         android:id="@+id/profile_container_V"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="192dp">
         <ImageView
+            android:id="@+id/cover_image_IV"
             android:src="@drawable/default_profile_cover"
             android:scaleType="centerCrop"
+            android:tint="@color/dark_transparent"
             android:layout_width="match_parent"
-            android:layout_height="192dp" />
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/profile_image_IV"
+            android:src="@drawable/donkey"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@color/white"
+            android:layout_marginLeft="16dp"
+            android:padding="2dp"
+            android:elevation="5dp"
+            android:layout_marginTop="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:text="User Name"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/username_TV"
+            android:layout_marginLeft="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
     <ListView

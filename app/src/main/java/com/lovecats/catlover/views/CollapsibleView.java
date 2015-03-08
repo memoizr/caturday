@@ -94,16 +94,17 @@ public class CollapsibleView extends FrameLayout {
     private void updateLogo() {
         MarginLayoutParams params =
                 (MarginLayoutParams) logo_IV.getLayoutParams();
+        float collapseScale = (float) (0.5*Math.tanh( 6 * collapseLevel - 3) + 0.5);
         params.topMargin =
                 (int) interpolate(logoMinTopMargin, logoMaxTopMargin, collapseLevel);
         params.leftMargin =
-                (int) interpolate(logoMinLeftMargin, logoMaxLeftMargin, collapseLevel);
+                (int) interpolate(logoMinLeftMargin, logoMaxLeftMargin, collapseScale);
         logo_IV.setLayoutParams(params);
 
         logo_IV.setPivotX(0);
         logo_IV.setPivotY(0);
-        logo_IV.setScaleX(interpolate(logoMinHeight, logoMaxHeight, collapseLevel)/logoMaxHeight);
-        logo_IV.setScaleY(interpolate(logoMinHeight, logoMaxHeight, collapseLevel)/logoMaxHeight);
+        logo_IV.setScaleX(interpolate(logoMinHeight, logoMaxHeight, collapseScale)/logoMaxHeight);
+        logo_IV.setScaleY(interpolate(logoMinHeight, logoMaxHeight, collapseScale)/logoMaxHeight);
     }
 
     private void updateLayoutParams() {

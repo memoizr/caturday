@@ -4,9 +4,12 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Outline;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -19,12 +22,14 @@ import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -40,6 +45,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import greendao.CatImage;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +60,7 @@ public class MainActivity extends ActionBarActivity
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
+    @InjectView(R.id.new_post_B) ImageButton new_post_B;
 
     private CollapsibleView collapsibleView;
 
@@ -85,6 +92,7 @@ public class MainActivity extends ActionBarActivity
 
         setupCollapsibleToolbar();
         setDrawer();
+        setUpButton();
     }
 
     private void setUpFragments(Bundle savedInstanceState) {
@@ -105,7 +113,7 @@ public class MainActivity extends ActionBarActivity
         } else {
             va = new ObjectAnimator().ofFloat(1, 0);
         }
-        va.setDuration(200);
+        va.setDuration(300);
         va.setInterpolator(new AccelerateDecelerateInterpolator());
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -114,6 +122,23 @@ public class MainActivity extends ActionBarActivity
             }
         });
         va.start();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setUpButton() {
+        ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
+                outline.setOval(0, 0, size, size);
+            }
+        };
+
+        new_post_B.setOutlineProvider(viewOutlineProvider);
+        new_post_B.setClipToOutline(true);
+
+        Drawable image = getResources().getDrawable(R.drawable.ic_add_white_48dp);
+        new_post_B.setImageDrawable(image);
     }
 
     public void setDrawer() {
@@ -146,6 +171,8 @@ public class MainActivity extends ActionBarActivity
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        toggleArrow(true);
+                        slide_show_V.animationPause();
                         if (item.getItemId() == R.id.action_login) {
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
@@ -195,8 +222,12 @@ public class MainActivity extends ActionBarActivity
 
     public void animateTitleContainer(float targetShiftY) {
         title_container_RL.animate().cancel();
-        title_container_RL.animate()
-                .translationY(-targetShiftY).setDuration(200).start();
+        title_container_RL
+                .animate()
+                .translationY(-targetShiftY)
+                .setDuration(300)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
     }
 
     @Override
@@ -299,8 +330,12 @@ public class MainActivity extends ActionBarActivity
             transparent = false;
         }
         title_container_RL.animate().cancel();
-        title_container_RL.animate()
-                .translationY(-targetShiftY).setDuration(200).start();
+        title_container_RL
+                .animate()
+                .translationY(-targetShiftY)
+                .setDuration(300)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
     }
 
     private void animateBackground(View view, int colorFrom, int colorTo) {
@@ -335,6 +370,13 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onResume() {
         super.onResume();
+        slide_show_V.animationResume();
         toggleArrow(false);
+    }
+
+    @OnClick(R.id.new_post_B)
+    public void clickNewPost() {
+        Intent intent = new Intent(this, NewPostActivity.class);
+        startActivity(intent);
     }
 }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:background="@color/primary"
     android:id="@+id/login_reveal_V"
+    android:visibility="invisible"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
@@ -15,15 +16,16 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:id="@+id/glide_container_V"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:paddingTop="72dp"
             android:paddingLeft="72dp"
             android:paddingRight="72dp"
             android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="Login"
@@ -39,6 +41,8 @@
 
             <EditText
                 android:id="@+id/username_TV"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
                 android:layout_width="match_parent"
                 android:layout_height="56dp" />
 
@@ -50,6 +54,8 @@
 
             <EditText
                 android:id="@+id/password_TV"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="56dp" />
         </LinearLayout>

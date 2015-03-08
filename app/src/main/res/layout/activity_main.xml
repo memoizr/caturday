@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lovecats.catlover.MainActivity">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.lovecats.catlover.views.SlideShowView
@@ -29,8 +29,6 @@
             android:background="@transition/background_transition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -63,7 +61,19 @@
             android:elevation="12dp"
             android:layout_width="match_parent"
             android:layout_height="24dp"/>
-    </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/new_post_B"
+            android:elevation="5dp"
+            android:padding="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:layout_margin="16dp"
+            android:background="@color/primary"
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
+    </RelativeLayout>
 
     <FrameLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/left_drawer_V"

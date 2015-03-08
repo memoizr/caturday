@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -114,12 +115,13 @@ public class CatDetailActivity extends ActionBarActivity {
         int cx = (detail_reveal.getLeft() + detail_reveal.getRight()) / 2;
         int cy = (detail_reveal.getTop() + detail_reveal.getBottom()) / 2;
         // get the final radius for the clipping circle
-        int finalRadius = Math.max(detail_reveal.getWidth(), detail_reveal.getHeight());
+        int finalRadius = (int) Math.sqrt(Math.pow(detail_reveal.getWidth(),2) + Math.pow(detail_reveal.getHeight(), 2) / 2);
 
         // create the animator for this view (the start radius is zero)
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(detail_reveal, cx, cy, 0, finalRadius);
         anim.setDuration(600);
+        anim.setInterpolator(new AccelerateInterpolator());
 
         // make the view visible and start the animation
         detail_reveal.setVisibility(View.VISIBLE);
