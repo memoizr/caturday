@@ -13,23 +13,25 @@
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/glide_container_V"
         android:layout_width="match_parent"
+        android:paddingTop="72dp"
+        android:clipToPadding="false"
+        android:paddingLeft="72dp"
+        android:animateLayoutChanges="true"
+        android:paddingRight="72dp"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:paddingTop="72dp"
-            android:paddingLeft="72dp"
-            android:paddingRight="72dp"
-            android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <TextView
                 android:text="Login"
                 android:textSize="32dp"
+                android:id="@+id/title_TV"
                 android:textColor="@color/white"
                 android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
@@ -37,11 +39,26 @@
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/username_TV"
+                android:hint="username"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_person_white_24dp"
+                android:layout_width="match_parent"
+                android:imeOptions="actionNext"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                app:floatingLabel="highlight"
+                app:baseColor="@android:color/white"
+                app:primaryColor="@color/white"
+                app:singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/email_TV"
                 android:hint="email"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionNext"
+                android:drawableLeft="@drawable/ic_email_white_24dp"
                 android:textColor="@color/white"
                 app:floatingLabel="highlight"
                 app:baseColor="@android:color/white"
@@ -54,6 +71,7 @@
                 android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 app:floatingLabel="highlight"
@@ -61,18 +79,42 @@
                 app:minCharacters="8"
                 app:primaryColor="@color/white"
                 app:singleLineEllipsis="true" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:visibility="gone"
+            android:id="@+id/signup_buttons_V"
+            android:layout_marginRight="-24dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="I have an account"
+                android:id="@+id/existing_account_B"
+                android:background="@drawable/tab_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp" />
+
+            <Button
+                android:text="Signup"
+                android:id="@+id/signup_B"
+                android:background="@drawable/tab_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
+            android:id="@+id/login_buttons_V"
             android:layout_gravity="right"
-            android:layout_marginRight="56dp"
+            android:layout_marginRight="-24dp"
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Sign Up"
-                android:id="@+id/signup_B"
+                android:text="Create Account"
+                android:id="@+id/create_account_B"
                 android:background="@drawable/tab_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp" />
@@ -86,4 +128,5 @@
         </LinearLayout>
 
     </LinearLayout>
+    </ScrollView>
 </FrameLayout>

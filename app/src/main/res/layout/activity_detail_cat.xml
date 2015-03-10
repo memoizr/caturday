@@ -6,7 +6,6 @@
 
     <FrameLayout
         android:id="@+id/detail_reveal"
-        android:visibility="invisible"
         android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

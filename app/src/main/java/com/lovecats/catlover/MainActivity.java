@@ -16,9 +16,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
 import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +30,7 @@ import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
@@ -37,6 +41,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.data.CatFetcher;
 import com.lovecats.catlover.data.CatModel;
+import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.views.CollapsibleView;
 import com.lovecats.catlover.views.SlideShowView;
 import com.squareup.picasso.Picasso;
@@ -93,6 +98,7 @@ public class MainActivity extends ActionBarActivity
         setupCollapsibleToolbar();
         setDrawer();
         setUpButton();
+        new AccelerateDecelerateInterpolator();
 
 //        slide_show_V.postDelayed(new Runnable() {
 //            @Override
@@ -100,6 +106,8 @@ public class MainActivity extends ActionBarActivity
 //                slide_show_V.flash();
 //            }
 //        }, 2000);
+
+
     }
 
     private void setUpFragments(Bundle savedInstanceState) {

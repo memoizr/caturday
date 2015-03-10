@@ -15,21 +15,27 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewOutlineProvider;
+import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.lovecats.catlover.data.CatModel;
+import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
 
@@ -81,20 +87,20 @@ public class CatDetailActivity extends ActionBarActivity {
                 .scaleY(1f)
                 .setDuration(400)
                 .setInterpolator(new HyperTanDecelerateInterpolator())
-                .setStartDelay(800)
+                .setStartDelay(400)
                 .start();
     }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        detail_reveal.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                reveal();
-            }
-        }, 100);
-    }
+//
+//    @Override
+//    protected void onPostResume() {
+//        super.onPostResume();
+//        detail_reveal.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                reveal();
+//            }
+//        }, 100);
+//    }
 
     private void compatMethods() {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -123,25 +129,25 @@ public class CatDetailActivity extends ActionBarActivity {
         favorite_B.setClipToOutline(true);
     }
 
-    public void reveal() {
-        // previously invisible view
-
-        // get the center for the clipping circle
-        int cx = (detail_reveal.getLeft() + detail_reveal.getRight()) / 2;
-        int cy = (detail_reveal.getTop() + detail_reveal.getBottom()) / 2;
-        // get the final radius for the clipping circle
-        int finalRadius = (int) Math.sqrt(Math.pow(detail_reveal.getWidth(),2) + Math.pow(detail_reveal.getHeight(), 2) / 2);
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(detail_reveal, cx, cy, 0, finalRadius);
-        anim.setDuration(600);
-        anim.setInterpolator(new AccelerateInterpolator());
-
-        // make the view visible and start the animation
-        detail_reveal.setVisibility(View.VISIBLE);
-        anim.start();
-    }
+//    public void reveal() {
+//        // previously invisible view
+//
+//        // get the center for the clipping circle
+//        int cx = (detail_reveal.getLeft() + detail_reveal.getRight()) / 2;
+//        int cy = (detail_reveal.getTop() + detail_reveal.getBottom()) / 2;
+//        // get the final radius for the clipping circle
+//        int finalRadius = (int) Math.sqrt(Math.pow(detail_reveal.getWidth(),2) + Math.pow(detail_reveal.getHeight(), 2) / 2);
+//
+//        // create the animator for this view (the start radius is zero)
+//        Animator anim =
+//                ViewAnimationUtils.createCircularReveal(detail_reveal, cx, cy, 0, finalRadius);
+//        anim.setDuration(600);
+//        anim.setInterpolator(new AccelerateInterpolator());
+//
+//        // make the view visible and start the animation
+//        detail_reveal.setVisibility(View.VISIBLE);
+//        anim.start();
+//    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setUpActivityTransitions(){

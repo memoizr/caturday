@@ -2,6 +2,7 @@ package com.lovecats.catlover;
 
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,9 +12,11 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lovecats.catlover.data.AuthModel;
 import com.lovecats.catlover.data.UserModel;
@@ -41,16 +44,24 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import greendao.Auth;
 import greendao.User;
 
 public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.username_TV) EditText username_TV;
+    @InjectView(R.id.email_TV) EditText email_TV;
     @InjectView(R.id.password_TV) EditText password_TV;
     @InjectView(R.id.login_submit_B) Button login_submit_B;
     @InjectView(R.id.login_reveal_V) View login_reveal;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.glide_container_V) LinearLayout glide_container;
+    @InjectView(R.id.signup_B) Button signup_B;
+    @InjectView(R.id.create_account_B) Button create_account_B;
+    @InjectView(R.id.existing_account_B) Button existing_account_B;
+    @InjectView(R.id.signup_buttons_V) View signup_buttons;
+    @InjectView(R.id.login_buttons_V) View login_buttons;
+    @InjectView(R.id.title_TV) TextView title_TV;
 
     private String rootUrl;
     private String url;
@@ -83,8 +94,32 @@ public class LoginActivity extends ActionBarActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         login();
         glideInAnimation();
-
+        glide_container.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+            }
+        }, 700);
     }
+
+    @OnClick(R.id.create_account_B)
+    public void showSignup() {
+        title_TV.setText("Signup");
+        username_TV.setVisibility(View.VISIBLE);
+        login_buttons.setVisibility(View.GONE);
+        signup_buttons.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.existing_account_B)
+    public void showLogin() {
+        username_TV.setVisibility(View.GONE);
+        title_TV.setText("Login");
+
+        signup_buttons.setVisibility(View.GONE);
+        login_buttons.setVisibility(View.VISIBLE);
+    }
+
 
     private void glideInAnimation() {
         int count = glide_container.getChildCount();
@@ -95,9 +130,9 @@ public class LoginActivity extends ActionBarActivity {
             view.animate()
                     .translationYBy(-400)
                     .alpha(1f)
-                    .setDuration(400)
+                    .setDuration(300)
                     .setInterpolator(new HyperTanDecelerateInterpolator())
-                    .setStartDelay(i * 150 + 600)
+                    .setStartDelay(i * 64 + 600)
                     .start();
         }
     }
@@ -109,9 +144,9 @@ public class LoginActivity extends ActionBarActivity {
             view.animate()
                     .translationYBy(400)
                     .alpha(0f)
-                    .setDuration(300)
+                    .setDuration(200)
                     .setInterpolator(new HyperTanAccelerateInterpolator())
-                    .setStartDelay((count - i) * 150)
+                    .setStartDelay((count - i) * 64)
                     .start();
         }
     }
