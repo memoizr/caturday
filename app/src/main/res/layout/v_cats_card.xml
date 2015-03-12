@@ -10,17 +10,92 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/caption_TV"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/cardCat_IV"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="48dp"
-        android:scaleType="centerCrop"
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/user_image_IV"
+        android:src="@drawable/donkey"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="16dp"
+        app:riv_corner_radius="36dp"
+        android:background="@drawable/profile_background"
+        android:padding="2dp"
+        android:elevation="3dp"/>
+    <TextView
+        android:layout_toRightOf="@+id/user_image_IV"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="@color/deepblack"
+        android:text="Random Chool"
+        android:id="@+id/user_name_TV"
+        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
-        android:layout_height="192dp" />
+        android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_toRightOf="@+id/user_image_IV"
+            android:layout_below="@+id/user_name_TV"
+            android:text="3 hours ago"
+            android:id="@+id/date_TV"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    <TextView
+        android:layout_below="@+id/user_image_IV"
+        android:id="@+id/caption_TV"
+        android:textSize="16sp"
+        android:textColor="@color/deepblack"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/cardCat_IV"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/caption_TV"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="192dp" />
+        <ImageButton
+            android:id="@+id/plus_one_B"
+            android:layout_margin="16dp"
+            android:layout_below="@id/cardCat_IV"
+            android:background="@drawable/done_round"
+            android:src="@drawable/ic_mood_white_18dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+        <ImageButton
+            android:layout_below="@id/cardCat_IV"
+            android:layout_toLeftOf="@+id/share_B"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/done_round"
+            android:backgroundTint="@color/gray"
+            android:src="@drawable/ic_chat_white_18dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+        <ImageButton
+            android:id="@+id/share_B"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_below="@id/cardCat_IV"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/done_round"
+            android:src="@drawable/ic_share_white_18dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+    </RelativeLayout>
+
 
 </android.support.v7.widget.CardView>

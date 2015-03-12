@@ -5,6 +5,8 @@
     <color name="primary_dark">#C2185B</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#333333</color>
+    <color name="gray">#AAA</color>
+    <color name="deepblack">#000</color>
     <color name="transparent">#0FFF</color>
     <color name="primary_translucent">#A0D81B60</color>
     <color name="primary_transparent">#00D81B60</color>
