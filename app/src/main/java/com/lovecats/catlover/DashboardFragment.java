@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.adapters.DashboardPageAdapter;
-import com.lovecats.catlover.data.CatFetcher;
 
 import java.util.List;
 
@@ -76,7 +75,9 @@ public class DashboardFragment extends Fragment
     }
 
     public void enableSwipeToRefresh(boolean toggle){
-        swipe_container.setEnabled(toggle);
+        if (swipe_container != null) {
+            swipe_container.setEnabled(toggle);
+        }
     }
 
 

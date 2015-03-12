@@ -2,9 +2,6 @@ package com.lovecats.catlover.data;
 
 import com.lovecats.catlover.Config;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import retrofit.Callback;
@@ -13,6 +10,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class CatPostFetcher {
+
     public static void fetchCatPosts() {
         String endpoint = Config.getEndpoint();
 
@@ -22,13 +20,21 @@ public class CatPostFetcher {
 
         CatPostApi api = adapter.create(CatPostApi.class);
 
+
         api.getPosts(new Callback<List<CatPostModel>>() {
             @Override
             public void success(List<CatPostModel> catPostModels, Response response) {
+                final List<CatPostModel> mCatPostModels = catPostModels;
 
-                for (CatPostModel catPostModel : catPostModels) {
-                    CatPostModel.createPost(catPostModel);
-                }
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (CatPostModel catPostModel : mCatPostModels) {
+                            CatPostModel.createPost(catPostModel);
+                        }
+                    }
+                });
+                thread.start();
             }
 
             @Override
@@ -36,6 +42,5 @@ public class CatPostFetcher {
                 error.printStackTrace();
             }
         });
-        System.out.println(CatPostModel.getCount());
     }
 }

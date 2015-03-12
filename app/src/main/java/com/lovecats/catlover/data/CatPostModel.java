@@ -1,6 +1,7 @@
 package com.lovecats.catlover.data;
 
 import java.util.List;
+import java.util.Random;
 
 import greendao.CatPost;
 import greendao.CatPostDao;
@@ -32,6 +33,10 @@ public class CatPostModel {
 
     public static CatPost getCatPostForServerId(String id) {
         return getCatPostDao().queryBuilder().where(CatPostDao.Properties.ServerId.eq(id)).unique();
+    }
+
+    public static CatPost getRandomCatPost() {
+        return getCatPostDao().load((long) Math.ceil(getCount() * Math.random()));
     }
 
     public static void createPost(CatPostModel catPostModel){

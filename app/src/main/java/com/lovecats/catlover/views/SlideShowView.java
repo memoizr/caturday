@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.data.CatModel;
+import com.lovecats.catlover.data.CatPostModel;
 import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
@@ -27,6 +27,9 @@ public class SlideShowView extends FrameLayout {
 
     private Context mContext;
 
+    private AnimationSet zoomIn;
+    private ScaleAnimation mScale;
+
     public SlideShowView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -37,23 +40,20 @@ public class SlideShowView extends FrameLayout {
         mContext = context;
 
         ButterKnife.inject(this);
-        if (CatModel.getCount(mContext) > 0) {
-            String url = CatModel.getCatImageForId(mContext, (long) Math.ceil(40 * Math.random())).getUrl();
-            Picasso.with(mContext).load(url).into(slide_0);
-        }
         cycleBackgroundImage();
     }
 
-    private void cycleBackgroundImage() {
-        if (CatModel.getCount(mContext) > 0) {
-            String url = CatModel.getCatImageForId(mContext, (long) Math.ceil(40 * Math.random())).getUrl();
+    private void setRandomImage() {
+        if (CatPostModel.getCount() > 0) {
+            String url = CatPostModel.getRandomCatPost().getImage_url();
             Picasso.with(mContext).load(url).into(slide_0);
         }
-        animateBackgroundImage(slide_0);
     }
 
-    AnimationSet zoomIn;
-    ScaleAnimation mScale;
+    private void cycleBackgroundImage() {
+        setRandomImage();
+        animateBackgroundImage(slide_0);
+    }
 
     private void animateBackgroundImage(ImageView view){
         zoomIn = new AnimationSet(true);

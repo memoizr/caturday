@@ -27,16 +27,13 @@ import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.data.AuthModel;
-import com.lovecats.catlover.data.CatFetcher;
-import com.lovecats.catlover.data.CatPostApi;
 import com.lovecats.catlover.data.CatPostFetcher;
-import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.data.DaoManager;
+import com.lovecats.catlover.helpers.ApiVersionHelper;
+import com.lovecats.catlover.helpers.DrawerArrowHelper;
+import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.views.CollapsibleView;
 import com.lovecats.catlover.views.SlideShowView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -44,16 +41,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import greendao.CatImage;
-import greendao.CatPost;
 import lombok.Getter;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationFragment.OnFragmentInteractionListener,
-        CatStreamFragment.ScrollCallback, CatFetcher.FetcherCallback {
+        CatStreamFragment.ScrollCallback {
 
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
@@ -78,6 +70,9 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new Config(this);
+        DaoManager.DaoLoader(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -95,7 +90,6 @@ public class MainActivity extends ActionBarActivity
         setDrawer();
         setUpButton();
 
-        new Config(this);
 
         CatPostFetcher.fetchCatPosts();
     }
@@ -110,24 +104,6 @@ public class MainActivity extends ActionBarActivity
                     .add(R.id.left_drawer_V, new NavigationFragment())
                     .commit();
         }
-    }
-
-    public void toggleArrow(boolean toggle) {
-        ValueAnimator va;
-        if (toggle) {
-            va = new ObjectAnimator().ofFloat(0, 1);
-        } else {
-            va = new ObjectAnimator().ofFloat(1, 0);
-        }
-        va.setDuration(300);
-        va.setInterpolator(new AccelerateDecelerateInterpolator());
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mDrawerToggle.onDrawerSlide(mDrawerLayout, Float.parseFloat(animation.getAnimatedValue().toString()));
-            }
-        });
-        va.start();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -206,26 +182,19 @@ public class MainActivity extends ActionBarActivity
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupActivityTransitions() {
-        if (supportsAPI(Build.VERSION_CODES.KITKAT)) {
+        if (ApiVersionHelper.supportsAPI(Build.VERSION_CODES.KITKAT)) {
             Transition fade = new Fade();
             fade.excludeTarget(android.R.id.statusBarBackground, true);
             fade.excludeTarget(android.R.id.navigationBarBackground, true);
             fade.excludeTarget(title_container_RL, true);
 
-            if (supportsAPI(Build.VERSION_CODES.LOLLIPOP)) {
+            if (ApiVersionHelper.supportsAPI(Build.VERSION_CODES.LOLLIPOP)) {
                 getWindow().setExitTransition(fade);
                 getWindow().setEnterTransition(fade);
             }
         }
     }
 
-    private static boolean supportsAPI(int targetAPI) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= targetAPI)
-            return true;
-        else
-            return false;
-    }
 
     public void animateTitleContainer(float targetShiftY) {
         title_container_RL.animate().cancel();
@@ -233,7 +202,7 @@ public class MainActivity extends ActionBarActivity
                 .animate()
                 .translationY(-targetShiftY)
                 .setDuration(300)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setInterpolator(new HyperAccelerateDecelerateInterpolator())
                 .start();
     }
 
@@ -294,7 +263,6 @@ public class MainActivity extends ActionBarActivity
                         getResources().getColor(R.color.primary_transparent),
                         getResources().getColor(R.color.primary));
 
-                System.out.println("paused");
                 slide_show_V.animationPause();
                 transparent = false;
             }
@@ -332,7 +300,6 @@ public class MainActivity extends ActionBarActivity
             animateBackground(title_container_RL,
                     getResources().getColor(R.color.primary_transparent),
                     getResources().getColor(R.color.primary));
-            System.out.println("paused");
             slide_show_V.animationPause();
             transparent = false;
         }
@@ -353,7 +320,7 @@ public class MainActivity extends ActionBarActivity
         va.setDuration(300);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                  @Override
-                                 public void onAnimationUpdate (ValueAnimator animation){
+                                 public void onAnimationUpdate(ValueAnimator animation) {
                                      mView.setBackgroundColor((Integer) animation.getAnimatedValue());
                                  }
                              }
@@ -367,7 +334,6 @@ public class MainActivity extends ActionBarActivity
         return true;
     }
 
-    @Override
     public void onFetchComplete(List<CatImage> catImages) {
         dashboardFragment.swipe_container.setRefreshing(false);
         slide_show_V.flash();
@@ -384,5 +350,9 @@ public class MainActivity extends ActionBarActivity
     public void clickNewPost() {
         Intent intent = new Intent(this, NewPostActivity.class);
         startActivity(intent);
+    }
+
+    public void toggleArrow(boolean toggle) {
+        DrawerArrowHelper.toggleArrow(toggle, mDrawerToggle, mDrawerLayout);
     }
 }

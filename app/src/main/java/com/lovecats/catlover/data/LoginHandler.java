@@ -33,7 +33,6 @@ public class LoginHandler {
         api.getToken(loginWrapper, new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authToken, Response response) {
-//                System.out.println("auth is " + authToken.getAuthToken().getToken());
                 User user = new User();
                 user.setServerId(authToken.getId());
                 user.setUsername(authToken.getUsername());

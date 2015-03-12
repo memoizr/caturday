@@ -52,7 +52,6 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
 
         User user = UserModel.getLoggedInUser();
         if (user != null) {
-            System.out.println("not null");
             username_TV.setText(user.getUsername());
         }
 

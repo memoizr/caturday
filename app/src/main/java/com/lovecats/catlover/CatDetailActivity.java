@@ -1,13 +1,10 @@
 package com.lovecats.catlover;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Outline;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,27 +12,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewOutlineProvider;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.BounceInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.lovecats.catlover.data.CatModel;
-import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
 
@@ -219,18 +207,18 @@ public class CatDetailActivity extends ActionBarActivity {
     }
 
     private void updateButton() {
-        favorite = CatModel.getCatImageForId(this, id).getFavorite();
-        Drawable image;
-        if (favorite != null && (Boolean) favorite) {
-            favorite_B.setBackgroundColor(getResources().getColor(R.color.primary));
-            image = getResources().getDrawable(R.drawable.ic_favorite_white_48dp);
-            image.mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
-        } else {
-            favorite_B.setBackgroundColor(getResources().getColor(R.color.white));
-            image = getResources().getDrawable(R.drawable.ic_favorite_outline_white_48dp);
-            image.mutate().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.MULTIPLY);
-        }
-        favorite_B.setImageDrawable(image);
+//        favorite = CatModel.getCatImageForId(this, id).getFavorite();
+//        Drawable image;
+//        if (favorite != null && (Boolean) favorite) {
+//            favorite_B.setBackgroundColor(getResources().getColor(R.color.primary));
+//            image = getResources().getDrawable(R.drawable.ic_favorite_white_48dp);
+//            image.mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+//        } else {
+//            favorite_B.setBackgroundColor(getResources().getColor(R.color.white));
+//            image = getResources().getDrawable(R.drawable.ic_favorite_outline_white_48dp);
+//            image.mutate().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.MULTIPLY);
+//        }
+//        favorite_B.setImageDrawable(image);
     }
 
     private void shareTextUrl() {
@@ -254,7 +242,7 @@ public class CatDetailActivity extends ActionBarActivity {
         } else {
             catImage.setFavorite(true);
         }
-        CatModel.insertOrUpdate(this, catImage);
+//        CatModel.insertOrUpdate(this, catImage);
         updateButton();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_clockwise);
         favorite_B.startAnimation(animation);
