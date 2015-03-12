@@ -9,4 +9,5 @@
     <color name="primary_translucent">#A0D81B60</color>
     <color name="primary_transparent">#00D81B60</color>
     <color name="dark_transparent">#50000000</color>
+    <color name="teal">@color/material_deep_teal_500</color>
 </resources>

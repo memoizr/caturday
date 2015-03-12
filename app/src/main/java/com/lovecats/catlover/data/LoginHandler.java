@@ -12,7 +12,7 @@ import retrofit.client.Response;
 
 public class LoginHandler {
 
-    public static void performLogin(String password, String email, Callback callback) {
+    public static void performLogin(String password, String email, final Callback callback) {
 
         final Callback mCallback = callback;
 
@@ -37,10 +37,12 @@ public class LoginHandler {
                 user.setServerId(authToken.getId());
                 user.setUsername(authToken.getUsername());
                 User newUser = UserModel.insertOrUpdate(user);
+                callback.success(authToken, response);
             }
 
             @Override
             public void failure(RetrofitError error) {
+                callback.failure(error);
                 error.printStackTrace();
 
             }

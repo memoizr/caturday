@@ -15,10 +15,10 @@ public class DrawerArrowHelper {
         ValueAnimator va;
         if (toggle) {
             va = new ObjectAnimator().ofFloat(0, 1);
-            va.setDuration(900);
+            va.setDuration(500);
         } else {
             va = new ObjectAnimator().ofFloat(1, 0);
-            va.setDuration(300);
+            va.setDuration(400);
         }
         va.setInterpolator(new HyperAccelerateDecelerateInterpolator());
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

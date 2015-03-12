@@ -4,8 +4,16 @@
     android:layout_width="match_parent"
     android:background="@color/primary"
     android:id="@+id/login_reveal_V"
+    android:animateLayoutChanges="false"
     android:visibility="invisible"
     android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/reveal_done_V"
+        android:visibility="invisible"
+        android:background="@color/teal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -42,6 +50,7 @@
                 android:hint="username"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_person_white_24dp"
+                android:drawablePadding="16dp"
                 android:layout_width="match_parent"
                 android:imeOptions="actionNext"
                 android:visibility="gone"
@@ -60,6 +69,7 @@
                 android:imeOptions="actionNext"
                 android:drawableLeft="@drawable/ic_email_white_24dp"
                 android:textColor="@color/white"
+                android:drawablePadding="16dp"
                 app:floatingLabel="highlight"
                 app:baseColor="@android:color/white"
                 app:primaryColor="@color/white"
@@ -71,6 +81,7 @@
                 android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:drawablePadding="16dp"
                 android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
@@ -129,4 +140,21 @@
 
     </LinearLayout>
     </ScrollView>
+    <ProgressBar
+        android:layout_marginTop="192dp"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="72dp"
+        android:layout_height="72dp" />
+    <ImageView
+        android:layout_marginTop="104dp"
+        android:id="@+id/done_V"
+        android:background="@drawable/done_round"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_done_white_48dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"/>
 </FrameLayout>

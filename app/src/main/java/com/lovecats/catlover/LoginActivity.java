@@ -1,22 +1,24 @@
 package com.lovecats.catlover;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lovecats.catlover.data.LoginHandler;
 import com.lovecats.catlover.data.UserFetcher;
-import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
-import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
+import com.lovecats.catlover.helpers.AnimationHelper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,6 +41,9 @@ public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.signup_buttons_V) View signup_buttons;
     @InjectView(R.id.login_buttons_V) View login_buttons;
     @InjectView(R.id.title_TV) TextView title_TV;
+    @InjectView(R.id.progress_bar) ProgressBar progress_bar;
+    @InjectView(R.id.done_V) View done;
+    @InjectView(R.id.reveal_done_V) View reveal_done;
 
     private String rootUrl;
     private String url;
@@ -56,29 +61,104 @@ public class LoginActivity extends ActionBarActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        glideInAnimation();
+        AnimationHelper.glideUp(glide_container);
+        showKeyboard();
+    }
+
+    private void showKeyboard() {
         glide_container.postDelayed(new Runnable() {
             @Override
             public void run() {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
             }
         }, 700);
     }
 
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
     @OnClick(R.id.login_submit_B)
     public void login() {
+        hideKeyboard();
+        final Context mContext = this;
+
         LoginHandler.performLogin(password_TV.getText().toString(), email_TV.getText().toString(), new Callback() {
             @Override
             public void success(Object authString, Response response) {
-                UserFetcher.createUser(authString.toString());
+                System.out.println("win");
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationHelper.zoomOut(progress_bar);
+                    }
+                }, 600);
+
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationHelper.zoomIn(done);
+                    }
+                }, 1000);
+
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationHelper.circularReveal(reveal_done, done.getLeft() + done.getWidth()/2, done.getTop() + done.getWidth()/2, null);
+                    }
+                }, 1400);
+
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        backPressed();
+                    }
+                }, 2200);
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                }, 2100);
             }
+
 
             @Override
             public void failure(RetrofitError error) {
+                System.out.println("fail");
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationHelper.glideOutAndHide(progress_bar);
+                    }
+                }, 500);
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationHelper.glideInAndShow(glide_container);
+                    }
+                }, 900);
+                progress_bar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.shake);
+                        password_TV.startAnimation(animation);
+                        email_TV.startAnimation(animation);
+
+                    }
+                }, 1150);
                 error.printStackTrace();
             }
         });
+
+        AnimationHelper.glideAwayAndHide(glide_container);
+        progress_bar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AnimationHelper.glideInAndShow(progress_bar);
+            }
+        }, 400);
     }
 
     @OnClick(R.id.create_account_B)
@@ -98,87 +178,29 @@ public class LoginActivity extends ActionBarActivity {
         login_buttons.setVisibility(View.VISIBLE);
     }
 
-
-    private void glideInAnimation() {
-        int count = glide_container.getChildCount();
-        for (int i = 0; i < count; i++) {
-            View view = glide_container.getChildAt(i);
-            view.setTranslationY(400);
-            view.setAlpha(0f);
-            view.animate()
-                    .translationYBy(-400)
-                    .alpha(1f)
-                    .setDuration(300)
-                    .setInterpolator(new HyperTanDecelerateInterpolator())
-                    .setStartDelay(i * 64 + 600)
-                    .start();
-        }
-    }
-
-    private void glideOutAnimation() {
-        int count = glide_container.getChildCount();
-        for (int i = 0; i < count; i++) {
-            View view = glide_container.getChildAt(i);
-            view.animate()
-                    .translationYBy(400)
-                    .alpha(0f)
-                    .setDuration(200)
-                    .setInterpolator(new HyperTanAccelerateInterpolator())
-                    .setStartDelay((count - i) * 64)
-                    .start();
-        }
-    }
-
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
         login_reveal.postDelayed(new Runnable() {
             @Override
             public void run() {
-                reveal();
+                circularReveal();
             }
         }, 32);
     }
 
-    public void reveal() {
-        // previously invisible view
-
-        // get the center for the clipping circle
+    public void circularReveal() {
         int cx = login_reveal.getRight() - 48;
         int cy = login_reveal.getTop() + 96;
 
-        // get the final radius for the clipping circle
-        int finalRadius = (int) Math.sqrt(Math.pow(login_reveal.getWidth(),2) + Math.pow(login_reveal.getHeight(), 2));
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(login_reveal, cx, cy, 0, finalRadius);
-        anim.setDuration(400);
-        anim.setInterpolator(new HyperTanAccelerateInterpolator());
-
-        // make the view visible and start the animation
-        login_reveal.setVisibility(View.VISIBLE);
-        anim.start();
+        AnimationHelper.circularReveal(login_reveal, cx, cy, null);
     }
 
-    public void hide() {
+    public void circularHide() {
         int cx = login_reveal.getRight() - 48;
         int cy = login_reveal.getTop() + 96;
 
-        // get the final radius for the clipping circle
-        int finalRadius = (int) Math.sqrt(Math.pow(login_reveal.getWidth(),2) + Math.pow(login_reveal.getHeight(), 2));
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(login_reveal, cx, cy, finalRadius, 0);
-        anim.setDuration(300);
-        anim.setStartDelay(500);
-        anim.setInterpolator(new HyperTanDecelerateInterpolator());
-
-        // make the view visible and start the animation
-        // login_reveal.setVisibility(View.INVISIBLE);
-        anim.addListener(new Animator.AnimatorListener() {
+        Animator.AnimatorListener listener = new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
             }
@@ -196,8 +218,9 @@ public class LoginActivity extends ActionBarActivity {
             @Override
             public void onAnimationRepeat(Animator animation) {
             }
-        });
-        anim.start();
+        };
+
+        AnimationHelper.circularHide(login_reveal, cx, cy, listener);
     }
 
     private void setUpToolbar(){
@@ -208,8 +231,8 @@ public class LoginActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        glideOutAnimation();
-        hide();
+        AnimationHelper.glideDown(glide_container);
+        circularHide();
     }
 
     private void backPressed() {

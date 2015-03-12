@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -308,7 +307,7 @@ public class MainActivity extends ActionBarActivity
                 .animate()
                 .translationY(-targetShiftY)
                 .setDuration(300)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setInterpolator(new HyperAccelerateDecelerateInterpolator())
                 .start();
     }
 
