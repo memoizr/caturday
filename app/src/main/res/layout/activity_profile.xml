@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lovecats.catlover.ProfileActivity">
+
+
+    <ImageView
+        android:id="@+id/cover_image_IV"
+        android:src="@drawable/default_profile_cover"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="168dp" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_marginLeft="16dp"
+        app:riv_corner_radius="48dp"
+        android:background="@drawable/profile_background"
+        android:id="@+id/profile_image_IV"
+        android:src="@drawable/donkey"
+        android:padding="4dp"
+        android:elevation="5dp"
+        android:scaleType="centerCrop"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_alignBottom="@+id/cover_image_IV"
+        android:layout_marginBottom="-48dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:layout_below="@id/cover_image_IV"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="16dp"
+        android:text="User Name"
+        android:textSize="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/username_TV" />
+
+</RelativeLayout>

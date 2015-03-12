@@ -35,6 +35,7 @@ public class CollapsibleView extends FrameLayout {
     private int logoMinTopMargin;
     private int logoMaxHeight;
     private int logoMinHeight;
+    private int offset;
 
     public CollapsibleView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -62,13 +63,15 @@ public class CollapsibleView extends FrameLayout {
         logoMinHeight = resources.getDimensionPixelSize(R.dimen.logo_min_height);
         logoMaxHeight = resources.getDimensionPixelSize(R.dimen.logo_max_height);
 
+        offset = resources.getDimensionPixelSize(R.dimen.size_xlarge);
+
         int logoWidth = resources.getDimensionPixelSize(R.dimen.logo_max_width);
 
         int displayWidth = context.getResources().getDisplayMetrics().widthPixels;
         MarginLayoutParams params =
                 (MarginLayoutParams) logo_IV.getLayoutParams();
         logo_IV.setLayoutParams(params);
-        logoMaxLeftMargin = (displayWidth - logoWidth ) / 2;
+        logoMaxLeftMargin = ((displayWidth - logoWidth ) / 2) - offset;
 
         maxHeight = resources.getDimensionPixelSize(R.dimen.title_height);
         updateLogo();
@@ -91,16 +94,17 @@ public class CollapsibleView extends FrameLayout {
     private void updateLogo() {
         MarginLayoutParams params =
                 (MarginLayoutParams) logo_IV.getLayoutParams();
+        float collapseScale = (float) (0.5*Math.tanh( 6 * collapseLevel - 3) + 0.5);
         params.topMargin =
                 (int) interpolate(logoMinTopMargin, logoMaxTopMargin, collapseLevel);
         params.leftMargin =
-                (int) interpolate(logoMinLeftMargin, logoMaxLeftMargin, collapseLevel);
+                (int) interpolate(logoMinLeftMargin, logoMaxLeftMargin, collapseScale);
         logo_IV.setLayoutParams(params);
 
         logo_IV.setPivotX(0);
         logo_IV.setPivotY(0);
-        logo_IV.setScaleX(interpolate(logoMinHeight, logoMaxHeight, collapseLevel)/logoMaxHeight);
-        logo_IV.setScaleY(interpolate(logoMinHeight, logoMaxHeight, collapseLevel)/logoMaxHeight);
+        logo_IV.setScaleX(interpolate(logoMinHeight, logoMaxHeight, collapseScale)/logoMaxHeight);
+        logo_IV.setScaleY(interpolate(logoMinHeight, logoMaxHeight, collapseScale)/logoMaxHeight);
     }
 
     private void updateLayoutParams() {

@@ -7,7 +7,7 @@
 
     <dimen name="fab_size">56dp</dimen>
     <dimen name="title_height">168dp</dimen>
-    <dimen name="dashboard_image_height">264dp</dimen>
+    <dimen name="dashboard_image_height">288dp</dimen>
 
 
     <dimen name="logo_max_height">32dp</dimen>
@@ -15,7 +15,7 @@
 
     <dimen name="logo_max_width">160dp</dimen>
 
-    <dimen name="logo_min_left_margin">72dp</dimen>
+    <dimen name="logo_min_left_margin">16dp</dimen>
 
     <dimen name="logo_max_top_margin">96dp</dimen>
     <dimen name="logo_min_top_margin">18dp</dimen>
@@ -25,4 +25,9 @@
 
     <dimen name="display_name_min_margin">30dp</dimen>
     <dimen name="display_name_max_margin">10dp</dimen>
+
+    <dimen name="size_small">16dp</dimen>
+    <dimen name="size_medium">32dp</dimen>
+    <dimen name="size_large">48dp</dimen>
+    <dimen name="size_xlarge">52dp</dimen>
 </resources>

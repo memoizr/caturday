@@ -12,27 +12,32 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lovecats.catlover.CatDetailActivity;
+import com.lovecats.catlover.MainActivity;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.data.CatPostModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.CatImage;
+import greendao.CatPost;
 
-public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    public List<CatImage> mCatImages;
+    public List<CatPost> mCatPosts;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    public CatsAdapter(Context context, List<CatImage> catImages) {
+    public CatPostAdapter(Context context, List<CatPost> catPosts) {
         mContext = context;
-        mCatImages = catImages;
+        mCatPosts= catPosts;
     }
 
     @Override
@@ -62,13 +67,17 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
             final int j = i;
 
+            setAnimation(myViewHolder.catContainer, i);
             final String transitionName = "catTransition" + i;
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
-            Picasso.with(mContext).load(mCatImages.get(i).getUrl()).into(myViewHolder.cat_IV);
+            ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
+
+            Picasso.with(mContext).load(mCatPosts.get(i).getImage_url()).into(myViewHolder.cat_IV);
             myViewHolder.catContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ((MainActivity)mContext).toggleArrow(true);
                     Intent intent = new Intent(mContext, CatDetailActivity.class);
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -76,8 +85,8 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     Pair.create((View) myViewHolder.cat_IV, transitionName)
                             );
                     intent.putExtra("transition", transitionName);
-                    intent.putExtra("url", mCatImages.get(j).getUrl());
-                    intent.putExtra("id", mCatImages.get(j).getId());
+                    intent.putExtra("url", mCatPosts.get(j).getImage_url());
+                    intent.putExtra("id", mCatPosts.get(j).getId());
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                 }
             });
@@ -86,7 +95,7 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mCatImages.size();
+        return mCatPosts.size();
     }
 
     @Override
@@ -110,10 +119,24 @@ public class CatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class CatsCardViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.cardCat_IV) ImageView cat_IV;
         @InjectView(R.id.catContainer) View catContainer;
+        @InjectView(R.id.caption_TV) TextView caption_TV;
 
         public CatsCardViewHolder(View v) {
             super(v);
             ButterKnife.inject(this, v);
+        }
+    }
+
+    int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_up);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
         }
     }
 }

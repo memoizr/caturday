@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lovecats.catlover.NewPostActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:id="@+id/reveal_V"
+        android:background="@color/accent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:paddingTop="72dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp"
+            android:text="New Post"
+            android:id="@+id/new_post_title"
+            android:layout_width="wrap_content"
+            android:textSize="32dp"
+            android:layout_height="wrap_content" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="Text"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp"
+            android:layout_width="match_parent"
+            app:floatingLabel="highlight"
+            app:baseColor="@android:color/white"
+            app:maxCharacters="20"
+            app:primaryColor="@color/white"
+            app:singleLineEllipsis="true" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="56dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="Publish"
+                android:id="@+id/login_submit_B"
+                android:background="@drawable/tab_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
