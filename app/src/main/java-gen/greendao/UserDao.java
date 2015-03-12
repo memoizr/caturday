@@ -24,11 +24,13 @@ public class UserDao extends AbstractDao<User, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
-        public final static Property FirstName = new Property(2, String.class, "firstName", false, "FIRST_NAME");
-        public final static Property LastName = new Property(3, String.class, "lastName", false, "LAST_NAME");
-        public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
-        public final static Property LoggedIn = new Property(5, Boolean.class, "loggedIn", false, "LOGGED_IN");
+        public final static Property ServerId = new Property(1, String.class, "serverId", false, "SERVER_ID");
+        public final static Property Username = new Property(2, String.class, "username", false, "USERNAME");
+        public final static Property Email = new Property(3, Short.class, "email", false, "EMAIL");
+        public final static Property FirstName = new Property(4, String.class, "firstName", false, "FIRST_NAME");
+        public final static Property LastName = new Property(5, String.class, "lastName", false, "LAST_NAME");
+        public final static Property Description = new Property(6, String.class, "description", false, "DESCRIPTION");
+        public final static Property LoggedIn = new Property(7, Boolean.class, "loggedIn", false, "LOGGED_IN");
     };
 
 
@@ -45,11 +47,16 @@ public class UserDao extends AbstractDao<User, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'USER' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'USERNAME' TEXT," + // 1: username
-                "'FIRST_NAME' TEXT," + // 2: firstName
-                "'LAST_NAME' TEXT," + // 3: lastName
-                "'DESCRIPTION' TEXT," + // 4: description
-                "'LOGGED_IN' INTEGER);"); // 5: loggedIn
+                "'SERVER_ID' TEXT UNIQUE ," + // 1: serverId
+                "'USERNAME' TEXT," + // 2: username
+                "'EMAIL' INTEGER," + // 3: email
+                "'FIRST_NAME' TEXT," + // 4: firstName
+                "'LAST_NAME' TEXT," + // 5: lastName
+                "'DESCRIPTION' TEXT," + // 6: description
+                "'LOGGED_IN' INTEGER);"); // 7: loggedIn
+        // Add Indexes
+        db.execSQL("CREATE INDEX " + constraint + "IDX_USER_SERVER_ID ON USER" +
+                " (SERVER_ID);");
     }
 
     /** Drops the underlying database table. */
@@ -68,29 +75,39 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(1, id);
         }
  
+        String serverId = entity.getServerId();
+        if (serverId != null) {
+            stmt.bindString(2, serverId);
+        }
+ 
         String username = entity.getUsername();
         if (username != null) {
-            stmt.bindString(2, username);
+            stmt.bindString(3, username);
+        }
+ 
+        Short email = entity.getEmail();
+        if (email != null) {
+            stmt.bindLong(4, email);
         }
  
         String firstName = entity.getFirstName();
         if (firstName != null) {
-            stmt.bindString(3, firstName);
+            stmt.bindString(5, firstName);
         }
  
         String lastName = entity.getLastName();
         if (lastName != null) {
-            stmt.bindString(4, lastName);
+            stmt.bindString(6, lastName);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(5, description);
+            stmt.bindString(7, description);
         }
  
         Boolean loggedIn = entity.getLoggedIn();
         if (loggedIn != null) {
-            stmt.bindLong(6, loggedIn ? 1l: 0l);
+            stmt.bindLong(8, loggedIn ? 1l: 0l);
         }
     }
 
@@ -105,11 +122,13 @@ public class UserDao extends AbstractDao<User, Long> {
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // username
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // firstName
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastName
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0 // loggedIn
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // serverId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // username
+            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3), // email
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // firstName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lastName
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // description
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0 // loggedIn
         );
         return entity;
     }
@@ -118,11 +137,13 @@ public class UserDao extends AbstractDao<User, Long> {
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setUsername(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setFirstName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setLastName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setLoggedIn(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setServerId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setUsername(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setEmail(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3));
+        entity.setFirstName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setLastName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDescription(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setLoggedIn(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
      }
     
     /** @inheritdoc */

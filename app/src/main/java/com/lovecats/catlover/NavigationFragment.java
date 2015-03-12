@@ -50,8 +50,11 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
         navigationListView.setAdapter(adapter);
         navigationListView.setOnItemClickListener(this);
 
-        User user = UserModel.getUserForId(getActivity(), 0);
-        username_TV.setText(user.getUsername());
+        User user = UserModel.getLoggedInUser();
+        if (user != null) {
+            System.out.println("not null");
+            username_TV.setText(user.getUsername());
+        }
 
         return rootView;
     }

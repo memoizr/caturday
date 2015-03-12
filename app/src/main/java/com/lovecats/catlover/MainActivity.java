@@ -5,46 +5,38 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Outline;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.lovecats.catlover.data.AuthModel;
 import com.lovecats.catlover.data.CatFetcher;
-import com.lovecats.catlover.data.CatModel;
-import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
+import com.lovecats.catlover.data.CatPostApi;
+import com.lovecats.catlover.data.CatPostFetcher;
+import com.lovecats.catlover.data.CatPostModel;
 import com.lovecats.catlover.views.CollapsibleView;
 import com.lovecats.catlover.views.SlideShowView;
-import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -52,8 +44,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import greendao.CatImage;
+import greendao.CatPost;
 import lombok.Getter;
-import lombok.Setter;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationFragment.OnFragmentInteractionListener,
@@ -98,17 +94,12 @@ public class MainActivity extends ActionBarActivity
         setupCollapsibleToolbar();
         setDrawer();
         setUpButton();
-        new AccelerateDecelerateInterpolator();
 
-//        slide_show_V.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                slide_show_V.flash();
-//            }
-//        }, 2000);
+        new Config(this);
 
-
+        CatPostFetcher.fetchCatPosts();
     }
+
 
     private void setUpFragments(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
@@ -360,18 +351,16 @@ public class MainActivity extends ActionBarActivity
                 colorFrom,
                 colorTo);
         va.setDuration(300);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-
-                             {
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                  @Override
                                  public void onAnimationUpdate (ValueAnimator animation){
                                      mView.setBackgroundColor((Integer) animation.getAnimatedValue());
                                  }
                              }
-
         );
         va.start();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);

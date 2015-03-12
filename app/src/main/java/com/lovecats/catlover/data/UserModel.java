@@ -2,45 +2,55 @@ package com.lovecats.catlover.data;
 
 import android.content.Context;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import greendao.User;
 import greendao.UserDao;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * Created by user on 23/02/15.
- */
 public class UserModel {
-    public static void insertOrUpdate(Context context, User user) {
-        getUserDao(context).insertOrReplace(user);
+
+    public static User insertOrUpdate(User user) {
+        long id = getUserDao().insertOrReplace(user);
+        return getUserDao().loadByRowId(id);
     }
 
-    private static UserDao getUserDao(Context c) {
-        return DaoManager.DaoLoader(c).getDaoSession().getUserDao();
+    private static UserDao getUserDao() {
+        return DaoManager.getDaoSession().getUserDao();
     }
 
-    public static long getCount(Context context) {
-        return getUserDao(context).count();
+    public static long getCount() {
+        return getUserDao().count();
     }
 
-    public static void logInUser(Context context, long id) {
-        getUserForId(context, id).setLoggedIn(true);
+    public static void logOutUser(String id) {
+        deleteUser(id);
     }
 
-    public static void logOutUser(Context context, long id) {
-        getUserForId(context, id).setLoggedIn(false);
+    private static void deleteUser(String id) {
+        getUserDao().delete(getUserForServerId(id));
     }
 
-    public static User getLoggedInUser(Context context) {
-        return getUserDao(context).queryBuilder()
-                .where(UserDao.Properties.LoggedIn.eq(true)).list().get(0);
+    public static User getLoggedInUser() {
+        if (getCount() > 0) {
+            return getUserDao().queryBuilder()
+                    .where(UserDao.Properties.LoggedIn.eq(true)).list().get(0);
+        } else {
+            return null;
+        }
     }
 
     public static List<User> getAllUsers(Context context) {
-        return getUserDao(context).loadAll();
+        return getUserDao().loadAll();
     }
 
-    public static User getUserForId(Context context, long id) {
-        return getUserDao(context).load(id);
+    public static User getUserForId(long id) {
+        return getUserDao().load(id);
+    }
+
+    public static User getUserForServerId(String id) {
+        return getUserDao().queryBuilder().where(UserDao.Properties.ServerId.eq(id)).unique();
     }
 }

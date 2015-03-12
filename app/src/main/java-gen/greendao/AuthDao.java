@@ -41,7 +41,7 @@ public class AuthDao extends AbstractDao<Auth, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'AUTH' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'TOKEN' TEXT);"); // 1: token
+                "'TOKEN' TEXT UNIQUE );"); // 1: token
     }
 
     /** Drops the underlying database table. */

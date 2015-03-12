@@ -6,25 +6,30 @@ import java.util.List;
 
 import greendao.Auth;
 import greendao.AuthDao;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AuthModel {
-    public static void insertOrUpdate(Context context, Auth auth) {
-        getAuthDao(context).insertOrReplace(auth);
+    @Setter @Getter private String username;
+    @Setter @Getter private String id;
+    @Setter @Getter private String email;
+
+    public static void insertOrUpdate(Auth auth) {
+        getAuthDao().insertOrReplace(auth);
     }
 
-    private static AuthDao getAuthDao(Context c) {
-        return DaoManager.DaoLoader(c).getDaoSession().getAuthDao();
+    private static AuthDao getAuthDao() {
+        return DaoManager.getDaoSession().getAuthDao();
     }
 
-    public static long getCount(Context context) {
-        return getAuthDao(context).count();
+    public static Auth getAuthToken() {
+        return getAuthDao().loadAll().get(0);
     }
 
-    public static List<Auth> getAllAuths(Context context) {
-        return getAuthDao(context).loadAll();
+    public static void setAuthToken(String token) {
+        Auth auth = new Auth();
+        auth.setToken(token);
+        insertOrUpdate(auth);
     }
 
-    public static Auth getAuthForId(Context context, long id) {
-        return getAuthDao(context).load(id);
-    }
 }

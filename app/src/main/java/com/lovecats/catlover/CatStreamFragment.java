@@ -13,20 +13,19 @@ import android.view.ViewGroup;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.adapters.CatsAdapter;
-import com.lovecats.catlover.data.CatFetcher;
+import com.lovecats.catlover.adapters.CatPostAdapter;
 import com.lovecats.catlover.data.CatModel;
+import com.lovecats.catlover.data.CatPostFetcher;
+import com.lovecats.catlover.data.CatPostModel;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.CatImage;
+import greendao.CatPost;
 
-/**
- * Created by user on 26/02/15.
- */
-public class CatStreamFragment extends Fragment implements ObservableScrollViewCallbacks,
-        CatFetcher.FetcherCallback {
+public class CatStreamFragment extends Fragment implements ObservableScrollViewCallbacks
+        {
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
     public static final int NEW_STREAM_TYPE = 0;
@@ -34,20 +33,20 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
 
     private ScrollCallback catScrollCallback;
     private int streamType;
-    private List<CatImage> catImages;
-    private CatsAdapter catsAdapter;
-    private CatFetcher catFetcher;
+    private List<CatPost> mCatPosts;
+    private CatPostAdapter catPostAdapter;
+    private CatPostFetcher catPostFetcher;
     private StaggeredGridLayoutManager staggeredGrid;
 
     public CatStreamFragment() {
     }
 
-    @Override
-    public void onFetchComplete(List<CatImage> catImages) {
-        catsAdapter.mCatImages = catImages;
-        notifyAdapter();
-
-    }
+//    @Override
+//    public void onFetchComplete(List<CatPostModel> catPostModels) {
+//        catPostAdapter.mCatPostModels = catPostModels;
+//        notifyAdapter();
+//
+//    }
 
     public interface ScrollCallback {
         void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
@@ -92,12 +91,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         return rootView;
     }
 
-    public void fetchCats() {
-
-        catFetcher = new CatFetcher(getActivity(), this);
-        catFetcher.getCatImageUrls();
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,8 +107,8 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         cats_stream_RV.setLayoutManager(staggeredGrid);
 
 
-        if (CatModel.getCount(getActivity()) == 0) {
-            fetchCats();
+        if (CatPostModel.getCount() == 0) {
+            CatPostFetcher.fetchCatPosts();
         }
 
         cats_stream_RV.setScrollViewCallbacks(this);
@@ -128,12 +121,13 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         });
 
         if (streamType == NEW_STREAM_TYPE) {
-            catImages = CatModel.getLastFourtyImages(getActivity());
+            mCatPosts = CatPostModel.getAllCatPosts();
         } else {
-            catImages = CatModel.getAllFavoriteCatImages(getActivity());
+            mCatPosts = CatPostModel.getAllCatPosts();
+//            catImages = CatModel.getAllFavoriteCatImages(getActivity());
         }
-        catsAdapter = new CatsAdapter(getActivity(), catImages);
-        cats_stream_RV.setAdapter(catsAdapter);
+        catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
+        cats_stream_RV.setAdapter(catPostAdapter);
     }
 
     private void notifyAdapter(){
@@ -149,13 +143,13 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         ((StaggeredGridLayoutManager)cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
     }
 
-    @Override
-    public void onResume(){
-        if (streamType == FAVORITES_STREAM_TYPE) {
-            catImages = CatModel.getAllFavoriteCatImages(getActivity());
-            catsAdapter.mCatImages = catImages;
-            catsAdapter.notifyDataSetChanged();
-        }
-        super.onResume();
-    }
+//    @Override
+//    public void onResume(){
+//        if (streamType == FAVORITES_STREAM_TYPE) {
+//            catImages = CatModel.getAllFavoriteCatImages(getActivity());
+//            catsAdapter.mCatImages = catImages;
+//            catsAdapter.notifyDataSetChanged();
+//        }
+//        super.onResume();
+//    }
 }

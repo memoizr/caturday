@@ -7,12 +7,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lovecats.catlover.data.AuthModel;
 import com.lovecats.catlover.data.UserModel;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.Auth;
 import greendao.User;
 
 
@@ -29,7 +27,7 @@ public class ProfileActivity extends ActionBarActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        User user = UserModel.getUserForId(this, 0);
+        User user = UserModel.getUserForId(0);
         username_TV.setText(user.getUsername());
 
     }

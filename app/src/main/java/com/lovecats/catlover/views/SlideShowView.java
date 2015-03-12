@@ -37,14 +37,18 @@ public class SlideShowView extends FrameLayout {
         mContext = context;
 
         ButterKnife.inject(this);
-        String url = CatModel.getCatImageForId(mContext, (long) Math.ceil(40 * Math.random())).getUrl();
-        Picasso.with(mContext).load(url).into(slide_0);
+        if (CatModel.getCount(mContext) > 0) {
+            String url = CatModel.getCatImageForId(mContext, (long) Math.ceil(40 * Math.random())).getUrl();
+            Picasso.with(mContext).load(url).into(slide_0);
+        }
         cycleBackgroundImage();
     }
 
     private void cycleBackgroundImage() {
-        String url = CatModel.getCatImageForId(mContext, (long) Math.ceil(40 * Math.random())).getUrl();
-        Picasso.with(mContext).load(url).into(slide_0);
+        if (CatModel.getCount(mContext) > 0) {
+            String url = CatModel.getCatImageForId(mContext, (long) Math.ceil(40 * Math.random())).getUrl();
+            Picasso.with(mContext).load(url).into(slide_0);
+        }
         animateBackgroundImage(slide_0);
     }
 

@@ -1,52 +1,29 @@
 package com.lovecats.catlover;
 
 import android.animation.Animator;
-import android.animation.TimeInterpolator;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lovecats.catlover.data.AuthModel;
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.data.LoginHandler;
+import com.lovecats.catlover.data.UserFetcher;
 import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import greendao.Auth;
-import greendao.User;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.username_TV) EditText username_TV;
@@ -77,30 +54,31 @@ public class LoginActivity extends ActionBarActivity {
 
         setUpToolbar();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        rootUrl = prefs.getString("example_text", null);
-        url = rootUrl + "/api/v1/token.json";
-
-        loginUrl = rootUrl + "/api/v1/user_data.json";
-
-        login_submit_B.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postData();
-            }
-        });
-
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        login();
         glideInAnimation();
         glide_container.postDelayed(new Runnable() {
             @Override
             public void run() {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         }, 700);
+    }
+
+    @OnClick(R.id.login_submit_B)
+    public void login() {
+        LoginHandler.performLogin(password_TV.getText().toString(), email_TV.getText().toString(), new Callback() {
+            @Override
+            public void success(Object authString, Response response) {
+                UserFetcher.createUser(authString.toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
     }
 
     @OnClick(R.id.create_account_B)
@@ -163,58 +141,6 @@ public class LoginActivity extends ActionBarActivity {
         }, 32);
     }
 
-    String requested;
-    public void postData() {
-        // Create a new HttpClient and Post Header
-        final HttpClient httpclient = new DefaultHttpClient();
-        final HttpPost httppost = new HttpPost(url);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-                    nameValuePairs.add(new BasicNameValuePair("email", username_TV.getText().toString()));
-                    nameValuePairs.add(new BasicNameValuePair("password", password_TV.getText().toString()));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                    StringBuilder builder = new StringBuilder();
-                    // Execute HTTP Post Request
-                    HttpResponse response = httpclient.execute(httppost);
-                    HttpEntity entity = response.getEntity();
-
-                    if (entity != null) {
-                        InputStream is = entity.getContent();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                        String line;
-                        while ( ( line = reader.readLine()) != null) {
-                            builder.append(line);
-                        }
-                        requested = builder.toString();
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(requested);
-                            String authToken = jsonObject.get("authentication_token").toString();
-//                            long userId = Long.parseLong(jsonObject.get("_id").toString());
-                            Auth auth = new Auth((long) 0, authToken);
-                            AuthModel.insertOrUpdate(getApplicationContext(), auth);
-                            login();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                } catch (ClientProtocolException e) {
-                } catch (IOException e) {
-                }
-            }
-        });
-        thread.start();
-    }
-
-//    private Animator anim;
-
     public void reveal() {
         // previously invisible view
 
@@ -272,56 +198,6 @@ public class LoginActivity extends ActionBarActivity {
             }
         });
         anim.start();
-    }
-
-    public void login() {
-
-
-        final String requestUrl = loginUrl
-                + "?api_key=" + AuthModel.getAllAuths(this).get(0).getToken()
-                + "&&user_id=" + "54f1e3a077d5164e63000001";
-        System.out.println(AuthModel.getAllAuths(this).get(0).getToken());
-
-        final HttpClient httpclient = new DefaultHttpClient();
-        final HttpGet httpget = new HttpGet(requestUrl);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    StringBuilder builder = new StringBuilder();
-                    HttpResponse response = httpclient.execute(httpget);
-                    HttpEntity entity = response.getEntity();
-                    if (entity != null) {
-                        InputStream is = entity.getContent();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                        String line;
-                        while ( ( line = reader.readLine()) != null) {
-                            builder.append(line);
-                        }
-                        requested = builder.toString();
-                        System.out.println(requested);
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(requested);
-                            String id = jsonObject.get("_id").toString();
-                            String username = jsonObject.get("username").toString();
-                            User user = new User();
-                            user.setId((long) 0);
-                            user.setUsername(username);
-
-                            UserModel.insertOrUpdate(getApplicationContext(), user);
-                            UserModel.logInUser(getApplicationContext(), user.getId());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
     }
 
     private void setUpToolbar(){

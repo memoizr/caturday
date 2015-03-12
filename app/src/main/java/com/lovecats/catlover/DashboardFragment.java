@@ -123,7 +123,7 @@ public class DashboardFragment extends Fragment
 
     @Override
     public void onRefresh() {
-        ((CatStreamFragment)pagerAdapter.getItem(0)).fetchCats();
+//        ((CatStreamFragment)pagerAdapter.getItem(0)).fetchCats();
     }
 
 }

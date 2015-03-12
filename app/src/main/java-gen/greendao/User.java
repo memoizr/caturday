@@ -7,7 +7,9 @@ package greendao;
 public class User {
 
     private Long id;
+    private String serverId;
     private String username;
+    private Short email;
     private String firstName;
     private String lastName;
     private String description;
@@ -20,9 +22,11 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String username, String firstName, String lastName, String description, Boolean loggedIn) {
+    public User(Long id, String serverId, String username, Short email, String firstName, String lastName, String description, Boolean loggedIn) {
         this.id = id;
+        this.serverId = serverId;
         this.username = username;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
@@ -37,12 +41,28 @@ public class User {
         this.id = id;
     }
 
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Short getEmail() {
+        return email;
+    }
+
+    public void setEmail(Short email) {
+        this.email = email;
     }
 
     public String getFirstName() {
