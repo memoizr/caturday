@@ -28,12 +28,17 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableListView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
 
@@ -53,8 +58,9 @@ public class CatDetailActivity extends ActionBarActivity {
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.detail_reveal) View detail_reveal;
-    @InjectView(R.id.comments_LV)  ListView comments_LV;
+    @InjectView(R.id.comments_LV) ObservableListView comments_LV;
     @InjectView(R.id.detail_container_RL) RelativeLayout detail_container;
+    @InjectView(R.id.caption_V) View caption_V;
 
     private long id;
 
@@ -92,13 +98,13 @@ public class CatDetailActivity extends ActionBarActivity {
         for (int i = 0; i < values.length; ++i) {
             list.add(values[i]);
         }
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
+        final StableArrayAdapter adapter = new StableArrayAdapter(this, list);
         LayoutInflater inflater = getLayoutInflater();
         header = (ViewGroup)inflater.inflate(R.layout.v_header, comments_LV, false);
-        header.getLayoutParams().height = 1000;
+        header.getLayoutParams().height = 1024;
         comments_LV.addHeaderView(header, null, false);
         comments_LV.setAdapter(adapter);
+        comments_LV.setDividerHeight(0);
 
         comments_LV.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -112,31 +118,53 @@ public class CatDetailActivity extends ActionBarActivity {
             }
         });
 
+        comments_LV.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
+            @Override
+            public void onScrollChanged(int i, boolean b, boolean b2) {
+                System.out.println(i);
+                if (i < 848) {
+                    caption_V.setTranslationY((float) -i - 160);
+                    favorite_B.setTranslationY((float) -i);
+                    if (i > 600) {
+                        caption_V.getLayoutParams().height = (i - 600 + 160);
+                        caption_V.requestLayout();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onDownMotionEvent() {
+
+            }
+
+            @Override
+            public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+            }
+        });
+
     }
 
     private class StableArrayAdapter extends ArrayAdapter<String> {
 
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+        ArrayList<String> mList;
 
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
-            super(context, textViewResourceId, objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
+        public StableArrayAdapter(Context context, ArrayList<String> objects) {
+            super(context, 0, objects);
+            mList = objects;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            String comment = getItem(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.v_comment, parent, false);
             }
+            TextView tvName = (TextView) convertView.findViewById(R.id.comment_TV);
+            tvName.setText(comment);
+            return convertView;
         }
-
-        @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
     }
 
     private void scaleButton() {
