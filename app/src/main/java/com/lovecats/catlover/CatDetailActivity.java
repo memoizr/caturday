@@ -3,9 +3,12 @@ package com.lovecats.catlover;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Outline;
 import android.os.Build;
+import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -14,18 +17,29 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,6 +53,8 @@ public class CatDetailActivity extends ActionBarActivity {
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.detail_reveal) View detail_reveal;
+    @InjectView(R.id.comments_LV)  ListView comments_LV;
+    @InjectView(R.id.detail_container_RL) RelativeLayout detail_container;
 
     private long id;
 
@@ -47,6 +63,7 @@ public class CatDetailActivity extends ActionBarActivity {
 
     private String url;
     private Object favorite;
+    private ViewGroup header;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +81,62 @@ public class CatDetailActivity extends ActionBarActivity {
         updateButton();
         setUpToolbar();
         scaleButton();
+
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+                "Android", "iPhone", "WindowsMobile" };
+
+        final ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < values.length; ++i) {
+            list.add(values[i]);
+        }
+        final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        LayoutInflater inflater = getLayoutInflater();
+        header = (ViewGroup)inflater.inflate(R.layout.v_header, comments_LV, false);
+        header.getLayoutParams().height = 1000;
+        comments_LV.addHeaderView(header, null, false);
+        comments_LV.setAdapter(adapter);
+
+        comments_LV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getY() > header.getBottom()) {
+                    return false;
+                } else {
+                    cat_detail_IV.dispatchTouchEvent(event);
+                    return true;
+                }
+            }
+        });
+
+    }
+
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            String item = getItem(position);
+            return mIdMap.get(item);
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
     }
 
     private void scaleButton() {
@@ -151,59 +224,21 @@ public class CatDetailActivity extends ActionBarActivity {
     private void setUpToolbar(){
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(
-                new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        shareTextUrl();
-                        return true;
-                    }
-                });
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setDrawerArrow();
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
     }
 
     private void getDataFromIntent(){
         Bundle bundle = getIntent().getExtras();
         id = bundle.getLong("id");
         url = bundle.getString("url");
-    }
-
-    public void setDrawerArrow() {
-        mDrawerLayout = new DrawerLayout(this);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.action_settings, R.string.action_login);
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    public void toggleArrow(boolean toggle) {
-        ValueAnimator va;
-        if (toggle) {
-            va = new ObjectAnimator().ofFloat(0, 1);
-        } else {
-            va = new ObjectAnimator().ofFloat(1, 0);
-        }
-        va.setDuration(200);
-        va.setInterpolator(new AccelerateDecelerateInterpolator());
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mDrawerToggle.onDrawerSlide(mDrawerLayout, Float.parseFloat(animation.getAnimatedValue().toString()));
-            }
-        });
-        va.start();
     }
 
     private void updateButton() {
@@ -254,9 +289,4 @@ public class CatDetailActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        toggleArrow(true);
-    }
 }

@@ -28,6 +28,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.DaoManager;
+import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.ApiVersionHelper;
 import com.lovecats.catlover.helpers.DrawerArrowHelper;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
@@ -352,6 +353,11 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void toggleArrow(boolean toggle) {
+        if (toggle) {
+            AnimationHelper.zoomOut(new_post_B);
+        } else {
+            AnimationHelper.zoomIn(new_post_B);
+        }
         DrawerArrowHelper.toggleArrow(toggle, mDrawerToggle, mDrawerLayout);
     }
 }

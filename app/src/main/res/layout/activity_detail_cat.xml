@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout
     android:id="@+id/detail_container_RL"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:clipToPadding="false"
+    android:gravity="bottom"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
@@ -19,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!--<com.diegocarloslima.byakugallery.lib.TouchImageView-->
     <ImageView
         android:id="@+id/cat_detail_IV"
         android:layout_width="match_parent"
@@ -28,12 +31,57 @@
     <ImageButton
         android:id="@+id/favorite_B"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:elevation="5dp"
         android:padding="12dp"
         android:scaleType="fitXY"
         android:layout_margin="16dp"
         android:background="@color/white"
-        android:layout_centerInParent="true"
         android:layout_width="56dp"
         android:layout_height="56dp" />
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:background="#6FFF"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<com.makeramen.roundedimageview.RoundedImageView-->
+            <!--android:id="@+id/user_image_IV"-->
+            <!--android:src="@drawable/donkey"-->
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--app:riv_corner_radius="36dp"-->
+            <!--android:background="@drawable/profile_background"-->
+            <!--android:padding="2dp"-->
+            <!--android:elevation="3dp"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_toRightOf="@+id/user_image_IV"-->
+            <!--android:textSize="18dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="@color/deepblack"-->
+            <!--android:text="Random Chool"-->
+            <!--android:id="@+id/user_name_TV"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<TextView-->
+            <!--android:layout_toRightOf="@+id/user_image_IV"-->
+            <!--android:layout_below="@+id/user_name_TV"-->
+            <!--android:text="3 hours ago"-->
+            <!--android:id="@+id/date_TV"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+    <!--</RelativeLayout>-->
+    <ListView
+        android:id="@+id/comments_LV"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
 </RelativeLayout>

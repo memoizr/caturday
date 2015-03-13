@@ -14,13 +14,6 @@
         android:background="@color/teal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:paddingTop="24dp"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -157,4 +150,11 @@
         android:src="@drawable/ic_done_white_48dp"
         android:layout_width="72dp"
         android:layout_height="72dp"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:paddingTop="24dp"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </FrameLayout>
