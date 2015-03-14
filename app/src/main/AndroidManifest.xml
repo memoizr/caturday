@@ -21,7 +21,8 @@
         <activity
             android:name=".CatDetailActivity"
             android:label="@string/title_activity_detail_cat"
-            android:parentActivityName=".MainActivity" >
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

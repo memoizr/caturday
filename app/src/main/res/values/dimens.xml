@@ -9,6 +9,10 @@
     <dimen name="title_height">168dp</dimen>
     <dimen name="dashboard_image_height">288dp</dimen>
 
+    <dimen name="caption_height">80dp</dimen>
+    <dimen name="max_caption_height">136dp</dimen>
+    <dimen name="caption_max_top_margin">28dp</dimen>
+
 
     <dimen name="logo_max_height">32dp</dimen>
     <dimen name="logo_min_height">22dp</dimen>
@@ -29,5 +33,6 @@
     <dimen name="size_small">16dp</dimen>
     <dimen name="size_medium">32dp</dimen>
     <dimen name="size_large">48dp</dimen>
-    <dimen name="size_xlarge">52dp</dimen>
+    <dimen name="size_xlarge">56dp</dimen>
+    <dimen name="size_xxlarge">72dp</dimen>
 </resources>

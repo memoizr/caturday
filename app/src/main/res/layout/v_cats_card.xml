@@ -38,35 +38,31 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/date_TV"
             android:layout_toRightOf="@+id/user_image_IV"
             android:layout_below="@+id/user_name_TV"
             android:text="3 hours ago"
+            android:id="@+id/date_TV"
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:layout_below="@+id/user_image_IV"
+            android:id="@+id/caption_TV"
+            android:textSize="16sp"
+            android:textColor="@color/deepblack"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/cardCat_IV"
             android:layout_marginTop="8dp"
-            android:layout_below="@+id/user_image_IV"
+            android:layout_below="@+id/caption_TV"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="240dp" />
-
-        <TextView
-            android:id="@+id/caption_TV"
-            android:layout_alignTop="@+id/cardCat_IV"
-            android:textSize="16sp"
-            android:background="@color/white_translucent"
-            android:textColor="@color/deepblack"
-            android:paddingTop="8dp"
-            android:elevation="3dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="192dp" />
 
         <LinearLayout
             android:orientation="horizontal"

@@ -55,7 +55,6 @@ public class CollapsibleView extends FrameLayout {
 
 
         logoMinLeftMargin = resources.getDimensionPixelSize(R.dimen.logo_min_left_margin);
-        logoMinTopMargin = resources.getDimensionPixelSize(R.dimen.logo_min_top_margin);
 
         logoMaxTopMargin = resources.getDimensionPixelSize(R.dimen.logo_max_top_margin);
         logoMinTopMargin = resources.getDimensionPixelSize(R.dimen.logo_min_top_margin);

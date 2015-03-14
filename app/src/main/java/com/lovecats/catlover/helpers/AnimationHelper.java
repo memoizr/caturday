@@ -1,9 +1,14 @@
 package com.lovecats.catlover.helpers;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.PaintDrawable;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.lovecats.catlover.LoginActivity;
 import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
@@ -153,4 +158,39 @@ public class AnimationHelper {
         anim.start();
     }
 
+    public static void animateColor(View view, int colorFrom, int colorTo) {
+        if (((ColorDrawable) view.getBackground()).getColor() == colorFrom) {
+            final View mView = view;
+            final ValueAnimator va = ObjectAnimator.ofArgb(
+                    colorFrom,
+                    colorTo);
+            va.setDuration(300);
+            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                     @Override
+                                     public void onAnimationUpdate(ValueAnimator animation) {
+                                         mView.setBackgroundColor((Integer) animation.getAnimatedValue());
+                                     }
+                                 }
+            );
+            va.start();
+        }
+    }
+
+    public static void animateTextColor(TextView view, int colorFrom, int colorTo) {
+        if (view.getCurrentTextColor() == colorFrom) {
+            final TextView mView = view;
+            final ValueAnimator va = ObjectAnimator.ofArgb(
+                    colorFrom,
+                    colorTo);
+            va.setDuration(300);
+            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                     @Override
+                                     public void onAnimationUpdate(ValueAnimator animation) {
+                                         mView.setTextColor((Integer) animation.getAnimatedValue());
+                                     }
+                                 }
+            );
+            va.start();
+        }
+    }
 }
