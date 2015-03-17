@@ -4,6 +4,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <FrameLayout
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <RelativeLayout
         android:id="@+id/profile_container_V"
         android:layout_width="wrap_content"
@@ -11,8 +15,9 @@
         <ImageView
             android:id="@+id/cover_image_IV"
             android:src="@drawable/default_profile_cover"
-            android:scaleType="centerCrop"
             android:tint="@color/dark_transparent"
+            android:scaleType="centerCrop"
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -26,24 +31,38 @@
             android:background="@drawable/profile_background"
             android:padding="2dp"
             android:elevation="5dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="44dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textColor="@color/white"
             android:text="User Name"
             android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:id="@+id/username_TV"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="16dp"
+            android:layout_above="@+id/email_TV"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:textSize="16dp"
+            android:id="@+id/email_TV"
+            android:textColor="@color/white"
+            android:text="foo@bar.com"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
     </RelativeLayout>
+    </FrameLayout>
 
     <ListView
         android:id="@+id/navigation_LV"

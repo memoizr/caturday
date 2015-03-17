@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.support.v7.app.ActionBarActivity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Transition;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import butterknife.InjectView;
 public class NewPostActivity extends ActionBarActivity {
     @InjectView(R.id.reveal_V) LinearLayout reveal;
     @InjectView(R.id.new_post_title) View new_post_title;
+    @InjectView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class NewPostActivity extends ActionBarActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        setUpToolbar();
 
         int count = reveal.getChildCount();
         for (int i = 0; i < count; i++) {
@@ -53,6 +56,18 @@ public class NewPostActivity extends ActionBarActivity {
                     .setStartDelay(i * 100 + 600)
                     .start();
         }
+    }
+
+    private void setUpToolbar(){
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
     }
 
     public void reveal() {

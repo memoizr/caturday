@@ -67,7 +67,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
             final int j = i;
 
-            setAnimation(myViewHolder.catContainer, i);
+//            setAnimation(myViewHolder.catContainer, i);
             final String transitionName = "catTransition" + i;
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 

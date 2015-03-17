@@ -44,7 +44,7 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
         ButterKnife.inject(this, rootView);
 
         navigationListView = (ListView) rootView.findViewById(R.id.navigation_LV);
-        final String[] values = new String[] { "What's Hot"};
+        final String[] values = new String[] { "What's Hot", "Following", "Nice organizations"};
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
         navigationListView.setAdapter(adapter);

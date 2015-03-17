@@ -4,18 +4,24 @@ import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.ColorFilter;
 import android.graphics.Outline;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.PersistableBundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -24,25 +30,23 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.adapters.CommentsAdapter;
+import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 import com.lovecats.catlover.views.ExpandingView;
 import com.squareup.picasso.Picasso;
 
-import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -73,6 +77,11 @@ public class CatDetailActivity extends ActionBarActivity {
     private ViewGroup header;
 
     private int captionHeight;
+    private int vibrant;
+    private int muted;
+    private int darkMuted;
+    private int vibrantLight;
+    private boolean activityClosed = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,11 +97,50 @@ public class CatDetailActivity extends ActionBarActivity {
         compatMethods();
         getDataFromIntent();
         setUpImageView();
-        updateButton();
         setUpToolbar();
+
         scaleButton();
         setUpListView();
         setUpIMEListener();
+
+
+        Bitmap mBitmap = ((BitmapDrawable)cat_detail_IV.getDrawable()).getBitmap();
+        Palette palette = Palette.generate(mBitmap);
+        vibrant = palette.getVibrantColor(0x000000);
+        muted = palette.getMutedColor(0x000000);
+        darkMuted = palette.getDarkMutedColor(0x000000);
+        vibrantLight = palette.getLightVibrantColor(0x000000);
+
+        caption_V.setBackgroundColor(vibrant);
+        updateButton();
+
+        getWindow().getExitTransition().addListener(new Transition.TransitionListener() {
+            @Override
+            public void onTransitionStart(Transition transition) {
+                activityClosed = true;
+            }
+
+            @Override
+            public void onTransitionEnd(Transition transition) {
+                activityClosed = false;
+
+            }
+
+            @Override
+            public void onTransitionCancel(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionPause(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionResume(Transition transition) {
+
+            }
+        });
     }
 
     private void setUpListView() {
@@ -128,7 +176,9 @@ public class CatDetailActivity extends ActionBarActivity {
                 if (event.getY() > header.getBottom() - captionHeight) {
                     return false;
                 } else {
-                    cat_detail_IV.dispatchTouchEvent(event);
+                    if (!activityClosed) {
+                        cat_detail_IV.dispatchTouchEvent(event);
+                    }
                     return true;
                 }
             }
@@ -141,17 +191,19 @@ public class CatDetailActivity extends ActionBarActivity {
             @Override
             public void onScrollChanged(int i, boolean b, boolean b2) {
                 new_comment_V.animate().cancel();
-                if (i < maxScroll) {
+                if (i <= maxScroll) {
                     caption_V.setTranslationY((float) -i);
-                    if (i > offset) {
+                    if (i >= offset) {
                         favorite_B.setTranslationY((float) - offset);
-                        caption_V.animateBackgroundAccent();
+//                        caption_V.animateBackgroundAccent(vibrant);
                         float fraction = (float) (i - offset)/ caption_V.getMinHeight();
+                        caption_V.getBackground().setAlpha((int) ((255 - 210) * fraction) + 210);
                         caption_V.setElevation(10 * fraction);
                         caption_V.setExpandedLevel(fraction);
                     } else {
                         favorite_B.setTranslationY((float) -i);
-                        caption_V.animateBackgroundNeutral();
+//                        caption_V.animateBackgroundNeutral(vibrant);
+                        caption_V.getBackground().setAlpha(210);
                         caption_V.setElevation(0);
                         caption_V.setExpandedLevel(0);
                     }
@@ -164,8 +216,9 @@ public class CatDetailActivity extends ActionBarActivity {
                         new_comment_V.setTranslationY((float) -120);
                     }
                 } else {
-                    caption_V.setTranslationY((float) -maxScroll);
-                    caption_V.setExpandedLevel(1);
+                    caption_V.getBackground().setAlpha(255);
+                    caption_V.setTranslationY((float) - maxScroll - 2);
+                    caption_V.setExpandedLevel(1f);
                 }
             }
             @Override
@@ -354,16 +407,16 @@ public class CatDetailActivity extends ActionBarActivity {
 
     private void updateButton() {
 //        favorite = CatModel.getCatImageForId(this, id).getFavorite();
-//        Drawable image;
+        Drawable image;
 //        if (favorite != null && (Boolean) favorite) {
-//            favorite_B.setBackgroundColor(getResources().getColor(R.color.primary));
+            favorite_B.setBackgroundColor(vibrantLight);
 //            image = getResources().getDrawable(R.drawable.ic_favorite_white_48dp);
-//            image.mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+            image = getResources().getDrawable(R.drawable.ic_favorite_outline_white_48dp);
+            image.mutate().setColorFilter(darkMuted, PorterDuff.Mode.MULTIPLY);
 //        } else {
 //            favorite_B.setBackgroundColor(getResources().getColor(R.color.white));
-//            image = getResources().getDrawable(R.drawable.ic_favorite_outline_white_48dp);
 //            image.mutate().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.MULTIPLY);
 //        }
-//        favorite_B.setImageDrawable(image);
+        favorite_B.setImageDrawable(image);
     }
 }

@@ -119,14 +119,14 @@
             <Button
                 android:text="Create Account"
                 android:id="@+id/create_account_B"
-                android:background="@drawable/tab_selector"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp" />
 
             <Button
                 android:text="Login"
                 android:id="@+id/login_submit_B"
-                android:background="@drawable/tab_selector"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp" />
         </LinearLayout>

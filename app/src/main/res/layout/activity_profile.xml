@@ -37,6 +37,15 @@
         android:textSize="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/username_TV" />
+        android:id="@+id/user_name_TV" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_below="@id/user_name_TV"
+        android:layout_alignParentRight="true"
+        android:background="@color/accent"
+        android:text="Logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

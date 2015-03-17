@@ -21,13 +21,14 @@
             android:layout_marginLeft="72dp"
             android:layout_marginRight="72dp"
             android:text="New Post"
+            android:textColor="@color/white"
             android:id="@+id/new_post_title"
             android:layout_width="wrap_content"
             android:textSize="32dp"
             android:layout_height="wrap_content" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:hint="Text"
+            android:hint="Enter Caption"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
             android:layout_marginRight="72dp"
@@ -35,6 +36,17 @@
             app:floatingLabel="highlight"
             app:baseColor="@android:color/white"
             app:maxCharacters="20"
+            app:primaryColor="@color/white"
+            app:singleLineEllipsis="true" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="Enter URL"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp"
+            android:layout_width="match_parent"
+            app:floatingLabel="highlight"
+            app:baseColor="@android:color/white"
             app:primaryColor="@color/white"
             app:singleLineEllipsis="true" />
 
@@ -54,4 +66,10 @@
         </LinearLayout>
     </LinearLayout>
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:paddingTop="@dimen/status_bar_size"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

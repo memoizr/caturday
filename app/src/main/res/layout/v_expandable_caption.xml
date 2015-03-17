@@ -23,7 +23,7 @@
         android:layout_alignTop="@+id/user_image_IV"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:textColor="@color/deepblack"
+        android:textColor="@color/white"
         android:text="Random Chool"
         android:id="@+id/user_name_TV"
         android:layout_width="match_parent"

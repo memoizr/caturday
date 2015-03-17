@@ -15,7 +15,7 @@ import greendao.User;
 
 
 public class ProfileActivity extends ActionBarActivity {
-    @InjectView(R.id.username_TV) TextView username_TV;
+    @InjectView(R.id.user_name_TV) TextView user_name_TV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,8 @@ public class ProfileActivity extends ActionBarActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        User user = UserModel.getUserForId(0);
-        username_TV.setText(user.getUsername());
+//        User user = UserModel.getUserForId(0);
+//        username_TV.setText(user.getUsername());
 
     }
 

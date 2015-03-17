@@ -79,19 +79,19 @@ public class ExpandingView extends RelativeLayout{
         user_image.setLayoutParams(params);
     }
 
-    public void animateBackgroundAccent() {
+    public void animateBackgroundAccent(int color) {
         AnimationHelper.animateColor((View) caption_container_V.getParent(),
                 getResources().getColor(R.color.white_translucent),
-                getResources().getColor(R.color.accent));
+                color);
 
         AnimationHelper.animateTextColor(user_name,
                 getResources().getColor(R.color.deepblack),
                 getResources().getColor(R.color.white));
     }
 
-    public void animateBackgroundNeutral() {
+    public void animateBackgroundNeutral(int color) {
         AnimationHelper.animateColor((View)caption_container_V.getParent(),
-                getResources().getColor(R.color.accent),
+                color,
                 getResources().getColor(R.color.white_translucent));
         AnimationHelper.animateTextColor(user_name,
                 getResources().getColor(R.color.white),
