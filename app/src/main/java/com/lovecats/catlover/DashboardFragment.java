@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.adapters.DashboardPageAdapter;
+import com.lovecats.catlover.data.CatPostFetcher;
+import com.lovecats.catlover.data.CatPostModel;
 
 import java.util.List;
 
@@ -80,51 +82,57 @@ public class DashboardFragment extends Fragment
         }
     }
 
-
     @Override
     public void onPageScrollStateChanged(int state) {
         float targetShiftY = 0;
         CatStreamFragment catStreamFragment;
         int oldScrollY = ((MainActivity)getActivity()).getOldScrollY();
 
-        if (state == 1) {
-            if (selectedPage == 0) {
-                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-                    currentScrollPosition = catStreamFragment.getScrollPosition();
-                }
-                if (currentScrollPosition > 224) {
-                    currentScrollPosition = 224;
-                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
-
-                } else {
-                    ((MainActivity)getActivity())
-                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-                }
-
-            } else {
-                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-                    currentScrollPosition = catStreamFragment.getScrollPosition();
-                }
-                if (currentScrollPosition > 224) {
-                    currentScrollPosition = 224;
-
-                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
-                } else {
-                    ((MainActivity)getActivity())
-                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-                }
-            }
-            otherCatStreamFragment.setScrollPosition(currentScrollPosition);
-        }
+//        if (state == 1) {
+//            if (selectedPage == 0) {
+//                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
+//                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
+//                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
+//                    currentScrollPosition = catStreamFragment.getScrollPosition();
+//                }
+//                if (currentScrollPosition > 224) {
+//                    currentScrollPosition = 224;
+//                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
+//
+//                } else {
+//                    ((MainActivity)getActivity())
+//                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
+//                }
+//
+//            } else {
+//                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
+//                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
+//                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
+//                    currentScrollPosition = catStreamFragment.getScrollPosition();
+//                }
+//                if (currentScrollPosition > 224) {
+//                    currentScrollPosition = 224;
+//
+//                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
+//                } else {
+//                    ((MainActivity)getActivity())
+//                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
+//                }
+//            }
+//            otherCatStreamFragment.setScrollPosition(currentScrollPosition);
+//        }
     }
 
     @Override
     public void onRefresh() {
-//        ((CatStreamFragment)pagerAdapter.getItem(0)).fetchCats();
+        CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
+
+            @Override
+            public void onSuccess(List<CatPostModel> catPostModels) {
+                swipe_container.setRefreshing(false);
+                ((MainActivity) getActivity()).doneSlideshow();
+            }
+        });
     }
 
 }

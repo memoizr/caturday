@@ -16,12 +16,18 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.adapters.CatPostAdapter;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.util.EventBus;
+import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatPost;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class CatStreamFragment extends Fragment implements ObservableScrollViewCallbacks
         {
@@ -41,11 +47,11 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     }
 
 //    @Override
-//    public void onFetchComplete(List<CatPostModel> catPostModels) {
-//        catPostAdapter.mCatPostModels = catPostModels;
-//        notifyAdapter();
-//
-//    }
+    public void onFetchComplete(List<CatPostModel> catPostModels) {
+        catPostAdapter.mCatPosts = CatPostModel.getAllCatPosts();
+        notifyAdapter();
+
+    }
 
     public interface ScrollCallback {
         void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
@@ -90,25 +96,33 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         return rootView;
     }
 
+    private void fetchPosts(){
+        CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
+            @Override
+            public void onSuccess(List<CatPostModel> catPostModels) {
+                onFetchComplete(catPostModels);
+            }
+        });
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getInstance().register(this);
 
         final Fragment that = this;
 
         if (streamType == 0) {
             staggeredGrid = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         } else {
-            staggeredGrid = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+            staggeredGrid = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         }
         staggeredGrid.setOrientation(StaggeredGridLayoutManager.VERTICAL);
 
         cats_stream_RV.setLayoutManager(staggeredGrid);
 
+        System.out.println(CatPostModel.getCount());
 
-        if (CatPostModel.getCount() == 0) {
-            CatPostFetcher.fetchCatPosts();
-        }
 
         cats_stream_RV.setScrollViewCallbacks(this);
         cats_stream_RV.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -119,14 +133,32 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
             }
         });
 
-        if (streamType == NEW_STREAM_TYPE) {
-            mCatPosts = CatPostModel.getAllCatPosts();
-        } else {
-            mCatPosts = CatPostModel.getAllCatPosts();
-//            catImages = CatModel.getAllFavoriteCatImages(getActivity());
+        switch (streamType) {
+            case 0:
+                mCatPosts = CatPostModel.getPostsForCategory("space");
+                break;
+            case 1:
+                mCatPosts = CatPostModel.getPostsForCategory("boxes");
+                break;
+            case 2:
+                mCatPosts = CatPostModel.getPostsForCategory("caturday");
+                break;
+            case 3:
+                mCatPosts = CatPostModel.getPostsForCategory("hats");
+                break;
+            case 4:
+                mCatPosts = CatPostModel.getPostsForCategory("sunglasses");
+                break;
+            default:
+                mCatPosts = CatPostModel.getPostsForCategory("dream");
         }
+
         catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
         cats_stream_RV.setAdapter(catPostAdapter);
+
+        if (CatPostModel.getCount() == 0 && streamType == NEW_STREAM_TYPE) {
+            fetchPosts();
+        }
     }
 
     private void notifyAdapter(){

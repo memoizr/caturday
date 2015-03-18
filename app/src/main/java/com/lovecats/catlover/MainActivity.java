@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity
 
     private int titleMaxHeight;
     private int titleMinHeight;
+    private int titleCollapsed;
     @Getter
     private int oldScrollY;
     private TransitionDrawable transitionDrawable;
@@ -68,6 +69,9 @@ public class MainActivity extends ActionBarActivity
     private ActionBarDrawerToggle mDrawerToggle;
     private DashboardFragment dashboardFragment;
 
+    public void doneSlideshow(){
+        slide_show_V.flash();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new Config(this);
@@ -90,10 +94,8 @@ public class MainActivity extends ActionBarActivity
         setDrawer();
         setUpButton();
 
-
-        CatPostFetcher.fetchCatPosts();
+        titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
     }
-
 
     private void setUpFragments(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
@@ -154,7 +156,7 @@ public class MainActivity extends ActionBarActivity
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         toggleArrow(true);
-                        slide_show_V.animationPause();
+//                        slide_show_V.animationPause();
                         if (item.getItemId() == R.id.action_login) {
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
@@ -243,6 +245,7 @@ public class MainActivity extends ActionBarActivity
             title_container_RL.setTranslationY(0);
 
         } else if (scrollY < titleMaxHeight && scrollDelta > 0) {
+
             collapsibleView.setCollapseLevel(0);
             if (statusTransparent) {
                 animateBackground(status_bar_scrim,
@@ -251,11 +254,12 @@ public class MainActivity extends ActionBarActivity
                 statusTransparent = false;
             }
 
-            float shiftY = (scrollY - titleMaxHeight + titleMinHeight);
-            shiftY = Math.min(Math.max(shiftY, 0), 208);
-            title_container_RL.setTranslationY(-shiftY);
+            float shiftY = (scrollY - titleCollapsed);
+            shiftY = Math.min(Math.max(shiftY, 0), titleCollapsed);
+            title_container_RL.setTranslationY(-shiftY + 16);
 
         } else {
+
             collapsibleView.setCollapseLevel(0);
 
             if (transparent && scrollY > titleMaxHeight + titleMinHeight) {
@@ -270,14 +274,16 @@ public class MainActivity extends ActionBarActivity
             // To avoid confusion about sign, use shiftY instead of transitionY.
             // shiftY has same sign as scrollY and always positive or 0.
             float shiftY = -title_container_RL.getTranslationY();
-            shiftY = Math.min(Math.max(shiftY + scrollDelta, 0), 208);
+            shiftY = Math.min(Math.max(shiftY + scrollDelta, 0), titleCollapsed);
             title_container_RL.setTranslationY(-shiftY);
         }
     }
 
     @Override
-    public void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollstate) {
-        adjustToolbarOnEndOfScroll();
+    public void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState) {
+        if (scrollState == ScrollState.STOP) {
+            adjustToolbarOnEndOfScroll();
+        }
     }
 
     @Override
@@ -293,7 +299,8 @@ public class MainActivity extends ActionBarActivity
         float targetShiftY = 0;
         if (shiftY > titleMinHeight &&
                 oldScrollY >= titleMaxHeight) {
-            targetShiftY = titleMinHeight + slidingTabs_PSTS.getHeight();
+
+            targetShiftY = titleCollapsed;
         }
 
         if (transparent && shiftY > 0) {
@@ -303,13 +310,16 @@ public class MainActivity extends ActionBarActivity
             slide_show_V.animationPause();
             transparent = false;
         }
-        title_container_RL.animate().cancel();
-        title_container_RL
-                .animate()
-                .translationY(-targetShiftY)
-                .setDuration(300)
-                .setInterpolator(new HyperAccelerateDecelerateInterpolator())
-                .start();
+
+        if (title_container_RL.getTranslationY() != -targetShiftY) {
+            title_container_RL.animate().cancel();
+            title_container_RL
+                    .animate()
+                    .translationY(-targetShiftY)
+                    .setDuration(300)
+                    .setInterpolator(new HyperAccelerateDecelerateInterpolator())
+                    .start();
+        }
     }
 
     private void animateBackground(View view, int colorFrom, int colorTo) {

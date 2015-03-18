@@ -43,15 +43,17 @@
             <com.astuetz.PagerSlidingTabStrip
                 android:id="@+id/sliding_PSTS"
                 android:layout_below="@id/toolbar"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:pstsTabPaddingLeftRight="24dp"
                 app:pstsTabBackground="@drawable/tab_selector"
                 app:pstsIndicatorColor="#fff"
                 app:pstsIndicatorHeight="2dp"
                 app:pstsDividerColor="#00000000"
-                app:pstsShouldExpand="true"
-                app:pstsTextAlpha="1"
+                app:pstsShouldExpand="false"
+                app:pstsTextAlpha="0.8"
                 android:layout_width="match_parent"
+                android:textSize="15sp"
                 android:layout_height="@dimen/dashboard_tab_height"
                 />
         </RelativeLayout>
@@ -60,7 +62,7 @@
             android:id="@+id/status_bar_scrim"
             android:elevation="12dp"
             android:layout_width="match_parent"
-            android:layout_height="24dp"/>
+            android:layout_height="@dimen/status_bar_size"/>
 
         <ImageButton
             android:id="@+id/new_post_B"

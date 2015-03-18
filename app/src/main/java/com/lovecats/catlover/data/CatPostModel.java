@@ -1,7 +1,9 @@
 package com.lovecats.catlover.data;
 
+
+import com.google.gson.JsonArray;
+
 import java.util.List;
-import java.util.Random;
 
 import greendao.CatPost;
 import greendao.CatPostDao;
@@ -11,8 +13,15 @@ import lombok.Setter;
 public class CatPostModel {
     @Getter @Setter private String commentsJSON;
     @Getter @Setter private String image_url;
-    @Getter @Setter private String userJSON;
+    @Getter @Setter private String user;
     @Getter @Setter private String caption;
+    @Getter @Setter private String id;
+    @Getter @Setter private String category;
+    @Getter @Setter private String reshares_count;
+    @Getter @Setter private String positive_votes_count;
+    @Getter @Setter private String negative_votes_count;
+    @Getter @Setter private int total_votes_count;
+    @Getter @Setter private JsonArray comments;
 
     public static CatPost insertOrUpdate(CatPost catPost) {
         long id = getCatPostDao().insertOrReplace(catPost);
@@ -35,6 +44,10 @@ public class CatPostModel {
         return getCatPostDao().queryBuilder().where(CatPostDao.Properties.ServerId.eq(id)).unique();
     }
 
+    public static List<CatPost> getPostsForCategory(String category){
+        return getCatPostDao().queryBuilder().where(CatPostDao.Properties.Category.eq(category)).list();
+    }
+
     public static CatPost getRandomCatPost() {
         return getCatPostDao().load((long) Math.ceil(getCount() * Math.random()));
     }
@@ -42,8 +55,11 @@ public class CatPostModel {
     public static void createPost(CatPostModel catPostModel){
         CatPost catPost = new CatPost();
         catPost.setCaption(catPostModel.caption);
-        catPost.setCommentsJson(catPostModel.commentsJSON);
+        catPost.setServerId(catPostModel.id);
+        catPost.setCategory(catPostModel.category);
+        catPost.setComments(catPostModel.comments.toString());
         catPost.setImage_url(catPostModel.image_url);
+        catPost.setTotalVotesCount(catPostModel.total_votes_count);
 
         insertOrUpdate(catPost);
     }

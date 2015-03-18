@@ -3,7 +3,7 @@
     <EditTextPreference
         android:key="example_text"
         android:title="@string/pref_title_server_address"
-        android:defaultValue="@string/pref_default_display_name"
+        android:defaultValue="@string/pref_default_server_address"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:maxLines="1" />

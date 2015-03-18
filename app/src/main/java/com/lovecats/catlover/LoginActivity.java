@@ -31,13 +31,9 @@ public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.username_TV) EditText username_TV;
     @InjectView(R.id.email_TV) EditText email_TV;
     @InjectView(R.id.password_TV) EditText password_TV;
-    @InjectView(R.id.login_submit_B) Button login_submit_B;
     @InjectView(R.id.login_reveal_V) View login_reveal;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.glide_container_V) LinearLayout glide_container;
-    @InjectView(R.id.signup_B) Button signup_B;
-    @InjectView(R.id.create_account_B) Button create_account_B;
-    @InjectView(R.id.existing_account_B) Button existing_account_B;
     @InjectView(R.id.signup_buttons_V) View signup_buttons;
     @InjectView(R.id.login_buttons_V) View login_buttons;
     @InjectView(R.id.title_TV) TextView title_TV;
@@ -45,9 +41,6 @@ public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.done_V) View done;
     @InjectView(R.id.reveal_done_V) View reveal_done;
 
-    private String rootUrl;
-    private String url;
-    private String loginUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

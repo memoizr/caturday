@@ -72,6 +72,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
+            System.out.println(mCatPosts.get(i).getTotalVotesCount());
+            ((CatsCardViewHolder) viewHolder).total_votes_count.setText(mCatPosts.get(i).getTotalVotesCount().toString());
 
             Picasso.with(mContext).load(mCatPosts.get(i).getImage_url()).into(myViewHolder.cat_IV);
             myViewHolder.catContainer.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +89,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     intent.putExtra("transition", transitionName);
                     intent.putExtra("url", mCatPosts.get(j).getImage_url());
                     intent.putExtra("id", mCatPosts.get(j).getId());
+                    intent.putExtra("serverId", mCatPosts.get(j).getServerId());
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                 }
             });
@@ -120,6 +123,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @InjectView(R.id.cardCat_IV) ImageView cat_IV;
         @InjectView(R.id.catContainer) View catContainer;
         @InjectView(R.id.caption_TV) TextView caption_TV;
+        @InjectView(R.id.total_votes_count_TV) TextView total_votes_count;
 
         public CatsCardViewHolder(View v) {
             super(v);

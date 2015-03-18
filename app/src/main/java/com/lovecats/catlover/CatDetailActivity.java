@@ -39,7 +39,13 @@ import android.widget.RelativeLayout;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.lovecats.catlover.adapters.CommentsAdapter;
+import com.lovecats.catlover.data.CatPostModel;
 import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
@@ -53,6 +59,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import greendao.CatImage;
+import greendao.CatPost;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
@@ -144,15 +151,14 @@ public class CatDetailActivity extends ActionBarActivity {
     }
 
     private void setUpListView() {
-        String[] values = new String[] { "Android", "iPhone",
-                "Blackberry", "WebOS", "Ubuntu", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone" };
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
+        final ArrayList<JsonObject> list = new ArrayList<>();
+
+        JsonParser parser = new JsonParser();
+        JsonElement tradeElement = parser.parse(catPost.getComments());
+        JsonArray array = tradeElement.getAsJsonArray();
+        for (int i = 0; i < array.size(); ++i) {
+            list.add(array.get(i).getAsJsonObject());
         }
         final CommentsAdapter adapter = new CommentsAdapter(this, list);
 
@@ -338,7 +344,10 @@ public class CatDetailActivity extends ActionBarActivity {
         Bundle bundle = getIntent().getExtras();
         id = bundle.getLong("id");
         url = bundle.getString("url");
+        catPost = CatPostModel.getCatPostForServerId(bundle.getString("serverId"));
     }
+
+    private CatPost catPost;
 
     private void shareTextUrl() {
         Intent share = new Intent(android.content.Intent.ACTION_SEND);

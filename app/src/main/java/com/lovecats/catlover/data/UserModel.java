@@ -2,13 +2,10 @@ package com.lovecats.catlover.data;
 
 import android.content.Context;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import greendao.User;
 import greendao.UserDao;
-import lombok.Getter;
-import lombok.Setter;
 
 public class UserModel {
 

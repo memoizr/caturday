@@ -27,8 +27,11 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         public final static Property ServerId = new Property(1, String.class, "serverId", false, "SERVER_ID");
         public final static Property Caption = new Property(2, String.class, "caption", false, "CAPTION");
         public final static Property Image_url = new Property(3, String.class, "image_url", false, "IMAGE_URL");
-        public final static Property UserJson = new Property(4, String.class, "userJson", false, "USER_JSON");
-        public final static Property CommentsJson = new Property(5, String.class, "commentsJson", false, "COMMENTS_JSON");
+        public final static Property User = new Property(4, String.class, "user", false, "USER");
+        public final static Property Comments = new Property(5, String.class, "comments", false, "COMMENTS");
+        public final static Property Category = new Property(6, String.class, "category", false, "CATEGORY");
+        public final static Property DownloadCount = new Property(7, Integer.class, "downloadCount", false, "DOWNLOAD_COUNT");
+        public final static Property TotalVotesCount = new Property(8, Integer.class, "totalVotesCount", false, "TOTAL_VOTES_COUNT");
     };
 
 
@@ -48,8 +51,11 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
                 "'SERVER_ID' TEXT UNIQUE ," + // 1: serverId
                 "'CAPTION' TEXT," + // 2: caption
                 "'IMAGE_URL' TEXT," + // 3: image_url
-                "'USER_JSON' TEXT," + // 4: userJson
-                "'COMMENTS_JSON' TEXT);"); // 5: commentsJson
+                "'USER' TEXT," + // 4: user
+                "'COMMENTS' TEXT," + // 5: comments
+                "'CATEGORY' TEXT," + // 6: category
+                "'DOWNLOAD_COUNT' INTEGER," + // 7: downloadCount
+                "'TOTAL_VOTES_COUNT' INTEGER);"); // 8: totalVotesCount
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CAT_POST_SERVER_ID ON CAT_POST" +
                 " (SERVER_ID);");
@@ -86,14 +92,29 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
             stmt.bindString(4, image_url);
         }
  
-        String userJson = entity.getUserJson();
-        if (userJson != null) {
-            stmt.bindString(5, userJson);
+        String user = entity.getUser();
+        if (user != null) {
+            stmt.bindString(5, user);
         }
  
-        String commentsJson = entity.getCommentsJson();
-        if (commentsJson != null) {
-            stmt.bindString(6, commentsJson);
+        String comments = entity.getComments();
+        if (comments != null) {
+            stmt.bindString(6, comments);
+        }
+ 
+        String category = entity.getCategory();
+        if (category != null) {
+            stmt.bindString(7, category);
+        }
+ 
+        Integer downloadCount = entity.getDownloadCount();
+        if (downloadCount != null) {
+            stmt.bindLong(8, downloadCount);
+        }
+ 
+        Integer totalVotesCount = entity.getTotalVotesCount();
+        if (totalVotesCount != null) {
+            stmt.bindLong(9, totalVotesCount);
         }
     }
 
@@ -111,8 +132,11 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // serverId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // caption
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // image_url
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // userJson
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // commentsJson
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // user
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // comments
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // category
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // downloadCount
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // totalVotesCount
         );
         return entity;
     }
@@ -124,8 +148,11 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         entity.setServerId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCaption(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setImage_url(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setUserJson(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setCommentsJson(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setUser(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setComments(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCategory(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setDownloadCount(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setTotalVotesCount(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
      }
     
     /** @inheritdoc */

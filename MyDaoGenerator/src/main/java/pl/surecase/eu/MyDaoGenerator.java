@@ -31,19 +31,24 @@ public class MyDaoGenerator {
         auth.addIdProperty();
         auth.addStringProperty("token").unique();
 
-        Entity catPost = schema.addEntity("CatPost");
-        catPost.addIdProperty();
-        catPost.addStringProperty("serverId").index().unique();
-        catPost.addStringProperty("caption");
-        catPost.addStringProperty("image_url");
-        catPost.addStringProperty("userJSON");
-        catPost.addStringProperty("commentsJSON");
 
         Entity comment = schema.addEntity("Comment");
         comment.addIdProperty();
         comment.addStringProperty("content");
         comment.addStringProperty("userId");
         comment.addStringProperty("postId");
+
+
+        Entity catPost = schema.addEntity("CatPost");
+        catPost.addIdProperty();
+        catPost.addStringProperty("serverId").index().unique();
+        catPost.addStringProperty("caption");
+        catPost.addStringProperty("image_url");
+        catPost.addStringProperty("user");
+        catPost.addStringProperty("comments");
+        catPost.addStringProperty("category");
+        catPost.addIntProperty("downloadCount");
+        catPost.addIntProperty("totalVotesCount");
 
 //        Index commentIndex = new Index();
 //        commentIndex.addProperty(catPostId);

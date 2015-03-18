@@ -13,4 +13,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="pref_title_server_address">Server address</string>
     <string name="title_activity_new_post">NewPostActivity</string>
+    <string name="pref_default_server_address">http://192.168.44.82:3000</string>
 </resources>

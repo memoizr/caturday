@@ -10,8 +10,11 @@ public class CatPost {
     private String serverId;
     private String caption;
     private String image_url;
-    private String userJson;
-    private String commentsJson;
+    private String user;
+    private String comments;
+    private String category;
+    private Integer downloadCount;
+    private Integer totalVotesCount;
 
     public CatPost() {
     }
@@ -20,13 +23,16 @@ public class CatPost {
         this.id = id;
     }
 
-    public CatPost(Long id, String serverId, String caption, String image_url, String userJson, String commentsJson) {
+    public CatPost(Long id, String serverId, String caption, String image_url, String user, String comments, String category, Integer downloadCount, Integer totalVotesCount) {
         this.id = id;
         this.serverId = serverId;
         this.caption = caption;
         this.image_url = image_url;
-        this.userJson = userJson;
-        this.commentsJson = commentsJson;
+        this.user = user;
+        this.comments = comments;
+        this.category = category;
+        this.downloadCount = downloadCount;
+        this.totalVotesCount = totalVotesCount;
     }
 
     public Long getId() {
@@ -61,20 +67,44 @@ public class CatPost {
         this.image_url = image_url;
     }
 
-    public String getUserJson() {
-        return userJson;
+    public String getUser() {
+        return user;
     }
 
-    public void setUserJson(String userJson) {
-        this.userJson = userJson;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getCommentsJson() {
-        return commentsJson;
+    public String getComments() {
+        return comments;
     }
 
-    public void setCommentsJson(String commentsJson) {
-        this.commentsJson = commentsJson;
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getDownloadCount() {
+        return downloadCount;
+    }
+
+    public void setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
+    }
+
+    public Integer getTotalVotesCount() {
+        return totalVotesCount;
+    }
+
+    public void setTotalVotesCount(Integer totalVotesCount) {
+        this.totalVotesCount = totalVotesCount;
     }
 
 }
