@@ -3,14 +3,11 @@ package com.lovecats.catlover.helpers;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.PaintDrawable;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lovecats.catlover.LoginActivity;
 import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 

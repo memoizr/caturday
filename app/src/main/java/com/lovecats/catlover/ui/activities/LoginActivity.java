@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.activities;
 
 import android.animation.Animator;
 import android.app.Activity;
@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.LoginHandler;
 import com.lovecats.catlover.data.UserFetcher;
 import com.lovecats.catlover.helpers.AnimationHelper;

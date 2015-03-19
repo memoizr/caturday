@@ -17,19 +17,17 @@ import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.CatStreamFragment;
+import com.lovecats.catlover.ui.fragments.CatStreamFragment;
 import com.lovecats.catlover.Config;
-import com.lovecats.catlover.DashboardFragment;
-import com.lovecats.catlover.LoginActivity;
+import com.lovecats.catlover.ui.fragments.DashboardFragment;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.DrawerArrowHelper;
-import com.lovecats.catlover.ui.activities.SettingsActivity;
 import com.lovecats.catlover.ui.fragments.NavigationFragment;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
-import com.lovecats.catlover.views.CollapsibleView;
-import com.lovecats.catlover.views.SlideShowView;
+import com.lovecats.catlover.ui.views.CollapsibleView;
+import com.lovecats.catlover.ui.views.SlideShowView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

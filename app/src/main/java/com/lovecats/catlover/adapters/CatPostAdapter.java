@@ -17,7 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lovecats.catlover.CatDetailActivity;
+import com.lovecats.catlover.ui.activities.CatDetailActivity;
 import com.lovecats.catlover.ui.activities.MainActivity;
 import com.lovecats.catlover.R;
 import com.squareup.picasso.Picasso;
@@ -66,7 +66,6 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
             final int j = i;
 
-//            setAnimation(myViewHolder.catContainer, i);
             final String transitionName = "catTransition" + i;
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
@@ -130,16 +129,4 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    int lastPosition = -1;
-
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_up);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
-    }
 }

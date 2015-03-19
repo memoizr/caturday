@@ -1,13 +1,11 @@
-package com.lovecats.catlover.views;
+package com.lovecats.catlover.ui.views;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

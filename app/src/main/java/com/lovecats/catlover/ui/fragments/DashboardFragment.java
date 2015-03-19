@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.adapters.DashboardPageAdapter;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.CatPostModel;
 import com.lovecats.catlover.ui.activities.MainActivity;
+import com.lovecats.catlover.ui.fragments.CatStreamFragment;
 
 import java.util.List;
 

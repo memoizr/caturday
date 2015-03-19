@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,40 +13,33 @@ import android.view.ViewGroup;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.adapters.CatPostAdapter;
+import com.lovecats.catlover.adapters.DashboardPageAdapter;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.CatPostModel;
 import com.lovecats.catlover.util.EventBus;
-import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatPost;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CatStreamFragment extends Fragment implements ObservableScrollViewCallbacks
         {
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
-    public static final int NEW_STREAM_TYPE = 0;
-    public static final int FAVORITES_STREAM_TYPE = 1;
 
     private ScrollCallback catScrollCallback;
     private int streamType;
     private List<CatPost> mCatPosts;
     private CatPostAdapter catPostAdapter;
-    private CatPostFetcher catPostFetcher;
     private StaggeredGridLayoutManager staggeredGrid;
 
     public CatStreamFragment() {
     }
 
-//    @Override
     public void onFetchComplete(List<CatPostModel> catPostModels) {
         catPostAdapter.mCatPosts = CatPostModel.getAllCatPosts();
         notifyAdapter();
@@ -90,7 +83,7 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         View rootView = inflater.inflate(R.layout.fragment_cat_stream, container, false);
 
         Bundle bundle = getArguments();
-        streamType = bundle.getInt("streamType");
+        streamType = bundle.getInt(DashboardPageAdapter.STREAM_CATEGORY);
 
         ButterKnife.inject(this, rootView);
         return rootView;
@@ -134,16 +127,16 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         });
 
         switch (streamType) {
-            case 0:
+            case DashboardPageAdapter.CATEGORY_SPACE:
                 mCatPosts = CatPostModel.getPostsForCategory("space");
                 break;
-            case 1:
+            case DashboardPageAdapter.CATEGORY_BOXES:
                 mCatPosts = CatPostModel.getPostsForCategory("boxes");
                 break;
-            case 2:
+            case DashboardPageAdapter.CATEGORY_CATURDAY:
                 mCatPosts = CatPostModel.getPostsForCategory("caturday");
                 break;
-            case 3:
+            case DashboardPageAdapter.CATEGORY_HATS:
                 mCatPosts = CatPostModel.getPostsForCategory("hats");
                 break;
             case 4:
@@ -156,7 +149,7 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
         cats_stream_RV.setAdapter(catPostAdapter);
 
-        if (CatPostModel.getCount() == 0 && streamType == NEW_STREAM_TYPE) {
+        if (CatPostModel.getCount() == 0 && streamType == DashboardPageAdapter.CATEGORY_SPACE) {
             fetchPosts();
         }
     }
@@ -173,14 +166,4 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     public void setScrollPosition(int position) {
         ((StaggeredGridLayoutManager)cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
     }
-
-//    @Override
-//    public void onResume(){
-//        if (streamType == FAVORITES_STREAM_TYPE) {
-//            catImages = CatModel.getAllFavoriteCatImages(getActivity());
-//            catsAdapter.mCatImages = catImages;
-//            catsAdapter.notifyDataSetChanged();
-//        }
-//        super.onResume();
-//    }
 }

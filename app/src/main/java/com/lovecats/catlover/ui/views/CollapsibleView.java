@@ -1,4 +1,4 @@
-package com.lovecats.catlover.views;
+package com.lovecats.catlover.ui.views;
 
 import android.content.Context;
 import android.content.res.Resources;

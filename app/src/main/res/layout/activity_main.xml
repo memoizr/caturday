@@ -9,10 +9,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.lovecats.catlover.views.SlideShowView
+        <com.lovecats.catlover.ui.views.SlideShowView
             android:id="@+id/slide_show_V"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dashboard_image_height"></com.lovecats.catlover.views.SlideShowView>
+            android:layout_height="@dimen/dashboard_image_height"></com.lovecats.catlover.ui.views.SlideShowView>
 
         <LinearLayout
             android:id="@+id/container"

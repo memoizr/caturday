@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CatDetailActivity"
+            android:name=".ui.activities.CatDetailActivity"
             android:label="@string/title_activity_detail_cat"
             android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".ui.activities.MainActivity">
@@ -32,7 +32,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".ui.activities.MainActivity"
             android:theme="@style/Theme.Transparent" >

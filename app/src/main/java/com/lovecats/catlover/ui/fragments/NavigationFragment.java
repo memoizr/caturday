@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.ui.activities.ProfileActivity;
@@ -26,7 +25,6 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
     private ListView navigationListView;
     private OnFragmentInteractionListener mListener;
     @InjectView(R.id.profile_container_V) View profileContainer;
-    @InjectView(R.id.username_TV) TextView username_TV;
 
     public NavigationFragment() {
     }

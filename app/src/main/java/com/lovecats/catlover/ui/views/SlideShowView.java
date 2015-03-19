@@ -1,4 +1,4 @@
-package com.lovecats.catlover.views;
+package com.lovecats.catlover.ui.views;
 
 import android.animation.Animator;
 import android.content.Context;
