@@ -13,8 +13,6 @@ public class LoginHandler {
 
     public static void performLogin(String password, String email, final Callback callback) {
 
-        final Callback mCallback = callback;
-
         String endpoint = Config.getEndpoint();
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -43,7 +41,6 @@ public class LoginHandler {
             public void failure(RetrofitError error) {
                 callback.failure(error);
                 error.printStackTrace();
-
             }
         });
     }

@@ -26,8 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatPost;
 
-public class CatStreamFragment extends Fragment implements ObservableScrollViewCallbacks
-        {
+public class CatStreamFragment extends Fragment implements ObservableScrollViewCallbacks {
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
 
@@ -40,20 +39,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
     public CatStreamFragment() {
     }
 
-    public void onFetchComplete(List<CatPostModel> catPostModels) {
-        catPostAdapter.mCatPosts = CatPostModel.getAllCatPosts();
-        notifyAdapter();
-
-    }
-
-    public interface ScrollCallback {
-        void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
-
-        void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState);
-
-        public void onScrollStateChanged(Fragment fragment, int scrollState);
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -61,20 +46,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         if (activity instanceof ScrollCallback) {
             catScrollCallback = (ScrollCallback) activity;
         }
-    }
-
-    @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        catScrollCallback.onScroll(this, scrollY, firstScroll, dragging);
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        catScrollCallback.onUpOrCancelMotionEvent(this, scrollState);
     }
 
     @Override
@@ -87,15 +58,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
 
         ButterKnife.inject(this, rootView);
         return rootView;
-    }
-
-    private void fetchPosts(){
-        CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
-            @Override
-            public void onSuccess(List<CatPostModel> catPostModels) {
-                onFetchComplete(catPostModels);
-            }
-        });
     }
 
     @Override
@@ -154,16 +116,52 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
         }
     }
 
-    private void notifyAdapter(){
+    private void fetchPosts() {
+        CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
+            @Override
+            public void onSuccess(List<CatPostModel> catPostModels) {
+                onFetchComplete(catPostModels);
+            }
+        });
+    }
+
+    public void onFetchComplete(List<CatPostModel> catPostModels) {
+        catPostAdapter.mCatPosts = CatPostModel.getAllCatPosts();
+        notifyAdapter();
+
+    }
+
+    private void notifyAdapter() {
         cats_stream_RV.getAdapter().notifyDataSetChanged();
     }
 
-    public int getScrollPosition() {
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        catScrollCallback.onScroll(this, scrollY, firstScroll, dragging);
+    }
 
+    @Override
+    public void onDownMotionEvent() {
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        catScrollCallback.onUpOrCancelMotionEvent(this, scrollState);
+    }
+
+    public int getScrollPosition() {
         return cats_stream_RV.getCurrentScrollY();
     }
 
     public void setScrollPosition(int position) {
-        ((StaggeredGridLayoutManager)cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
+        ((StaggeredGridLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
+    }
+
+    public interface ScrollCallback {
+        void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
+
+        void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState);
+
+        public void onScrollStateChanged(Fragment fragment, int scrollState);
     }
 }

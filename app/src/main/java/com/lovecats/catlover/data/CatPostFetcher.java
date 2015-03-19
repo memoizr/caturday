@@ -48,17 +48,8 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
         api.getPosts(new Callback<List<CatPostModel>>() {
             @Override
             public void success(final List<CatPostModel> catPostModels, Response response) {
-                System.out.println("success");
-
                 execute(catPostModels);
                 mCatPostModels = catPostModels;
-
-                System.out.println(catPostModels.get(0).getTotal_votes_count());
-                System.out.println(catPostModels.get(1).getTotal_votes_count());
-                System.out.println(catPostModels.get(2).getTotal_votes_count());
-                System.out.println(catPostModels.get(4).getUser());
-                System.out.println(catPostModels.get(4).getComments());
-
             }
 
             @Override
@@ -71,7 +62,6 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
 
     @Override
     protected String doInBackground(List<CatPostModel>... params) {
-        System.out.println("doing in background");
         for (CatPostModel catpostmodel : params[0]) {
             catpostmodel.createPost(catpostmodel);
         }
@@ -81,12 +71,10 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
         System.out.println(values[0]);
     }
 
     protected void onPostExecute(String astring) {
-        System.out.println(astring);
         mCallback.onSuccess(mCatPostModels);
     }
 }

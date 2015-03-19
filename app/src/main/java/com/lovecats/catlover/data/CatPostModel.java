@@ -23,28 +23,19 @@ public class CatPostModel {
     @Getter @Setter private int total_votes_count;
     @Getter @Setter private JsonArray comments;
 
-    public static CatPost insertOrUpdate(CatPost catPost) {
-        long id = getCatPostDao().insertOrReplace(catPost);
-        return getCatPostDao().loadByRowId(id);
+    public static List<CatPost> getAllCatPosts() {
+        return getCatPostDao().loadAll();
     }
 
     private static CatPostDao getCatPostDao() {
         return DaoManager.getDaoSession().getCatPostDao();
     }
 
-    public static long getCount() {
-        return getCatPostDao().count();
-    }
-
-    public static List<CatPost> getAllCatPosts() {
-        return getCatPostDao().loadAll();
-    }
-
     public static CatPost getCatPostForServerId(String id) {
         return getCatPostDao().queryBuilder().where(CatPostDao.Properties.ServerId.eq(id)).unique();
     }
 
-    public static List<CatPost> getPostsForCategory(String category){
+    public static List<CatPost> getPostsForCategory(String category) {
         return getCatPostDao().queryBuilder().where(CatPostDao.Properties.Category.eq(category)).list();
     }
 
@@ -52,7 +43,11 @@ public class CatPostModel {
         return getCatPostDao().load((long) Math.ceil(getCount() * Math.random()));
     }
 
-    public static void createPost(CatPostModel catPostModel){
+    public static long getCount() {
+        return getCatPostDao().count();
+    }
+
+    public static void createPost(CatPostModel catPostModel) {
         CatPost catPost = new CatPost();
         catPost.setCaption(catPostModel.caption);
         catPost.setServerId(catPostModel.id);
@@ -62,5 +57,10 @@ public class CatPostModel {
         catPost.setTotalVotesCount(catPostModel.total_votes_count);
 
         insertOrUpdate(catPost);
+    }
+
+    public static CatPost insertOrUpdate(CatPost catPost) {
+        long id = getCatPostDao().insertOrReplace(catPost);
+        return getCatPostDao().loadByRowId(id);
     }
 }

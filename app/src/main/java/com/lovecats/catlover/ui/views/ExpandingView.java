@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.helpers.AnimationHelper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -55,7 +54,6 @@ public class ExpandingView extends RelativeLayout{
 
         maxHeight = resources.getDimensionPixelSize(R.dimen.max_caption_height);
         minHeight = resources.getDimensionPixelSize(R.dimen.caption_height);
-
     }
 
     public void setExpandedLevel(float level){
@@ -63,11 +61,11 @@ public class ExpandingView extends RelativeLayout{
             expandedLevel = level;
             collapseScale = (float) (0.5*Math.tanh( 6 * expandedLevel - 3) + 0.5);
             updateLayoutParams();
-            updateLogo();
+            updateUserImageMargins();
         }
     }
 
-    private void updateLogo() {
+    private void updateUserImageMargins() {
         ViewGroup.MarginLayoutParams params =
                 (ViewGroup.MarginLayoutParams) user_image.getLayoutParams();
         params.topMargin =
@@ -77,34 +75,14 @@ public class ExpandingView extends RelativeLayout{
         user_image.setLayoutParams(params);
     }
 
-    public void animateBackgroundAccent(int color) {
-        AnimationHelper.animateColor((View) caption_container_V.getParent(),
-                getResources().getColor(R.color.white_translucent),
-                color);
-
-        AnimationHelper.animateTextColor(user_name,
-                getResources().getColor(R.color.deepblack),
-                getResources().getColor(R.color.white));
-    }
-
-    public void animateBackgroundNeutral(int color) {
-        AnimationHelper.animateColor((View)caption_container_V.getParent(),
-                color,
-                getResources().getColor(R.color.white_translucent));
-        AnimationHelper.animateTextColor(user_name,
-                getResources().getColor(R.color.white),
-                getResources().getColor(R.color.deepblack));
-    }
-
     private void updateLayoutParams() {
-        updateContainer();
+        updateContainerHeight();
         requestLayout();
     }
 
-    private void updateContainer() {
+    private void updateContainerHeight() {
         ViewGroup.LayoutParams params = caption_container_V.getLayoutParams();
         params.height = (int) interpolate(minHeight, maxHeight, collapseScale);
-        System.out.println(params.height);
         caption_container_V.setLayoutParams(params);
     }
 

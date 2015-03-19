@@ -17,16 +17,4 @@ public class UserModel {
     private static UserDao getUserDao() {
         return DaoManager.getDaoSession().getUserDao();
     }
-
-    public static long getCount() {
-        return getUserDao().count();
-    }
-
-    private static void deleteUser(String id) {
-        getUserDao().delete(getUserForServerId(id));
-    }
-
-    public static User getUserForServerId(String id) {
-        return getUserDao().queryBuilder().where(UserDao.Properties.ServerId.eq(id)).unique();
-    }
 }
