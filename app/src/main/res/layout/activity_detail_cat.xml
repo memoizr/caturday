@@ -27,13 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageButton
+    <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/favorite_B"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:elevation="8dp"
         android:padding="12dp"
-        android:scaleType="fitXY"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="52dp"
         android:background="@color/white"

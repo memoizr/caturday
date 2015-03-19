@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.UserModel;
 
 import butterknife.ButterKnife;

@@ -18,9 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lovecats.catlover.CatDetailActivity;
-import com.lovecats.catlover.MainActivity;
+import com.lovecats.catlover.ui.activities.MainActivity;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.data.CatPostModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

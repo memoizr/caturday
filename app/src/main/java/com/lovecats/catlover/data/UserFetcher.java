@@ -1,6 +1,7 @@
 package com.lovecats.catlover.data;
 
 import com.lovecats.catlover.Config;
+import com.lovecats.catlover.api.UserApi;
 
 import greendao.User;
 import lombok.Getter;

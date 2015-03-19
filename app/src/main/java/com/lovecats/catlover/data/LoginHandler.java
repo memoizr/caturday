@@ -1,8 +1,7 @@
 package com.lovecats.catlover.data;
 
 import com.lovecats.catlover.Config;
-
-import java.math.BigInteger;
+import com.lovecats.catlover.api.LoginApi;
 
 import greendao.User;
 import retrofit.Callback;

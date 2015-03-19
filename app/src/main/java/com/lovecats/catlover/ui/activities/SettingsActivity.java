@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+
+import com.lovecats.catlover.R;
 
 import java.util.List;
 

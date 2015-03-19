@@ -1,19 +1,12 @@
 package com.lovecats.catlover.data;
 
 import android.os.AsyncTask;
-import android.os.Looper;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.lovecats.catlover.Config;
-import com.lovecats.catlover.util.EventBus;
-
-import org.json.JSONObject;
+import com.lovecats.catlover.api.CatPostApi;
 
 import java.util.List;
 
-import greendao.CatPost;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;

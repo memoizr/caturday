@@ -1,77 +1,61 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.activities;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Outline;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.widget.AbsListView;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.data.CatPostFetcher;
+import com.lovecats.catlover.CatStreamFragment;
+import com.lovecats.catlover.Config;
+import com.lovecats.catlover.DashboardFragment;
+import com.lovecats.catlover.LoginActivity;
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.helpers.AnimationHelper;
-import com.lovecats.catlover.helpers.ApiVersionHelper;
 import com.lovecats.catlover.helpers.DrawerArrowHelper;
+import com.lovecats.catlover.ui.activities.SettingsActivity;
+import com.lovecats.catlover.ui.fragments.NavigationFragment;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.views.CollapsibleView;
 import com.lovecats.catlover.views.SlideShowView;
 
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
-import greendao.CatImage;
 import lombok.Getter;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationFragment.OnFragmentInteractionListener,
         CatStreamFragment.ScrollCallback {
 
-    @InjectView(R.id.toolbar) Toolbar toolbar;
+    public PagerSlidingTabStrip slidingTabs;
+    @InjectView(R.id.toolbar) Toolbar mToolbar;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
     @InjectView(R.id.slide_show_V) SlideShowView slide_show_V;
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
-    @InjectView(R.id.new_post_B) ImageButton new_post_B;
-
     private CollapsibleView collapsibleView;
-
     private int titleMaxHeight;
     private int titleMinHeight;
     private int titleCollapsed;
-    @Getter
-    private int oldScrollY;
-    private TransitionDrawable transitionDrawable;
+    @Getter private int oldScrollY;
     private boolean transparent = true;
     private boolean statusTransparent = true;
-    public PagerSlidingTabStrip slidingTabs;
     private ActionBarDrawerToggle mDrawerToggle;
     private DashboardFragment dashboardFragment;
 
-    public void doneSlideshow(){
-        slide_show_V.flash();
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new Config(this);
@@ -90,15 +74,16 @@ public class MainActivity extends ActionBarActivity
 
         setUpFragments(savedInstanceState);
 
-        setupCollapsibleToolbar();
-        setDrawer();
-        setUpButton();
+        setupCollapsibleToolbar(this, mToolbar);
+        setupMenuClickListener(mToolbar);
+        setDrawer(this, mToolbar);
 
         titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
     }
 
     private void setUpFragments(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, dashboardFragment)
                     .commit();
@@ -108,49 +93,19 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setUpButton() {
-        ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
-                outline.setOval(0, 0, size, size);
-            }
-        };
-
-        new_post_B.setOutlineProvider(viewOutlineProvider);
-        new_post_B.setClipToOutline(true);
-
-        Drawable image = getResources().getDrawable(R.drawable.ic_add_white_48dp);
-        new_post_B.setImageDrawable(image);
-    }
-
-    public void setDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.action_settings, R.string.action_login);
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    private void setupCollapsibleToolbar() {
+    private void setupCollapsibleToolbar(Context context, Toolbar toolbar) {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        collapsibleView = new CollapsibleView(this);
+        collapsibleView = new CollapsibleView(context);
         toolbar.addView(collapsibleView);
 
         titleMaxHeight = collapsibleView.getMaxHeight();
         titleMinHeight = collapsibleView.getMinHeight();
+    }
 
-        transitionDrawable = (TransitionDrawable) title_container_RL.getBackground();
-
+    private void setupMenuClickListener(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
@@ -169,6 +124,23 @@ public class MainActivity extends ActionBarActivity
                 });
     }
 
+    private void setDrawer(Activity activity, Toolbar toolbar) {
+        mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout, toolbar, R.string.action_settings, R.string.action_login);
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    public void toggleArrow(boolean toggle) {
+        DrawerArrowHelper.toggleArrow(toggle, mDrawerToggle, mDrawerLayout);
+    }
+
     @Override
     public void onFragmentInteraction(int position) {
         switch (position) {
@@ -182,30 +154,8 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupActivityTransitions() {
-        if (ApiVersionHelper.supportsAPI(Build.VERSION_CODES.KITKAT)) {
-            Transition fade = new Fade();
-            fade.excludeTarget(android.R.id.statusBarBackground, true);
-            fade.excludeTarget(android.R.id.navigationBarBackground, true);
-            fade.excludeTarget(title_container_RL, true);
-
-            if (ApiVersionHelper.supportsAPI(Build.VERSION_CODES.LOLLIPOP)) {
-                getWindow().setExitTransition(fade);
-                getWindow().setEnterTransition(fade);
-            }
-        }
-    }
-
-
-    public void animateTitleContainer(float targetShiftY) {
-        title_container_RL.animate().cancel();
-        title_container_RL
-                .animate()
-                .translationY(-targetShiftY)
-                .setDuration(300)
-                .setInterpolator(new HyperAccelerateDecelerateInterpolator())
-                .start();
+    public void doneSlideshow() {
+        slide_show_V.flash();
     }
 
     @Override
@@ -230,12 +180,13 @@ public class MainActivity extends ActionBarActivity
             collapsibleView.setCollapseLevel(
                     Math.max(1f - scrollY / (float) (titleMaxHeight - titleMinHeight), 0));
             if (!transparent) {
-                animateBackground(title_container_RL,
+                AnimationHelper.animateColor(title_container_RL,
                         getResources().getColor(R.color.primary),
                         getResources().getColor(R.color.primary_transparent));
-            }  if (!statusTransparent) {
+            }
+            if (!statusTransparent) {
 
-                animateBackground(status_bar_scrim,
+                AnimationHelper.animateColor(status_bar_scrim,
                         getResources().getColor(R.color.primary),
                         getResources().getColor(R.color.primary_transparent));
                 transparent = statusTransparent = true;
@@ -248,7 +199,7 @@ public class MainActivity extends ActionBarActivity
 
             collapsibleView.setCollapseLevel(0);
             if (statusTransparent) {
-                animateBackground(status_bar_scrim,
+                AnimationHelper.animateColor(status_bar_scrim,
                         getResources().getColor(R.color.primary_transparent),
                         getResources().getColor(R.color.primary));
                 statusTransparent = false;
@@ -263,7 +214,7 @@ public class MainActivity extends ActionBarActivity
             collapsibleView.setCollapseLevel(0);
 
             if (transparent && scrollY > titleMaxHeight + titleMinHeight) {
-                animateBackground(title_container_RL,
+                AnimationHelper.animateColor(title_container_RL,
                         getResources().getColor(R.color.primary_transparent),
                         getResources().getColor(R.color.primary));
 
@@ -304,7 +255,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         if (transparent && shiftY > 0) {
-            animateBackground(title_container_RL,
+            AnimationHelper.animateColor(title_container_RL,
                     getResources().getColor(R.color.primary_transparent),
                     getResources().getColor(R.color.primary));
             slide_show_V.animationPause();
@@ -322,31 +273,10 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    private void animateBackground(View view, int colorFrom, int colorTo) {
-        final View mView = view;
-        final ValueAnimator va = ObjectAnimator.ofArgb(
-                colorFrom,
-                colorTo);
-        va.setDuration(300);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                 @Override
-                                 public void onAnimationUpdate(ValueAnimator animation) {
-                                     mView.setBackgroundColor((Integer) animation.getAnimatedValue());
-                                 }
-                             }
-        );
-        va.start();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
         return true;
-    }
-
-    public void onFetchComplete(List<CatImage> catImages) {
-        dashboardFragment.swipe_container.setRefreshing(false);
-        slide_show_V.flash();
     }
 
     @Override
@@ -354,20 +284,5 @@ public class MainActivity extends ActionBarActivity
         super.onResume();
         slide_show_V.animationResume();
         toggleArrow(false);
-    }
-
-    @OnClick(R.id.new_post_B)
-    public void clickNewPost() {
-        Intent intent = new Intent(this, NewPostActivity.class);
-        startActivity(intent);
-    }
-
-    public void toggleArrow(boolean toggle) {
-        if (toggle) {
-            AnimationHelper.zoomOut(new_post_B);
-        } else {
-            AnimationHelper.zoomIn(new_post_B);
-        }
-        DrawerArrowHelper.toggleArrow(toggle, mDrawerToggle, mDrawerLayout);
     }
 }

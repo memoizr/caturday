@@ -1,7 +1,8 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.lovecats.catlover.data.CatPostModel;
 
 import org.json.JSONArray;
 

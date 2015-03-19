@@ -1,4 +1,7 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.api;
+
+import com.lovecats.catlover.data.AuthModel;
+import com.lovecats.catlover.data.LoginWrapper;
 
 import retrofit.Callback;
 import retrofit.http.Body;

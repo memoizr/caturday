@@ -22,29 +22,8 @@ public class UserModel {
         return getUserDao().count();
     }
 
-    public static void logOutUser(String id) {
-        deleteUser(id);
-    }
-
     private static void deleteUser(String id) {
         getUserDao().delete(getUserForServerId(id));
-    }
-
-    public static User getLoggedInUser() {
-        if (getCount() > 0) {
-            return getUserDao().queryBuilder()
-                    .where(UserDao.Properties.LoggedIn.eq(true)).list().get(0);
-        } else {
-            return null;
-        }
-    }
-
-    public static List<User> getAllUsers(Context context) {
-        return getUserDao().loadAll();
-    }
-
-    public static User getUserForId(long id) {
-        return getUserDao().load(id);
     }
 
     public static User getUserForServerId(String id) {

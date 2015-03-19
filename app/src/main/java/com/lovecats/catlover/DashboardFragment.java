@@ -12,12 +12,12 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.adapters.DashboardPageAdapter;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.ui.activities.MainActivity;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.CatImage;
 
 public class DashboardFragment extends Fragment
         implements ViewPager.OnPageChangeListener,
@@ -29,6 +29,7 @@ public class DashboardFragment extends Fragment
     private DashboardPageAdapter pagerAdapter;
     private int currentScrollPosition;
     private CatStreamFragment otherCatStreamFragment;
+    private int selectedPage = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,11 +38,11 @@ public class DashboardFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_dashboard, container, false);
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         ButterKnife.inject(this, rootView);
-        slidingTabs_PSTS = ((MainActivity)getActivity()).slidingTabs;
+        slidingTabs_PSTS = ((MainActivity) getActivity()).slidingTabs;
 
 
         swipe_container.setOnRefreshListener(this);
@@ -68,25 +69,17 @@ public class DashboardFragment extends Fragment
         swipe_container.setEnabled(false);
     }
 
-    private int selectedPage = 0;
-
     @Override
     public void onPageSelected(int position) {
         selectedPage = position;
         swipe_container.setEnabled(true);
     }
 
-    public void enableSwipeToRefresh(boolean toggle){
-        if (swipe_container != null) {
-            swipe_container.setEnabled(toggle);
-        }
-    }
-
     @Override
     public void onPageScrollStateChanged(int state) {
         float targetShiftY = 0;
         CatStreamFragment catStreamFragment;
-        int oldScrollY = ((MainActivity)getActivity()).getOldScrollY();
+        int oldScrollY = ((MainActivity) getActivity()).getOldScrollY();
 
 //        if (state == 1) {
 //            if (selectedPage == 0) {
@@ -123,6 +116,12 @@ public class DashboardFragment extends Fragment
 //        }
     }
 
+    public void enableSwipeToRefresh(boolean toggle) {
+        if (swipe_container != null) {
+            swipe_container.setEnabled(toggle);
+        }
+    }
+
     @Override
     public void onRefresh() {
         CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
@@ -134,5 +133,4 @@ public class DashboardFragment extends Fragment
             }
         });
     }
-
 }

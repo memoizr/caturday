@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.activities;
 
 import android.animation.Animator;
 import android.support.v7.app.ActionBarActivity;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.LinearLayout;
 
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
 

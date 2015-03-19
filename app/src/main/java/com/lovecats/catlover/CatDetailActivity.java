@@ -2,17 +2,14 @@ package com.lovecats.catlover;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.ColorFilter;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.PersistableBundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -24,6 +21,7 @@ import android.transition.Fade;
 import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +37,6 @@ import android.widget.RelativeLayout;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -67,20 +64,13 @@ public class CatDetailActivity extends ActionBarActivity {
     @InjectView(R.id.cat_detail_IV) ImageView cat_detail_IV;
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
     @InjectView(R.id.toolbar) Toolbar toolbar;
-    @InjectView(R.id.detail_reveal) View detail_reveal;
     @InjectView(R.id.comments_LV) ObservableListView comments_LV;
-    @InjectView(R.id.detail_container_RL) RelativeLayout detail_container;
     @InjectView(R.id.caption_V) ExpandingView caption_V;
     @InjectView(R.id.new_comment_V) View new_comment_V;
-    @InjectView(R.id.comment_TE) EditText comment_TE;
 
     private long id;
 
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-
     private String url;
-    private Object favorite;
     private ViewGroup header;
 
     private int captionHeight;
@@ -100,54 +90,27 @@ public class CatDetailActivity extends ActionBarActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-
         compatMethods();
         getDataFromIntent();
         setUpImageView();
         setUpToolbar();
 
-        scaleButton();
+        AnimationHelper.zoomIn(favorite_B);
         setUpListView();
         setUpIMEListener();
 
+        setupPalette((BitmapDrawable) cat_detail_IV.getDrawable());
 
-        Bitmap mBitmap = ((BitmapDrawable)cat_detail_IV.getDrawable()).getBitmap();
+        caption_V.setBackgroundColor(vibrant);
+    }
+
+    private void setupPalette(BitmapDrawable bitmapDrawable) {
+        Bitmap mBitmap = bitmapDrawable.getBitmap();
         Palette palette = Palette.generate(mBitmap);
         vibrant = palette.getVibrantColor(0x000000);
         muted = palette.getMutedColor(0x000000);
         darkMuted = palette.getDarkMutedColor(0x000000);
         vibrantLight = palette.getLightVibrantColor(0x000000);
-
-        caption_V.setBackgroundColor(vibrant);
-        updateButton();
-
-        getWindow().getExitTransition().addListener(new Transition.TransitionListener() {
-            @Override
-            public void onTransitionStart(Transition transition) {
-                activityClosed = true;
-            }
-
-            @Override
-            public void onTransitionEnd(Transition transition) {
-                activityClosed = false;
-
-            }
-
-            @Override
-            public void onTransitionCancel(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionPause(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionResume(Transition transition) {
-
-            }
-        });
     }
 
     private void setUpListView() {
@@ -274,23 +237,8 @@ public class CatDetailActivity extends ActionBarActivity {
 
     }
 
-
-    private void scaleButton() {
-        View view = favorite_B;
-        view.setScaleX(0f);
-        view.setScaleY(0f);
-        view.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(400)
-                .setInterpolator(new HyperTanDecelerateInterpolator())
-                .setStartDelay(400)
-                .start();
-    }
-
     private void compatMethods() {
         if (Build.VERSION.SDK_INT >= 21) {
-            setUpButton();
             setUpActivityTransitions();
         }
     }
@@ -298,21 +246,6 @@ public class CatDetailActivity extends ActionBarActivity {
     private void setUpImageView() {
         Picasso.with(this).load(url).into(cat_detail_IV);
         PhotoViewAttacher mAttacher = new PhotoViewAttacher(cat_detail_IV);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setUpButton() {
-        ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                // Or read size directly from the view's width/height
-                int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
-                outline.setOval(0, 0, size, size);
-            }
-        };
-
-        favorite_B.setOutlineProvider(viewOutlineProvider);
-        favorite_B.setClipToOutline(true);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -338,6 +271,14 @@ public class CatDetailActivity extends ActionBarActivity {
         });
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                shareTextUrl();
+                return false;
+            }
+        });
     }
 
     private void getDataFromIntent(){
@@ -360,72 +301,9 @@ public class CatDetailActivity extends ActionBarActivity {
         startActivity(Intent.createChooser(share, "Share link!"));
     }
 
-    @OnClick(R.id.favorite_B)
-    void favoriteImage() {
-        CatImage catImage = new CatImage();
-        catImage.setId(id);
-        catImage.setUrl(url);
-        if (favorite != null && (Boolean) favorite) {
-            catImage.setFavorite(false);
-        } else {
-            catImage.setFavorite(true);
-        }
-//        CatModel.insertOrUpdate(this, catImage);
-        updateButton();
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_clockwise);
-        favorite_B.startAnimation(animation);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_cat, menu);
         return true;
-    }
-
-//
-//    @Override
-//    protected void onPostResume() {
-//        super.onPostResume();
-//        detail_reveal.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                reveal();
-//            }
-//        }, 100);
-//    }
-
-//    public void reveal() {
-//        // previously invisible view
-//
-//        // get the center for the clipping circle
-//        int cx = (detail_reveal.getLeft() + detail_reveal.getRight()) / 2;
-//        int cy = (detail_reveal.getTop() + detail_reveal.getBottom()) / 2;
-//        // get the final radius for the clipping circle
-//        int finalRadius = (int) Math.sqrt(Math.pow(detail_reveal.getWidth(),2) + Math.pow(detail_reveal.getHeight(), 2) / 2);
-//
-//        // create the animator for this view (the start radius is zero)
-//        Animator anim =
-//                ViewAnimationUtils.createCircularReveal(detail_reveal, cx, cy, 0, finalRadius);
-//        anim.setDuration(600);
-//        anim.setInterpolator(new AccelerateInterpolator());
-//
-//        // make the view visible and start the animation
-//        detail_reveal.setVisibility(View.VISIBLE);
-//        anim.start();
-//    }
-
-    private void updateButton() {
-//        favorite = CatModel.getCatImageForId(this, id).getFavorite();
-        Drawable image;
-//        if (favorite != null && (Boolean) favorite) {
-            favorite_B.setBackgroundColor(vibrantLight);
-//            image = getResources().getDrawable(R.drawable.ic_favorite_white_48dp);
-            image = getResources().getDrawable(R.drawable.ic_favorite_outline_white_48dp);
-            image.mutate().setColorFilter(darkMuted, PorterDuff.Mode.MULTIPLY);
-//        } else {
-//            favorite_B.setBackgroundColor(getResources().getColor(R.color.white));
-//            image.mutate().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.MULTIPLY);
-//        }
-        favorite_B.setImageDrawable(image);
     }
 }

@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,12 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.R;
+import com.lovecats.catlover.ui.activities.ProfileActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import greendao.User;
 
 /**
  * Created by user on 01/03/15.
@@ -49,11 +49,6 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
         navigationListView.setAdapter(adapter);
         navigationListView.setOnItemClickListener(this);
-
-//        User user = UserModel.getLoggedInUser();
-//        if (user != null) {
-//            username_TV.setText(user.getUsername());
-//        }
 
         return rootView;
     }

@@ -159,21 +159,19 @@ public class AnimationHelper {
     }
 
     public static void animateColor(View view, int colorFrom, int colorTo) {
-        if (((ColorDrawable) view.getBackground()).getColor() == colorFrom) {
-            final View mView = view;
-            final ValueAnimator va = ObjectAnimator.ofArgb(
-                    colorFrom,
-                    colorTo);
-            va.setDuration(300);
-            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                     @Override
-                                     public void onAnimationUpdate(ValueAnimator animation) {
-                                         mView.setBackgroundColor((Integer) animation.getAnimatedValue());
-                                     }
-                                 }
-            );
-            va.start();
-        }
+        final View mView = view;
+        final ValueAnimator va = ObjectAnimator.ofArgb(
+                colorFrom,
+                colorTo);
+        va.setDuration(300);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                         @Override
+                         public void onAnimationUpdate(ValueAnimator animation) {
+                                     mView.setBackgroundColor((Integer) animation.getAnimatedValue());
+                             }
+                         }
+        );
+        va.start();
     }
 
     public static void animateTextColor(TextView view, int colorFrom, int colorTo) {
