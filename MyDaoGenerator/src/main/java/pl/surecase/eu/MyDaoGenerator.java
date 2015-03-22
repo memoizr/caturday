@@ -12,24 +12,18 @@ public class MyDaoGenerator {
     public static void main(String args[]) throws Exception {
         Schema schema = new Schema(7, "greendao");
 
-        Entity catImage = schema.addEntity("CatImage");
-        catImage.addIdProperty().autoincrement();
-        catImage.addStringProperty("url");
-        catImage.addBooleanProperty("favorite");
-
         Entity user = schema.addEntity("User");
         user.addIdProperty();
         user.addStringProperty("serverId").index().unique();
         user.addStringProperty("username");
-        user.addShortProperty("email");
+        user.addStringProperty("image_url");
+        user.addStringProperty("authToken");
+        user.addStringProperty("email");
+        user.addStringProperty("info");
         user.addStringProperty("firstName");
         user.addStringProperty("lastName");
         user.addStringProperty("description");
         user.addBooleanProperty("loggedIn");
-
-        Entity auth = schema.addEntity("Auth");
-        auth.addIdProperty();
-        auth.addStringProperty("token").unique();
 
 
         Entity comment = schema.addEntity("Comment");
@@ -49,14 +43,6 @@ public class MyDaoGenerator {
         catPost.addStringProperty("category");
         catPost.addIntProperty("downloadCount");
         catPost.addIntProperty("totalVotesCount");
-
-//        Index commentIndex = new Index();
-//        commentIndex.addProperty(catPostId);
-//        commentIndex.makeUnique();
-//        comment.addIndex(commentIndex);
-//
-//        ToMany catPostToComments = catPost.addToMany(comment, catPostId);
-//        catPostToComments.setName("comments");
 
         new DaoGenerator().generateAll(schema, args[0]);
     }

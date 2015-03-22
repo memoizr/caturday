@@ -8,9 +8,7 @@ import android.util.Log;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
-import greendao.CatImageDao;
 import greendao.UserDao;
-import greendao.AuthDao;
 import greendao.CommentDao;
 import greendao.CatPostDao;
 
@@ -23,18 +21,14 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
-        CatImageDao.createTable(db, ifNotExists);
         UserDao.createTable(db, ifNotExists);
-        AuthDao.createTable(db, ifNotExists);
         CommentDao.createTable(db, ifNotExists);
         CatPostDao.createTable(db, ifNotExists);
     }
     
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
-        CatImageDao.dropTable(db, ifExists);
         UserDao.dropTable(db, ifExists);
-        AuthDao.dropTable(db, ifExists);
         CommentDao.dropTable(db, ifExists);
         CatPostDao.dropTable(db, ifExists);
     }
@@ -68,9 +62,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(CatImageDao.class);
         registerDaoClass(UserDao.class);
-        registerDaoClass(AuthDao.class);
         registerDaoClass(CommentDao.class);
         registerDaoClass(CatPostDao.class);
     }

@@ -9,15 +9,11 @@ import de.greenrobot.dao.AbstractDaoSession;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import greendao.CatImage;
 import greendao.User;
-import greendao.Auth;
 import greendao.Comment;
 import greendao.CatPost;
 
-import greendao.CatImageDao;
 import greendao.UserDao;
-import greendao.AuthDao;
 import greendao.CommentDao;
 import greendao.CatPostDao;
 
@@ -30,15 +26,11 @@ import greendao.CatPostDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig catImageDaoConfig;
     private final DaoConfig userDaoConfig;
-    private final DaoConfig authDaoConfig;
     private final DaoConfig commentDaoConfig;
     private final DaoConfig catPostDaoConfig;
 
-    private final CatImageDao catImageDao;
     private final UserDao userDao;
-    private final AuthDao authDao;
     private final CommentDao commentDao;
     private final CatPostDao catPostDao;
 
@@ -46,14 +38,8 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        catImageDaoConfig = daoConfigMap.get(CatImageDao.class).clone();
-        catImageDaoConfig.initIdentityScope(type);
-
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
-
-        authDaoConfig = daoConfigMap.get(AuthDao.class).clone();
-        authDaoConfig.initIdentityScope(type);
 
         commentDaoConfig = daoConfigMap.get(CommentDao.class).clone();
         commentDaoConfig.initIdentityScope(type);
@@ -61,37 +47,23 @@ public class DaoSession extends AbstractDaoSession {
         catPostDaoConfig = daoConfigMap.get(CatPostDao.class).clone();
         catPostDaoConfig.initIdentityScope(type);
 
-        catImageDao = new CatImageDao(catImageDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
-        authDao = new AuthDao(authDaoConfig, this);
         commentDao = new CommentDao(commentDaoConfig, this);
         catPostDao = new CatPostDao(catPostDaoConfig, this);
 
-        registerDao(CatImage.class, catImageDao);
         registerDao(User.class, userDao);
-        registerDao(Auth.class, authDao);
         registerDao(Comment.class, commentDao);
         registerDao(CatPost.class, catPostDao);
     }
     
     public void clear() {
-        catImageDaoConfig.getIdentityScope().clear();
         userDaoConfig.getIdentityScope().clear();
-        authDaoConfig.getIdentityScope().clear();
         commentDaoConfig.getIdentityScope().clear();
         catPostDaoConfig.getIdentityScope().clear();
     }
 
-    public CatImageDao getCatImageDao() {
-        return catImageDao;
-    }
-
     public UserDao getUserDao() {
         return userDao;
-    }
-
-    public AuthDao getAuthDao() {
-        return authDao;
     }
 
     public CommentDao getCommentDao() {

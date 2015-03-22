@@ -29,12 +29,17 @@ public class LoginHandler {
 
         api.getToken(loginWrapper, new Callback<AuthModel>() {
             @Override
-            public void success(AuthModel authToken, Response response) {
+            public void success(AuthModel authModel, Response response) {
                 User user = new User();
-                user.setServerId(authToken.getId());
-                user.setUsername(authToken.getUsername());
+                user.setServerId(authModel.getId());
+                user.setUsername(authModel.getUsername());
+                user.setEmail(authModel.getEmail());
+                user.setInfo(authModel.getInfo());
+                user.setImage_url(authModel.getImage_url());
+                user.setAuthToken(authModel.getAuthToken());
+                user.setLoggedIn(true);
                 User newUser = UserModel.insertOrUpdate(user);
-                callback.success(authToken, response);
+                callback.success(newUser, response);
             }
 
             @Override

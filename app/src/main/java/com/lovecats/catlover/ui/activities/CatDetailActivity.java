@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +28,8 @@ import android.widget.ImageView;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,6 +37,9 @@ import com.google.gson.JsonParser;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.adapters.CommentsAdapter;
 import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.data.CommentModel;
+import com.lovecats.catlover.data.CommentPoster;
+import com.lovecats.catlover.data.UserModel;
 import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
@@ -44,7 +50,13 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import greendao.CatPost;
+import greendao.Comment;
+import greendao.User;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
@@ -55,6 +67,7 @@ public class CatDetailActivity extends ActionBarActivity {
     @InjectView(R.id.comments_LV) ObservableListView comments_LV;
     @InjectView(R.id.caption_V) ExpandingView caption_V;
     @InjectView(R.id.new_comment_V) View new_comment_V;
+    @InjectView(R.id.comment_TE) EditText comment_ET;
 
     private long id;
 
@@ -67,6 +80,7 @@ public class CatDetailActivity extends ActionBarActivity {
     private int darkMuted;
     private int vibrantLight;
     private boolean activityClosed = false;
+    private CommentsAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +125,7 @@ public class CatDetailActivity extends ActionBarActivity {
         for (int i = 0; i < array.size(); ++i) {
             list.add(array.get(i).getAsJsonObject());
         }
-        final CommentsAdapter adapter = new CommentsAdapter(this, list);
+        adapter = new CommentsAdapter(this, list);
 
         captionHeight = getResources().getDimensionPixelSize(R.dimen.caption_height);
         FrameLayout content = (FrameLayout) findViewById(android.R.id.content);
@@ -273,9 +287,11 @@ public class CatDetailActivity extends ActionBarActivity {
         Bundle bundle = getIntent().getExtras();
         id = bundle.getLong("id");
         url = bundle.getString("url");
-        catPost = CatPostModel.getCatPostForServerId(bundle.getString("serverId"));
+        catPostServerId = bundle.getString("serverId");
+        catPost = CatPostModel.getCatPostForServerId(catPostServerId);
     }
 
+    private String catPostServerId;
     private CatPost catPost;
 
     private void shareTextUrl() {
@@ -293,5 +309,39 @@ public class CatDetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_cat, menu);
         return true;
+    }
+
+    @OnClick(R.id.send_message_B)
+    public void sendMessage(){
+        String message = comment_ET.getText().toString();
+        CommentModel commentModel = new CommentModel();
+        commentModel.setCommentable_id(catPostServerId);
+        commentModel.setCommentable_type(CommentModel.COMMENTABLE_TYPE_CAT_POST);
+        commentModel.setContent(message);
+
+
+
+
+
+
+        final User user = UserModel.getLoggedInUser();
+        commentModel.setUser_id(user.getServerId());
+        CommentPoster.postComment(UserModel.getLoggedInUser().getAuthToken(),
+                commentModel, new Callback<CommentModel>() {
+                    @Override
+                    public void success(CommentModel commentModel, Response response) {
+                        Gson gson = new GsonBuilder().create();
+                        String jsonComment = gson.toJson(commentModel);
+                        JsonParser parser = new JsonParser();
+                        JsonObject object = (JsonObject) parser.parse(jsonComment);
+                        adapter.add(object);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
     }
 }

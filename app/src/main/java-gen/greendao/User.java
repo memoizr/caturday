@@ -9,7 +9,10 @@ public class User {
     private Long id;
     private String serverId;
     private String username;
-    private Short email;
+    private String image_url;
+    private String authToken;
+    private String email;
+    private String info;
     private String firstName;
     private String lastName;
     private String description;
@@ -22,11 +25,14 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String serverId, String username, Short email, String firstName, String lastName, String description, Boolean loggedIn) {
+    public User(Long id, String serverId, String username, String image_url, String authToken, String email, String info, String firstName, String lastName, String description, Boolean loggedIn) {
         this.id = id;
         this.serverId = serverId;
         this.username = username;
+        this.image_url = image_url;
+        this.authToken = authToken;
         this.email = email;
+        this.info = info;
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
@@ -57,12 +63,36 @@ public class User {
         this.username = username;
     }
 
-    public Short getEmail() {
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Short email) {
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public String getFirstName() {

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lovecats.catlover.R;
@@ -43,8 +44,11 @@ public class CommentsAdapter extends ArrayAdapter<JsonObject> {
         tvComment.setText(comment.get("content").getAsString());
         JsonParser parser = new JsonParser();
         JsonObject o = (JsonObject)parser.parse(comment.get("user").toString());
+        JsonElement image_url = o.get("image_url");
 
-        Picasso.with(mContext).load(o.get("image_url").getAsString()).into(profileImage);
+        if (image_url != null && !image_url.isJsonNull()) {
+            Picasso.with(mContext).load(image_url.getAsString()).into(profileImage);
+        }
         tvName.setText(o.get("username").getAsString());
         return convertView;
     }

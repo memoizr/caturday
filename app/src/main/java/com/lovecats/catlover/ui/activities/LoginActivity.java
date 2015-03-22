@@ -81,7 +81,7 @@ public class LoginActivity extends ActionBarActivity {
 
         LoginHandler.performLogin(password_TV.getText().toString(), email_TV.getText().toString(), new Callback() {
             @Override
-            public void success(Object authString, Response response) {
+            public void success(Object user, Response response) {
                 System.out.println("win");
                 progress_bar.postDelayed(new Runnable() {
                     @Override

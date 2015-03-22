@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.lovecats.catlover.data.UserModel;
 import com.lovecats.catlover.ui.fragments.CatStreamFragment;
 import com.lovecats.catlover.Config;
 import com.lovecats.catlover.ui.fragments.DashboardFragment;
@@ -269,6 +270,16 @@ public class MainActivity extends ActionBarActivity
                     .setInterpolator(new HyperAccelerateDecelerateInterpolator())
                     .start();
         }
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_login);
+        if (item != null){
+            item.setVisible(!UserModel.userLoggedIn());
+        }
+        return true;
     }
 
     @Override
