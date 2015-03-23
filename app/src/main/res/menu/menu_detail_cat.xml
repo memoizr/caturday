@@ -5,4 +5,7 @@
     <item android:id="@+id/action_settings" android:title="@string/action_share"
         android:icon="@drawable/ic_share_white_24dp"
         android:orderInCategory="100" app:showAsAction="always" />
+    <item android:id="@+id/action_download" android:title="@string/action_download"
+          android:icon="@drawable/ic_get_app_white_24dp"
+          android:orderInCategory="100" app:showAsAction="always" />
 </menu>

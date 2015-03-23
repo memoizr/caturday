@@ -13,6 +13,7 @@ public class User {
     private String authToken;
     private String email;
     private String info;
+    private String favorites;
     private String firstName;
     private String lastName;
     private String description;
@@ -25,7 +26,7 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String serverId, String username, String image_url, String authToken, String email, String info, String firstName, String lastName, String description, Boolean loggedIn) {
+    public User(Long id, String serverId, String username, String image_url, String authToken, String email, String info, String favorites, String firstName, String lastName, String description, Boolean loggedIn) {
         this.id = id;
         this.serverId = serverId;
         this.username = username;
@@ -33,6 +34,7 @@ public class User {
         this.authToken = authToken;
         this.email = email;
         this.info = info;
+        this.favorites = favorites;
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
@@ -93,6 +95,14 @@ public class User {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(String favorites) {
+        this.favorites = favorites;
     }
 
     public String getFirstName() {

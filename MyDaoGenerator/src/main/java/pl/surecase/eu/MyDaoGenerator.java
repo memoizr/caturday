@@ -20,18 +20,17 @@ public class MyDaoGenerator {
         user.addStringProperty("authToken");
         user.addStringProperty("email");
         user.addStringProperty("info");
+        user.addStringProperty("favorites");
         user.addStringProperty("firstName");
         user.addStringProperty("lastName");
         user.addStringProperty("description");
         user.addBooleanProperty("loggedIn");
-
 
         Entity comment = schema.addEntity("Comment");
         comment.addIdProperty();
         comment.addStringProperty("content");
         comment.addStringProperty("userId");
         comment.addStringProperty("postId");
-
 
         Entity catPost = schema.addEntity("CatPost");
         catPost.addIdProperty();

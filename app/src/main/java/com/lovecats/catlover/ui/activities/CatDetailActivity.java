@@ -2,11 +2,16 @@ package com.lovecats.catlover.ui.activities;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
+import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -45,14 +50,15 @@ import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.ui.views.ExpandingView;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import greendao.CatPost;
-import greendao.Comment;
 import greendao.User;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -81,6 +87,9 @@ public class CatDetailActivity extends ActionBarActivity {
     private int vibrantLight;
     private boolean activityClosed = false;
     private CommentsAdapter adapter;
+    private String catPostServerId;
+    private CatPost catPost;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -277,8 +286,17 @@ public class CatDetailActivity extends ActionBarActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                shareTextUrl();
+                switch(menuItem.getItemId()) {
+                    case R.id.action_share:
+                        shareTextUrl();
+                        break;
+                    case R.id.action_download:
+                        downloadImage();
+                        break;
+
+                }
                 return false;
+
             }
         });
     }
@@ -290,9 +308,6 @@ public class CatDetailActivity extends ActionBarActivity {
         catPostServerId = bundle.getString("serverId");
         catPost = CatPostModel.getCatPostForServerId(catPostServerId);
     }
-
-    private String catPostServerId;
-    private CatPost catPost;
 
     private void shareTextUrl() {
         Intent share = new Intent(android.content.Intent.ACTION_SEND);
@@ -311,6 +326,11 @@ public class CatDetailActivity extends ActionBarActivity {
         return true;
     }
 
+    @OnClick(R.id.favorite_B)
+    public void favoritePost() {
+
+    }
+
     @OnClick(R.id.send_message_B)
     public void sendMessage(){
         String message = comment_ET.getText().toString();
@@ -318,11 +338,6 @@ public class CatDetailActivity extends ActionBarActivity {
         commentModel.setCommentable_id(catPostServerId);
         commentModel.setCommentable_type(CommentModel.COMMENTABLE_TYPE_CAT_POST);
         commentModel.setContent(message);
-
-
-
-
-
 
         final User user = UserModel.getLoggedInUser();
         commentModel.setUser_id(user.getServerId());
@@ -343,5 +358,47 @@ public class CatDetailActivity extends ActionBarActivity {
 
                     }
                 });
+    }
+
+    private void downloadImage() {
+        final String fileName = catPostServerId + ".jpg";
+        final Context mContext = this;
+        Target target = new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) {
+                return;
+            }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+
+                try {
+
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    String path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), bitmap, "Title", null);
+                    Uri uri = Uri.parse(path);
+                    Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
+                    intent.addCategory((Intent.CATEGORY_DEFAULT));
+                    intent.setDataAndType(uri, "image/jpeg");
+                    intent.putExtra("mimeType", "image/jpg");
+                    mContext.startActivity(Intent.createChooser(intent, "Set as:"));
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable arg0) {
+                return;
+            }
+        };
+
+        Picasso.with(this)
+                .load(url)
+                .into(target);
     }
 }

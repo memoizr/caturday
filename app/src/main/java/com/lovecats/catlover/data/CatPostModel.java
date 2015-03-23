@@ -7,6 +7,7 @@ import java.util.List;
 
 import greendao.CatPost;
 import greendao.CatPostDao;
+import greendao.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +38,10 @@ public class CatPostModel {
 
     public static List<CatPost> getPostsForCategory(String category) {
         return getCatPostDao().queryBuilder().where(CatPostDao.Properties.Category.eq(category)).list();
+    }
+
+    public static List<CatPost> getCatPostsForIds(List<String> catPostServerIds) {
+        return getCatPostDao().queryBuilder().where(CatPostDao.Properties.ServerId.in(catPostServerIds)).list();
     }
 
     public static CatPost getRandomCatPost() {
