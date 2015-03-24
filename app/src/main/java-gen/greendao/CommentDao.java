@@ -1,12 +1,17 @@
 package greendao;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import greendao.Comment;
 
@@ -27,8 +32,12 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         public final static Property Content = new Property(1, String.class, "content", false, "CONTENT");
         public final static Property UserId = new Property(2, String.class, "userId", false, "USER_ID");
         public final static Property PostId = new Property(3, String.class, "postId", false, "POST_ID");
+        public final static Property IdCatPost = new Property(4, Long.class, "idCatPost", false, "ID_CAT_POST");
     };
 
+    private DaoSession daoSession;
+
+    private Query<Comment> catPost_CommentListQuery;
 
     public CommentDao(DaoConfig config) {
         super(config);
@@ -36,6 +45,7 @@ public class CommentDao extends AbstractDao<Comment, Long> {
     
     public CommentDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -45,7 +55,8 @@ public class CommentDao extends AbstractDao<Comment, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'CONTENT' TEXT," + // 1: content
                 "'USER_ID' TEXT," + // 2: userId
-                "'POST_ID' TEXT);"); // 3: postId
+                "'POST_ID' TEXT," + // 3: postId
+                "'ID_CAT_POST' INTEGER);"); // 4: idCatPost
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +89,17 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         if (postId != null) {
             stmt.bindString(4, postId);
         }
+ 
+        Long idCatPost = entity.getIdCatPost();
+        if (idCatPost != null) {
+            stmt.bindLong(5, idCatPost);
+        }
+    }
+
+    @Override
+    protected void attachEntity(Comment entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -93,7 +115,8 @@ public class CommentDao extends AbstractDao<Comment, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // content
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // userId
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // postId
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // postId
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // idCatPost
         );
         return entity;
     }
@@ -105,6 +128,7 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         entity.setContent(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setUserId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPostId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setIdCatPost(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */
@@ -130,4 +154,109 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "commentList" to-many relationship of CatPost. */
+    public List<Comment> _queryCatPost_CommentList(Long idCatPost) {
+        synchronized (this) {
+            if (catPost_CommentListQuery == null) {
+                QueryBuilder<Comment> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.IdCatPost.eq(null));
+                catPost_CommentListQuery = queryBuilder.build();
+            }
+        }
+        Query<Comment> query = catPost_CommentListQuery.forCurrentThread();
+        query.setParameter(0, idCatPost);
+        return query.list();
+    }
+
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getCatPostDao().getAllColumns());
+            builder.append(" FROM COMMENT T");
+            builder.append(" LEFT JOIN CAT_POST T0 ON T.'ID_CAT_POST'=T0.'_id'");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected Comment loadCurrentDeep(Cursor cursor, boolean lock) {
+        Comment entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        CatPost catPost = loadCurrentOther(daoSession.getCatPostDao(), cursor, offset);
+        entity.setCatPost(catPost);
+
+        return entity;    
+    }
+
+    public Comment loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Comment> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Comment> list = new ArrayList<Comment>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Comment> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Comment> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

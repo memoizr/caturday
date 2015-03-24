@@ -34,6 +34,8 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         public final static Property TotalVotesCount = new Property(8, Integer.class, "totalVotesCount", false, "TOTAL_VOTES_COUNT");
     };
 
+    private DaoSession daoSession;
+
 
     public CatPostDao(DaoConfig config) {
         super(config);
@@ -41,6 +43,7 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
     
     public CatPostDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -116,6 +119,12 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         if (totalVotesCount != null) {
             stmt.bindLong(9, totalVotesCount);
         }
+    }
+
+    @Override
+    protected void attachEntity(CatPost entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */

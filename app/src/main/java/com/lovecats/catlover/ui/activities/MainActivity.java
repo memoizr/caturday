@@ -30,13 +30,22 @@ import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.ui.views.CollapsibleView;
 import com.lovecats.catlover.ui.views.SlideShowView;
 
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends BaseActionBarActivity
         implements NavigationFragment.OnFragmentInteractionListener,
         CatStreamFragment.ScrollCallback {
+
+    @Inject CollapsibleView collapsibleView;
+    @Inject DashboardFragment dashboardFragment;
+    @Inject NavigationFragment navigationFragment;
 
     public PagerSlidingTabStrip slidingTabs;
     @InjectView(R.id.toolbar) Toolbar mToolbar;
@@ -45,7 +54,6 @@ public class MainActivity extends ActionBarActivity
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
-    private CollapsibleView collapsibleView;
     private int titleMaxHeight;
     private int titleMinHeight;
     private int titleCollapsed;
@@ -53,11 +61,9 @@ public class MainActivity extends ActionBarActivity
     private boolean transparent = true;
     private boolean statusTransparent = true;
     private ActionBarDrawerToggle mDrawerToggle;
-    private DashboardFragment dashboardFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        new Config(this);
         DaoManager.DaoLoader(this);
 
         super.onCreate(savedInstanceState);
@@ -65,7 +71,6 @@ public class MainActivity extends ActionBarActivity
 
         ButterKnife.inject(this);
 
-        dashboardFragment = new DashboardFragment();
         slidingTabs = slidingTabs_PSTS;
 
         getWindow().getDecorView().setSystemUiVisibility(
@@ -73,11 +78,16 @@ public class MainActivity extends ActionBarActivity
 
         setUpFragments(savedInstanceState);
 
-        setupCollapsibleToolbar(this, mToolbar);
+        setupCollapsibleToolbar(mToolbar);
         setupMenuClickListener(mToolbar);
         setDrawer(this, mToolbar);
 
         titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
+    }
+
+    @Override
+    protected List<Object> getModules() {
+        return Arrays.<Object>asList(new MainModule(this));
     }
 
     private void setUpFragments(Bundle savedInstanceState) {
@@ -87,17 +97,16 @@ public class MainActivity extends ActionBarActivity
                     .add(R.id.container, dashboardFragment)
                     .commit();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.left_drawer_V, new NavigationFragment())
+                    .add(R.id.left_drawer_V, navigationFragment)
                     .commit();
         }
     }
 
-    private void setupCollapsibleToolbar(Context context, Toolbar toolbar) {
+    private void setupCollapsibleToolbar(Toolbar toolbar) {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        collapsibleView = new CollapsibleView(context);
         toolbar.addView(collapsibleView);
 
         titleMaxHeight = collapsibleView.getMaxHeight();
@@ -145,7 +154,7 @@ public class MainActivity extends ActionBarActivity
         switch (position) {
             case 0:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new DashboardFragment())
+                        .replace(R.id.container, dashboardFragment)
                         .commit();
                 break;
             default:

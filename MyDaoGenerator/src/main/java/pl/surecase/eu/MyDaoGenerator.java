@@ -26,12 +26,6 @@ public class MyDaoGenerator {
         user.addStringProperty("description");
         user.addBooleanProperty("loggedIn");
 
-        Entity comment = schema.addEntity("Comment");
-        comment.addIdProperty();
-        comment.addStringProperty("content");
-        comment.addStringProperty("userId");
-        comment.addStringProperty("postId");
-
         Entity catPost = schema.addEntity("CatPost");
         catPost.addIdProperty();
         catPost.addStringProperty("serverId").index().unique();
@@ -42,6 +36,16 @@ public class MyDaoGenerator {
         catPost.addStringProperty("category");
         catPost.addIntProperty("downloadCount");
         catPost.addIntProperty("totalVotesCount");
+
+        Entity comment = schema.addEntity("Comment");
+        comment.addIdProperty();
+        comment.addStringProperty("content");
+        comment.addStringProperty("userId");
+        comment.addStringProperty("postId");
+
+        Property idCatPost = comment.addLongProperty("idCatPost").getProperty();
+        ToMany catPostComments = catPost.addToMany(comment, idCatPost);
+        comment.addToOne(catPost, idCatPost);
 
         new DaoGenerator().generateAll(schema, args[0]);
     }
