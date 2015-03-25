@@ -7,8 +7,11 @@ import android.view.View;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.UserModel;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import greendao.DaoSession;
 
 
 public class ProfileActivity extends ActionBarActivity {
@@ -21,6 +24,7 @@ public class ProfileActivity extends ActionBarActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
     }
 
     @OnClick(R.id.logout)

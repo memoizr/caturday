@@ -1,11 +1,9 @@
 package com.lovecats.catlover.data;
 
-import org.json.JSONArray;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 import greendao.User;
 import greendao.UserDao;
 import lombok.Getter;
@@ -19,6 +17,7 @@ public class UserModel {
 
     public static User insertOrUpdate(User user) {
         flushUsers();
+        user.setLoggedIn(true);
         long id = getUserDao().insertOrReplace(user);
         return getUserDao().loadByRowId(id);
     }
@@ -35,56 +34,25 @@ public class UserModel {
         return getUserDao().count() > 0;
     }
 
-    public static List<String> getFavoriteCatPosts(){
+    public static ArrayList<String> getFavoriteCatPosts(){
         String favorites = getLoggedInUser().getFavorites();
-        List<String> idList = new ArrayList();
-        try {
-            JSONArray jsonArray = new JSONArray(favorites);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                idList.add(jsonArray.getString(i));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return idList;
+        Gson gson = new Gson();
+        String[] idList = gson.fromJson(favorites, String[].class);
+
+        return new ArrayList<>(Arrays.asList(idList));
     }
 
     public static void addFavorite(String serverId) {
-        List<String> favorites = getFavoriteCatPosts();
+        ArrayList<String> favorites = getFavoriteCatPosts();
         favorites.add(serverId);
         getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
     }
 
     public static void removeFavorite(String serverId) {
-        List<String> favorites = getFavoriteCatPosts();
+        ArrayList<String> favorites = getFavoriteCatPosts();
         favorites.remove(serverId);
         getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public static User getLoggedInUser() {
         return getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).unique();

@@ -3,9 +3,6 @@ package com.lovecats.catlover;
 import android.app.Application;
 import android.content.Context;
 
-import com.lovecats.catlover.ui.activities.MainActivity;
-import com.lovecats.catlover.ui.views.SlideShowView;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,7 +15,7 @@ import dagger.Provides;
                 App.class
         },
         includes = {
-                ConfigModule.class
+                ConfigModule.class,
         }
 )
 public class AppModule {
