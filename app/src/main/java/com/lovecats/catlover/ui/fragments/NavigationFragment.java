@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.ui.activities.ProfileActivity;
+import com.lovecats.catlover.ui.activities.Profile.ProfileActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -43,7 +43,7 @@
                 android:value=".ui.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.ProfileActivity"
+            android:name=".ui.activities.Profile.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
         <activity

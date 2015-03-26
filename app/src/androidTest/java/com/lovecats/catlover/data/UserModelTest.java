@@ -67,6 +67,7 @@ public class UserModelTest extends AndroidTestCase {
 
         assertEquals(Arrays.asList(favorites2), favoriteList);
     }
+
     public void testRemoveFavorite() {
         String[] favorites = {"foo", "bar", "baz"};
         String[] favorites2 = {"foo", "bar"};
