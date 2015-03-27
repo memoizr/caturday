@@ -23,6 +23,7 @@ android {
             java.srcDirs = ['src/main/java', 'src/main/java-gen']
             res.srcDirs = ['src/main/res']
         }
+
     }
 }
 
@@ -51,8 +52,15 @@ dependencies {
     provided 'com.squareup.dagger:dagger-compiler:1.2.+'
 
 //    androidTestCompile 'junit:junit:4.8.2'
-    androidTestCompile 'org.mockito:mockito-core:1.9.5'
-    androidTestCompile files('libs/dexmaker-mockito-1.0.jar')
-    androidTestCompile files('libs/dexmaker-1.0.jar')
+//    androidTestCompile 'junit:junit:4.10'
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
+    testCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
+    testCompile "org.robolectric:robolectric:3.0-SNAPSHOT"
+
+    androidTestCompile "org.mockito:mockito-core:1.9.5"
+    androidTestCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+

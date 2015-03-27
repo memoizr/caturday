@@ -46,6 +46,7 @@ public class MainActivity extends BaseActionBarActivity
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
     @Inject NavigationFragment navigationFragment;
+    @Inject UserModel userModel;
 
     public PagerSlidingTabStrip slidingTabs;
     @InjectView(R.id.toolbar) Toolbar mToolbar;
@@ -285,7 +286,7 @@ public class MainActivity extends BaseActionBarActivity
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_login);
         if (item != null){
-            item.setVisible(!UserModel.userLoggedIn());
+            item.setVisible(!userModel.userLoggedIn());
         }
         return true;
     }

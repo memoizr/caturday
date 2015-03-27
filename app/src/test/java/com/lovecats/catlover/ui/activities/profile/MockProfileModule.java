@@ -1,11 +1,13 @@
-package com.lovecats.catlover.activities.profile;
+package com.lovecats.catlover.ui.activities.profile;
+
 
 import android.content.Context;
 
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.data.UserModel;
-import com.lovecats.catlover.ui.activities.Profile.ProfileActivity;
+
+import static org.mockito.Mockito.*;
 
 import javax.inject.Singleton;
 
@@ -14,7 +16,7 @@ import dagger.Provides;
 
 @Module(
         injects = {
-                ProfileActivity.class
+                MockProfileActivity.class
         },
         addsTo = AppModule.class
 )
@@ -25,8 +27,12 @@ public class MockProfileModule {
         this.context = context;
     }
 
-    @Provides @Singleton public UserModel provideUserModel() {
+    @Provides @Singleton
+    public UserModel provideUserModel() {
         DaoManager.DaoLoader(context);
-        return new UserModel();
+        UserModel mock = mock(UserModel.class);
+
+        when(mock.userLoggedIn()).thenReturn(true);
+        return mock;
     }
 }

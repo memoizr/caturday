@@ -35,13 +35,18 @@ public class ProfileActivity extends BaseActionBarActivity {
         toggleButton();
     }
 
+    public boolean isUserLoggedIn(){
+        return userModel.userLoggedIn();
+    }
+
     @Override
     public List<Object> getModules() {
         return Arrays.<Object>asList(new ProfileModule(this));
     }
 
     private void toggleButton() {
-        if (UserModel.userLoggedIn()) {
+        System.out.println(isUserLoggedIn());
+        if (userModel.userLoggedIn()) {
             logout.setVisibility(View.VISIBLE);
         } else {
             logout.setVisibility(View.GONE);

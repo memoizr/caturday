@@ -30,7 +30,7 @@ public class UserModel {
         getUserDao().deleteAll();
     }
 
-    public static boolean userLoggedIn() {
+    public boolean userLoggedIn() {
         return getUserDao().count() > 0;
     }
 
