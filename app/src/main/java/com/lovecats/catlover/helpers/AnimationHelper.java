@@ -8,8 +8,8 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
-import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperTanAccelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
 
 public class AnimationHelper {
     private static final int GLIDE_DISTANCE = 400;

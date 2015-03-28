@@ -1,6 +1,6 @@
 package com.lovecats.catlover.data;
 
-import com.lovecats.catlover.Config;
+import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.api.UserApi;
 
 import greendao.User;

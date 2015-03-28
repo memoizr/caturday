@@ -1,4 +1,4 @@
-package com.lovecats.catlover.util;
+package com.lovecats.catlover.common;
 
 import com.squareup.otto.Bus;
 

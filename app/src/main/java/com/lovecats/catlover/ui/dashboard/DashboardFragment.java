@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.fragments;
+package com.lovecats.catlover.ui.dashboard;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,8 +13,7 @@ import com.lovecats.catlover.R;
 import com.lovecats.catlover.adapters.DashboardPageAdapter;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.CatPostModel;
-import com.lovecats.catlover.ui.activities.MainActivity;
-import com.lovecats.catlover.ui.fragments.CatStreamFragment;
+import com.lovecats.catlover.ui.main.MainActivity;
 
 import java.util.List;
 

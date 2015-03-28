@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.lovecats.catlover.ui.fragments.CatStreamFragment;
+import com.lovecats.catlover.ui.dashboard.CatStreamFragment;
 
 /**
  * Created by user on 23/02/15.

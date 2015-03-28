@@ -1,6 +1,8 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.common;
 
 import android.app.Application;
+
+import com.lovecats.catlover.common.Config;
 
 import javax.inject.Singleton;
 

@@ -1,8 +1,7 @@
-package com.lovecats.catlover.ui.activities;
+package com.lovecats.catlover.ui.detail;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
-import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -47,7 +46,7 @@ import com.lovecats.catlover.data.CommentPoster;
 import com.lovecats.catlover.data.UserModel;
 import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
-import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.ui.views.ExpandingView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;

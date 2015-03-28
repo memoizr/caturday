@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.activities;
+package com.lovecats.catlover.ui.common;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

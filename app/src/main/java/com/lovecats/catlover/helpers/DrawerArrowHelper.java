@@ -5,7 +5,7 @@ import android.animation.ValueAnimator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 
-import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
 
 public class DrawerArrowHelper {
     public static void toggleArrow(boolean toggle, ActionBarDrawerToggle drawerToggle, DrawerLayout drawerLayout) {

@@ -9,7 +9,7 @@ import com.lovecats.catlover.BuildConfig;
 import com.lovecats.catlover.CustomRoboelectricRunner;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.UserModel;
-import com.lovecats.catlover.ui.activities.Profile.ProfileActivity;
+import com.lovecats.catlover.ui.profile.ProfileActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

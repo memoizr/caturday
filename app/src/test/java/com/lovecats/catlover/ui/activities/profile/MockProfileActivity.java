@@ -1,6 +1,6 @@
 package com.lovecats.catlover.ui.activities.profile;
 
-import com.lovecats.catlover.ui.activities.Profile.ProfileActivity;
+import com.lovecats.catlover.ui.profile.ProfileActivity;
 
 import java.util.Arrays;
 import java.util.List;

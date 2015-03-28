@@ -1,4 +1,4 @@
-package com.lovecats.catlover.util;
+package com.lovecats.catlover.util.interpolators;
 
 import android.animation.TimeInterpolator;
 

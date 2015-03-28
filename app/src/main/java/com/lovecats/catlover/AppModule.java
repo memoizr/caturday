@@ -3,6 +3,11 @@ package com.lovecats.catlover;
 import android.app.Application;
 import android.content.Context;
 
+import com.lovecats.catlover.common.ConfigModule;
+import com.lovecats.catlover.interactors.InteractorsModule;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -16,6 +21,7 @@ import dagger.Provides;
         },
         includes = {
                 ConfigModule.class,
+                InteractorsModule.class
         }
 )
 public class AppModule {
@@ -31,7 +37,13 @@ public class AppModule {
         this.app = app;
     }
 
-    @Provides
+//    @Provides
+//    @Singleton
+//    public Context provideContext(){
+//        return context;
+//    }
+
+    @Provides @Singleton
     public Application provideApplication() {
         return app;
     }

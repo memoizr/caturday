@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.fragments;
+package com.lovecats.catlover.ui.drawer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.ui.activities.Profile.ProfileActivity;
+import com.lovecats.catlover.ui.profile.ProfileActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

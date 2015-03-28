@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.lovecats.catlover.common;
 
 import android.app.Application;
 import android.content.Context;

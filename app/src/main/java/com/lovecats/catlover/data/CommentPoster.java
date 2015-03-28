@@ -1,6 +1,5 @@
 package com.lovecats.catlover.data;
 
-import com.lovecats.catlover.Config;
 import com.lovecats.catlover.api.CommentApi;
 
 import retrofit.Callback;

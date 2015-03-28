@@ -2,6 +2,7 @@ package com.lovecats.catlover;
 
 import android.app.Application;
 
+import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.data.DaoManager;
 
 import java.util.Arrays;

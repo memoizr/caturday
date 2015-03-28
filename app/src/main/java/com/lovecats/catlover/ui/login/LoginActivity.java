@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.activities;
+package com.lovecats.catlover.ui.login;
 
 import android.animation.Animator;
 import android.app.Activity;

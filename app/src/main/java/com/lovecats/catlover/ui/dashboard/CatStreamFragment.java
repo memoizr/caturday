@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.fragments;
+package com.lovecats.catlover.ui.dashboard;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.lovecats.catlover.adapters.CatPostAdapter;
 import com.lovecats.catlover.adapters.DashboardPageAdapter;
 import com.lovecats.catlover.data.CatPostFetcher;
 import com.lovecats.catlover.data.CatPostModel;
-import com.lovecats.catlover.util.EventBus;
+import com.lovecats.catlover.common.EventBus;
 
 import java.util.List;
 

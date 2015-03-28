@@ -1,12 +1,10 @@
-package com.lovecats.catlover.ui.activities;
+package com.lovecats.catlover.ui.main;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,15 +16,16 @@ import android.widget.RelativeLayout;
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.data.UserModel;
-import com.lovecats.catlover.ui.fragments.CatStreamFragment;
-import com.lovecats.catlover.Config;
-import com.lovecats.catlover.ui.fragments.DashboardFragment;
+import com.lovecats.catlover.ui.common.BaseActionBarActivity;
+import com.lovecats.catlover.ui.login.LoginActivity;
+import com.lovecats.catlover.ui.dashboard.CatStreamFragment;
+import com.lovecats.catlover.ui.dashboard.DashboardFragment;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.DrawerArrowHelper;
-import com.lovecats.catlover.ui.fragments.NavigationFragment;
-import com.lovecats.catlover.util.HyperAccelerateDecelerateInterpolator;
+import com.lovecats.catlover.ui.drawer.NavigationFragment;
+import com.lovecats.catlover.ui.settings.SettingsActivity;
+import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.ui.views.CollapsibleView;
 import com.lovecats.catlover.ui.views.SlideShowView;
 

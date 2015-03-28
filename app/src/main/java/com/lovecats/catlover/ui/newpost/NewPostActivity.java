@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.activities;
+package com.lovecats.catlover.ui.newpost;
 
 import android.animation.Animator;
 import android.support.v7.app.ActionBarActivity;
@@ -10,8 +10,8 @@ import android.view.ViewAnimationUtils;
 import android.widget.LinearLayout;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.util.HyperTanAccelerateInterpolator;
-import com.lovecats.catlover.util.HyperTanDecelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperTanAccelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

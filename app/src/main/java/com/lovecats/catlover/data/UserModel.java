@@ -31,6 +31,8 @@ public class UserModel {
     }
 
     public boolean userLoggedIn() {
+        System.out.println("==========");
+        System.out.println(getUserDao().count());
         return getUserDao().count() > 0;
     }
 

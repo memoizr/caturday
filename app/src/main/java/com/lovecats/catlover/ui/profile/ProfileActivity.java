@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.activities.Profile;
+package com.lovecats.catlover.ui.profile;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,7 +6,7 @@ import android.widget.Button;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.UserModel;
-import com.lovecats.catlover.ui.activities.BaseActionBarActivity;
+import com.lovecats.catlover.ui.common.BaseActionBarActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +18,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class ProfileActivity extends BaseActionBarActivity {
+public class ProfileActivity extends BaseActionBarActivity implements ProfileView {
     @InjectView(R.id.logout) Button logout;
-    @Inject UserModel userModel;
+    @Inject ProfilePresenter profilePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,7 @@ public class ProfileActivity extends BaseActionBarActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        toggleButton();
-    }
 
-    public boolean isUserLoggedIn(){
-        return userModel.userLoggedIn();
     }
 
     @Override
@@ -44,9 +40,9 @@ public class ProfileActivity extends BaseActionBarActivity {
         return Arrays.<Object>asList(new ProfileModule(this));
     }
 
-    private void toggleButton() {
-        System.out.println(isUserLoggedIn());
-        if (userModel.userLoggedIn()) {
+    @Override
+    public void showButton(Boolean visible) {
+        if (visible) {
             logout.setVisibility(View.VISIBLE);
         } else {
             logout.setVisibility(View.GONE);
@@ -54,8 +50,12 @@ public class ProfileActivity extends BaseActionBarActivity {
     }
 
     @OnClick(R.id.logout)
-    public void logout() {
-        userModel.flushUsers();
-        toggleButton();
+    public void clickLogout() {
+        profilePresenter.logout();
+    }
+
+    @Override
+    public void onPostLogout() {
+        logout.setVisibility(View.GONE);
     }
 }

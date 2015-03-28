@@ -12,13 +12,11 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lovecats.catlover.ui.activities.CatDetailActivity;
-import com.lovecats.catlover.ui.activities.MainActivity;
+import com.lovecats.catlover.ui.detail.CatDetailActivity;
+import com.lovecats.catlover.ui.main.MainActivity;
 import com.lovecats.catlover.R;
 import com.squareup.picasso.Picasso;
 

@@ -2,7 +2,7 @@ package com.lovecats.catlover.data;
 
 import android.os.AsyncTask;
 
-import com.lovecats.catlover.Config;
+import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.api.CatPostApi;
 
 import java.util.List;

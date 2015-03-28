@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.activities;
+package com.lovecats.catlover.ui.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
