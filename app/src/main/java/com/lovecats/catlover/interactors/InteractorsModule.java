@@ -1,9 +1,10 @@
 package com.lovecats.catlover.interactors;
 
-import android.content.Context;
-
-import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.interactors.navigation.NavigationInteractor;
+import com.lovecats.catlover.interactors.navigation.NavigationInteractorImpl;
+import com.lovecats.catlover.interactors.profile.ProfileInteractor;
+import com.lovecats.catlover.interactors.profile.ProfileInteractorImpl;
 
 import javax.inject.Singleton;
 
@@ -27,6 +28,10 @@ public class InteractorsModule {
     }
 
     @Provides @Singleton public ProfileInteractor provideProfileInteractor(UserModel userModel) {
-        return new ProfileInteractorConcrete(userModel);
+        return new ProfileInteractorImpl(userModel);
+    }
+
+    @Provides @Singleton public NavigationInteractor provideNavigationInteractor() {
+        return new NavigationInteractorImpl();
     }
 }

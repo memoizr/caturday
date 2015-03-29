@@ -12,7 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.ui.profile.ProfileActivity;
+import com.lovecats.catlover.ui.common.BaseFragment;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,10 +26,10 @@ import butterknife.OnClick;
 /**
  * Created by user on 01/03/15.
  */
-public class NavigationFragment extends Fragment implements AdapterView.OnItemClickListener{
-    private ListView navigationListView;
-    private OnFragmentInteractionListener mListener;
-    @InjectView(R.id.profile_container_V) View profileContainer;
+public class NavigationFragment extends BaseFragment implements NavigationView, AdapterView.OnItemClickListener{
+
+    @Inject NavigationPresenter navigationPresenter;
+    @InjectView(R.id.navigation_LV) ListView navigationListView;
 
     public NavigationFragment() {
     }
@@ -41,47 +46,30 @@ public class NavigationFragment extends Fragment implements AdapterView.OnItemCl
 
         ButterKnife.inject(this, rootView);
 
-        navigationListView = (ListView) rootView.findViewById(R.id.navigation_LV);
-        final String[] values = new String[] { "New stuff", "Favourites", "Wallpapers"};
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
-        navigationListView.setAdapter(adapter);
-        navigationListView.setOnItemClickListener(this);
+        navigationPresenter.onCreate();
 
         return rootView;
     }
 
+    @Override
+    public void initializeListView(String[] values) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
+        navigationListView.setAdapter(adapter);
+        navigationListView.setOnItemClickListener(this);
+    }
+
     @OnClick(R.id.profile_container_V)
     public void clickProfile() {
-        Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
-        getActivity().startActivity(profileIntent);
+        navigationPresenter.onProfileClicked(getActivity());
     }
 
-
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position , long id) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(position);
-        }
+        navigationPresenter.onNavigationInteraction(getActivity(), position);
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    protected List<Object> getModules() {
+        return Arrays.<Object>asList(new NavigationModule(this));
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(int position);
-    }}
+}

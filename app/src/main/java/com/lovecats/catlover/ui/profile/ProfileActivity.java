@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.data.UserModel;
 import com.lovecats.catlover.ui.common.BaseActionBarActivity;
 
 import java.util.Arrays;
@@ -32,7 +31,7 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-
+        profilePresenter.onCreate();
     }
 
     @Override

@@ -16,7 +16,8 @@ import android.widget.RelativeLayout;
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.data.UserModel;
-import com.lovecats.catlover.ui.common.BaseActionBarActivity;
+import com.lovecats.catlover.ui.drawer.DrawerActivity;
+import com.lovecats.catlover.ui.favorites.FavoritesFragment;
 import com.lovecats.catlover.ui.login.LoginActivity;
 import com.lovecats.catlover.ui.dashboard.CatStreamFragment;
 import com.lovecats.catlover.ui.dashboard.DashboardFragment;
@@ -38,13 +39,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-public class MainActivity extends BaseActionBarActivity
-        implements NavigationFragment.OnFragmentInteractionListener,
-        CatStreamFragment.ScrollCallback {
+public class MainActivity extends DrawerActivity implements CatStreamFragment.ScrollCallback {
 
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
     @Inject NavigationFragment navigationFragment;
+    @Inject FavoritesFragment favoritesFragment;
     @Inject UserModel userModel;
 
     public PagerSlidingTabStrip slidingTabs;
@@ -146,19 +146,6 @@ public class MainActivity extends BaseActionBarActivity
 
     public void toggleArrow(boolean toggle) {
         DrawerArrowHelper.toggleArrow(toggle, mDrawerToggle, mDrawerLayout);
-    }
-
-    @Override
-    public void onFragmentInteraction(int position) {
-        switch (position) {
-            case 0:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, dashboardFragment)
-                        .commit();
-                break;
-            default:
-                break;
-        }
     }
 
     public void doneSlideshow() {
@@ -297,9 +284,27 @@ public class MainActivity extends BaseActionBarActivity
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onRestart() {
+        super.onRestart();
         slide_show_V.animationResume();
         toggleArrow(false);
+    }
+
+    @Override
+    public void onNavigationItemSelected(int position) {
+        switch (position) {
+            case 0:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, dashboardFragment)
+                        .commit();
+                break;
+            case 1:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, favoritesFragment)
+                        .commit();
+                break;
+            default:
+                break;
+        }
     }
 }

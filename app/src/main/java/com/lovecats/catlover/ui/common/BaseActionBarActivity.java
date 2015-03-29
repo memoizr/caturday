@@ -7,6 +7,7 @@ import com.lovecats.catlover.App;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import dagger.ObjectGraph;
 
 /**
@@ -20,13 +21,14 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         activityGraph = ((App) getApplication()).createScopedGraph(getModules().toArray());
         activityGraph.inject(this);
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        activityGraph = null;
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        activityGraph = null;
+//    }
 
     protected abstract List<Object> getModules();
 }

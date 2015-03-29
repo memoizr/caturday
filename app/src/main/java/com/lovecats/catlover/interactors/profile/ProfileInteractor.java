@@ -1,4 +1,4 @@
-package com.lovecats.catlover.interactors;
+package com.lovecats.catlover.interactors.profile;
 
 /**
  * Created by user on 28/03/15.

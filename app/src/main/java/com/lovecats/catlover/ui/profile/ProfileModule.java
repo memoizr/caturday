@@ -1,7 +1,7 @@
 package com.lovecats.catlover.ui.profile;
 
 import com.lovecats.catlover.AppModule;
-import com.lovecats.catlover.interactors.ProfileInteractor;
+import com.lovecats.catlover.interactors.profile.ProfileInteractor;
 
 import javax.inject.Singleton;
 
@@ -26,6 +26,6 @@ public class ProfileModule {
     }
 
     @Provides @Singleton public ProfilePresenter provideProfilePresenter(ProfileView profileView, ProfileInteractor profileInteractor) {
-        return new ProfilePresenterConcrete(profileView, profileInteractor);
+        return new ProfilePresenterImpl(profileView, profileInteractor);
     }
 }

@@ -1,17 +1,15 @@
-package com.lovecats.catlover.interactors;
-
-import android.content.Context;
+package com.lovecats.catlover.interactors.profile;
 
 import com.lovecats.catlover.data.UserModel;
 
 /**
  * Created by user on 28/03/15.
  */
-public class ProfileInteractorConcrete implements ProfileInteractor{
+public class ProfileInteractorImpl implements ProfileInteractor{
 
     private UserModel userModel;
 
-    public ProfileInteractorConcrete(UserModel userModel){
+    public ProfileInteractorImpl(UserModel userModel){
         this.userModel = userModel;
     }
 

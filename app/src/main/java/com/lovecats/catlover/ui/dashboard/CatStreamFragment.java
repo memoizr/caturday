@@ -76,8 +76,6 @@ public class CatStreamFragment extends Fragment implements ObservableScrollViewC
 
         cats_stream_RV.setLayoutManager(staggeredGrid);
 
-        System.out.println(CatPostModel.getCount());
-
 
         cats_stream_RV.setScrollViewCallbacks(this);
         cats_stream_RV.setOnScrollListener(new RecyclerView.OnScrollListener() {
