@@ -1,7 +1,7 @@
 package com.lovecats.catlover.ui.dashboard;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -10,32 +10,25 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.adapters.DashboardPageAdapter;
-import com.lovecats.catlover.data.CatPostFetcher;
-import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.ui.common.BaseFragment;
 import com.lovecats.catlover.ui.main.MainActivity;
 
+import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class DashboardFragment extends Fragment
-        implements ViewPager.OnPageChangeListener,
-        SwipeRefreshLayout.OnRefreshListener {
+public class DashboardFragment extends BaseFragment implements DashboardView {
+
+    @Inject DashboardPresenter dashboardPresenter;
+
     @InjectView(R.id.dashboard_VP) ViewPager dashboard_VP;
     @InjectView(R.id.swipe_container) SwipeRefreshLayout swipe_container;
+
     private PagerSlidingTabStrip slidingTabs_PSTS;
-
-    private DashboardPageAdapter pagerAdapter;
-    private int currentScrollPosition;
-    private CatStreamFragment otherCatStreamFragment;
-    private int selectedPage = 0;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,95 +36,43 @@ public class DashboardFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         ButterKnife.inject(this, rootView);
-        slidingTabs_PSTS = ((MainActivity) getActivity()).slidingTabs;
 
-
-        swipe_container.setOnRefreshListener(this);
-        swipe_container.setColorSchemeColors(
-                getResources().getColor(R.color.primary),
-                getResources().getColor(R.color.accent));
-
-        setupPager();
+        dashboardPresenter.onCreateView(this);
 
         return rootView;
     }
 
-    private void setupPager() {
-        pagerAdapter = new DashboardPageAdapter(getActivity().getSupportFragmentManager());
-        dashboard_VP.setAdapter(pagerAdapter);
+    @Override
+    public void initializeSwipeContainer(SwipeRefreshLayout.OnRefreshListener listener) {
+        swipe_container.setOnRefreshListener(listener);
+        swipe_container.setColorSchemeColors(
+                getResources().getColor(R.color.primary),
+                getResources().getColor(R.color.accent));
+    }
 
+    @Override
+    public void setRefreshing(boolean refreshing) {
+        swipe_container.setRefreshing(refreshing);
+    }
+
+    @Override
+    public void initializePager(FragmentStatePagerAdapter adapter, PagerSlidingTabStrip slidingTabs_PSTS) {
+
+        dashboard_VP.setAdapter(adapter);
         slidingTabs_PSTS.setViewPager(dashboard_VP);
         slidingTabs_PSTS.setTextColor(getResources().getColor(R.color.white));
-        slidingTabs_PSTS.setOnPageChangeListener(this);
+        slidingTabs_PSTS.setOnPageChangeListener(dashboardPresenter);
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        swipe_container.setEnabled(false);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        selectedPage = position;
-        swipe_container.setEnabled(true);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        float targetShiftY = 0;
-        CatStreamFragment catStreamFragment;
-        int oldScrollY = ((MainActivity) getActivity()).getOldScrollY();
-
-//        if (state == 1) {
-//            if (selectedPage == 0) {
-//                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-//                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-//                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-//                    currentScrollPosition = catStreamFragment.getScrollPosition();
-//                }
-//                if (currentScrollPosition > 224) {
-//                    currentScrollPosition = 224;
-//                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
-//
-//                } else {
-//                    ((MainActivity)getActivity())
-//                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-//                }
-//
-//            } else {
-//                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-//                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-//                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-//                    currentScrollPosition = catStreamFragment.getScrollPosition();
-//                }
-//                if (currentScrollPosition > 224) {
-//                    currentScrollPosition = 224;
-//
-//                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
-//                } else {
-//                    ((MainActivity)getActivity())
-//                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-//                }
-//            }
-//            otherCatStreamFragment.setScrollPosition(currentScrollPosition);
-//        }
-    }
-
-    public void enableSwipeToRefresh(boolean toggle) {
+    public void enableSwipeToRefresh(boolean enabled) {
         if (swipe_container != null) {
-            swipe_container.setEnabled(toggle);
+            swipe_container.setEnabled(enabled);
         }
     }
 
     @Override
-    public void onRefresh() {
-        CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
-
-            @Override
-            public void onSuccess(List<CatPostModel> catPostModels) {
-                swipe_container.setRefreshing(false);
-                ((MainActivity) getActivity()).doneSlideshow();
-            }
-        });
+    protected List<Object> getModules() {
+        return Arrays.<Object>asList(new DashboardModule(this));
     }
 }

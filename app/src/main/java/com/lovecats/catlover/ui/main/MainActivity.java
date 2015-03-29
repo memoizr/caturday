@@ -16,10 +16,11 @@ import android.widget.RelativeLayout;
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.ui.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.ui.drawer.DrawerActivity;
 import com.lovecats.catlover.ui.favorites.FavoritesFragment;
 import com.lovecats.catlover.ui.login.LoginActivity;
-import com.lovecats.catlover.ui.dashboard.CatStreamFragment;
+import com.lovecats.catlover.ui.stream.CatStreamFragment;
 import com.lovecats.catlover.ui.dashboard.DashboardFragment;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.helpers.AnimationHelper;
@@ -39,7 +40,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-public class MainActivity extends DrawerActivity implements CatStreamFragment.ScrollCallback {
+public class MainActivity extends DrawerActivity implements CatStreamFragment.ScrollCallback, SlidingTabActivity {
 
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
@@ -47,17 +48,17 @@ public class MainActivity extends DrawerActivity implements CatStreamFragment.Sc
     @Inject FavoritesFragment favoritesFragment;
     @Inject UserModel userModel;
 
-    public PagerSlidingTabStrip slidingTabs;
     @InjectView(R.id.toolbar) Toolbar mToolbar;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
     @InjectView(R.id.slide_show_V) SlideShowView slide_show_V;
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
+    @Getter private int oldScrollY;
+    public PagerSlidingTabStrip slidingTabs;
     private int titleMaxHeight;
     private int titleMinHeight;
     private int titleCollapsed;
-    @Getter private int oldScrollY;
     private boolean transparent = true;
     private boolean statusTransparent = true;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -79,7 +80,7 @@ public class MainActivity extends DrawerActivity implements CatStreamFragment.Sc
 
         setupCollapsibleToolbar(mToolbar);
         setupMenuClickListener(mToolbar);
-        setDrawer(this, mToolbar);
+        setDrawer(this, mToolbar, mDrawerLayout);
 
         titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
     }
@@ -131,8 +132,8 @@ public class MainActivity extends DrawerActivity implements CatStreamFragment.Sc
                 });
     }
 
-    private void setDrawer(Activity activity, Toolbar toolbar) {
-        mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout, toolbar, R.string.action_settings, R.string.action_login);
+    private void setDrawer(Activity activity, Toolbar toolbar, DrawerLayout drawerLayout) {
+        mDrawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.drawer_open_desc, R.string.drawer_close_desc);
         mDrawerLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -306,5 +307,10 @@ public class MainActivity extends DrawerActivity implements CatStreamFragment.Sc
             default:
                 break;
         }
+    }
+
+    @Override
+    public PagerSlidingTabStrip getSlidingTabStrip() {
+        return slidingTabs_PSTS;
     }
 }

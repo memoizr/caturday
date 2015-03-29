@@ -1,4 +1,4 @@
-package com.lovecats.catlover.ui.dashboard;
+package com.lovecats.catlover.ui.stream;
 
 import android.app.Activity;
 import android.os.Bundle;
