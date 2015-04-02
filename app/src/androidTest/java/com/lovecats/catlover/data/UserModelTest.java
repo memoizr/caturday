@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
 import com.google.gson.Gson;
+import com.lovecats.catlover.data.user.UserModel;
 
 import java.util.Arrays;
 import java.util.List;

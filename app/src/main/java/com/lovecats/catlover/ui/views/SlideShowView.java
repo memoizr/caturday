@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.util.interpolators.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
@@ -44,10 +44,10 @@ public class SlideShowView extends FrameLayout {
     }
 
     private void setRandomImage() {
-        if (CatPostModel.getCount() > 0) {
-            String url = CatPostModel.getRandomCatPost().getImage_url();
-            Picasso.with(mContext).load(url).into(slide_0);
-        }
+//        if (CatPostEntity.getCount() > 0) {
+//            String url = CatPostEntity.getRandomCatPost().getImage_url();
+//            Picasso.with(mContext).load(url).into(slide_0);
+//        }
     }
 
     private void cycleBackgroundImage() {

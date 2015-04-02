@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.data.DaoManager;
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.data.user.UserModel;
 
 import static org.mockito.Mockito.*;
 

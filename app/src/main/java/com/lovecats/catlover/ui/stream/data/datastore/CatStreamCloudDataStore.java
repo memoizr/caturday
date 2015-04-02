@@ -1,9 +1,10 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.ui.stream.data.datastore;
 
 import android.os.AsyncTask;
 
 import com.lovecats.catlover.common.Config;
-import com.lovecats.catlover.api.CatPostApi;
+import com.lovecats.catlover.ui.stream.api.CatPostApi;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 
 import java.util.List;
 
@@ -12,18 +13,18 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String> {
+public class CatStreamCloudDataStore extends AsyncTask<List<CatPostEntity>,Integer, String> {
 
-    private static CatPostFetcher session;
+    private static CatStreamCloudDataStore session;
 
-    private List<CatPostModel> mCatPostModels;
+    private List<CatPostEntity> mCatPostEntities;
 
-    private CatPostFetcher(){
+    private CatStreamCloudDataStore(){
     }
 
-    public static CatPostFetcher getSession() {
+    public static CatStreamCloudDataStore getSession() {
         if (session == null) {
-            session = new CatPostFetcher();
+            session = new CatStreamCloudDataStore();
         }
         return session;
     }
@@ -31,7 +32,7 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
 
 
     public interface CatPostFetcherCallbacks {
-        public void onSuccess(List<CatPostModel> catPostModels);
+        public void onSuccess(List<CatPostEntity> catPostEntities);
     }
 
     CatPostFetcherCallbacks mCallback;
@@ -45,11 +46,11 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
 
         CatPostApi api = adapter.create(CatPostApi.class);
 
-        api.getPosts(new Callback<List<CatPostModel>>() {
+        api.getPosts(new Callback<List<CatPostEntity>>() {
             @Override
-            public void success(final List<CatPostModel> catPostModels, Response response) {
-                execute(catPostModels);
-                mCatPostModels = catPostModels;
+            public void success(final List<CatPostEntity> catPostEntities, Response response) {
+                execute(catPostEntities);
+                mCatPostEntities = catPostEntities;
             }
 
             @Override
@@ -59,15 +60,12 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
         });
     }
 
-
     @Override
-    protected String doInBackground(List<CatPostModel>... params) {
-        for (CatPostModel catpostmodel : params[0]) {
-            catpostmodel.createPost(catpostmodel);
+    protected String doInBackground(List<CatPostEntity>... params) {
+        for (CatPostEntity catpostmodel : params[0]) {
         }
         return "done";
     }
-
 
     @Override
     protected void onProgressUpdate(Integer... values) {
@@ -75,6 +73,6 @@ public class CatPostFetcher extends AsyncTask<List<CatPostModel>,Integer, String
     }
 
     protected void onPostExecute(String astring) {
-        mCallback.onSuccess(mCatPostModels);
+        mCallback.onSuccess(mCatPostEntities);
     }
 }

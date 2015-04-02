@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import lombok.Getter;
+
 /**
  * Created by user on 10/03/15.
  */
@@ -12,6 +14,7 @@ public class Config {
     private static final String API_VERSION = "/api/v1";
     private static Context mContext;
     private static Application app;
+    public static final int PAGINATION_LIMIT = 25;
 
     public Config(Application app) {
         System.out.println("Config initialized");

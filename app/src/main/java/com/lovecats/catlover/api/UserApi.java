@@ -1,6 +1,6 @@
 package com.lovecats.catlover.api;
 
-import com.lovecats.catlover.data.UserFetcher;
+import com.lovecats.catlover.data.user.UserFetcher;
 
 import retrofit.Callback;
 import retrofit.http.Header;

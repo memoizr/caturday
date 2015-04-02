@@ -1,7 +1,6 @@
 package com.lovecats.catlover.ui.login;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.data.LoginHandler;
-import com.lovecats.catlover.data.UserFetcher;
 import com.lovecats.catlover.helpers.AnimationHelper;
 
 import butterknife.ButterKnife;

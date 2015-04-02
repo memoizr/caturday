@@ -1,4 +1,4 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.data.user;
 
 import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.api.UserApi;

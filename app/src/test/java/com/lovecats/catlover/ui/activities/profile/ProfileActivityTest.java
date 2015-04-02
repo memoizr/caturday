@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.lovecats.catlover.BuildConfig;
 import com.lovecats.catlover.CustomRoboelectricRunner;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.data.user.UserModel;
 import com.lovecats.catlover.ui.profile.ProfileActivity;
 
 import org.junit.Test;

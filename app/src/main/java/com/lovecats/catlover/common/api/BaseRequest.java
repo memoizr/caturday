@@ -1,4 +1,4 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.common.api;
 
 import com.lovecats.catlover.common.Config;
 

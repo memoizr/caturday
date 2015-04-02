@@ -1,4 +1,4 @@
-package com.lovecats.catlover.adapters;
+package com.lovecats.catlover.ui.stream.adapter;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,9 +1,7 @@
 package com.lovecats.catlover.api;
 
 import com.lovecats.catlover.data.CommentModel;
-import com.lovecats.catlover.data.UserFetcher;
 
-import greendao.Comment;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.Header;

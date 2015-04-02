@@ -1,6 +1,7 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.data.user;
 
 import com.google.gson.Gson;
+import com.lovecats.catlover.data.DaoManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;

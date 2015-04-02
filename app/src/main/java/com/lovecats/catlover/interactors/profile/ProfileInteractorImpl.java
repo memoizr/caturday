@@ -1,6 +1,6 @@
 package com.lovecats.catlover.interactors.profile;
 
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.data.user.UserModel;
 
 /**
  * Created by user on 28/03/15.

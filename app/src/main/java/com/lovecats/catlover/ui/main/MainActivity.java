@@ -3,7 +3,6 @@ package com.lovecats.catlover.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +14,12 @@ import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.data.user.UserModel;
+import com.lovecats.catlover.ui.common.ScrollEventListener;
 import com.lovecats.catlover.ui.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.ui.drawer.DrawerActivity;
 import com.lovecats.catlover.ui.favorites.FavoritesFragment;
 import com.lovecats.catlover.ui.login.LoginActivity;
-import com.lovecats.catlover.ui.stream.CatStreamFragment;
 import com.lovecats.catlover.ui.dashboard.DashboardFragment;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.helpers.AnimationHelper;
@@ -40,7 +39,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-public class MainActivity extends DrawerActivity implements CatStreamFragment.ScrollCallback, SlidingTabActivity {
+public class MainActivity extends DrawerActivity implements ScrollEventListener,
+        SlidingTabActivity {
 
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
@@ -154,8 +154,7 @@ public class MainActivity extends DrawerActivity implements CatStreamFragment.Sc
     }
 
     @Override
-    public void onScroll(Fragment fragment, int scrollY,
-                         boolean firstScroll, boolean dragging) {
+    public void onScrollChanged(int scrollY, boolean dragging) {
 
         slide_show_V.setTranslationY(-(float) (scrollY * 0.8));
 
@@ -226,14 +225,14 @@ public class MainActivity extends DrawerActivity implements CatStreamFragment.Sc
     }
 
     @Override
-    public void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState) {
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
         if (scrollState == ScrollState.STOP) {
             adjustToolbarOnEndOfScroll();
         }
     }
 
     @Override
-    public void onScrollStateChanged(Fragment fragment, int scrollState) {
+    public void onScrollStateChanged(int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
             adjustToolbarOnEndOfScroll();
         }

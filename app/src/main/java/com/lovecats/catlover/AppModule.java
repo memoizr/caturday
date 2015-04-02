@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.lovecats.catlover.common.ConfigModule;
 import com.lovecats.catlover.interactors.InteractorsModule;
+import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractor;
+import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractorModule;
 
 import javax.inject.Singleton;
 
@@ -21,6 +23,7 @@ import dagger.Provides;
         },
         includes = {
                 ConfigModule.class,
+                CatStreamInteractorModule.class,
                 InteractorsModule.class
         }
 )

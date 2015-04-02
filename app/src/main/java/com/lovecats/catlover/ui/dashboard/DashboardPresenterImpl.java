@@ -3,7 +3,7 @@ package com.lovecats.catlover.ui.dashboard;
 import android.app.Activity;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.lovecats.catlover.adapters.DashboardPageAdapter;
+import com.lovecats.catlover.ui.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.ui.common.BaseFragment;
 
 /**

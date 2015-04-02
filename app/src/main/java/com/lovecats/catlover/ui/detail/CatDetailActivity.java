@@ -40,10 +40,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.adapters.CommentsAdapter;
-import com.lovecats.catlover.data.CatPostModel;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.data.CommentModel;
 import com.lovecats.catlover.data.CommentPoster;
-import com.lovecats.catlover.data.UserModel;
+import com.lovecats.catlover.data.user.UserModel;
 import com.lovecats.catlover.helpers.AnimationHelper;
 import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
@@ -305,7 +305,7 @@ public class CatDetailActivity extends ActionBarActivity {
         id = bundle.getLong("id");
         url = bundle.getString("url");
         catPostServerId = bundle.getString("serverId");
-        catPost = CatPostModel.getCatPostForServerId(catPostServerId);
+//        catPost = CatPostEntity.getCatPostForServerId(catPostServerId);
     }
 
     private void shareTextUrl() {

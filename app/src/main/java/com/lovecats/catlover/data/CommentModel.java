@@ -1,5 +1,7 @@
 package com.lovecats.catlover.data;
 
+import com.lovecats.catlover.data.user.UserModel;
+
 import lombok.Getter;
 import lombok.Setter;
 

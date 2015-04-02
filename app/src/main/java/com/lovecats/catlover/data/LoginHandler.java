@@ -2,6 +2,7 @@ package com.lovecats.catlover.data;
 
 import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.api.LoginApi;
+import com.lovecats.catlover.data.user.UserModel;
 
 import greendao.User;
 import retrofit.Callback;
