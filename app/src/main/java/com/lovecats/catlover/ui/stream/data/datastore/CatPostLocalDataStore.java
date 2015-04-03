@@ -1,5 +1,6 @@
 package com.lovecats.catlover.ui.stream.data.datastore;
 
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.data.db.CatPostDb;
 import com.lovecats.catlover.ui.stream.data.db.CatPostORM;
 
@@ -19,5 +20,9 @@ public class CatPostLocalDataStore implements CatPostDataStore{
     @Override
     public CatPost getCatPost(String serverId) {
         return catPostDb.getCatPostForServerId(serverId);
+    }
+
+    public void createMultipleCatPost(Collection<CatPostEntity> catPostEntityCollection) {
+        catPostDb.createMultiplePost(catPostEntityCollection);
     }
 }

@@ -52,13 +52,15 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return new EmptyHeader(header);
         }
 
-        throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
+        throw new RuntimeException("there is no type that matches the type " + viewType +
+                " + make sure your using types correctly");
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof EmptyHeader) {
-            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
+            StaggeredGridLayoutManager.LayoutParams layoutParams =
+                    (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
             layoutParams.setFullSpan(true);
         } else {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
@@ -69,7 +71,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
             System.out.println(mCatPosts.get(i).getTotalVotesCount());
-            ((CatsCardViewHolder) viewHolder).total_votes_count.setText(mCatPosts.get(i).getTotalVotesCount().toString());
+            ((CatsCardViewHolder) viewHolder).total_votes_count.setText(
+                    mCatPosts.get(i).getTotalVotesCount().toString());
 
             Picasso.with(mContext).load(mCatPosts.get(i).getImage_url()).into(myViewHolder.cat_IV);
             myViewHolder.catContainer.setOnClickListener(new View.OnClickListener() {

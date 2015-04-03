@@ -90,8 +90,13 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     }
 
     @Override
-    public void setAdapter(RecyclerView.Adapter adapter) {
-        cats_stream_RV.setAdapter(adapter);
+    public void setAdapter(final RecyclerView.Adapter adapter) {
+        cats_stream_RV.post(new Runnable() {
+            @Override
+            public void run() {
+                cats_stream_RV.setAdapter(adapter);
+            }
+        });
     }
 
     @Override

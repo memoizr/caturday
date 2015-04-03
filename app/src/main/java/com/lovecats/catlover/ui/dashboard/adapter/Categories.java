@@ -1,8 +1,5 @@
 package com.lovecats.catlover.ui.dashboard.adapter;
 
-/**
- * Created by user on 02/04/15.
- */
 public enum Categories {
     CATEGORY_SPACE("space"),
     CATEGORY_HATS("hats");

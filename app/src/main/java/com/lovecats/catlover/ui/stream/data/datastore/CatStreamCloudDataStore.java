@@ -1,78 +1,37 @@
 package com.lovecats.catlover.ui.stream.data.datastore;
 
-import android.os.AsyncTask;
-
 import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.ui.stream.api.CatPostApi;
 import com.lovecats.catlover.ui.stream.data.CatPostEntity;
+import com.lovecats.catlover.ui.stream.data.mapper.CatPostMapper;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import retrofit.Callback;
+import greendao.CatPost;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
-public class CatStreamCloudDataStore extends AsyncTask<List<CatPostEntity>,Integer, String> {
+public class CatStreamCloudDataStore implements CatPostDataStore {
 
-    private static CatStreamCloudDataStore session;
-
-    private List<CatPostEntity> mCatPostEntities;
-
-    private CatStreamCloudDataStore(){
-    }
-
-    public static CatStreamCloudDataStore getSession() {
-        if (session == null) {
-            session = new CatStreamCloudDataStore();
-        }
-        return session;
-    }
-
-
-
-    public interface CatPostFetcherCallbacks {
-        public void onSuccess(List<CatPostEntity> catPostEntities);
-    }
-
-    CatPostFetcherCallbacks mCallback;
-    public void fetchCatPosts(final CatPostFetcherCallbacks callback) {
-        mCallback = callback;
+    @Override
+    public Collection<CatPost> getCatPostsForPageAndCategory(int page, String category) {
         String endpoint = Config.getEndpoint();
 
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
                 .build();
 
-        CatPostApi api = adapter.create(CatPostApi.class);
+        final CatPostApi api = adapter.create(CatPostApi.class);
 
-        api.getPosts(new Callback<List<CatPostEntity>>() {
-            @Override
-            public void success(final List<CatPostEntity> catPostEntities, Response response) {
-                execute(catPostEntities);
-                mCatPostEntities = catPostEntities;
-            }
+        Collection<CatPostEntity> catPostEntities = api.getPosts(page, category);
+        System.out.println(new ArrayList(catPostEntities).get(0).toString());
+        System.out.println("foooo");
 
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
+        return CatPostMapper.transform(catPostEntities);
     }
 
     @Override
-    protected String doInBackground(List<CatPostEntity>... params) {
-        for (CatPostEntity catpostmodel : params[0]) {
-        }
-        return "done";
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        System.out.println(values[0]);
-    }
-
-    protected void onPostExecute(String astring) {
-        mCallback.onSuccess(mCatPostEntities);
+    public CatPost getCatPost(String serverId) {
+        return null;
     }
 }

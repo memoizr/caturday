@@ -17,6 +17,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import greendao.CatPost;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class CatStreamPresenterImpl extends CatStreamPresenter {
 
@@ -66,10 +69,18 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public void setStreamType(String streamType) {
-        Collection<CatPost> catPostCollection =
-                catStreamInteractor.getCatPostPageAndType(0, streamType);
-        CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
-        catStreamView.setAdapter(adapter);
+        catStreamInteractor.getCatPostPageAndType(3, streamType, new Callback<Collection<CatPost>>() {
+            @Override
+            public void success(Collection<CatPost> catPostCollection, Response response) {
+                CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
+                catStreamView.setAdapter(adapter);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     @Override

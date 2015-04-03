@@ -3,6 +3,7 @@ package com.lovecats.catlover.ui.stream.data.db;
 import com.lovecats.catlover.common.Config;
 import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.ui.stream.data.CatPostEntity;
+import com.lovecats.catlover.ui.stream.data.mapper.CatPostMapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,23 +65,16 @@ public class CatPostORM implements CatPostDb {
 
     @Override
     public void createMultiplePost(Collection<CatPostEntity> catPostEntities) {
-        Collection<CatPost> catPostCollection = new ArrayList<>();
-        for (CatPostEntity catPostEntity : catPostEntities) {
-            catPostCollection.add(mapToCatPost(catPostEntity));
-        }
+        Collection<CatPost> catPostCollection;
+
+        catPostCollection = CatPostMapper.transform(catPostEntities);
 
         insertOrUpdateInTx(catPostCollection);
     }
 
     private CatPost mapToCatPost(CatPostEntity catPostEntity){
 
-        CatPost catPost = new CatPost();
-        catPost.setCaption(catPostEntity.getCaption());
-        catPost.setServerId(catPostEntity.getServerId());
-        catPost.setCategory(catPostEntity.getCategory());
-        catPost.setComments(catPostEntity.getComments().toString());
-        catPost.setImage_url(catPostEntity.getImageUrl());
-        catPost.setTotalVotesCount(catPostEntity.getTotalVotesCount());
+        CatPost catPost = CatPostMapper.transform(catPostEntity);
 
         return catPost;
     }
