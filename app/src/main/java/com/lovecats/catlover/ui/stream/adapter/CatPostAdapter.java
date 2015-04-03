@@ -20,15 +20,17 @@ import com.lovecats.catlover.ui.main.MainActivity;
 import com.lovecats.catlover.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collection;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import greendao.CatPost;
+import lombok.Setter;
 
 public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    public List<CatPost> mCatPosts;
+    @Setter private List<CatPost> mCatPosts;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
@@ -59,9 +61,10 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof EmptyHeader) {
-            StaggeredGridLayoutManager.LayoutParams layoutParams =
-                    (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
-            layoutParams.setFullSpan(true);
+
+//            StaggeredGridLayoutManager.LayoutParams layoutParams =
+//                    (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
+//            layoutParams.setFullSpan(true);
         } else {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
             final int j = i;
@@ -70,7 +73,6 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
-            System.out.println(mCatPosts.get(i).getTotalVotesCount());
             ((CatsCardViewHolder) viewHolder).total_votes_count.setText(
                     mCatPosts.get(i).getTotalVotesCount().toString());
 
@@ -93,6 +95,11 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
         }
+    }
+
+    public void addItems(Collection<CatPost> catPostCollection) {
+        mCatPosts.addAll(catPostCollection);
+        notifyDataSetChanged();
     }
 
     @Override

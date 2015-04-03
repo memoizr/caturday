@@ -7,6 +7,7 @@ import com.lovecats.catlover.common.ConfigModule;
 import com.lovecats.catlover.interactors.InteractorsModule;
 import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractorModule;
+import com.lovecats.catlover.util.concurrent.ThreadModule;
 
 import javax.inject.Singleton;
 
@@ -24,6 +25,7 @@ import dagger.Provides;
         includes = {
                 ConfigModule.class,
                 CatStreamInteractorModule.class,
+                ThreadModule.class,
                 InteractorsModule.class
         }
 )

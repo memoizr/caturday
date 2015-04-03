@@ -5,7 +5,6 @@ import com.lovecats.catlover.ui.stream.api.CatPostApi;
 import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.data.mapper.CatPostMapper;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import greendao.CatPost;
@@ -24,8 +23,6 @@ public class CatStreamCloudDataStore implements CatPostDataStore {
         final CatPostApi api = adapter.create(CatPostApi.class);
 
         Collection<CatPostEntity> catPostEntities = api.getPosts(page, category);
-        System.out.println(new ArrayList(catPostEntities).get(0).toString());
-        System.out.println("foooo");
 
         return CatPostMapper.transform(catPostEntities);
     }

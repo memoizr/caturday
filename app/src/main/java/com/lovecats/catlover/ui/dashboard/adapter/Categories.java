@@ -2,6 +2,8 @@ package com.lovecats.catlover.ui.dashboard.adapter;
 
 public enum Categories {
     CATEGORY_SPACE("space"),
+    CATEGORY_CATURDAY("caturday"),
+    CATEGORY_SUNGLASSES("sunglasses"),
     CATEGORY_HATS("hats");
 
     private final String category;
@@ -20,9 +22,11 @@ public enum Categories {
             case 0:
                 return "Space";
             case 1:
-                return "Hats";
+                return "Caturday";
+            case 2:
+                return "Sunglasses";
             default:
-                return "Space";
+                return "Hats";
         }
     }
 }

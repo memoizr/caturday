@@ -2,7 +2,7 @@ package com.lovecats.catlover.ui.stream.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -13,8 +13,6 @@ import com.lovecats.catlover.ui.stream.view.CatStreamView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.inject.Inject;
 
 import greendao.CatPost;
 import retrofit.Callback;
@@ -28,6 +26,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     private ScrollEventListener scrollEventListener;
     private static final String WARN_NO_LISTENER = "No Listeners attached";
     private Context context;
+    private String streamType;
 
     public CatStreamPresenterImpl(CatStreamView catStreamView, CatStreamInteractor catStreamInteractor) {
         this.catStreamView = catStreamView;
@@ -63,13 +62,20 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public void onViewCreated() {
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         catStreamView.initializeRecyclerView(this, layoutManager);
     }
 
     @Override
-    public void setStreamType(String streamType) {
-        catStreamInteractor.getCatPostPageAndType(3, streamType, new Callback<Collection<CatPost>>() {
+    public void onScrollStateChanged(int scrollState) {
+        scrollEventListener.onScrollStateChanged(scrollState);
+    }
+
+    @Override
+    public void setAdapterByType(String streamType) {
+        this.streamType = streamType;
+        catStreamInteractor.getCatPostPageAndType(0, streamType, new Callback<Collection<CatPost>>() {
             @Override
             public void success(Collection<CatPost> catPostCollection, Response response) {
                 CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
@@ -84,7 +90,18 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Override
-    public void onScrollStateChanged(int scrollState) {
-        scrollEventListener.onScrollStateChanged(scrollState);
+    public void loadMore(int page, int totalItems) {
+        catStreamInteractor.getCatPostPageAndType(page, streamType, new Callback<Collection<CatPost>>() {
+            @Override
+            public void success(Collection<CatPost> catPostCollection, Response response) {
+                CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
+                adapter.addItems(catPostCollection);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }

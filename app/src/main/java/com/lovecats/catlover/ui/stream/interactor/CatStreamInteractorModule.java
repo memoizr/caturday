@@ -4,6 +4,8 @@ import com.lovecats.catlover.ui.stream.data.datastore.CatPostDataStore;
 import com.lovecats.catlover.ui.stream.data.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.ui.stream.data.repository.CatPostRepository;
 import com.lovecats.catlover.ui.stream.data.repository.CatPostRepositoryImpl;
+import com.lovecats.catlover.util.concurrent.PostExecutionThread;
+import com.lovecats.catlover.util.concurrent.ThreadExecutor;
 
 import javax.inject.Singleton;
 
@@ -22,7 +24,10 @@ public class CatStreamInteractorModule {
     }
 
     @Provides @Singleton public CatStreamInteractor provideCatStreamInteractor(
-            CatPostRepository catPostRepository) {
-        return new CatStreamInteractorImpl(catPostRepository);
+            CatPostRepository catPostRepository,
+            ThreadExecutor threadExecutor,
+            PostExecutionThread postExecutionThread ) {
+
+        return new CatStreamInteractorImpl(catPostRepository, threadExecutor, postExecutionThread);
     }
 }

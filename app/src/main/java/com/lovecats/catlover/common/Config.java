@@ -17,12 +17,10 @@ public class Config {
     public static final int PAGINATION_LIMIT = 25;
 
     public Config(Application app) {
-        System.out.println("Config initialized");
         this.app = app;
     }
 
     public Config(Context context) {
-        System.out.println("Config initialized");
         mContext = context;
     }
 

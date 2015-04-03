@@ -79,7 +79,6 @@ public class LoginActivity extends ActionBarActivity {
         LoginHandler.performLogin(password_TV.getText().toString(), email_TV.getText().toString(), new Callback() {
             @Override
             public void success(Object user, Response response) {
-                System.out.println("win");
                 progress_bar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -117,7 +116,6 @@ public class LoginActivity extends ActionBarActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                System.out.println("fail");
                 progress_bar.postDelayed(new Runnable() {
                     @Override
                     public void run() {

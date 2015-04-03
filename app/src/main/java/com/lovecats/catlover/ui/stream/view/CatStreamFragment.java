@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.ui.common.listener.EndlessScrollListener;
 import com.lovecats.catlover.ui.stream.adapter.CatPostAdapter;
 import com.lovecats.catlover.ui.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.ui.stream.CatStreamModule;
@@ -73,7 +74,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
         String streamType = bundle.getString(DashboardPageAdapter.STREAM_CATEGORY);
 
-        catStreamPresenter.setStreamType(streamType);
+        catStreamPresenter.setAdapterByType(streamType);
     }
 
     @Override
@@ -91,12 +92,12 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Override
     public void setAdapter(final RecyclerView.Adapter adapter) {
-        cats_stream_RV.post(new Runnable() {
-            @Override
-            public void run() {
-                cats_stream_RV.setAdapter(adapter);
-            }
-        });
+        cats_stream_RV.setAdapter(adapter);
+    }
+
+    @Override
+    public RecyclerView.Adapter getAdapter() {
+        return cats_stream_RV.getAdapter();
     }
 
     @Override
@@ -104,7 +105,12 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
         cats_stream_RV.setLayoutManager(layoutManager);
 
         cats_stream_RV.setScrollViewCallbacks(listener);
-        cats_stream_RV.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        cats_stream_RV.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int previousTotalItemCount) {
+                catStreamPresenter.loadMore(page, previousTotalItemCount);
+            }
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
