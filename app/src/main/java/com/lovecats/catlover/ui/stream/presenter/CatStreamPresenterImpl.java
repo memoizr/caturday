@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.ui.common.ScrollEventListener;
-import com.lovecats.catlover.ui.stream.adapter.CatPostAdapter;
+import com.lovecats.catlover.ui.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.ui.stream.view.CatStreamView;
 

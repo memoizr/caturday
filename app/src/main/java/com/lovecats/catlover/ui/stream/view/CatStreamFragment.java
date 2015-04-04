@@ -13,7 +13,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.ui.common.listener.EndlessScrollListener;
-import com.lovecats.catlover.ui.stream.adapter.CatPostAdapter;
+import com.lovecats.catlover.ui.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.ui.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.ui.stream.CatStreamModule;
 import com.lovecats.catlover.ui.stream.presenter.CatStreamPresenter;
