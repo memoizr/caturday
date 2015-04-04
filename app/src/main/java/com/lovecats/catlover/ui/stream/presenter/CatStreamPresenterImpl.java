@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.ui.common.ScrollEventListener;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.ui.stream.view.CatStreamView;
@@ -14,7 +15,6 @@ import com.lovecats.catlover.ui.stream.view.CatStreamView;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import greendao.CatPost;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -75,9 +75,11 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     @Override
     public void setAdapterByType(String streamType) {
         this.streamType = streamType;
-        catStreamInteractor.getCatPostPageAndType(0, streamType, new Callback<Collection<CatPost>>() {
+        catStreamInteractor.getCatPostPageAndType(0,
+                streamType,
+                new Callback<Collection<CatPostEntity>>() {
             @Override
-            public void success(Collection<CatPost> catPostCollection, Response response) {
+            public void success(Collection<CatPostEntity> catPostCollection, Response response) {
                 CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
                 catStreamView.setAdapter(adapter);
             }
@@ -91,9 +93,11 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public void loadMore(int page, int totalItems) {
-        catStreamInteractor.getCatPostPageAndType(page, streamType, new Callback<Collection<CatPost>>() {
+        catStreamInteractor.getCatPostPageAndType(page,
+                streamType,
+                new Callback<Collection<CatPostEntity>>() {
             @Override
-            public void success(Collection<CatPost> catPostCollection, Response response) {
+            public void success(Collection<CatPostEntity> catPostCollection, Response response) {
                 CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
                 adapter.addItems(catPostCollection);
             }

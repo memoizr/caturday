@@ -1,5 +1,7 @@
 package com.lovecats.catlover.ui.stream.data.datastore;
 
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
+
 import java.util.Collection;
 
 import greendao.CatPost;
@@ -9,7 +11,7 @@ import greendao.CatPost;
  */
 public interface CatPostDataStore {
 
-    public Collection<CatPost> getCatPostsForPageAndCategory(int page, String category);
+    Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category);
 
-    public CatPost getCatPost(String serverId);
+    CatPostEntity getCatPost(String serverId);
 }

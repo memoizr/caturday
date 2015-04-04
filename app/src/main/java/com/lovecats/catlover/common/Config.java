@@ -26,7 +26,16 @@ public class Config {
 
     public static String getEndpoint() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
-        String rootUrl = prefs.getString("example_text", null);
+        String rootUrl;
+        rootUrl = prefs.getString("example_text", null);
+
+        if (rootUrl == null) {
+            SharedPreferences.Editor editor = prefs.edit();
+            String address = "http://196.18.44.82:3000";
+            editor.putString("example_text", address);
+            rootUrl = address;
+        }
+
         String endpoint = rootUrl + API_VERSION;
         return endpoint;
     }

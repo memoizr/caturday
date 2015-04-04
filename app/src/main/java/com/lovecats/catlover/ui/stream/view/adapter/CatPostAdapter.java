@@ -14,9 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lovecats.catlover.ui.detail.CatDetailActivity;
+import com.lovecats.catlover.ui.detail.view.CatDetailActivity;
 import com.lovecats.catlover.ui.main.MainActivity;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collection;
@@ -24,18 +25,17 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.CatPost;
 import lombok.Setter;
 
 public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    @Setter private List<CatPost> mCatPosts;
+    @Setter private List<CatPostEntity> mCatPosts;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    public CatPostAdapter(Context context, List<CatPost> catPosts) {
+    public CatPostAdapter(Context context, List<CatPostEntity> catPosts) {
         mContext = context;
-        mCatPosts= catPosts;
+        mCatPosts = catPosts;
     }
 
     @Override
@@ -72,10 +72,10 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
-            ((CatsCardViewHolder) viewHolder).total_votes_count.setText(
-                    mCatPosts.get(i).getTotalVotesCount().toString());
+//            ((CatsCardViewHolder) viewHolder).total_votes_count.setText(
+//                    mCatPosts.get(i).getTotalVotesCount());
 
-            Picasso.with(mContext).load(mCatPosts.get(i).getImage_url()).into(myViewHolder.cat_IV);
+            Picasso.with(mContext).load(mCatPosts.get(i).getImageUrl()).into(myViewHolder.cat_IV);
             myViewHolder.catContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -87,8 +87,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     Pair.create((View) myViewHolder.cat_IV, transitionName)
                             );
                     intent.putExtra("transition", transitionName);
-                    intent.putExtra("url", mCatPosts.get(j).getImage_url());
-                    intent.putExtra("id", mCatPosts.get(j).getId());
+                    intent.putExtra("url", mCatPosts.get(j).getImageUrl());
                     intent.putExtra("serverId", mCatPosts.get(j).getServerId());
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                 }
@@ -96,7 +95,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public void addItems(Collection<CatPost> catPostCollection) {
+    public void addItems(Collection<CatPostEntity> catPostCollection) {
         mCatPosts.addAll(catPostCollection);
         notifyDataSetChanged();
     }
@@ -135,5 +134,4 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ButterKnife.inject(this, v);
         }
     }
-
 }

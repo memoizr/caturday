@@ -1,12 +1,11 @@
 package com.lovecats.catlover.ui.stream.data.repository;
 
-import java.util.Collection;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 
-import greendao.CatPost;
+import java.util.Collection;
 
 public interface CatPostRepository {
 
-    public Collection<CatPost> getCatPostsForPageAndCategory(int page, String category);
-
-    public CatPost getCatPost(String serverId);
+    Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category);
+    CatPostEntity getCatPost(String serverId);
 }

@@ -5,7 +5,6 @@ import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.data.mapper.CatPostMapper;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import greendao.CatPost;
@@ -18,36 +17,42 @@ public class CatPostORM implements CatPostDb {
     }
 
     @Override
-    public CatPost getCatPostForServerId(String id) {
-        return getCatPostDao()
+    public CatPostEntity getCatPostForServerId(String id) {
+        CatPost catPost = getCatPostDao()
                 .queryBuilder()
                 .where(CatPostDao.Properties.ServerId.eq(id))
-                .unique();
+                .uniqueOrThrow();
+        return CatPostMapper.toEntity(catPost);
     }
 
     @Override
-    public Collection<CatPost> getPostsForPageAndCategory(int page, String category) {
+    public Collection<CatPostEntity> getPostsForPageAndCategory(int page, String category) {
         int limit = Config.PAGINATION_LIMIT;
         int offset = page * limit;
-        return getCatPostDao()
+        Collection<CatPost> catPostCollection = getCatPostDao()
                 .queryBuilder()
                 .where(CatPostDao.Properties.Category.eq(category))
                 .offset(offset)
                 .limit(25)
                 .list();
+
+        return CatPostMapper.toEntity(catPostCollection);
     }
 
     @Override
-    public Collection<CatPost> getCatPostsForServerIds(Collection<String> catPostServerIds) {
-        return getCatPostDao()
+    public Collection<CatPostEntity> getCatPostsForServerIds(Collection<String> catPostServerIds) {
+        Collection<CatPost> catPostCollection = getCatPostDao()
                 .queryBuilder()
                 .where(CatPostDao.Properties.ServerId.in(catPostServerIds))
                 .list();
+
+        return CatPostMapper.toEntity(catPostCollection);
     }
 
     @Override
-    public CatPost getRandomCatPost() {
-        return getCatPostDao().load((long) Math.ceil(getCount() * Math.random()));
+    public CatPostEntity getRandomCatPost() {
+        CatPost catPost = getCatPostDao().load((long) Math.ceil(getCount() * Math.random()));
+        return CatPostMapper.toEntity(catPost);
     }
 
     @Override
@@ -67,14 +72,14 @@ public class CatPostORM implements CatPostDb {
     public void createMultiplePost(Collection<CatPostEntity> catPostEntities) {
         Collection<CatPost> catPostCollection;
 
-        catPostCollection = CatPostMapper.transform(catPostEntities);
+        catPostCollection = CatPostMapper.fromEntity(catPostEntities);
 
         insertOrUpdateInTx(catPostCollection);
     }
 
     private CatPost mapToCatPost(CatPostEntity catPostEntity){
 
-        CatPost catPost = CatPostMapper.transform(catPostEntity);
+        CatPost catPost = CatPostMapper.fromEntity(catPostEntity);
 
         return catPost;
     }

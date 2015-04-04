@@ -13,12 +13,12 @@ import greendao.CatPost;
  */
 public interface CatStreamView {
 
-    public void initializeRecyclerView(ObservableScrollViewCallbacks listener,
+    void initializeRecyclerView(ObservableScrollViewCallbacks listener,
                                        RecyclerView.LayoutManager layoutManager);
 
-    public void notifyAdapter();
+    void notifyAdapter();
 
-    public void setAdapter(RecyclerView.Adapter adapter);
+    void setAdapter(RecyclerView.Adapter adapter);
 
-    public RecyclerView.Adapter getAdapter();
+    RecyclerView.Adapter getAdapter();
 }

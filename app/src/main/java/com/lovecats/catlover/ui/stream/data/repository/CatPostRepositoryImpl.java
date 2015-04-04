@@ -1,11 +1,11 @@
 package com.lovecats.catlover.ui.stream.data.repository;
 
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.data.datastore.CatPostDataStore;
 import com.lovecats.catlover.ui.stream.data.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.ui.stream.data.datastore.CatStreamCloudDataStore;
 
 import java.util.Collection;
-import greendao.CatPost;
 
 public class CatPostRepositoryImpl implements CatPostRepository{
 
@@ -20,14 +20,14 @@ public class CatPostRepositoryImpl implements CatPostRepository{
     }
 
     @Override
-    public Collection<CatPost> getCatPostsForPageAndCategory(int page, String category) {
-
-        return catStreamCloudDataStore.getCatPostsForPageAndCategory(page, category);
+    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
+        Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForPageAndCategory(page, category);
+        catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+        return catPostEntities;
     }
 
     @Override
-    public CatPost getCatPost(String serverId) {
+    public CatPostEntity getCatPost(String serverId) {
         return catPostDataStore.getCatPost(serverId);
-
     }
 }

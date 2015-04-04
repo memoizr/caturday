@@ -39,7 +39,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp" />
 
-    <com.github.ksoichiro.android.observablescrollview.ObservableListView
+    <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
         android:id="@+id/comments_LV"
         android:clipToPadding="false"
         android:layout_height="match_parent"

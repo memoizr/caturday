@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.detail.CatDetailActivity"
+            android:name=".ui.detail.view.CatDetailActivity"
             android:label="@string/title_activity_detail_cat"
             android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".ui.main.MainActivity">

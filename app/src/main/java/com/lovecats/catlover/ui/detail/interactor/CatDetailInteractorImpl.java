@@ -1,46 +1,38 @@
-package com.lovecats.catlover.ui.stream.interactor;
+package com.lovecats.catlover.ui.detail.interactor;
 
 import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.data.repository.CatPostRepository;
 import com.lovecats.catlover.util.concurrent.PostExecutionThread;
 import com.lovecats.catlover.util.concurrent.ThreadExecutor;
+import com.lovecats.catlover.util.concurrent.WorkerCallback;
 
-import java.util.Collection;
+public class CatDetailInteractorImpl implements CatDetailInteractor {
 
-import retrofit.Callback;
-
-public class CatStreamInteractorImpl implements CatStreamInteractor {
-
+    private final CatPostRepository catPostRepository;
     private final PostExecutionThread postExecutionThread;
     private final ThreadExecutor threadExecutor;
 
-    CatPostRepository catPostRepository;
-    public CatStreamInteractorImpl(CatPostRepository catPostRepository,
+    public CatDetailInteractorImpl(CatPostRepository catPostRepository,
                                    ThreadExecutor threadExecutor,
                                    PostExecutionThread postExecutionThread) {
-
         this.catPostRepository = catPostRepository;
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
     }
 
     @Override
-    public void getCatPostPageAndType(final int page,
-                                      final String streamType,
-                                      final Callback<Collection<CatPostEntity>> callback) {
-
+    public void getPostFromId(final String serverId, final WorkerCallback<CatPostEntity> callback) {
         threadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                final Collection<CatPostEntity> catPostCollection =
-                        catPostRepository.getCatPostsForPageAndCategory(page, streamType);
-
+                final CatPostEntity catPostEntity = catPostRepository.getCatPost(serverId);
                 postExecutionThread.post(new Runnable() {
                     @Override
                     public void run() {
-                        callback.success(catPostCollection, null);
+                        callback.done(catPostEntity);
                     }
                 });
+
             }
         });
     }

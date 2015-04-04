@@ -1,0 +1,90 @@
+Applications Graphics Acceleration Info:
+Uptime: 225961425 Realtime: 369356161
+
+** Graphics info for pid 10073 [com.lovecats.catlover] **
+
+Recent DisplayList operations
+                  DrawRenderNode
+                    DrawRenderNode
+                      Translate
+                      DrawRenderNode
+                      Save
+                      ClipRect
+                      Translate
+                      DrawText
+                      RestoreToCount
+                    DrawRenderNode
+                      Translate
+                      DrawRenderNode
+                      Save
+                      ClipRect
+                      Translate
+                      DrawText
+                      RestoreToCount
+                    DrawRenderNode
+                      Translate
+                      DrawRenderNode
+                      Save
+                      ClipRect
+                      Translate
+                      DrawText
+                      RestoreToCount
+                    DrawRenderNode
+                      Translate
+                      DrawRenderNode
+                      Save
+                      ClipRect
+                      Translate
+                      DrawText
+                      RestoreToCount
+            RestoreToCount
+  DrawRenderNode
+RestoreToCount
+DrawRect
+DrawShadow
+DrawRoundRect
+DrawRoundRect
+DrawText
+DrawShadow
+DrawRect
+DrawRect
+DrawBitmap
+DrawBitmap
+DrawPath
+DrawText
+DrawText
+DrawText
+
+Caches:
+Current memory usage / total memory usage (bytes):
+  TextureCache          9934800 / 25165824
+  LayerCache             393216 / 16777216 (numLayers = 3)
+  Garbage layers              0
+  Active layers               0
+  RenderBufferCache           0 /  2097152
+  GradientCache           32768 /   524288
+  PathCache                4656 / 10485760
+  TessellationCache        9600 /  1048576
+  TextDropShadowCache         0 /  2097152
+  PatchCache                256 /   131072
+  FontRenderer 0 A8      524288 /   524288
+  FontRenderer 0 RGBA         0 /        0
+  FontRenderer 0 total   524288 /   524288
+Other:
+  FboCache                    0 /        0
+Total memory usage:
+  10899584 bytes, 10.39 MB
+
+Profile data in ms:
+
+	com.lovecats.catlover/com.lovecats.catlover.ui.main.MainActivity/android.view.ViewRootImpl@bf87e3f (visibility=0)
+View hierarchy:
+
+  com.lovecats.catlover/com.lovecats.catlover.ui.main.MainActivity/android.view.ViewRootImpl@bf87e3f
+  91 views, 92.53 kB of display lists
+
+
+Total ViewRootImpl: 1
+Total Views:        91
+Total DisplayList:  92.53 kB
+

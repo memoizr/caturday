@@ -13,6 +13,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.ui.common.listener.EndlessScrollListener;
+import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.ui.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.ui.stream.CatStreamModule;
@@ -26,14 +27,13 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.CatPost;
 
 public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
-    private List<CatPost> mCatPosts;
+    private List<CatPostEntity> mCatPosts;
     private CatPostAdapter catPostAdapter;
 
     public CatStreamFragment() {

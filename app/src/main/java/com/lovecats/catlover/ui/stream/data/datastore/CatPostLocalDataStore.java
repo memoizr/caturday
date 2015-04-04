@@ -6,19 +6,17 @@ import com.lovecats.catlover.ui.stream.data.db.CatPostORM;
 
 import java.util.Collection;
 
-import greendao.CatPost;
-
-public class CatPostLocalDataStore implements CatPostDataStore{
+public class CatPostLocalDataStore implements CatPostDataStore {
 
     CatPostDb catPostDb = new CatPostORM();
 
     @Override
-    public Collection<CatPost> getCatPostsForPageAndCategory(int page, String category) {
+    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
         return catPostDb.getPostsForPageAndCategory(page, category);
     }
 
     @Override
-    public CatPost getCatPost(String serverId) {
+    public CatPostEntity getCatPost(String serverId) {
         return catPostDb.getCatPostForServerId(serverId);
     }
 

@@ -13,10 +13,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.util.interpolators.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
-import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
