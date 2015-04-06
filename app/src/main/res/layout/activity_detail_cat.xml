@@ -45,7 +45,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent" />
 
-    <com.lovecats.catlover.ui.views.ExpandingView
+    <com.lovecats.catlover.capsules.common.view.views.ExpandingView
         android:id="@+id/caption_V"
         android:clipToPadding="false"
         android:clipChildren="false"

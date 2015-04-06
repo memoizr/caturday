@@ -2,7 +2,7 @@
 
     <!-- These settings headers are only used on tablets. -->
 
-    <header android:fragment="com.lovecats.catlover.ui.settings.SettingsActivity$GeneralPreferenceFragment"
+    <header android:fragment="com.lovecats.catlover.capsules.settings.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
 </preference-headers>

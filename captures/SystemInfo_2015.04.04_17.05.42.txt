@@ -77,10 +77,10 @@ Total memory usage:
 
 Profile data in ms:
 
-	com.lovecats.catlover/com.lovecats.catlover.ui.main.MainActivity/android.view.ViewRootImpl@bf87e3f (visibility=0)
+	com.lovecats.catlover/com.lovecats.catlover.module.main.MainActivity/android.view.ViewRootImpl@bf87e3f (visibility=0)
 View hierarchy:
 
-  com.lovecats.catlover/com.lovecats.catlover.ui.main.MainActivity/android.view.ViewRootImpl@bf87e3f
+  com.lovecats.catlover/com.lovecats.catlover.module.main.MainActivity/android.view.ViewRootImpl@bf87e3f
   91 views, 92.53 kB of display lists
 
 

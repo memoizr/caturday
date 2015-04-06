@@ -4,10 +4,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.lovecats.catlover.api.ApiModule;
-import com.lovecats.catlover.common.ConfigModule;
-import com.lovecats.catlover.interactors.InteractorsModule;
-import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractor;
-import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractorModule;
+import com.lovecats.catlover.capsules.common.ConfigModule;
+import com.lovecats.catlover.capsules.common.interactors.InteractorsModule;
+import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractorModule;
 import com.lovecats.catlover.util.concurrent.ThreadModule;
 
 import javax.inject.Singleton;

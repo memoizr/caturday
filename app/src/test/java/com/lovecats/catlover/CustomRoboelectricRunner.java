@@ -1,5 +1,5 @@
 package com.lovecats.catlover;
-import com.lovecats.catlover.common.Config;
+import com.lovecats.catlover.capsules.common.Config;
 
 import org.junit.runners.model.InitializationError;
 import org.robolectric.RobolectricGradleTestRunner;

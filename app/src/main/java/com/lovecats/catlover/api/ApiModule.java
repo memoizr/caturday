@@ -1,6 +1,6 @@
 package com.lovecats.catlover.api;
 
-import com.lovecats.catlover.common.Config;
+import com.lovecats.catlover.capsules.common.Config;
 
 import javax.inject.Singleton;
 
