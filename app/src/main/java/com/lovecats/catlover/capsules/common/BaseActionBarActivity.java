@@ -23,11 +23,11 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
 
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        activityGraph = null;
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activityGraph = null;
+    }
 
     protected abstract List<Object> getModules();
 }

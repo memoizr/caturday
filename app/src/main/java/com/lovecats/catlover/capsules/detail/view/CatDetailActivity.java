@@ -2,6 +2,7 @@ package com.lovecats.catlover.capsules.detail.view;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +17,7 @@ import android.transition.Transition;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -108,6 +110,13 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     public void sendMessage() {
         String message = comment_ET.getText().toString();
         catDetailPresenter.sendComment(message);
+    }
+
+    @Override
+    public void hideKeyboard() {
+        InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @Override

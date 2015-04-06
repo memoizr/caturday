@@ -92,6 +92,10 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
     @Override
     public void favoritePost() {
+        catDetailInteractor.sendVote(catPostServerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(voteEntity -> System.out.println("done, my friend!"));
     }
 
     @Override

@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 public class FullScreenActivitySoftInputHelper {
 
     public interface VisibleSizeChangeListener {
-        public void onVisibleSizeChanged(int heightDifference);
+        void onVisibleSizeChanged(int heightDifference);
     }
 
     private VisibleSizeChangeListener mVisibleSizeChangeListener;

@@ -1,8 +1,12 @@
 package com.lovecats.catlover.models.user.db;
 
+import com.google.gson.Gson;
 import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.models.user.UserMapper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import greendao.User;
 import greendao.UserDao;
@@ -28,25 +32,28 @@ public class UserORM {
         return getUserDao().count() > 0;
     }
 
-//    public static ArrayList<String> getFavoriteCatPosts(){
-//        String favorites = getLoggedInUser().getFavorites();
-//        Gson gson = new Gson();
-//        String[] idList = gson.fromJson(favorites, String[].class);
-//
-//        return new ArrayList<>(Arrays.asList(idList));
-//    }
+    public static ArrayList<String> getFavoriteCatPosts(){
+        String favorites = getLoggedInUser().getFavorites();
+        System.out.println(favorites);
+        favorites = "[]";
+        Gson gson = new Gson();
+        String[] idList = gson.fromJson(favorites, String[].class);
+        System.out.println(idList);
 
-//    public static void addFavorite(String serverId) {
-//        ArrayList<String> favorites = getFavoriteCatPosts();
-//        favorites.add(serverId);
-//        getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
-//    }
-//
-//    public static void removeFavorite(String serverId) {
-//        ArrayList<String> favorites = getFavoriteCatPosts();
-//        favorites.remove(serverId);
-//        getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
-//    }
+        return new ArrayList<>(Arrays.asList(idList));
+    }
+
+    public static void addFavorite(String serverId) {
+        ArrayList<String> favorites = getFavoriteCatPosts();
+        favorites.add(serverId);
+        getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
+    }
+
+    public static void removeFavorite(String serverId) {
+        ArrayList<String> favorites = getFavoriteCatPosts();
+        favorites.remove(serverId);
+        getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
+    }
 
     public static UserEntity getLoggedInUser() {
         User user = getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).unique();

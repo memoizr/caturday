@@ -23,7 +23,7 @@
         <activity
             android:name=".capsules.detail.view.CatDetailActivity"
             android:label="@string/title_activity_detail_cat"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".capsules.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

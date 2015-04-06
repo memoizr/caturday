@@ -3,6 +3,7 @@ package com.lovecats.catlover.capsules.detail;
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.common.Config;
 import com.lovecats.catlover.capsules.detail.api.CommentApi;
+import com.lovecats.catlover.capsules.detail.api.VoteApi;
 import com.lovecats.catlover.models.comment.CommentCloudDataStore;
 import com.lovecats.catlover.models.comment.repository.CommentRepository;
 import com.lovecats.catlover.models.comment.repository.CommentRepositoryImpl;
@@ -12,9 +13,13 @@ import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
 import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenterImpl;
 import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
 import com.lovecats.catlover.capsules.detail.view.CatDetailView;
+import com.lovecats.catlover.models.user.db.UserORM;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 import com.lovecats.catlover.models.user.repository.UserRepositoryImpl;
 import com.lovecats.catlover.models.catpost.repository.CatPostRepository;
+import com.lovecats.catlover.models.vote.datastore.VoteCloudDataStore;
+import com.lovecats.catlover.models.vote.repository.VoteRepository;
+import com.lovecats.catlover.models.vote.repository.VoteRepositoryImpl;
 import com.lovecats.catlover.util.concurrent.PostExecutionThread;
 import com.lovecats.catlover.util.concurrent.ThreadExecutor;
 
@@ -44,7 +49,7 @@ public class CatDetailModule {
     }
 
     @Provides @Singleton public UserRepository provideUserRepository() {
-        return new UserRepositoryImpl();
+        return new UserRepositoryImpl(new UserORM());
     }
 
     @Provides @Singleton public CommentApi provideCommentApi(UserRepository userRepository) {
@@ -61,6 +66,28 @@ public class CatDetailModule {
         return api;
     }
 
+    @Provides @Singleton public VoteApi provideVoteApi(UserRepository userRepository) {
+        String endpoint = Config.getEndpoint();
+
+        String authToken = userRepository.getCurrentUser().getAuthToken();
+        RequestInterceptor interceptor = requestFacade -> requestFacade.addHeader("Auth-Token", authToken);
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(endpoint)
+                .setRequestInterceptor(interceptor)
+                .build();
+
+        final VoteApi api = adapter.create(VoteApi.class);
+        return api;
+    }
+
+    @Provides @Singleton public VoteCloudDataStore provideVoteCloudDataStore(VoteApi voteApi) {
+        return new VoteCloudDataStore(voteApi);
+    }
+
+    @Provides @Singleton public VoteRepository provideVoteRepository(VoteCloudDataStore voteCloudDataStore) {
+        return new VoteRepositoryImpl(voteCloudDataStore);
+    }
+
     @Provides @Singleton public CommentCloudDataStore provideCommentCloudDataStore(CommentApi commentApi) {
         return new CommentCloudDataStore(commentApi);
     }
@@ -73,12 +100,14 @@ public class CatDetailModule {
             CatPostRepository catPostRepository,
             UserRepository userRepository,
             CommentRepository commentRepository,
+            VoteRepository voteRepository,
             ThreadExecutor threadExecutor,
             PostExecutionThread postExecutionThread) {
 
         return new CatDetailInteractorImpl(catPostRepository,
                 userRepository,
                 commentRepository,
+                voteRepository,
                 threadExecutor,
                 postExecutionThread);
     }

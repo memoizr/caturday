@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
     <FrameLayout
         android:id="@+id/detail_reveal"
@@ -20,30 +20,33 @@
         android:minHeight="?attr/actionBarSize"
         android:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <ImageView
         android:id="@+id/cat_detail_IV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/favorite_B"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:elevation="8dp"
-        android:padding="12dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="52dp"
-        android:background="@color/white"
         android:layout_width="56dp"
-        android:layout_height="56dp" />
+        android:layout_height="56dp"
+        android:layout_marginBottom="56dp"
+        android:layout_marginRight="16dp"
+        android:padding="12dp"
+        android:elevation="8dp"
+
+        android:scaleType="fitXY"
+        android:background="@drawable/fab_bg"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_favorite_outline_white_48dp"/>
 
     <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
         android:id="@+id/comments_LV"
         android:clipToPadding="false"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_width="match_parent"/>
 
     <com.lovecats.catlover.capsules.common.view.views.ExpandingView
         android:id="@+id/caption_V"
@@ -80,8 +83,7 @@
             android:id="@+id/send_message_B"
             android:layout_gravity="right"
             android:src="@drawable/ic_send_grey600_24dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
-
-        </FrameLayout>
+            android:layout_width="56dp"
+            android:layout_height="56dp"/>
+    </FrameLayout>
 </RelativeLayout>

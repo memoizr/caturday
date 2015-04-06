@@ -23,5 +23,7 @@ public interface CatDetailView {
 
     void initCompat21();
 
+    void hideKeyboard();
+
     CommentsAdapter getCommentsAdapter();
 }
