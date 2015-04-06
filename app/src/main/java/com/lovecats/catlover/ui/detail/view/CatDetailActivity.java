@@ -2,16 +2,11 @@ package com.lovecats.catlover.ui.detail.view;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -34,22 +25,17 @@ import android.widget.ImageView;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.google.gson.JsonObject;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.adapters.CommentsAdapter;
 import com.lovecats.catlover.helpers.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.ui.common.BaseActionBarActivity;
 import com.lovecats.catlover.ui.detail.CatDetailModule;
+import com.lovecats.catlover.ui.detail.adapter.CommentsAdapter;
 import com.lovecats.catlover.ui.detail.data.CommentEntity;
 import com.lovecats.catlover.ui.detail.presenter.CatDetailPresenter;
-import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 import com.lovecats.catlover.ui.views.ExpandingView;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,6 +56,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     @InjectView(R.id.new_comment_V) View new_comment_V;
     @InjectView(R.id.comment_TE) EditText comment_ET;
     @Inject CatDetailPresenter catDetailPresenter;
+    int headerBottom;
     private String url;
     private ViewGroup header;
     private int captionHeight;
@@ -89,7 +76,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        catDetailPresenter.create(getIntent().getExtras());
+        catDetailPresenter.create(this, getIntent().getExtras());
     }
 
     @Override
@@ -105,89 +92,6 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         darkMuted = palette.getDarkMutedColor(0x000000);
         vibrantLight = palette.getLightVibrantColor(0x000000);
         caption_V.setBackgroundColor(vibrant);
-    }
-
-    private void setUpToolbar() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.action_share:
-                        shareTextUrl();
-                        break;
-                    case R.id.action_download:
-                        downloadImage();
-                        break;
-
-                }
-                return false;
-            }
-        });
-    }
-
-    private void shareTextUrl() {
-        Intent share = new Intent(android.content.Intent.ACTION_SEND);
-        share.setType("text/plain");
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        share.putExtra(Intent.EXTRA_SUBJECT, "Check out this cat!");
-        share.putExtra(Intent.EXTRA_TEXT, url);
-
-        startActivity(Intent.createChooser(share, "Share link!"));
-    }
-
-    private void downloadImage() {
-//        final String fileName = catPostServerId + ".jpg";
-        final Context mContext = this;
-        Target target = new Target() {
-
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-
-                try {
-
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                    String path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), bitmap, "Title", null);
-                    Uri uri = Uri.parse(path);
-                    Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-                    intent.addCategory((Intent.CATEGORY_DEFAULT));
-                    intent.setDataAndType(uri, "image/jpeg");
-                    intent.putExtra("mimeType", "image/jpg");
-                    mContext.startActivity(Intent.createChooser(intent, "Set as:"));
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable arg0) {
-                return;
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable arg0) {
-                return;
-            }
-        };
-
-        Picasso.with(this)
-                .load(url)
-                .into(target);
     }
 
     @Override
@@ -215,7 +119,66 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         comments_RV.setLayoutManager(layoutManager);
     }
 
-    int headerBottom;
+    @Override
+    public void initImageView(String imageUrl) {
+        Picasso.with(this).load(imageUrl).into(cat_detail_IV);
+        new PhotoViewAttacher(cat_detail_IV);
+    }
+
+    @Override
+    public void initIMEListener() {
+        FullScreenActivitySoftInputHelper.assistActivity(this,
+                heightDifference -> {
+                    if (heightDifference != 0) {
+                        new_comment_V.animate()
+                                .setInterpolator(new HyperAccelerateDecelerateInterpolator())
+                                .setDuration(100)
+                                .translationYBy(heightDifference)
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        if (heightDifference < 0) {
+                                            comments_RV.setPadding(0, 0, 0, -heightDifference);
+                                            comments_RV.smoothScrollBy(0, -heightDifference);
+                                        } else {
+                                            comments_RV.smoothScrollBy(0, -heightDifference);
+                                            comments_RV.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    comments_RV.setPadding(0, 0, 0, 0);
+                                                }
+                                            }, 416);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+                                    }
+                                })
+                                .start();
+                    }
+                });
+    }
+
+    @Override
+    public void initToolbar() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
+
+        toolbar.setOnMenuItemClickListener(catDetailPresenter);
+    }
 
     @Override
     public void setRecyclerViewAdapter(List<CommentEntity> commentEntities) {
@@ -228,23 +191,20 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         mChildOfContent.getWindowVisibleDisplayFrame(r);
         final int headerHeight = r.bottom;
 
-        com.lovecats.catlover.ui.detail.adapter.CommentsAdapter adapter =
-                new com.lovecats.catlover.ui.detail.adapter.CommentsAdapter(headerHeight);
+        CommentsAdapter adapter =
+                new CommentsAdapter(headerHeight);
         adapter.setCommentEntities(commentEntities);
 
         comments_RV.setAdapter(adapter);
 
-        comments_RV.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getY() > headerBottom - captionHeight) {
-                    return false;
-                } else {
-                    if (!activityClosed) {
-                        cat_detail_IV.dispatchTouchEvent(event);
-                    }
-                    return true;
+        comments_RV.setOnTouchListener((v, event) -> {
+            if (event.getY() > headerBottom - captionHeight) {
+                return false;
+            } else {
+                if (!activityClosed) {
+                    cat_detail_IV.dispatchTouchEvent(event);
                 }
+                return true;
             }
         });
 
@@ -298,76 +258,6 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     }
 
     @Override
-    public void initImageView(String imageUrl) {
-        Picasso.with(this).load(imageUrl).into(cat_detail_IV);
-        new PhotoViewAttacher(cat_detail_IV);
-    }
-
-    @Override
-    public void initIMEListener() {
-        FullScreenActivitySoftInputHelper.assistActivity(this,
-                new FullScreenActivitySoftInputHelper.VisibleSizeChangeListener() {
-                    @Override
-                    public void onVisibleSizeChanged(final int heightDifference) {
-                        if (heightDifference != 0) {
-                            new_comment_V.animate()
-                                    .setInterpolator(new HyperAccelerateDecelerateInterpolator())
-                                    .setDuration(100)
-                                    .translationYBy(heightDifference)
-                                    .setListener(new Animator.AnimatorListener() {
-                                        @Override
-                                        public void onAnimationStart(Animator animation) {
-                                        }
-
-                                        @Override
-                                        public void onAnimationEnd(Animator animation) {
-                                            if (heightDifference < 0) {
-                                                comments_RV.setPadding(0, 0, 0, -heightDifference);
-                                                comments_RV.smoothScrollBy(0, -heightDifference);
-                                            } else {
-                                                comments_RV.smoothScrollBy(0, -heightDifference);
-                                                comments_RV.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        comments_RV.setPadding(0, 0, 0, 0);
-                                                    }
-                                                }, 416);
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onAnimationCancel(Animator animation) {
-                                        }
-
-                                        @Override
-                                        public void onAnimationRepeat(Animator animation) {
-                                        }
-                                    })
-                                    .start();
-                        }
-                    }
-                });
-
-    }
-
-    @Override
-    public void initToolbar() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
-
-        toolbar.setOnMenuItemClickListener(catDetailPresenter);
-    }
-
-    @Override
     public void initButton() {
 
     }
@@ -380,6 +270,11 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     @Override
     public void initCompat21() {
         setUpActivityTransitions();
+    }
+
+    @Override
+    public CommentsAdapter getCommentsAdapter() {
+        return (CommentsAdapter) comments_RV.getAdapter();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

@@ -1,5 +1,8 @@
 package com.lovecats.catlover.ui.detail.view;
 
+import android.support.v7.widget.RecyclerView;
+
+import com.lovecats.catlover.ui.detail.adapter.CommentsAdapter;
 import com.lovecats.catlover.ui.detail.data.CommentEntity;
 import com.lovecats.catlover.ui.stream.data.CatPostEntity;
 
@@ -22,4 +25,6 @@ public interface CatDetailView {
     void initCaptionHeader();
 
     void initCompat21();
+
+    CommentsAdapter getCommentsAdapter();
 }

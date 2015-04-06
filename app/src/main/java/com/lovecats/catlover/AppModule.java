@@ -3,6 +3,7 @@ package com.lovecats.catlover;
 import android.app.Application;
 import android.content.Context;
 
+import com.lovecats.catlover.api.ApiModule;
 import com.lovecats.catlover.common.ConfigModule;
 import com.lovecats.catlover.interactors.InteractorsModule;
 import com.lovecats.catlover.ui.stream.interactor.CatStreamInteractor;
@@ -26,6 +27,7 @@ import dagger.Provides;
                 ConfigModule.class,
                 CatStreamInteractorModule.class,
                 ThreadModule.class,
+                ApiModule.class,
                 InteractorsModule.class
         }
 )

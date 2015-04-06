@@ -40,6 +40,7 @@ public class LoginHandler {
                 user.setAuthToken(authModel.getAuthToken());
                 user.setLoggedIn(true);
                 User newUser = UserModel.insertOrUpdate(user);
+                Config.setAuthToken(authModel.getAuthToken());
                 callback.success(newUser, response);
             }
 

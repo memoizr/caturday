@@ -39,4 +39,16 @@ public class Config {
         String endpoint = rootUrl + API_VERSION;
         return endpoint;
     }
+
+    public static String getAuthToken() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+        String authToken = prefs.getString("authToken", null);
+        System.out.println(authToken);
+        return authToken;
+    }
+
+    public static void setAuthToken(String authToken) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+        prefs.edit().putString("authToken", authToken);
+    }
 }

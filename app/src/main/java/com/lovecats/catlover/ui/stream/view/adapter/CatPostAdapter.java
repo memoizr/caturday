@@ -76,21 +76,18 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    mCatPosts.get(i).getTotalVotesCount());
 
             Picasso.with(mContext).load(mCatPosts.get(i).getImageUrl()).into(myViewHolder.cat_IV);
-            myViewHolder.catContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((MainActivity)mContext).toggleArrow(true);
-                    Intent intent = new Intent(mContext, CatDetailActivity.class);
-                    ActivityOptionsCompat options =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                    (Activity) mContext,
-                                    Pair.create((View) myViewHolder.cat_IV, transitionName)
-                            );
-                    intent.putExtra("transition", transitionName);
-                    intent.putExtra("url", mCatPosts.get(j).getImageUrl());
-                    intent.putExtra("serverId", mCatPosts.get(j).getServerId());
-                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                }
+            myViewHolder.catContainer.setOnClickListener(view -> {
+                ((MainActivity) mContext).toggleArrow(true);
+                Intent intent = new Intent(mContext, CatDetailActivity.class);
+                ActivityOptionsCompat options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                (Activity) mContext,
+                                Pair.create((View) myViewHolder.cat_IV, transitionName)
+                        );
+                intent.putExtra("transition", transitionName);
+                intent.putExtra("url", mCatPosts.get(j).getImageUrl());
+                intent.putExtra("serverId", mCatPosts.get(j).getServerId());
+                ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
             });
         }
     }

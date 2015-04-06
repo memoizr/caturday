@@ -14,24 +14,24 @@ import retrofit.client.Response;
  */
 public class CommentPoster extends BaseRequest {
 
-    public static void postComment(String authToken, final CommentEntity commentModel,
-                                   final Callback<CommentEntity> callback) {
-
-
-        RestAdapter restAdapter = getRestAdapter();
-        restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
-        CommentApi api = restAdapter.create(CommentApi.class);
-
-        api.postComment(authToken, commentModel, new Callback<CommentEntity>() {
-            @Override
-            public void success(CommentEntity commentEntity, Response response) {
-                callback.success(commentEntity, response);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
-    }
+//    public static void postComment(String authToken, final CommentEntity commentModel,
+//                                   final Callback<CommentEntity> callback) {
+//
+//
+//        RestAdapter restAdapter = getRestAdapter();
+//        restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
+//        CommentApi api = restAdapter.create(CommentApi.class);
+//
+//        api.postComment(authToken, commentModel, new Callback<CommentEntity>() {
+//            @Override
+//            public void success(CommentEntity commentEntity, Response response) {
+//                callback.success(commentEntity, response);
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                error.printStackTrace();
+//            }
+//        });
+//    }
 }

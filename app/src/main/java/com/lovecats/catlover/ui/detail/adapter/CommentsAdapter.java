@@ -61,11 +61,9 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        System.out.println(commentEntities.size());
         if (holder instanceof CommentsViewHolder) {
             CommentEntity commentEntity = commentEntities.get(position);
 
-            System.out.println(commentEntity.getContent());
             ((CommentsViewHolder) holder).tvComment.setText(commentEntity.getContent());
             ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUser().getUsername());
             String url = commentEntity.getUser().getImage_url();
@@ -80,6 +78,12 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
     public void setCommentEntities(List<CommentEntity> commentEntities) {
         this.commentEntities = commentEntities;
+        notifyDataSetChanged();
+    }
+
+
+    public void addCommentEntity(CommentEntity commentEntity) {
+        this.commentEntities.add(commentEntity);
         notifyDataSetChanged();
     }
 

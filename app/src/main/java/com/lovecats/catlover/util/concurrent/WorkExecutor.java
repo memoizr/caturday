@@ -6,10 +6,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by Cat#2 on 03/04/15.
- */
-
 public class WorkExecutor implements ThreadExecutor {
 
     private static final int INITIAL_POOL_SIZE = 3;
@@ -40,11 +36,13 @@ public class WorkExecutor implements ThreadExecutor {
 
     private static class JobThreadFactory implements ThreadFactory {
 
-        private static final String THREAD_NAME = "android_";
-        private int counter = 0;
+        private static final String THREAD_NAME = "caturday_";
+        private static int threadCount = 0;
 
         @Override
         public Thread newThread(Runnable runnable) {
+            int counter = threadCount;
+            threadCount++;
             return new Thread(runnable, THREAD_NAME + counter);
         }
     }

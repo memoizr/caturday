@@ -15,6 +15,7 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     private final ThreadExecutor threadExecutor;
 
     CatPostRepository catPostRepository;
+
     public CatStreamInteractorImpl(CatPostRepository catPostRepository,
                                    ThreadExecutor threadExecutor,
                                    PostExecutionThread postExecutionThread) {
@@ -29,19 +30,11 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
                                       final String streamType,
                                       final Callback<Collection<CatPostEntity>> callback) {
 
-        threadExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                final Collection<CatPostEntity> catPostCollection =
-                        catPostRepository.getCatPostsForPageAndCategory(page, streamType);
+        threadExecutor.execute(() -> {
+            final Collection<CatPostEntity> catPostCollection =
+                    catPostRepository.getCatPostsForPageAndCategory(page, streamType);
 
-                postExecutionThread.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.success(catPostCollection, null);
-                    }
-                });
-            }
+            postExecutionThread.post(() -> callback.success(catPostCollection, null));
         });
     }
 }
