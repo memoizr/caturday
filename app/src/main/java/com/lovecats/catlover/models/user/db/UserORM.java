@@ -1,30 +1,44 @@
 package com.lovecats.catlover.models.user.db;
 
 import com.google.gson.Gson;
-import com.lovecats.catlover.data.DaoManager;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.models.user.UserMapper;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
+import greendao.DaoSession;
 import greendao.User;
 import greendao.UserDao;
 
 public class UserORM {
 
-    public static User insertOrUpdate(User user) {
+    private DaoSession daoSession;
+
+    private static Gson gson = new Gson();
+
+    public UserORM(DaoSession daoSession) {
+        this.daoSession = daoSession;
+    }
+
+    public User logInUser(UserEntity userEntity) {
         flushUsers();
+        User user = UserMapper.fromEntity(userEntity);
         user.setLoggedIn(true);
         long id = getUserDao().insertOrReplace(user);
         return getUserDao().loadByRowId(id);
     }
 
-    private static UserDao getUserDao() {
-        return DaoManager.getDaoSession().getUserDao();
+    private UserDao getUserDao() {
+        return daoSession.getUserDao();
     }
 
-    public static void flushUsers() {
+    public void flushUsers() {
         getUserDao().deleteAll();
     }
 
@@ -32,31 +46,38 @@ public class UserORM {
         return getUserDao().count() > 0;
     }
 
-    public static ArrayList<String> getFavoriteCatPosts(){
-        String favorites = getLoggedInUser().getFavorites();
-        System.out.println(favorites);
-        favorites = "[]";
-        Gson gson = new Gson();
-        String[] idList = gson.fromJson(favorites, String[].class);
-        System.out.println(idList);
-
-        return new ArrayList<>(Arrays.asList(idList));
+    public ArrayList<String> getFavoriteCatPosts(){
+        String favorites;
+        favorites = currentUser().getFavorites();
+        if (favorites == null) {
+            favorites = "[]";
+        }
+//        Collection<String> idList = gson.fromJson(favorites, collectionType);
+        Type listType = new TypeToken<Collection<String>>() {}.getType();
+        Collection<String> idList = new Gson().fromJson(favorites, listType);
+        return new ArrayList<>(idList);
     }
 
-    public static void addFavorite(String serverId) {
+    public void addFavorite(String serverId) {
         ArrayList<String> favorites = getFavoriteCatPosts();
         favorites.add(serverId);
-        getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
-    }
+        String array = gson.toJson(favorites);
 
-    public static void removeFavorite(String serverId) {
+        currentUser().setFavorites(array);
+    }
+    public void removeFavorite(String serverId) {
         ArrayList<String> favorites = getFavoriteCatPosts();
         favorites.remove(serverId);
-        getLoggedInUser().setFavorites(Arrays.toString(favorites.toArray()));
+        currentUser().setFavorites(Arrays.toString(favorites.toArray()));
     }
 
-    public static UserEntity getLoggedInUser() {
+    public User currentUser() {
         User user = getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).unique();
+        return user;
+    }
+
+    public UserEntity getLoggedInUser() {
+        User user = currentUser();
         return UserMapper.fromUser(user);
     }
 }

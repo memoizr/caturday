@@ -3,7 +3,6 @@ import com.lovecats.catlover.capsules.common.Config;
 
 import org.junit.runners.model.InitializationError;
 import org.robolectric.RobolectricGradleTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.manifest.AndroidManifest;
 import org.robolectric.res.FileFsFile;
 import org.robolectric.res.FsFile;
@@ -20,7 +19,7 @@ public class CustomRoboelectricRunner extends RobolectricGradleTestRunner {
         super(klass);
     }
 
-    protected AndroidManifest getAppManifest(Config config) {
+    protected AndroidManifest getAppManifest(org.robolectric.annotation.Config config) {
         AndroidManifest appManifest = super.getAppManifest(config);
         String moduleRoot = getModuleRootPath(config);
         FsFile androidManifestFile = FileFsFile.from(moduleRoot, appManifest.getAndroidManifestFile().getPath());
@@ -32,7 +31,7 @@ public class CustomRoboelectricRunner extends RobolectricGradleTestRunner {
         return new AndroidManifest(androidManifestFile, resDirectory, assetsDirectory);
     }
 
-    private String getModuleRootPath(Config config) {
+    private String getModuleRootPath(org.robolectric.annotation.Config config) {
         String moduleRoot = config.constants().getResource("").toString().replace("file:", "");
         return moduleRoot.substring(0, moduleRoot.indexOf("/build"));
     }

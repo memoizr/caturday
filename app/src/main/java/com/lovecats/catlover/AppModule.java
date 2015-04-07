@@ -7,6 +7,7 @@ import com.lovecats.catlover.api.ApiModule;
 import com.lovecats.catlover.capsules.common.ConfigModule;
 import com.lovecats.catlover.capsules.common.interactors.InteractorsModule;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractorModule;
+import com.lovecats.catlover.data.DataModule;
 import com.lovecats.catlover.util.concurrent.ThreadModule;
 
 import javax.inject.Singleton;
@@ -24,6 +25,7 @@ import dagger.Provides;
         },
         includes = {
                 ConfigModule.class,
+                DataModule.class,
                 CatStreamInteractorModule.class,
                 ThreadModule.class,
                 ApiModule.class,

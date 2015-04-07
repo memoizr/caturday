@@ -15,12 +15,12 @@ public class DaoManager {
 
     private DaoManager(Context context){
         sessionContext = context;
-        setupDatabase();
     }
 
     public static DaoManager DaoLoader(Context c) {
         if (instance == null) {
             instance = new DaoManager(c);
+            setupDatabase();
         }
         return instance;
     }

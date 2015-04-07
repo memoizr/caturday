@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import greendao.DaoSession;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
@@ -48,8 +49,8 @@ public class CatDetailModule {
         return catDetailView;
     }
 
-    @Provides @Singleton public UserRepository provideUserRepository() {
-        return new UserRepositoryImpl(new UserORM());
+    @Provides @Singleton public UserRepository provideUserRepository(DaoSession daoSession) {
+        return new UserRepositoryImpl(new UserORM(daoSession));
     }
 
     @Provides @Singleton public CommentApi provideCommentApi(UserRepository userRepository) {
