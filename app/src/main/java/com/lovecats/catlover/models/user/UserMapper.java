@@ -2,9 +2,6 @@ package com.lovecats.catlover.models.user;
 
 import greendao.User;
 
-/**
- * Created by Cat#2 on 05/04/15.
- */
 public class UserMapper {
 
     public static User fromEntity(UserEntity userEntity) {

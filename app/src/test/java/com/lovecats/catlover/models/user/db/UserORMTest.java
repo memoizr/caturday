@@ -34,6 +34,8 @@ public class UserORMTest {
     private UserEntity user;
     private UserORM userORM;
     private DaoMaster.DevOpenHelper helper;
+    private Gson gson = new Gson();
+
 
     @Before
     public void initTest() throws Exception {
@@ -74,12 +76,10 @@ public class UserORMTest {
     @Test
     public void getFavoriteCatPostsReturnsCatPosts() {
         String[] favorites = {"foo", "bar"};
-        Gson gson = new Gson();
+        gson = new Gson();
         String favoritesJSON = gson.toJson(favorites);
 
         user = new UserEntity();
-        user.setFirstName("foo");
-        user.setUsername("boo");
         user.setFavorites(favoritesJSON);
         userORM.logInUser(user);
 
@@ -92,8 +92,6 @@ public class UserORMTest {
     public void getFavoriteCatPostsReturnsEmptyIfNoFavoritesArePresent() {
 
         user = new UserEntity();
-        user.setFirstName("foo");
-        user.setUsername("boo");
         userORM.logInUser(user);
 
         List<String> favoriteList = userORM.getFavoriteCatPosts();
@@ -104,8 +102,6 @@ public class UserORMTest {
     @Test
     public void addFavoritesAddsFavoriteToUser() {
         user = new UserEntity();
-        user.setFirstName("foo");
-        user.setUsername("boo");
         userORM.logInUser(user);
 
         String newFavorites = "12345";
@@ -115,6 +111,26 @@ public class UserORMTest {
         List<String> favoriteList = userORM.getFavoriteCatPosts();
 
         assertEquals(Arrays.asList(newFavorites), favoriteList);
+    }
+
+    @Test
+    public void removeFavoritesRemoveFavoriteToUser() {
+        String[] favorites = {"foo", "bar", "12345"};
+        String[] favoritesRemaining = {"foo", "bar"};
+        String doomedFavorites = "12345";
+
+        String favoritesJSON = gson.toJson(favorites);
+
+        user = new UserEntity();
+        user.setFavorites(favoritesJSON);
+        userORM.logInUser(user);
+
+
+        userORM.removeFavorite(doomedFavorites);
+
+        List<String> favoriteList = userORM.getFavoriteCatPosts();
+
+        assertEquals(Arrays.asList(favoritesRemaining), favoriteList);
     }
 
     @After

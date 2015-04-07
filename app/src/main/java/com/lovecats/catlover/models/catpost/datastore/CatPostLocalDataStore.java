@@ -8,7 +8,11 @@ import java.util.Collection;
 
 public class CatPostLocalDataStore implements CatPostDataStore {
 
-    CatPostDb catPostDb = new CatPostORM();
+    private CatPostDb catPostDb;
+
+    public CatPostLocalDataStore(CatPostDb catPostDb) {
+        this.catPostDb = catPostDb;
+    }
 
     @Override
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {

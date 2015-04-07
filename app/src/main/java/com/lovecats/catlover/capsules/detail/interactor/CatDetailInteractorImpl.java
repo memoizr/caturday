@@ -12,6 +12,8 @@ import com.lovecats.catlover.util.concurrent.PostExecutionThread;
 import com.lovecats.catlover.util.concurrent.ThreadExecutor;
 import com.lovecats.catlover.util.concurrent.WorkerCallback;
 
+import java.util.Arrays;
+
 import rx.Observable;
 
 public class CatDetailInteractorImpl implements CatDetailInteractor {
@@ -74,11 +76,12 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
 
         addFavorite(serverId);
 
+        System.out.println(Arrays.toString(userRepository.getAllFavoritePost().toArray()));
+
         return  voteRepository.sendVote(voteEntity);
     }
 
     private void addFavorite(String serverId) {
-        System.out.println("adding favorite to local storage");
         userRepository.addFavoritePost(serverId);
     }
 

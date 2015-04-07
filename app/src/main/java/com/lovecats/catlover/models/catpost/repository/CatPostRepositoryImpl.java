@@ -4,18 +4,19 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.datastore.CatPostDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatStreamCloudDataStore;
+import com.lovecats.catlover.models.catpost.db.CatPostDb;
 
 import java.util.Collection;
 
-public class CatPostRepositoryImpl implements CatPostRepository{
+import greendao.DaoSession;
 
-    private final CatPostDataStore catPostDataStore;
+public class CatPostRepositoryImpl implements CatPostRepository {
+
     private final CatPostLocalDataStore catPostLocalDataStore;
     private final CatStreamCloudDataStore catStreamCloudDataStore;
 
-    public CatPostRepositoryImpl(CatPostDataStore catPostDataStore) {
-        this.catPostDataStore = catPostDataStore;
-        this.catPostLocalDataStore = new CatPostLocalDataStore();
+    public CatPostRepositoryImpl(CatPostDb catPostDb) {
+        this.catPostLocalDataStore = new CatPostLocalDataStore(catPostDb);
         this.catStreamCloudDataStore = new CatStreamCloudDataStore();
     }
 
@@ -28,6 +29,6 @@ public class CatPostRepositoryImpl implements CatPostRepository{
 
     @Override
     public CatPostEntity getCatPost(String serverId) {
-        return catPostDataStore.getCatPost(serverId);
+        return catPostLocalDataStore.getCatPost(serverId);
     }
 }

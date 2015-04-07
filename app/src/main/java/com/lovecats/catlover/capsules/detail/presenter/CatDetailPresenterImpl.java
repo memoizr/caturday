@@ -103,11 +103,9 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
         switch (item.getItemId()) {
             case R.id.action_share:
-                System.out.println("share");
                 shareTextUrl();
                 break;
             case R.id.action_download:
-                System.out.println("download");
                 downloadImage();
                 break;
         }

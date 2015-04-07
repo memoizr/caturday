@@ -1,7 +1,6 @@
 package com.lovecats.catlover.models.catpost.db;
 
 import com.lovecats.catlover.capsules.common.Config;
-import com.lovecats.catlover.data.DaoManager;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.mapper.CatPostMapper;
 
@@ -9,11 +8,18 @@ import java.util.Collection;
 
 import greendao.CatPost;
 import greendao.CatPostDao;
+import greendao.DaoSession;
 
 public class CatPostORM implements CatPostDb {
 
-    private static CatPostDao getCatPostDao() {
-        return DaoManager.getDaoSession().getCatPostDao();
+    private final DaoSession daoSession;
+
+    public CatPostORM(DaoSession daoSession) {
+        this.daoSession = daoSession;
+    }
+
+    private CatPostDao getCatPostDao() {
+        return daoSession.getCatPostDao();
     }
 
     @Override
@@ -89,7 +95,7 @@ public class CatPostORM implements CatPostDb {
         return getCatPostDao().loadByRowId(id);
     }
 
-    public static void insertOrUpdateInTx(Collection<CatPost> catPostCollection) {
+    public void insertOrUpdateInTx(Collection<CatPost> catPostCollection) {
         getCatPostDao().insertOrReplaceInTx(catPostCollection);
     }
 }
