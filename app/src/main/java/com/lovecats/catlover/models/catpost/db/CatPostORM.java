@@ -5,6 +5,8 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.mapper.CatPostMapper;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import greendao.CatPost;
 import greendao.CatPostDao;
@@ -46,11 +48,13 @@ public class CatPostORM implements CatPostDb {
     }
 
     @Override
-    public Collection<CatPostEntity> getCatPostsForServerIds(Collection<String> catPostServerIds) {
+    public Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> catPostServerIds) {
         Collection<CatPost> catPostCollection = getCatPostDao()
                 .queryBuilder()
                 .where(CatPostDao.Properties.ServerId.in(catPostServerIds))
                 .list();
+
+        System.out.println(catPostCollection.size());
 
         return CatPostMapper.toEntity(catPostCollection);
     }

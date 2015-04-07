@@ -5,6 +5,7 @@ import com.lovecats.catlover.models.catpost.db.CatPostDb;
 import com.lovecats.catlover.models.catpost.db.CatPostORM;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 public class CatPostLocalDataStore implements CatPostDataStore {
 
@@ -17,6 +18,11 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     @Override
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
         return catPostDb.getPostsForPageAndCategory(page, category);
+    }
+
+    @Override
+    public Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> ids) {
+        return catPostDb.getCatPostsForServerIds(ids);
     }
 
     @Override

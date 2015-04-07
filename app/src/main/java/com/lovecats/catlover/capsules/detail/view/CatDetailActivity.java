@@ -30,7 +30,6 @@ import com.lovecats.catlover.R;
 import com.lovecats.catlover.util.helper.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.detail.CatDetailModule;
-import com.lovecats.catlover.capsules.detail.adapter.CommentsAdapter;
 import com.lovecats.catlover.models.comment.CommentEntity;
 import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
 import com.lovecats.catlover.capsules.common.view.views.ExpandingView;

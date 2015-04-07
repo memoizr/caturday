@@ -18,7 +18,7 @@ import com.lovecats.catlover.data.user.UserModel;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.drawer.DrawerActivity;
-import com.lovecats.catlover.capsules.favorites.FavoritesFragment;
+import com.lovecats.catlover.capsules.favorites.view.FavoritesFragment;
 import com.lovecats.catlover.capsules.login.LoginActivity;
 import com.lovecats.catlover.capsules.dashboard.DashboardFragment;
 import com.lovecats.catlover.R;

@@ -1,6 +1,5 @@
 package com.lovecats.catlover.capsules.detail.view;
 
-import com.lovecats.catlover.capsules.detail.adapter.CommentsAdapter;
 import com.lovecats.catlover.models.comment.CommentEntity;
 
 import java.util.List;

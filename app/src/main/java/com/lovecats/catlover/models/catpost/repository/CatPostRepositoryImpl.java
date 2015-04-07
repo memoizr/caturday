@@ -7,6 +7,7 @@ import com.lovecats.catlover.models.catpost.datastore.CatStreamCloudDataStore;
 import com.lovecats.catlover.models.catpost.db.CatPostDb;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import greendao.DaoSession;
 
@@ -24,6 +25,12 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
         Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForPageAndCategory(page, category);
         catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+        return catPostEntities;
+    }
+
+    @Override
+    public Collection<CatPostEntity> getCatPostsForIds(HashSet<String> ids) {
+        Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForServerIds(ids);
         return catPostEntities;
     }
 

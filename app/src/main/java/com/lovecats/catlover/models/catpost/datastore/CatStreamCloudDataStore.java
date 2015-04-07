@@ -5,6 +5,7 @@ import com.lovecats.catlover.capsules.dashboard.stream.api.CatPostApi;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import retrofit.RestAdapter;
 
@@ -23,6 +24,11 @@ public class CatStreamCloudDataStore implements CatPostDataStore {
         Collection<CatPostEntity> catPostEntities = api.getPosts(page, category);
 
         return catPostEntities;
+    }
+
+    @Override
+    public Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> ids) {
+        return new HashSet<>();
     }
 
     @Override

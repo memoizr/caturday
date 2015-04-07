@@ -3,6 +3,7 @@ package com.lovecats.catlover.models.catpost.db;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 public interface CatPostDb {
 
@@ -10,7 +11,7 @@ public interface CatPostDb {
 
     Collection<CatPostEntity> getPostsForPageAndCategory(int page, String category);
 
-    Collection<CatPostEntity> getCatPostsForServerIds(Collection<String> catPostServerIds);
+    Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> catPostServerIds);
 
     CatPostEntity getRandomCatPost();
 

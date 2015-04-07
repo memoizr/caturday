@@ -1,16 +1,16 @@
-package com.lovecats.catlover.capsules.detail.adapter;
+package com.lovecats.catlover.capsules.favorites.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.view.HeaderAdapter;
-import com.lovecats.catlover.models.comment.CommentEntity;
+import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,14 +18,13 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
-
+public class FavoritesAdapter extends HeaderAdapter {
     private int headerHeight;
-    private List<CommentEntity> commentEntities;
+    private List<CatPostEntity> catPostEntities;
     private Context context;
 
-    public CommentsAdapter(int headerHeight) {
-       this.headerHeight = headerHeight;
+    public FavoritesAdapter(int headerHeight) {
+        this.headerHeight = headerHeight;
     }
 
     @Override
@@ -35,9 +34,9 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
         if (viewType == TYPE_ITEM) {
             View comment = LayoutInflater.from(context)
-                    .inflate(R.layout.v_comment, parent, false);
+                    .inflate(R.layout.v_favorite_card, parent, false);
 
-            return new CommentsViewHolder(comment);
+            return new FavoritesViewHolder(comment);
 
         } else if (viewType == TYPE_HEADER) {
             View header = LayoutInflater.from(parent.getContext())
@@ -61,38 +60,39 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof CommentsViewHolder) {
-            CommentEntity commentEntity = commentEntities.get(position);
+        if (holder instanceof FavoritesViewHolder) {
+            CatPostEntity catPostEntity = catPostEntities.get(position);
+            String url = catPostEntity.getImageUrl();
 
-            ((CommentsViewHolder) holder).tvComment.setText(commentEntity.getContent());
-            ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUser().getUsername());
-            String url = commentEntity.getUser().getImage_url();
-            Picasso.with(context).load(url).into(((CommentsViewHolder)holder).profileImage);
+            Picasso.with(context).load(url).into(((FavoritesViewHolder) holder).favoriteImage);
+        } else {
+            StaggeredGridLayoutManager.LayoutParams layoutParams =
+                    (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+
         }
     }
 
     @Override
     public int getItemCount() {
-        return commentEntities.size();
+        return catPostEntities.size();
     }
 
-    public void setCommentEntities(List<CommentEntity> commentEntities) {
-        this.commentEntities = commentEntities;
+    public void setCatPostEntities(List<CatPostEntity> catPostEntities) {
+        this.catPostEntities = catPostEntities;
         notifyDataSetChanged();
     }
+//
+//
+//    public void addCommentEntity(CommentEntity commentEntity) {
+//        this.commentEntities.add(commentEntity);
+//        notifyDataSetChanged();
+//    }
 
+    class FavoritesViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.favorite_IV) ImageView favoriteImage;
 
-    public void addCommentEntity(CommentEntity commentEntity) {
-        this.commentEntities.add(commentEntity);
-        notifyDataSetChanged();
-    }
-
-    class CommentsViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.user_name_TV) TextView tvName;
-        @InjectView(R.id.comment_TV) TextView tvComment;
-        @InjectView(R.id.user_image_IV) ImageView profileImage;
-
-        public CommentsViewHolder(View itemView) {
+        public FavoritesViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.inject(this, itemView);
