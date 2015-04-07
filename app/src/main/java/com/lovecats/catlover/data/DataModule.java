@@ -19,9 +19,7 @@ import greendao.DaoSession;
 public class DataModule {
         @Provides
         @Singleton
-        DaoSession provideDaoSession(Application app){
-                Context context = app.getApplicationContext();
-                DaoManager.DaoLoader(context);
+        DaoSession provideDaoSession(){
                 return DaoManager.getDaoSession();
         }
 }

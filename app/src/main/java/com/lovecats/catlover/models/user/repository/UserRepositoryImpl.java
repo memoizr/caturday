@@ -5,6 +5,7 @@ import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.models.user.db.UserORM;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -30,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public ArrayList<String> getAllFavoritePost() {
+    public HashSet<String> getAllFavoritePost() {
         return userORM.getFavoriteCatPosts();
     }
 }

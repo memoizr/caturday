@@ -17,12 +17,11 @@ import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 
 import greendao.DaoMaster;
 import greendao.DaoSession;
 
-import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -75,7 +74,8 @@ public class UserORMTest {
 
     @Test
     public void getFavoriteCatPostsReturnsCatPosts() {
-        String[] favorites = {"foo", "bar"};
+        String[] favs = {"foo", "bar"};
+        HashSet<String> favorites = arrayToHashSet(favs);
         gson = new Gson();
         String favoritesJSON = gson.toJson(favorites);
 
@@ -83,9 +83,9 @@ public class UserORMTest {
         user.setFavorites(favoritesJSON);
         userORM.logInUser(user);
 
-        List<String> favoriteList = userORM.getFavoriteCatPosts();
+        HashSet<String> favoriteList = userORM.getFavoriteCatPosts();
 
-        assertEquals(Arrays.asList(favorites), favoriteList);
+        assert(favoriteList.equals(favorites));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class UserORMTest {
         user = new UserEntity();
         userORM.logInUser(user);
 
-        List<String> favoriteList = userORM.getFavoriteCatPosts();
+        HashSet<String> favoriteList = userORM.getFavoriteCatPosts();
 
         assert(favoriteList.isEmpty());
     }
@@ -108,15 +108,19 @@ public class UserORMTest {
 
         userORM.addFavorite(newFavorites);
 
-        List<String> favoriteList = userORM.getFavoriteCatPosts();
+        HashSet<String> favoriteList = userORM.getFavoriteCatPosts();
 
-        assertEquals(Arrays.asList(newFavorites), favoriteList);
+        assert(favoriteList.contains(newFavorites));
     }
 
     @Test
     public void removeFavoritesRemoveFavoriteToUser() {
-        String[] favorites = {"foo", "bar", "12345"};
-        String[] favoritesRemaining = {"foo", "bar"};
+        String[] favs = {"foo", "bar", "12345"};
+        String[] favsRemaining = {"foo", "bar"};
+
+        HashSet<String> favorites = arrayToHashSet(favs);
+        HashSet<String> favoritesRemaining = arrayToHashSet(favsRemaining);
+
         String doomedFavorites = "12345";
 
         String favoritesJSON = gson.toJson(favorites);
@@ -125,12 +129,40 @@ public class UserORMTest {
         user.setFavorites(favoritesJSON);
         userORM.logInUser(user);
 
-
         userORM.removeFavorite(doomedFavorites);
 
-        List<String> favoriteList = userORM.getFavoriteCatPosts();
+        HashSet<String> favoriteList = userORM.getFavoriteCatPosts();
 
-        assertEquals(Arrays.asList(favoritesRemaining), favoriteList);
+        assert(favoritesRemaining.containsAll(favoriteList));
+    }
+
+    @Test
+    public void itDoesNotAddDuplicateEntries() {
+        String[] favList = {"foo", "bar", "12345"};
+
+        HashSet<String> favorites = arrayToHashSet(favList);
+
+        String newFavorite = "12345";
+
+        String favoritesJSON = gson.toJson(favorites);
+
+        user = new UserEntity();
+        user.setFavorites(favoritesJSON);
+        userORM.logInUser(user);
+
+        userORM.addFavorite(newFavorite);
+
+        HashSet<String> favoriteList = userORM.getFavoriteCatPosts();
+
+        assert(favorites.containsAll(favoriteList));
+    }
+
+    private HashSet<String> arrayToHashSet(String[] array) {
+
+        HashSet<String> favorites = new HashSet<>();
+        favorites.addAll(Arrays.asList(array));
+
+        return favorites;
     }
 
     @After

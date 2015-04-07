@@ -20,7 +20,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        DaoManager.DaoLoader(this);
+        DaoManager.DaoLoader(this);
 
         objectGraph = ObjectGraph.create(getModules().toArray());
         objectGraph.inject(this);
