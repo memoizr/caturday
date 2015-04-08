@@ -13,7 +13,10 @@ import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
 import com.lovecats.catlover.data.user.UserModel;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
@@ -22,13 +25,13 @@ import com.lovecats.catlover.capsules.favorites.view.FavoritesFragment;
 import com.lovecats.catlover.capsules.login.LoginActivity;
 import com.lovecats.catlover.capsules.dashboard.DashboardFragment;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.util.animation.ImageAnimation;
 import com.lovecats.catlover.util.helper.AnimationHelper;
 import com.lovecats.catlover.util.helper.DrawerArrowHelper;
 import com.lovecats.catlover.capsules.drawer.NavigationFragment;
 import com.lovecats.catlover.capsules.settings.SettingsActivity;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
 import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
-import com.lovecats.catlover.capsules.common.view.views.SlideShowView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +53,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
 
     @InjectView(R.id.toolbar) Toolbar mToolbar;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
-    @InjectView(R.id.slide_show_V) SlideShowView slide_show_V;
+    @InjectView(R.id.slider) SliderLayout sliderLayout;
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
@@ -62,6 +65,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     private boolean transparent = true;
     private boolean statusTransparent = true;
     private ActionBarDrawerToggle mDrawerToggle;
+    private ImageAnimation backgroundImageAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +82,37 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
 
         setUpFragments(savedInstanceState);
 
+        //TODO Use real data, plus make use of MVP pattern, too much going on here!
+        String[] urls = {
+                "http://24.media.tumblr.com/tumblr_lokav7QGyk1qij6yko1_500.jpg",
+                "http://25.media.tumblr.com/tumblr_lm5pnr3Ema1qij6yko1_1280.jpg",
+                "http://28.media.tumblr.com/tumblr_lyen4oNDur1qgn88ho1_1280.jpg",
+                "http://24.media.tumblr.com/tumblr_lo704ppQDt1qagn8eo1_1280.jpg",
+                "http://26.media.tumblr.com/tumblr_lydgh7MEEH1r286rvo1_1280.jpg"};
+
+        initSliderLayout(Arrays.asList(urls));
         setupCollapsibleToolbar(mToolbar);
         setupMenuClickListener(mToolbar);
         setDrawer(this, mToolbar, mDrawerLayout);
 
         titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
+    }
+
+    private void initSliderLayout(List<String> urls) {
+
+        for (String url : urls) {
+            MovingImageSliderView defaultSliderView = new MovingImageSliderView(this);
+            defaultSliderView.image(url)
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+
+            sliderLayout.addSlider(defaultSliderView);
+        }
+
+        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
+        backgroundImageAnimation = new ImageAnimation();
+        sliderLayout.setCustomAnimation(backgroundImageAnimation);
+        sliderLayout.setDuration(10000);
+        sliderLayout.startAutoCycle();
     }
 
     @Override
@@ -150,13 +180,13 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     }
 
     public void doneSlideshow() {
-        slide_show_V.flash();
+//        slide_show_V.flash();
     }
 
     @Override
     public void onScrollChanged(int scrollY, boolean dragging) {
 
-        slide_show_V.setTranslationY(-(float) (scrollY * 0.8));
+        sliderLayout.setTranslationY(-(float) (scrollY * 0.8));
 
         title_container_RL.animate().cancel();
 
@@ -185,7 +215,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
                         getResources().getColor(R.color.primary_transparent));
                 transparent = statusTransparent = true;
 
-                slide_show_V.animationStart();
+                backgroundImageAnimation.resumeAnimation();
             }
             title_container_RL.setTranslationY(0);
 
@@ -212,7 +242,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
                         getResources().getColor(R.color.primary_transparent),
                         getResources().getColor(R.color.primary));
 
-                slide_show_V.animationPause();
+                backgroundImageAnimation.pauseAnimation();
                 transparent = false;
             }
 
@@ -252,7 +282,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
             AnimationHelper.animateColor(title_container_RL,
                     getResources().getColor(R.color.primary_transparent),
                     getResources().getColor(R.color.primary));
-            slide_show_V.animationPause();
+            backgroundImageAnimation.pauseAnimation();
             transparent = false;
         }
 
@@ -266,7 +296,6 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
                     .start();
         }
     }
-
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -286,7 +315,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     @Override
     public void onRestart() {
         super.onRestart();
-        slide_show_V.animationResume();
+        backgroundImageAnimation.resumeAnimation();
         toggleArrow(false);
     }
 

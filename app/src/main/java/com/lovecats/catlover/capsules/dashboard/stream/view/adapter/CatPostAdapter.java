@@ -38,6 +38,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mCatPosts = catPosts;
     }
 
+    //TODO optimize this class. Shame on you!
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
@@ -72,8 +74,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
-//            ((CatsCardViewHolder) viewHolder).total_votes_count.setText(
-//                    mCatPosts.get(i).getTotalVotesCount());
+            String commentsNumber = Integer.toString(mCatPosts.get(i).getComments().size());
+            ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
 
             Picasso.with(mContext).load(mCatPosts.get(i).getImageUrl()).into(myViewHolder.cat_IV);
             myViewHolder.catContainer.setOnClickListener(view -> {
@@ -125,6 +127,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @InjectView(R.id.catContainer) View catContainer;
         @InjectView(R.id.caption_TV) TextView caption_TV;
         @InjectView(R.id.total_votes_count_TV) TextView total_votes_count;
+        @InjectView(R.id.total_comments_count_TV) TextView total_comments_count;
 
         public CatsCardViewHolder(View v) {
             super(v);

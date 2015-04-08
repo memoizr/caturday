@@ -68,7 +68,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesView {
 
     @Override
     public void setRecyclerViewAdapter(Collection<CatPostEntity> catPostList) {
-        System.out.println(catPostList.size());
+
         favoritesAdapter.setCatPostEntities(new ArrayList(catPostList));
         favoritesAdapter.notifyDataSetChanged();
     }

@@ -96,6 +96,7 @@
                 android:layout_height="32dp" />
 
             <TextView
+                android:id="@+id/total_comments_count_TV"
                 android:text="23"
                 android:textSize="16dp"
                 android:gravity="center_vertical"
