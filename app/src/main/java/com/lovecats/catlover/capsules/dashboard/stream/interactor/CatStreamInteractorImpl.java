@@ -28,11 +28,12 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     @Override
     public void getCatPostPageAndType(final int page,
                                       final String streamType,
+                                      boolean fromNetwork,
                                       final Callback<Collection<CatPostEntity>> callback) {
 
         threadExecutor.execute(() -> {
             final Collection<CatPostEntity> catPostCollection =
-                    catPostRepository.getCatPostsForPageAndCategory(page, streamType);
+                    catPostRepository.getCatPostsForPageAndCategory(page, streamType, fromNetwork);
 
             postExecutionThread.post(() -> callback.success(catPostCollection, null));
         });

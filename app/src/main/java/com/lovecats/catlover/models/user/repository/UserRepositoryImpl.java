@@ -10,8 +10,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final UserORM userORM;
 
-    // TODO use factory method to choose what data source/sink to use at runtime
-
     public UserRepositoryImpl(UserORM userORM) {
         this.userORM = userORM;
     }
@@ -48,7 +46,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void updateUserName(String userName) {
-
+        userORM.updateUserName(userName);
     }
 
     @Override

@@ -9,12 +9,10 @@ import com.lovecats.catlover.models.catpost.db.CatPostDb;
 import java.util.Collection;
 import java.util.HashSet;
 
-import greendao.DaoSession;
-
 public class CatPostRepositoryImpl implements CatPostRepository {
 
-    private final CatPostLocalDataStore catPostLocalDataStore;
-    private final CatStreamCloudDataStore catStreamCloudDataStore;
+    private CatPostLocalDataStore catPostLocalDataStore;
+    private CatStreamCloudDataStore catStreamCloudDataStore;
 
     // TODO fix this sham!
 
@@ -23,10 +21,23 @@ public class CatPostRepositoryImpl implements CatPostRepository {
         this.catStreamCloudDataStore = new CatStreamCloudDataStore();
     }
 
+    private CatPostDataStore catPostFactory(boolean fromNetwork) {
+        if (fromNetwork)
+            return new CatStreamCloudDataStore();
+        else
+            return catPostLocalDataStore;
+    }
+
     @Override
-    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
-        Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForPageAndCategory(page, category);
-        catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
+
+        System.out.println("been here" + fromNetwork);
+        CatPostDataStore catPostDataStore = catPostFactory(fromNetwork);
+        Collection<CatPostEntity> catPostEntities = catPostDataStore.getCatPostsForPageAndCategory(page, category);
+
+        if (fromNetwork)
+            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+
         return catPostEntities;
     }
 

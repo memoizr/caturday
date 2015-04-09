@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 public interface CatPostRepository {
 
-    Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category);
+    Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork);
 
     Collection<CatPostEntity> getCatPostsForIds(HashSet<String> ids);
 

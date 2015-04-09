@@ -77,6 +77,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         this.streamType = streamType;
         catStreamInteractor.getCatPostPageAndType(0,
                 streamType,
+                false,
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
@@ -93,18 +94,21 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public void loadMore(int page, int totalItems) {
+        System.out.println("loading more");
         catStreamInteractor.getCatPostPageAndType(page,
                 streamType,
+                true,
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
+                System.out.println("success " + catPostCollection.size());
                 CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
                 adapter.addItems(catPostCollection);
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                System.out.println("failure");
             }
         });
     }

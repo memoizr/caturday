@@ -97,6 +97,13 @@ public class UserORM {
         return user;
     }
 
+    public void updateUserName(String string) {
+        User user = currentUser();
+        user.setUsername(string);
+
+        getUserDao().update(user);
+    }
+
     public UserEntity getLoggedInUser() {
 
         User user = currentUser();

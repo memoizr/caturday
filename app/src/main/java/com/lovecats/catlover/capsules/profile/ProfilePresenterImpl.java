@@ -2,9 +2,6 @@ package com.lovecats.catlover.capsules.profile;
 
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
 
-/**
- * Created by user on 28/03/15.
- */
 public class ProfilePresenterImpl implements ProfilePresenter {
 
     private ProfileView profileView;
@@ -38,6 +35,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void updateUserName(String userName) {
-        // TODO update username
+        profileInteractor.updateUserName(userName);
     }
 }

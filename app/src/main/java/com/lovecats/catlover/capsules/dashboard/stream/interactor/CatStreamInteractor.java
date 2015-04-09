@@ -11,6 +11,7 @@ import retrofit.Callback;
  */
 public interface CatStreamInteractor {
     void getCatPostPageAndType(int page,
-                                      String streamType,
-                                      Callback<Collection<CatPostEntity>> callback);
+                               String streamType,
+                               boolean fromNetwork,
+                               Callback<Collection<CatPostEntity>> callback);
 }

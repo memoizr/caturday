@@ -35,7 +35,6 @@ public class UserORMTest {
     private DaoMaster.DevOpenHelper helper;
     private Gson gson = new Gson();
 
-
     @Before
     public void initTest() throws Exception {
         Context context = Robolectric.setupActivity(MockActivity.class);
@@ -163,6 +162,22 @@ public class UserORMTest {
         favorites.addAll(Arrays.asList(array));
 
         return favorites;
+    }
+
+    @Test
+    public void itSavesTheUpdatedUserName() {
+        user = new UserEntity();
+        user.setUsername("oldName");
+        userORM.logInUser(user);
+
+        UserEntity oldUser = userORM.getLoggedInUser();
+
+        userORM.updateUserName("newName");
+
+        UserEntity newUser = userORM.getLoggedInUser();
+
+        assertThat(oldUser.getUsername(), equalTo("oldName"));
+        assertThat(newUser.getUsername(), equalTo("newName"));
     }
 
     @After

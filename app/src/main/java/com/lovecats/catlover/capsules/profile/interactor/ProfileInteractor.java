@@ -11,4 +11,6 @@ public interface ProfileInteractor {
     boolean userLoggedIn();
 
     UserEntity getUser();
+
+    void updateUserName(String userName);
 }

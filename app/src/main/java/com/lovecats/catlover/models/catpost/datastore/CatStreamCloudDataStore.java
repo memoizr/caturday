@@ -11,6 +11,10 @@ import retrofit.RestAdapter;
 
 public class CatStreamCloudDataStore implements CatPostDataStore {
 
+    public CatStreamCloudDataStore() {
+        System.out.println("and here");
+    }
+
     @Override
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
         String endpoint = Config.getEndpoint();

@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
@@ -53,22 +52,11 @@ public class MainPresenterImpl implements MainPresenter {
         initMenuClickListener(toolbar);
     }
 
-    private Observable<Collection<CatPostEntity>> getRandomPosts(int howMany) {
-        return Observable.create(new Observable.OnSubscribe<Collection<CatPostEntity>>() {
-            @Override
-            public void call(Subscriber<? super Collection<CatPostEntity>> subscriber) {
-                subscriber.onNext(mainInteractor.getRandomCatPosts(howMany));
-                subscriber.onCompleted();
-            }
-        });
-
-    }
-
     @Override
     public void prepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_login);
         if (item != null) {
-//            item.setVisible(!userModel.userLoggedIn());
+            item.setVisible(!mainInteractor.userLoggedIn());
         }
     }
 
@@ -80,6 +68,28 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void resumeSliderAnimation() {
         backgroundImageAnimation.resumeAnimation();
+    }
+
+    private void initSliderLayout(SliderLayout sliderLayout) {
+
+        getRandomPosts(10)
+                .subscribeOn(Schedulers.io())
+                .flatMap((iterable) -> Observable.from(iterable))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((s) -> {
+
+                    MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
+                    defaultSliderView.image(s.getImageUrl())
+                            .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+
+                    sliderLayout.addSlider(defaultSliderView);
+                });
+
+        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
+        backgroundImageAnimation = new ImageAnimation();
+        sliderLayout.setCustomAnimation(backgroundImageAnimation);
+        sliderLayout.setDuration(10000);
+        sliderLayout.startAutoCycle();
     }
 
     private void initMenuClickListener(Toolbar toolbar) {
@@ -100,24 +110,14 @@ public class MainPresenterImpl implements MainPresenter {
                 });
     }
 
-    private void initSliderLayout(SliderLayout sliderLayout) {
+    private Observable<Collection<CatPostEntity>> getRandomPosts(int howMany) {
+        return Observable.create(new Observable.OnSubscribe<Collection<CatPostEntity>>() {
+            @Override
+            public void call(Subscriber<? super Collection<CatPostEntity>> subscriber) {
+                subscriber.onNext(mainInteractor.getRandomCatPosts(howMany));
+                subscriber.onCompleted();
+            }
+        });
 
-        getRandomPosts(10)
-                .subscribeOn(Schedulers.io())
-                .flatMap((s) -> Observable.from(s))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((s) -> {
-                    MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
-                    defaultSliderView.image(s.getImageUrl())
-                            .setScaleType(BaseSliderView.ScaleType.CenterCrop);
-
-                    sliderLayout.addSlider(defaultSliderView);
-                });
-
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
-        backgroundImageAnimation = new ImageAnimation();
-        sliderLayout.setCustomAnimation(backgroundImageAnimation);
-        sliderLayout.setDuration(10000);
-        sliderLayout.startAutoCycle();
     }
 }
