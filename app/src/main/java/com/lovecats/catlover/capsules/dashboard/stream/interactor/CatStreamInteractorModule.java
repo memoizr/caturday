@@ -1,5 +1,6 @@
 package com.lovecats.catlover.capsules.dashboard.stream.interactor;
 
+import com.lovecats.catlover.models.catpost.CatPostModule;
 import com.lovecats.catlover.models.catpost.datastore.CatPostDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.models.catpost.db.CatPostDb;
@@ -17,14 +18,10 @@ import greendao.DaoSession;
 
 @Module(
         complete = false,
+        includes = CatPostModule.class,
         library = true
 )
 public class CatStreamInteractorModule {
-
-    @Provides @Singleton public CatPostRepository provideCatPostRepository(DaoSession daoSession) {
-        CatPostDb catPostDb = new CatPostORM(daoSession);
-        return new CatPostRepositoryImpl(catPostDb);
-    }
 
     @Provides @Singleton public CatStreamInteractor provideCatStreamInteractor(
             CatPostRepository catPostRepository,

@@ -5,6 +5,6 @@ package com.lovecats.catlover.capsules.drawer;
  */
 public interface NavigationView {
 
-    public void initializeListView(String[] values);
+    void initializeListView(String[] values);
 
 }

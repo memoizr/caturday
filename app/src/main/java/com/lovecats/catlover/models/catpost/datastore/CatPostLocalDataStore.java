@@ -2,7 +2,6 @@ package com.lovecats.catlover.models.catpost.datastore;
 
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.db.CatPostDb;
-import com.lovecats.catlover.models.catpost.db.CatPostORM;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,6 +27,11 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     @Override
     public CatPostEntity getCatPost(String serverId) {
         return catPostDb.getCatPostForServerId(serverId);
+    }
+
+    @Override
+    public Collection<CatPostEntity> getRandomCatPosts(int howMany) {
+        return catPostDb.getRandomCatPosts(howMany);
     }
 
     public void createMultipleCatPost(Collection<CatPostEntity> catPostEntityCollection) {

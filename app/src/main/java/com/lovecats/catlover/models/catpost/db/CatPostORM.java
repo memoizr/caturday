@@ -4,9 +4,10 @@ import com.lovecats.catlover.capsules.common.Config;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.mapper.CatPostMapper;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import greendao.CatPost;
 import greendao.CatPostDao;
@@ -54,15 +55,28 @@ public class CatPostORM implements CatPostDb {
                 .where(CatPostDao.Properties.ServerId.in(catPostServerIds))
                 .list();
 
-        System.out.println(catPostCollection.size());
-
         return CatPostMapper.toEntity(catPostCollection);
     }
 
     @Override
     public CatPostEntity getRandomCatPost() {
-        CatPost catPost = getCatPostDao().load((long) Math.ceil(getCount() * Math.random()));
+        CatPost catPost = getCatPostDao().loadAll().get((int) Math.ceil(getCount() * Math.random()));
         return CatPostMapper.toEntity(catPost);
+    }
+
+    @Override
+    public Collection<CatPostEntity> getRandomCatPosts(int howMany) {
+        Collection<CatPostEntity> catPostEntities = new ArrayList<>();
+
+        List<CatPost> catPosts = getCatPostDao()
+                .loadAll();
+
+        for (int i = 0; i < howMany; i++) {
+            CatPost randomPost = catPosts.get((int) Math.ceil(catPosts.size() * Math.random()));
+            catPostEntities.add(CatPostMapper.toEntity(randomPost));
+        }
+
+        return catPostEntities;
     }
 
     @Override

@@ -35,4 +35,9 @@ public class CatStreamCloudDataStore implements CatPostDataStore {
     public CatPostEntity getCatPost(String serverId) {
         return null;
     }
+
+    @Override
+    public Collection<CatPostEntity> getRandomCatPosts(int howMany) {
+        return null;
+    }
 }

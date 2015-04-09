@@ -16,4 +16,7 @@ public interface CatPostDataStore {
     Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> ids);
 
     CatPostEntity getCatPost(String serverId);
+
+    Collection<CatPostEntity> getRandomCatPosts(int howMany);
+    
 }

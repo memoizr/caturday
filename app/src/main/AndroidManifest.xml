@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".capsules.main.MainActivity"
+            android:name=".capsules.main.view.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +24,10 @@
             android:name=".capsules.detail.view.CatDetailActivity"
             android:label="@string/title_activity_detail_cat"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:parentActivityName=".capsules.main.MainActivity">
+            android:parentActivityName=".capsules.main.view.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".capsules.main.MainActivity" />
+                android:value=".capsules.main.view.MainActivity" />
         </activity>
         <activity
             android:name=".capsules.settings.SettingsActivity"
@@ -36,11 +36,11 @@
         <activity
             android:name=".capsules.login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".capsules.main.MainActivity"
+            android:parentActivityName=".capsules.main.view.MainActivity"
             android:theme="@style/Theme.Transparent" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".capsules.main.MainActivity" />
+                android:value=".capsules.main.view.MainActivity" />
         </activity>
         <activity
             android:name=".capsules.profile.ProfileActivity"

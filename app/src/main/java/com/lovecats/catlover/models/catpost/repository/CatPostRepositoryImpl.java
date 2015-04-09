@@ -16,6 +16,8 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     private final CatPostLocalDataStore catPostLocalDataStore;
     private final CatStreamCloudDataStore catStreamCloudDataStore;
 
+    // TODO fix this sham!
+
     public CatPostRepositoryImpl(CatPostDb catPostDb) {
         this.catPostLocalDataStore = new CatPostLocalDataStore(catPostDb);
         this.catStreamCloudDataStore = new CatStreamCloudDataStore();
@@ -37,5 +39,10 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public CatPostEntity getCatPost(String serverId) {
         return catPostLocalDataStore.getCatPost(serverId);
+    }
+
+    @Override
+    public Collection<CatPostEntity> getRandomCatPosts(int howMany) {
+        return catPostLocalDataStore.getRandomCatPosts(howMany);
     }
 }

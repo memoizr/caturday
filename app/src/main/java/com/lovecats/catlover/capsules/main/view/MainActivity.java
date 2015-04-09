@@ -1,7 +1,6 @@
-package com.lovecats.catlover.capsules.main;
+package com.lovecats.catlover.capsules.main.view;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,24 +13,21 @@ import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
-import com.lovecats.catlover.data.user.UserModel;
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
+import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
+import com.lovecats.catlover.capsules.dashboard.DashboardFragment;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.drawer.DrawerActivity;
+import com.lovecats.catlover.capsules.drawer.NavigationFragment;
 import com.lovecats.catlover.capsules.favorites.view.FavoritesFragment;
-import com.lovecats.catlover.capsules.login.LoginActivity;
-import com.lovecats.catlover.capsules.dashboard.DashboardFragment;
-import com.lovecats.catlover.R;
+import com.lovecats.catlover.capsules.main.MainModule;
+import com.lovecats.catlover.capsules.main.presenter.MainPresenter;
 import com.lovecats.catlover.util.animation.ImageAnimation;
 import com.lovecats.catlover.util.helper.AnimationHelper;
 import com.lovecats.catlover.util.helper.DrawerArrowHelper;
-import com.lovecats.catlover.capsules.drawer.NavigationFragment;
-import com.lovecats.catlover.capsules.settings.SettingsActivity;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
-import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,29 +39,30 @@ import butterknife.InjectView;
 import lombok.Getter;
 
 public class MainActivity extends DrawerActivity implements ScrollEventListener,
-        SlidingTabActivity {
+        SlidingTabActivity, MainView {
+
+    public PagerSlidingTabStrip slidingTabs;
+    @Getter private int oldScrollY;
 
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
-    @Inject NavigationFragment navigationFragment;
     @Inject FavoritesFragment favoritesFragment;
-//    @Inject UserRep userModel;
+    @Inject MainPresenter mainPresenter;
+    @Inject NavigationFragment navigationFragment;
 
-    @InjectView(R.id.toolbar) Toolbar mToolbar;
-    @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
-    @InjectView(R.id.slider) SliderLayout sliderLayout;
-    @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
+    @Getter @InjectView(R.id.slider) SliderLayout sliderLayout;
+    @Getter @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
+    @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
-    @Getter private int oldScrollY;
-    public PagerSlidingTabStrip slidingTabs;
-    private int titleMaxHeight;
-    private int titleMinHeight;
-    private int titleCollapsed;
-    private boolean transparent = true;
-    private boolean statusTransparent = true;
+    @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
     private ActionBarDrawerToggle mDrawerToggle;
     private ImageAnimation backgroundImageAnimation;
+    private boolean statusTransparent = true;
+    private boolean transparent = true;
+    private int titleCollapsed;
+    private int titleMaxHeight;
+    private int titleMinHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,59 +77,33 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        setUpFragments(savedInstanceState);
-
-        //TODO Use real data, plus make use of MVP pattern, too much going on here!
-        String[] urls = {
-                "http://24.media.tumblr.com/tumblr_lokav7QGyk1qij6yko1_500.jpg",
-                "http://25.media.tumblr.com/tumblr_lm5pnr3Ema1qij6yko1_1280.jpg",
-                "http://28.media.tumblr.com/tumblr_lyen4oNDur1qgn88ho1_1280.jpg",
-                "http://24.media.tumblr.com/tumblr_lo704ppQDt1qagn8eo1_1280.jpg",
-                "http://26.media.tumblr.com/tumblr_lydgh7MEEH1r286rvo1_1280.jpg"};
-
-        initSliderLayout(Arrays.asList(urls));
-        setupCollapsibleToolbar(mToolbar);
-        setupMenuClickListener(mToolbar);
-        setDrawer(this, mToolbar, mDrawerLayout);
+        mainPresenter.create(savedInstanceState);
+        setDrawer(this, toolbar, mDrawerLayout);
 
         titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
     }
 
-    private void initSliderLayout(List<String> urls) {
-
-        for (String url : urls) {
-            MovingImageSliderView defaultSliderView = new MovingImageSliderView(this);
-            defaultSliderView.image(url)
-                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
-
-            sliderLayout.addSlider(defaultSliderView);
-        }
-
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
-        backgroundImageAnimation = new ImageAnimation();
-        sliderLayout.setCustomAnimation(backgroundImageAnimation);
-        sliderLayout.setDuration(10000);
-        sliderLayout.startAutoCycle();
+    @Override
+    protected List<Object> getModules() {
+        return Arrays.asList(new MainModule(this));
     }
 
     @Override
-    protected List<Object> getModules() {
-        return Arrays.<Object>asList(new MainModule(this));
-    }
-
-    private void setUpFragments(Bundle savedInstanceState) {
+    public void setUpFragments(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, dashboardFragment)
                     .commit();
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.left_drawer_V, navigationFragment)
                     .commit();
         }
     }
 
-    private void setupCollapsibleToolbar(Toolbar toolbar) {
+    @Override
+    public void setupCollapsibleToolbar(Toolbar toolbar) {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -143,44 +114,31 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
         titleMinHeight = collapsibleView.getMinHeight();
     }
 
-    private void setupMenuClickListener(Toolbar toolbar) {
-        toolbar.setOnMenuItemClickListener(
-                new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        toggleArrow(true);
-//                        slide_show_V.animationPause();
-                        if (item.getItemId() == R.id.action_login) {
-                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                            startActivity(intent);
-                        }
-                        return true;
-                    }
-                });
-    }
-
-    private void setDrawer(Activity activity, Toolbar toolbar, DrawerLayout drawerLayout) {
+    @Override
+    public void setDrawer(Activity activity, Toolbar toolbar, DrawerLayout drawerLayout) {
         mDrawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.drawer_open_desc, R.string.drawer_close_desc);
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
+        mDrawerLayout.post(() -> mDrawerToggle.syncState());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+    @Override
     public void toggleArrow(boolean toggle) {
         DrawerArrowHelper.toggleArrow(toggle, mDrawerToggle, mDrawerLayout);
     }
 
-    public void doneSlideshow() {
+    @Override
+    public void onRefreshCompleted() {
 //        slide_show_V.flash();
+    }
+
+    public void pauseSliderAnimation() {
+        mainPresenter.pauseSliderAnimation();
+    }
+
+    public void resumeSliderAnimation() {
+        mainPresenter.resumeSliderAnimation();
     }
 
     @Override
@@ -215,7 +173,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
                         getResources().getColor(R.color.primary_transparent));
                 transparent = statusTransparent = true;
 
-                backgroundImageAnimation.resumeAnimation();
+                resumeSliderAnimation();
             }
             title_container_RL.setTranslationY(0);
 
@@ -242,7 +200,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
                         getResources().getColor(R.color.primary_transparent),
                         getResources().getColor(R.color.primary));
 
-                backgroundImageAnimation.pauseAnimation();
+                pauseSliderAnimation();
                 transparent = false;
             }
 
@@ -282,7 +240,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
             AnimationHelper.animateColor(title_container_RL,
                     getResources().getColor(R.color.primary_transparent),
                     getResources().getColor(R.color.primary));
-            backgroundImageAnimation.pauseAnimation();
+            pauseSliderAnimation();
             transparent = false;
         }
 
@@ -298,12 +256,10 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_login);
-        if (item != null){
-//            item.setVisible(!userModel.userLoggedIn());
-        }
-        return true;
+    public void onRestart() {
+        super.onRestart();
+        resumeSliderAnimation();
+        toggleArrow(false);
     }
 
     @Override
@@ -313,10 +269,9 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     }
 
     @Override
-    public void onRestart() {
-        super.onRestart();
-        backgroundImageAnimation.resumeAnimation();
-        toggleArrow(false);
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mainPresenter.prepareOptionsMenu(menu);
+        return true;
     }
 
     @Override

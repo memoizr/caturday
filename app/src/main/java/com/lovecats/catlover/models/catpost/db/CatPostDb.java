@@ -15,6 +15,8 @@ public interface CatPostDb {
 
     CatPostEntity getRandomCatPost();
 
+    Collection<CatPostEntity> getRandomCatPosts(int howMany);
+
     long getCount();
 
     void createPost(CatPostEntity catPostEntity);
