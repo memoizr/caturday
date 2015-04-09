@@ -3,6 +3,7 @@ package com.lovecats.catlover.capsules.profile;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
@@ -19,6 +20,7 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActionBarActivity implements ProfileView {
     @InjectView(R.id.logout) Button logout;
+    @InjectView(R.id.user_name_TV) TextView user_name_TV;
     @Inject ProfilePresenter profilePresenter;
 
     @Override
@@ -46,6 +48,11 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
         } else {
             logout.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void setUserName(String string) {
+        user_name_TV.setText(string);
     }
 
     @OnClick(R.id.logout)

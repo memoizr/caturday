@@ -5,7 +5,9 @@ package com.lovecats.catlover.capsules.profile;
  */
 public interface ProfileView {
 
-    public void onPostLogout();
+    void onPostLogout();
 
-    public void showButton(Boolean visible);
+    void showButton(Boolean visible);
+
+    void setUserName(String string);
 }

@@ -63,6 +63,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof EmptyHeader) {
 
+            //TODO make my mind up whether to use staggered grid or not
 //            StaggeredGridLayoutManager.LayoutParams layoutParams =
 //                    (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
 //            layoutParams.setFullSpan(true);

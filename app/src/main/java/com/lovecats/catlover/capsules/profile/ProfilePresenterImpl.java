@@ -17,6 +17,10 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void onCreate() {
+        if (profileInteractor.userLoggedIn()) {
+            profileView.setUserName(profileInteractor.getUser().getUsername());
+        }
+        profileInteractor.getUser();
         profileView.showButton(userLoggedIn());
     }
 
@@ -30,5 +34,10 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public boolean userLoggedIn() {
         return profileInteractor.userLoggedIn();
+    }
+
+    @Override
+    public void updateUserName(String userName) {
+        // TODO update username
     }
 }

@@ -42,5 +42,4 @@ public class MainModule {
     @Provides @Singleton public FavoritesFragment provideFavoritesFragment() {
         return new FavoritesFragment();
     }
-
 }

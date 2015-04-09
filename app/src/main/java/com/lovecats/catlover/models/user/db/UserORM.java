@@ -25,7 +25,7 @@ public class UserORM {
 
     public User logInUser(UserEntity userEntity) {
 
-        flushUsers();
+        performLogout();
         User user = UserMapper.fromEntity(userEntity);
         user.setLoggedIn(true);
         long id = getUserDao().insertOrReplace(user);
@@ -38,7 +38,7 @@ public class UserORM {
         return daoSession.getUserDao();
     }
 
-    public void flushUsers() {
+    public void performLogout() {
 
         getUserDao().deleteAll();
     }

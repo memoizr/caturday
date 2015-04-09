@@ -2,6 +2,7 @@ package com.lovecats.catlover.capsules.profile;
 
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
+import com.lovecats.catlover.models.user.UserModule;
 
 import javax.inject.Singleton;
 
@@ -12,6 +13,7 @@ import dagger.Provides;
         injects = {
                 ProfileActivity.class
         },
+        includes = UserModule.class,
         addsTo = AppModule.class
 )
 public class ProfileModule {

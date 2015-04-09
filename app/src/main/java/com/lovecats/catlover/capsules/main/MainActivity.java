@@ -49,7 +49,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     @Inject DashboardFragment dashboardFragment;
     @Inject NavigationFragment navigationFragment;
     @Inject FavoritesFragment favoritesFragment;
-    @Inject UserModel userModel;
+//    @Inject UserRep userModel;
 
     @InjectView(R.id.toolbar) Toolbar mToolbar;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
@@ -301,7 +301,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_login);
         if (item != null){
-            item.setVisible(!userModel.userLoggedIn());
+//            item.setVisible(!userModel.userLoggedIn());
         }
         return true;
     }

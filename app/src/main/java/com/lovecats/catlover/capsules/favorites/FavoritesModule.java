@@ -8,6 +8,7 @@ import com.lovecats.catlover.capsules.favorites.presenter.FavoritesPresenterImpl
 import com.lovecats.catlover.capsules.favorites.view.FavoritesFragment;
 import com.lovecats.catlover.capsules.favorites.view.FavoritesView;
 import com.lovecats.catlover.models.catpost.repository.CatPostRepository;
+import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.db.UserORM;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 import com.lovecats.catlover.models.user.repository.UserRepositoryImpl;
@@ -22,6 +23,7 @@ import greendao.DaoSession;
         injects = {
                 FavoritesFragment.class
         },
+        includes = UserModule.class,
         addsTo = AppModule.class
 )
 public class FavoritesModule {
@@ -33,9 +35,9 @@ public class FavoritesModule {
     }
 
 
-    @Provides @Singleton public UserRepository provideUserRepository(DaoSession daoSession) {
-        return new UserRepositoryImpl(new UserORM(daoSession));
-    }
+//    @Provides @Singleton public UserRepository provideUserRepository(DaoSession daoSession) {
+//        return new UserRepositoryImpl(new UserORM(daoSession));
+//    }
 
     @Provides @Singleton FavoritesInteractor provideFavoriteInteractor(
             UserRepository userRepository,

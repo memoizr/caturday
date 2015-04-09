@@ -5,9 +5,11 @@ package com.lovecats.catlover.capsules.profile;
  */
 public interface ProfilePresenter {
 
-    public void logout();
+    void logout();
 
-    public void onCreate();
+    void onCreate();
 
-    public boolean userLoggedIn();
+    boolean userLoggedIn();
+
+    void updateUserName(String userName);
 }

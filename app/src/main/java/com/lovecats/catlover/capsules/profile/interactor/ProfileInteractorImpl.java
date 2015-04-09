@@ -1,25 +1,31 @@
 package com.lovecats.catlover.capsules.profile.interactor;
 
-import com.lovecats.catlover.data.user.UserModel;
+import com.lovecats.catlover.models.user.UserEntity;
+import com.lovecats.catlover.models.user.repository.UserRepository;
 
 /**
  * Created by user on 28/03/15.
  */
 public class ProfileInteractorImpl implements ProfileInteractor{
 
-    private UserModel userModel;
+    private UserRepository userRepository;
 
-    public ProfileInteractorImpl(UserModel userModel){
-        this.userModel = userModel;
+    public ProfileInteractorImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public void logout() {
-        userModel.flushUsers();
+        userRepository.logout();
     }
 
     @Override
     public boolean userLoggedIn() {
-        return userModel.userLoggedIn();
+        return userRepository.userLoggedIn();
+    }
+
+    @Override
+    public UserEntity getUser() {
+        return userRepository.getCurrentUser();
     }
 }
