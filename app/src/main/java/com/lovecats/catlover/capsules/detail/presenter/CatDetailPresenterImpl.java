@@ -16,6 +16,7 @@ import com.lovecats.catlover.models.comment.CommentEntity;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractor;
 import com.lovecats.catlover.capsules.detail.view.CatDetailView;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
+import com.lovecats.catlover.util.ShareHelper;
 import com.lovecats.catlover.util.data.GsonConverter;
 import com.lovecats.catlover.util.concurrent.WorkerCallback;
 import com.squareup.picasso.Picasso;
@@ -113,14 +114,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     private void shareTextUrl() {
-        Intent share = new Intent(android.content.Intent.ACTION_SEND);
-
-        share.setType("text/plain");
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        share.putExtra(Intent.EXTRA_SUBJECT, "Check out this cat!");
-        share.putExtra(Intent.EXTRA_TEXT, url);
-
-        context.startActivity(Intent.createChooser(share, "Share link!"));
+        ShareHelper.shareLinkAction("Check out this cat!", url, context);
     }
 
     private void downloadImage() {

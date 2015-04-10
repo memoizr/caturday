@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/catContainer"
     android:background="@color/background_material_light"
     android:layout_margin="4dp"
     android:elevation="5dp"
@@ -11,7 +10,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
+
+        android:id="@+id/catContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -64,16 +69,18 @@
             android:layout_width="match_parent"
             android:layout_height="192dp" />
 
+    </RelativeLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:padding="16dp"
-            android:layout_below="@id/cardCat_IV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageButton
                 android:id="@+id/plus_one_B"
                 android:layout_marginRight="8dp"
+                style="?android:attr/borderlessButtonStyle"
                 android:background="@drawable/done_round"
                 android:src="@drawable/ic_mood_white_18dp"
                 android:layout_width="32dp"
@@ -103,11 +110,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
 
-            <ImageButton
+            <LinearLayout
                 android:id="@+id/share_B"
+                android:layout_width="wrap_content"
+                android:foreground="@drawable/tab_selector"
+                android:layout_height="wrap_content">
+            <ImageButton
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_gravity="right"
+                android:foreground="@drawable/tab_selector"
                 android:background="@drawable/done_round"
                 android:src="@drawable/ic_share_white_18dp"
                 android:layout_width="32dp"
@@ -119,9 +131,9 @@
                 android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
+            </LinearLayout>
 
         </LinearLayout>
-
-    </RelativeLayout>
+</LinearLayout>
 
 </android.support.v7.widget.CardView>
