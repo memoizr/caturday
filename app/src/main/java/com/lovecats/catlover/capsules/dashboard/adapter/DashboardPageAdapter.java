@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatStreamFragment;
 
-/**
- * Created by user on 23/02/15.
- */
 public class DashboardPageAdapter extends FragmentStatePagerAdapter{
+
     public static final String STREAM_CATEGORY = "streamCategory";
     private static int NUM_ITEMS = Categories.values().length;
 

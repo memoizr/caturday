@@ -14,8 +14,6 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     private CatPostLocalDataStore catPostLocalDataStore;
     private CatStreamCloudDataStore catStreamCloudDataStore;
 
-    // TODO fix this sham!
-
     public CatPostRepositoryImpl(CatPostDb catPostDb) {
         this.catPostLocalDataStore = new CatPostLocalDataStore(catPostDb);
         this.catStreamCloudDataStore = new CatStreamCloudDataStore();
@@ -31,7 +29,6 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
 
-        System.out.println("been here" + fromNetwork);
         CatPostDataStore catPostDataStore = catPostFactory(fromNetwork);
         Collection<CatPostEntity> catPostEntities = catPostDataStore.getCatPostsForPageAndCategory(page, category);
 

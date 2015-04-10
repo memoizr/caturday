@@ -30,6 +30,7 @@ import dagger.Provides;
         addsTo = AppModule.class
 )
 public class MainModule {
+
     private Context context;
 
     public MainModule(Context context) {

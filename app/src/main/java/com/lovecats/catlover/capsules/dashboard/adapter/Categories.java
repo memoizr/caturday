@@ -8,7 +8,7 @@ public enum Categories {
 
     private final String category;
 
-    private Categories(final String category) {
+    Categories(final String category) {
         this.category = category;
     }
 

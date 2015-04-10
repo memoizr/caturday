@@ -19,6 +19,7 @@ import dagger.Provides;
         addsTo = AppModule.class
 )
 public class ProfileModule {
+
     private ProfileView profileView;
 
     public ProfileModule(ProfileView profileView) {

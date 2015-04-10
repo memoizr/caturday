@@ -76,8 +76,6 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
 
         addFavorite(serverId);
 
-        System.out.println(Arrays.toString(userRepository.getAllFavoritePost().toArray()));
-
         return  voteRepository.sendVote(voteEntity);
     }
 

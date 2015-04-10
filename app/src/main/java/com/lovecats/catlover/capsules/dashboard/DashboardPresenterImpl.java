@@ -44,6 +44,8 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
     @Override
     public void onPageScrollStateChanged(int state) {
+        // TODO reduce amount of WTF
+
 //        float targetShiftY = 0;
 //        int oldScrollY = ((MainActivity) getActivity()).getOldScrollY();
 

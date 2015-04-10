@@ -7,5 +7,5 @@ public interface ScrollEventListener {
 
     void onUpOrCancelMotionEvent(ScrollState scrollState);
 
-    public void onScrollStateChanged(int scrollState);
+    void onScrollStateChanged(int scrollState);
 }
