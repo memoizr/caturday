@@ -16,7 +16,7 @@ import com.lovecats.catlover.models.comment.CommentEntity;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractor;
 import com.lovecats.catlover.capsules.detail.view.CatDetailView;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
-import com.lovecats.catlover.util.ShareHelper;
+import com.lovecats.catlover.util.helper.ShareHelper;
 import com.lovecats.catlover.util.data.GsonConverter;
 import com.lovecats.catlover.util.concurrent.WorkerCallback;
 import com.squareup.picasso.Picasso;

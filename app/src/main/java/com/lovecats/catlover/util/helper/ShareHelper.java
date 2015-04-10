@@ -1,4 +1,4 @@
-package com.lovecats.catlover.util;
+package com.lovecats.catlover.util.helper;
 
 import android.content.Context;
 import android.content.Intent;

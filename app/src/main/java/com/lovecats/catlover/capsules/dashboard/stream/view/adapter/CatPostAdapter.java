@@ -19,7 +19,7 @@ import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
 import com.lovecats.catlover.capsules.main.view.MainActivity;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
-import com.lovecats.catlover.util.ShareHelper;
+import com.lovecats.catlover.util.helper.ShareHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collection;

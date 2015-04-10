@@ -13,4 +13,11 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
+    <View
+        android:id="@+id/reveal_V"
+        android:background="@color/accent"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>
