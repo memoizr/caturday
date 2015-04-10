@@ -2,7 +2,9 @@ package com.lovecats.catlover.capsules.profile;
 
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
+import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractorImpl;
 import com.lovecats.catlover.models.user.UserModule;
+import com.lovecats.catlover.models.user.repository.UserRepository;
 
 import javax.inject.Singleton;
 
@@ -21,6 +23,10 @@ public class ProfileModule {
 
     public ProfileModule(ProfileView profileView) {
         this.profileView = profileView;
+    }
+
+    @Provides @Singleton public ProfileInteractor provideProfileInteractor(UserRepository userRepository) {
+        return new ProfileInteractorImpl(userRepository);
     }
 
     @Provides @Singleton public ProfileView provideProfileView() {

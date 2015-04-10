@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.lovecats.catlover.capsules.drawer.interactor.NavigationInteractor;
+import com.lovecats.catlover.capsules.drawer.view.DrawerActivity;
+import com.lovecats.catlover.capsules.drawer.view.NavigationView;
 import com.lovecats.catlover.capsules.profile.ProfileActivity;
-
+import com.lovecats.catlover.models.user.UserEntity;
 
 public class NavigationPresenterImpl implements NavigationPresenter {
 
@@ -22,6 +24,14 @@ public class NavigationPresenterImpl implements NavigationPresenter {
     public void onCreate() {
         String[] values = navigationInteractor.provideNavigationItems();
         navigationView.initializeListView(values);
+
+        boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();
+
+        if (isUserLoggedIn) {
+            UserEntity userEntity = navigationInteractor.getLoggedInUser();
+            navigationView.setUserEmail(userEntity.getEmail());
+            navigationView.setUsername(userEntity.getUsername());
+        }
     }
 
     @Override

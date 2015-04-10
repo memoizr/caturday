@@ -8,5 +8,5 @@ import retrofit.http.POST;
 
 public interface UserApi {
     @POST("/user_data.json")
-    public void getUser(@Header("Auth-Token") String authToken, Callback<UserFetcher> response);
+    void getUser(@Header("Auth-Token") String authToken, Callback<UserFetcher> response);
 }

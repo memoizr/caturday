@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.drawer;
+package com.lovecats.catlover.capsules.drawer.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.drawer.NavigationModule;
+import com.lovecats.catlover.capsules.drawer.NavigationPresenter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +30,9 @@ public class NavigationFragment extends BaseFragment implements NavigationView, 
 
     @Inject NavigationPresenter navigationPresenter;
     @InjectView(R.id.navigation_LV) ListView navigationListView;
+    @InjectView(R.id.username_TV) TextView username_TV;
+    @InjectView(R.id.email_TV) TextView email_TV;
+
 
     public NavigationFragment() {
     }
@@ -55,6 +61,16 @@ public class NavigationFragment extends BaseFragment implements NavigationView, 
         navigationListView.setOnItemClickListener(this);
     }
 
+    @Override
+    public void setUserEmail(String userEmail) {
+        email_TV.setText(userEmail);
+    }
+
+    @Override
+    public void setUsername(String username) {
+        username_TV.setText(username);
+    }
+
     @OnClick(R.id.profile_container_V)
     public void clickProfile() {
         navigationPresenter.onProfileClicked(getActivity());
@@ -67,6 +83,6 @@ public class NavigationFragment extends BaseFragment implements NavigationView, 
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.<Object>asList(new NavigationModule(this));
+        return Arrays.asList(new NavigationModule(this));
     }
 }

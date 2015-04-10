@@ -5,7 +5,7 @@ import android.content.Context;
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.favorites.view.FavoritesFragment;
 import com.lovecats.catlover.capsules.dashboard.DashboardFragment;
-import com.lovecats.catlover.capsules.drawer.NavigationFragment;
+import com.lovecats.catlover.capsules.drawer.view.NavigationFragment;
 import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractorImpl;

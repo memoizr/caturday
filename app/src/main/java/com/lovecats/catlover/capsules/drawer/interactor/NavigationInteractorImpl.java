@@ -1,9 +1,15 @@
 package com.lovecats.catlover.capsules.drawer.interactor;
 
-/**
- * Created by user on 28/03/15.
- */
+import com.lovecats.catlover.models.user.UserEntity;
+import com.lovecats.catlover.models.user.repository.UserRepository;
+
 public class NavigationInteractorImpl implements NavigationInteractor {
+
+    private final UserRepository userRepository;
+
+    public NavigationInteractorImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String[] provideNavigationItems() {
@@ -11,5 +17,15 @@ public class NavigationInteractorImpl implements NavigationInteractor {
                 "New stuff",
                 "Favourites",
                 "Wallpapers"};
+    }
+
+    @Override
+    public boolean isUserLoggedIn() {
+        return userRepository.userLoggedIn();
+    }
+
+    @Override
+    public UserEntity getLoggedInUser() {
+        return userRepository.getCurrentUser();
     }
 }

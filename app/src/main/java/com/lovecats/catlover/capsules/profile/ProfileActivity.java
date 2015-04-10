@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-
 public class ProfileActivity extends BaseActionBarActivity implements ProfileView {
     @InjectView(R.id.logout) Button logout;
     @InjectView(R.id.user_name_ET) EditText user_name_ET;
