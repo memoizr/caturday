@@ -1,4 +1,7 @@
-package com.lovecats.catlover.capsules.profile;
+package com.lovecats.catlover.capsules.profile.view;
+
+import android.app.Activity;
+import android.content.Context;
 
 /**
  * Created by user on 28/03/15.
@@ -7,7 +10,7 @@ public interface ProfilePresenter {
 
     void logout();
 
-    void onCreate();
+    void onCreate(Context context);
 
     boolean userLoggedIn();
 

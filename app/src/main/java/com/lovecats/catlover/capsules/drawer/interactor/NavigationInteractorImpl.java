@@ -13,10 +13,7 @@ public class NavigationInteractorImpl implements NavigationInteractor {
 
     @Override
     public String[] provideNavigationItems() {
-        return new String[] {
-                "New stuff",
-                "Favourites",
-                "Wallpapers"};
+        return new String[] { "New posts", "Favourites"};
     }
 
     @Override

@@ -1,12 +1,16 @@
-package com.lovecats.catlover.capsules.profile;
+package com.lovecats.catlover.capsules.profile.view;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.profile.ProfileModule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +22,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActionBarActivity implements ProfileView {
-    @InjectView(R.id.logout) Button logout;
-    @InjectView(R.id.user_name_ET) EditText user_name_ET;
+//    @InjectView(R.id.logout) Button logout;
+    @InjectView(R.id.profile_VP) ViewPager profile_VP;
+//    @InjectView(R.id.user_name_ET) EditText user_name_ET;
     @Inject ProfilePresenter profilePresenter;
 
     @Override
@@ -32,7 +37,7 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        profilePresenter.onCreate();
+        profilePresenter.onCreate(this);
     }
 
     @Override
@@ -43,15 +48,24 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
     @Override
     public void showButton(Boolean visible) {
         if (visible) {
-            logout.setVisibility(View.VISIBLE);
+//            logout.setVisibility(View.VISIBLE);
         } else {
-            logout.setVisibility(View.GONE);
+//            logout.setVisibility(View.GONE);
         }
     }
 
     @Override
+    public void initializePager(FragmentPagerAdapter adapter, PagerSlidingTabStrip slidingTabs_PSTS) {
+
+        profile_VP.setAdapter(adapter);
+//        slidingTabs_PSTS.setViewPager(dashboard_VP);
+//        slidingTabs_PSTS.setTextColor(getResources().getColor(R.color.white));
+//        slidingTabs_PSTS.setOnPageChangeListener(dashboardPresenter);
+    }
+
+    @Override
     public void setUserName(String string) {
-        user_name_ET.setText(string);
+//        user_name_ET.setText(string);
     }
 
     @OnClick(R.id.logout)
@@ -61,6 +75,6 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
 
     @Override
     public void onPostLogout() {
-        logout.setVisibility(View.GONE);
+//        logout.setVisibility(View.GONE);
     }
 }

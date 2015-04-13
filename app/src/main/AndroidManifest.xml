@@ -43,7 +43,7 @@
                 android:value=".capsules.main.view.MainActivity" />
         </activity>
         <activity
-            android:name=".capsules.profile.ProfileActivity"
+            android:name=".capsules.profile.view.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
         <activity

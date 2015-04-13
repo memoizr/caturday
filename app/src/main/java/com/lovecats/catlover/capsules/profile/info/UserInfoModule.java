@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.profile;
+package com.lovecats.catlover.capsules.profile.info;
 
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
@@ -17,28 +17,25 @@ import dagger.Provides;
 
 @Module(
         injects = {
-                ProfileActivity.class
+                UserInfoFragment.class
         },
         includes = UserModule.class,
         addsTo = AppModule.class
 )
-public class ProfileModule {
+public class UserInfoModule {
 
-    private ProfileView profileView;
+    private UserInfoView userInfoView;
 
-    public ProfileModule(ProfileView profileView) {
-        this.profileView = profileView;
+    public UserInfoModule(UserInfoView userInfoView) {
+        this.userInfoView = userInfoView;
     }
 
-    @Provides @Singleton public ProfileInteractor provideProfileInteractor(UserRepository userRepository) {
-        return new ProfileInteractorImpl(userRepository);
+    @Provides @Singleton public UserInfoView provideUserInfoView() {
+        return userInfoView;
     }
 
-    @Provides @Singleton public ProfileView provideProfileView() {
-        return profileView;
-    }
-
-    @Provides @Singleton public ProfilePresenter provideProfilePresenter(ProfileView profileView, ProfileInteractor profileInteractor) {
-        return new ProfilePresenterImpl(profileView, profileInteractor);
+    @Provides @Singleton public UserInfoPresenter provideUserInfoPresenter(
+            UserInfoView userInfoView) {
+        return new UserInfoPresenterImpl(userInfoView);
     }
 }

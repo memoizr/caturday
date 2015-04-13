@@ -3,46 +3,32 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.lovecats.catlover.capsules.profile.ProfileActivity">
+                tools:context="com.lovecats.catlover.capsules.profile.view.ProfileActivity">
 
+    <!--<com.makeramen.roundedimageview.RoundedImageView-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--app:riv_corner_radius="48dp"-->
+        <!--android:background="@drawable/profile_background"-->
+        <!--android:id="@+id/profile_image_IV"-->
+        <!--android:src="@drawable/donkey"-->
+        <!--android:padding="4dp"-->
+        <!--android:elevation="5dp"-->
+        <!--android:scaleType="centerCrop"-->
+        <!--android:layout_width="96dp"-->
+        <!--android:layout_height="96dp"-->
+        <!--android:layout_alignBottom="@+id/cover_image_IV"-->
+        <!--android:layout_marginBottom="-48dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_alignParentRight="true"/>-->
 
-    <ImageView
-        android:id="@+id/cover_image_IV"
-        android:src="@drawable/default_profile_cover"
-        android:scaleType="centerCrop"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/profile_VP"
         android:layout_width="match_parent"
-        android:layout_height="168dp"/>
+        android:layout_height="match_parent" />
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:layout_marginLeft="16dp"
-        app:riv_corner_radius="48dp"
-        android:background="@drawable/profile_background"
-        android:id="@+id/profile_image_IV"
-        android:src="@drawable/donkey"
-        android:padding="4dp"
-        android:elevation="5dp"
-        android:scaleType="centerCrop"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_alignBottom="@+id/cover_image_IV"
-        android:layout_marginBottom="-48dp"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentRight="true"/>
-
-    <EditText
-        android:id="@+id/user_name_ET"
-        android:layout_below="@id/cover_image_IV"
-        android:layout_marginTop="32dp"
-        android:layout_marginLeft="16dp"
-        android:text="User Name"
-        android:textSize="32dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
 
     <Button
         android:id="@+id/logout"
-        android:layout_below="@id/user_name_ET"
         android:layout_alignParentRight="true"
         android:background="@color/accent"
         android:text="Logout"
