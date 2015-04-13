@@ -1,15 +1,28 @@
 package com.lovecats.catlover.capsules.profile.following;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.profile.info.UserInfoView;
+import com.lovecats.catlover.capsules.common.BaseFragment;
 
-public class FollowingFragment extends Fragment implements UserInfoView {
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class FollowingFragment extends BaseFragment implements FollowingView {
+
+    @InjectView(R.id.following_RV) RecyclerView following_RV;
+
+    @Inject FollowingPresenter followingPresenter;
 
     public FollowingFragment() {
         // Required empty public constructor
@@ -23,6 +36,25 @@ public class FollowingFragment extends Fragment implements UserInfoView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.following_fragment, container, false);
+
+        View rootView = inflater.inflate(R.layout.following_fragment, container, false);
+
+        ButterKnife.inject(this, rootView);
+
+        followingPresenter.viewCreated(getActivity());
+
+        return rootView;
+    }
+
+    @Override
+    public void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        following_RV.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    protected List<Object> getModules() {
+        return Arrays.asList(new FollowingModule(this));
     }
 }

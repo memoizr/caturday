@@ -4,4 +4,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+        android:id="@+id/following_RV"
+        android:clipToPadding="false"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
 </LinearLayout>
