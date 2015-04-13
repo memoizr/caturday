@@ -54,10 +54,14 @@ public class ImageAnimation implements BaseAnimationInterface {
     }
 
     public void pauseAnimation() {
-        mScale.pause();
+        if (mScale != null) {
+            mScale.pause();
+        }
     }
 
     public void resumeAnimation() {
-        mScale.resume();
+        if (mScale != null) {
+            mScale.resume();
+        }
     }
 }

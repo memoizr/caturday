@@ -29,6 +29,21 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
 
+        Collection<CatPostEntity> catPostEntities = retrieveCatPosts(page, category, fromNetwork);
+
+        if (catPostEntities.size() == 0) {
+            fromNetwork = true;
+            catPostEntities = retrieveCatPosts(page, category, fromNetwork);
+        }
+
+        if (fromNetwork)
+            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+
+        return catPostEntities;
+    }
+
+    private Collection<CatPostEntity> retrieveCatPosts(int page, String category, boolean fromNetwork) {
+
         CatPostDataStore catPostDataStore = catPostFactory(fromNetwork);
         Collection<CatPostEntity> catPostEntities = catPostDataStore.getCatPostsForPageAndCategory(page, category);
 
@@ -37,6 +52,8 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
         return catPostEntities;
     }
+
+
 
     @Override
     public Collection<CatPostEntity> getCatPostsForIds(HashSet<String> ids) {

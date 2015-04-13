@@ -51,31 +51,15 @@ public class CatDetailModule {
 
     @Provides
     @Singleton
-    public CommentApi provideCommentApi(UserRepository userRepository) {
-        String endpoint = Config.getEndpoint();
+    public CommentApi provideCommentApi(RestAdapter restAdapter) {
 
-        String authToken = userRepository.getCurrentUser().getAuthToken();
-        RequestInterceptor interceptor = requestFacade -> requestFacade.addHeader("Auth-Token", authToken);
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(endpoint)
-                .setRequestInterceptor(interceptor)
-                .build();
-
-        final CommentApi api = adapter.create(CommentApi.class);
+        final CommentApi api = restAdapter.create(CommentApi.class);
         return api;
     }
 
     @Provides
     @Singleton
-    public VoteApi provideVoteApi(UserRepository userRepository) {
-        String endpoint = Config.getEndpoint();
-
-        String authToken = userRepository.getCurrentUser().getAuthToken();
-        RequestInterceptor interceptor = requestFacade -> requestFacade.addHeader("Auth-Token", authToken);
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(endpoint)
-                .setRequestInterceptor(interceptor)
-                .build();
+    public VoteApi provideVoteApi(RestAdapter adapter) {
 
         final VoteApi api = adapter.create(VoteApi.class);
         return api;

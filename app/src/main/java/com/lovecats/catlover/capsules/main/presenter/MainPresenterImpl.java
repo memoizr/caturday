@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.capsules.common.view.views.ExpandingView;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
 import com.lovecats.catlover.capsules.login.LoginActivity;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
@@ -21,6 +22,7 @@ import com.lovecats.catlover.util.animation.ImageAnimation;
 import java.util.Collection;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -76,6 +78,7 @@ public class MainPresenterImpl implements MainPresenter {
                 .subscribeOn(Schedulers.io())
                 .flatMap((iterable) -> Observable.from(iterable))
                 .observeOn(AndroidSchedulers.mainThread())
+                .retry()
                 .subscribe((s) -> {
 
                     MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
@@ -114,8 +117,8 @@ public class MainPresenterImpl implements MainPresenter {
         return Observable.create(new Observable.OnSubscribe<Collection<CatPostEntity>>() {
             @Override
             public void call(Subscriber<? super Collection<CatPostEntity>> subscriber) {
-                subscriber.onNext(mainInteractor.getRandomCatPosts(howMany));
-                subscriber.onCompleted();
+                    subscriber.onNext(mainInteractor.getRandomCatPosts(howMany));
+                    subscriber.onCompleted();
             }
         });
 
