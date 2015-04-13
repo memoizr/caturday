@@ -94,14 +94,13 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public void loadMore(int page, int totalItems) {
-        System.out.println("loading more");
+        // TODO switch to RX
         catStreamInteractor.getCatPostPageAndType(page,
                 streamType,
-                true,
+                false,
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-                System.out.println("success " + catPostCollection.size());
                 CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
                 adapter.addItems(catPostCollection);
             }
