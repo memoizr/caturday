@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,6 +27,7 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
     @InjectView(R.id.profile_VP) ViewPager profile_VP;
 //    @InjectView(R.id.user_name_ET) EditText user_name_ET;
     @Inject ProfilePresenter profilePresenter;
+    @InjectView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,21 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
     }
 
     @Override
+    public void initToolbar() {
+        toolbar.setTitle("Username");
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
+    }
+
+    @Override
     public void setUserName(String string) {
 //        user_name_ET.setText(string);
     }
 
-    @OnClick(R.id.logout)
+//    @OnClick(R.id.logout)
     public void clickLogout() {
         profilePresenter.logout();
     }

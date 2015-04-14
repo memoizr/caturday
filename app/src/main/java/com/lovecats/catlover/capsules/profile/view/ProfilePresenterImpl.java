@@ -1,9 +1,6 @@
 package com.lovecats.catlover.capsules.profile.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
@@ -28,6 +25,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
         }
         profileInteractor.getUser();
         profileView.showButton(userLoggedIn());
+        profileView.initToolbar();
         initViewPager();
     }
 

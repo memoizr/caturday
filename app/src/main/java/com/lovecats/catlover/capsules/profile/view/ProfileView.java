@@ -13,5 +13,7 @@ public interface ProfileView {
     void setUserName(String string);
 
     void initializePager(FragmentPagerAdapter adapter, PagerSlidingTabStrip slidingTabs_PSTS);
+
+    void initToolbar();
 }
 
