@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.view.views.ExpandingView;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
 import com.lovecats.catlover.capsules.login.LoginActivity;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
@@ -22,7 +21,6 @@ import com.lovecats.catlover.util.animation.ImageAnimation;
 import java.util.Collection;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -56,9 +54,11 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void prepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_login);
-        if (item != null) {
-            item.setVisible(!mainInteractor.userLoggedIn());
+        MenuItem loginItem = menu.findItem(R.id.action_login);
+        MenuItem logoutItem = menu.findItem(R.id.action_logout);
+        if (loginItem != null && logoutItem != null) {
+            loginItem.setVisible(!mainInteractor.userLoggedIn());
+            logoutItem.setVisible(mainInteractor.userLoggedIn());
         }
     }
 
@@ -105,6 +105,8 @@ public class MainPresenterImpl implements MainPresenter {
                     if (item.getItemId() == R.id.action_login) {
                         Intent intent = new Intent(mainViewActivity, LoginActivity.class);
                         mainViewActivity.startActivity(intent);
+                    } else if (item.getItemId() == R.id.action_logout) {
+                        mainInteractor.performLogout();
                     } else {
                         Intent intent = new Intent(mainViewActivity, SettingsActivity.class);
                         mainViewActivity.startActivity(intent);

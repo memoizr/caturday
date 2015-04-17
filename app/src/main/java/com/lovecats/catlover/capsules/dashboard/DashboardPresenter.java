@@ -12,4 +12,6 @@ public abstract class DashboardPresenter implements ViewPager.OnPageChangeListen
         SwipeRefreshLayout.OnRefreshListener {
 
     public abstract void onCreateView(BaseFragment fragment);
+
+    public abstract void createNewPost();
 }

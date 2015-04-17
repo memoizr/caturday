@@ -1,10 +1,13 @@
 package com.lovecats.catlover.capsules.dashboard;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.newpost.NewPostActivity;
 
 /**
  * Created by user on 29/03/15.
@@ -12,6 +15,7 @@ import com.lovecats.catlover.capsules.common.BaseFragment;
 public class DashboardPresenterImpl extends DashboardPresenter {
 
     private DashboardView dashboardView;
+    private FragmentActivity activity;
 
     public DashboardPresenterImpl(DashboardView dashboardView){
         this.dashboardView = dashboardView;
@@ -19,7 +23,7 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
     @Override
     public void onCreateView(BaseFragment fragment) {
-        Activity activity = fragment.getActivity();
+        activity = fragment.getActivity();
         if (activity instanceof SlidingTabActivity) {
 
             DashboardPageAdapter adapter = new DashboardPageAdapter(fragment.getFragmentManager());
@@ -30,6 +34,12 @@ public class DashboardPresenterImpl extends DashboardPresenter {
         }
         dashboardView.initializeSwipeContainer(this);
 
+    }
+
+    @Override
+    public void createNewPost() {
+        Intent intent = new Intent(activity, NewPostActivity.class);
+        activity.startActivity(intent);
     }
 
     @Override

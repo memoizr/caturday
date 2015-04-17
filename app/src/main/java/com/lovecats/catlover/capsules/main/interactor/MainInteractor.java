@@ -11,5 +11,7 @@ public interface MainInteractor {
 
     boolean userLoggedIn();
 
+    void performLogout();
+
     Collection<CatPostEntity> getRandomCatPosts(int howMany);
 }

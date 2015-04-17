@@ -258,7 +258,9 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     public void onRestart() {
         super.onRestart();
         resumeSliderAnimation();
-        toggleArrow(false);
+        toolbar.postDelayed(()-> {
+            toggleArrow(false);
+        }, 200);
     }
 
     @Override

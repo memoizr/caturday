@@ -1,9 +1,12 @@
 package com.lovecats.catlover.capsules.profile.view;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
@@ -32,8 +35,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     private void initViewPager() {
 
         ProfilePageAdapter adapter = new ProfilePageAdapter(((BaseActionBarActivity)context).getSupportFragmentManager());
-//        PagerSlidingTabStrip pager = ((SlidingTabActivity) activity).getSlidingTabStrip();
-        PagerSlidingTabStrip pager = null;
+        PagerSlidingTabStrip pager = ((SlidingTabActivity) context).getSlidingTabStrip();
         profileView.initializePager(adapter, pager);
     }
 

@@ -32,10 +32,14 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
                                       final Callback<Collection<CatPostEntity>> callback) {
 
         threadExecutor.execute(() -> {
-            final Collection<CatPostEntity> catPostCollection =
-                    catPostRepository.getCatPostsForPageAndCategory(page, streamType, fromNetwork);
+            try {
+                final Collection<CatPostEntity> catPostCollection =
+                        catPostRepository.getCatPostsForPageAndCategory(page, streamType, fromNetwork);
 
             postExecutionThread.post(() -> callback.success(catPostCollection, null));
+            } catch (Error e) {
+
+            }
         });
     }
 }

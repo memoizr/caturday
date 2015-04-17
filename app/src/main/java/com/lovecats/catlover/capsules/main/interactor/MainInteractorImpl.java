@@ -19,10 +19,14 @@ public class MainInteractorImpl implements  MainInteractor {
         this.catPostRepository = catPostRepository;
     }
 
-
     @Override
     public boolean userLoggedIn() {
         return userRepository.userLoggedIn();
+    }
+
+    @Override
+    public void performLogout() {
+        userRepository.logout();
     }
 
     @Override

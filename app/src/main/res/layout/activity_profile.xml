@@ -45,6 +45,7 @@
         app:pstsTextAlpha="0.8"
         android:layout_width="match_parent"
         android:textSize="15sp"
+        android:background="@color/primary"
         android:layout_height="56dp"
         />
 

@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class DashboardFragment extends BaseFragment implements DashboardView {
 
@@ -73,5 +74,11 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     @Override
     protected List<Object> getModules() {
         return Arrays.<Object>asList(new DashboardModule(this));
+    }
+
+    @OnClick(R.id.new_post_B)
+    public void newPost(){
+
+        dashboardPresenter.createNewPost();
     }
 }

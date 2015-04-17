@@ -4,6 +4,7 @@ import com.lovecats.catlover.capsules.common.Config;
 import com.lovecats.catlover.capsules.dashboard.stream.api.CatPostApi;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -12,7 +13,6 @@ import retrofit.RestAdapter;
 public class CatStreamCloudDataStore implements CatPostDataStore {
 
     public CatStreamCloudDataStore() {
-        System.out.println("and here");
     }
 
     @Override
@@ -24,8 +24,12 @@ public class CatStreamCloudDataStore implements CatPostDataStore {
                 .build();
 
         final CatPostApi api = adapter.create(CatPostApi.class);
+        Collection<CatPostEntity> catPostEntities = new ArrayList<>();
+        try {
+            catPostEntities = api.getPosts(page, category);
+        } catch (Exception e) {
 
-        Collection<CatPostEntity> catPostEntities = api.getPosts(page, category);
+        }
 
         return catPostEntities;
     }

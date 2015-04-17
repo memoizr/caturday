@@ -20,4 +20,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="drawer_open_desc">Open</string>
     <string name="drawer_close_desc">Close</string>
+    <string name="action_logout">Logout</string>
 </resources>

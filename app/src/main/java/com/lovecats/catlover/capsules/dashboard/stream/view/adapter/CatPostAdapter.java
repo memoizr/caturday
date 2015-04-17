@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,29 +73,36 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //            layoutParams.setFullSpan(true);
         } else {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
-            final int j = i;
+
+            final CatPostEntity catPostEntity = mCatPosts.get(i);
 
             final String transitionName = "catTransition" + i;
+
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
-            ((CatsCardViewHolder) viewHolder).caption_TV.setText(mCatPosts.get(i).getCaption());
+            ((CatsCardViewHolder) viewHolder).caption_TV.setText(catPostEntity.getCaption());
 
-            String commentsNumber = Integer.toString(mCatPosts.get(i).getComments().size());
+            String commentsNumber = Integer.toString(catPostEntity.getComments().size());
             ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
+            int votesCount = catPostEntity.getTotalVotesCount();
 
-            String votesNumber = Integer.toString(mCatPosts.get(i).getTotalVotesCount());
-            myViewHolder.total_votes_count.setText(votesNumber);
+            String votesNumber = "";
 
-            Picasso.with(mContext).load(mCatPosts.get(i).getImageUrl()).into(myViewHolder.cat_IV);
+            if (votesCount != 0) {
+                votesNumber = Integer.toString(votesCount);
+            }
+
+            myViewHolder.vote_B.setText(votesNumber);
+
+            Picasso.with(mContext).load(catPostEntity.getImageUrl()).into(myViewHolder.cat_IV);
 
             myViewHolder.share_B.setOnClickListener(view -> {
-                System.out.println("Shared again!");
                 ShareHelper.shareLinkAction("Check out this cat!",
                         mCatPosts.get(i).getImageUrl(),
                         mContext);
             });
 
-            myViewHolder.plus_one_B.setOnClickListener(view -> {
+            myViewHolder.vote_B.setOnClickListener(view -> {
                 System.out.println("Clicked!");
             });
 
@@ -106,8 +115,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 Pair.create((View) myViewHolder.cat_IV, transitionName)
                         );
                 intent.putExtra("transition", transitionName);
-                intent.putExtra("url", mCatPosts.get(j).getImageUrl());
-                intent.putExtra("serverId", mCatPosts.get(j).getServerId());
+                intent.putExtra("url", catPostEntity.getImageUrl());
+                intent.putExtra("serverId", catPostEntity.getServerId());
                 ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
             });
         }
@@ -147,9 +156,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @InjectView(R.id.cardCat_IV) ImageView cat_IV;
         @InjectView(R.id.catContainer) View catContainer;
         @InjectView(R.id.caption_TV) TextView caption_TV;
-        @InjectView(R.id.total_votes_count_TV) TextView total_votes_count;
         @InjectView(R.id.total_comments_count_TV) TextView total_comments_count;
-        @InjectView(R.id.plus_one_B) ImageButton plus_one_B;
+        @InjectView(R.id.votes_B) Button vote_B;
         @InjectView(R.id.share_B) View share_B;
 
         public CatsCardViewHolder(View v) {

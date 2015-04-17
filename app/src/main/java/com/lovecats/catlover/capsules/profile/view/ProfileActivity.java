@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.profile.ProfileModule;
 
 import java.util.Arrays;
@@ -22,12 +23,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class ProfileActivity extends BaseActionBarActivity implements ProfileView {
-//    @InjectView(R.id.logout) Button logout;
+public class ProfileActivity extends BaseActionBarActivity implements SlidingTabActivity, ProfileView {
     @InjectView(R.id.profile_VP) ViewPager profile_VP;
-//    @InjectView(R.id.user_name_ET) EditText user_name_ET;
-    @Inject ProfilePresenter profilePresenter;
+    @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip sliding_PSTS;
+
     @InjectView(R.id.toolbar) Toolbar toolbar;
+    @Inject ProfilePresenter profilePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +61,9 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
     public void initializePager(FragmentPagerAdapter adapter, PagerSlidingTabStrip slidingTabs_PSTS) {
 
         profile_VP.setAdapter(adapter);
-//        slidingTabs_PSTS.setViewPager(dashboard_VP);
-//        slidingTabs_PSTS.setTextColor(getResources().getColor(R.color.white));
-//        slidingTabs_PSTS.setOnPageChangeListener(dashboardPresenter);
-    }
+        slidingTabs_PSTS.setViewPager(profile_VP);
+        slidingTabs_PSTS.setTextColor(getResources().getColor(R.color.white));
+   }
 
     @Override
     public void initToolbar() {
@@ -88,5 +88,10 @@ public class ProfileActivity extends BaseActionBarActivity implements ProfileVie
     @Override
     public void onPostLogout() {
 //        logout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public PagerSlidingTabStrip getSlidingTabStrip() {
+        return sliding_PSTS;
     }
 }
