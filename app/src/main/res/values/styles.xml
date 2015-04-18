@@ -24,12 +24,12 @@
         <item name="android:windowContentTransitions">true</item>
 
 
-        <item name="popupTheme">@style/PopupStyle</item>
+        <item name="popupTheme">@style/PopupMenuStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-    <style name="PopupStyle">
-        <item name="android:background">@color/white</item>
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/white</item>
         <item name="android:textColorPrimary">@color/black</item>
     </style>
 
@@ -58,8 +58,6 @@
     <style name="CardButtonStyle">
         <item name="android:drawablePadding">8dp</item>
         <item name="android:background">@drawable/card_button_selector</item>
-        <item name="android:tint">@color/black</item>
-        <item name="android:text">23</item>
         <item name="android:textSize">16dp</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:textColor">@color/dark</item>

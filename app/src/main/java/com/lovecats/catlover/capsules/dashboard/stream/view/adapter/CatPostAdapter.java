@@ -7,14 +7,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.PopupWindowCompat;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
@@ -86,6 +95,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
             int votesCount = catPostEntity.getTotalVotesCount();
 
+
             String votesNumber = "";
 
             if (votesCount != 0) {
@@ -95,6 +105,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             myViewHolder.vote_B.setText(votesNumber);
 
             Picasso.with(mContext).load(catPostEntity.getImageUrl()).into(myViewHolder.cat_IV);
+
+            myViewHolder.options_B.setOnClickListener(this::showPopup);
 
             myViewHolder.share_B.setOnClickListener(view -> {
                 ShareHelper.shareLinkAction("Check out this cat!",
@@ -126,6 +138,29 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mCatPosts.addAll(catPostCollection);
         notifyDataSetChanged();
     }
+    public void showPopupWindow(View v) {
+        PopupWindow popupWindow = new PopupWindow(mContext);
+
+        LayoutInflater inflater = (LayoutInflater)   mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.menu_card, null);
+
+
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+        popupWindow.showAsDropDown(v);
+    }
+
+    public void showPopup(View v) {
+        Context wrapper = new ContextThemeWrapper(mContext, R.style.PopupMenuStyle);
+        PopupMenu popupMenu = new PopupMenu(wrapper, v);
+        popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Report abuse");
+        popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "Copy image URL");
+        popupMenu.show();
+    }
+
 
     @Override
     public int getItemCount() {
@@ -159,6 +194,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @InjectView(R.id.total_comments_count_TV) TextView total_comments_count;
         @InjectView(R.id.votes_B) Button vote_B;
         @InjectView(R.id.share_B) View share_B;
+        @InjectView(R.id.options_B) ImageButton options_B;
 
         public CatsCardViewHolder(View v) {
             super(v);

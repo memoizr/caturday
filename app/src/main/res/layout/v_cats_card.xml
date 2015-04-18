@@ -65,6 +65,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <ImageButton
+                android:id="@+id/options_B"
+                android:src="@drawable/ic_more_vert_grey600_24dp"
+                android:layout_alignParentRight="true"
+                style="@style/CardButtonStyle"
+                android:paddingTop="16dp"
+                android:paddingRight="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <ImageView
                 android:id="@+id/cardCat_IV"
                 android:layout_marginTop="8dp"
