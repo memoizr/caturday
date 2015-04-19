@@ -1,7 +1,9 @@
-package com.lovecats.catlover.capsules.dashboard.stream.api;
+package com.lovecats.catlover.models.catpost.api;
 
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import java.util.List;
+
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -15,8 +17,14 @@ public interface CatPostApi {
     List<CatPostEntity> getPosts(@Query("page") int page,
                          @Query("category") String category);
 
+//    @Multipart
+//    @POST("/cat_post")
+//    Observable<CatPostEntity> upload(@Part("image_file") TypedFile file,
+//                              @Part("caption") String caption);
+
     @Multipart
     @POST("/cat_post")
     Observable<CatPostEntity> upload(@Part("image_file") TypedFile file,
-                              @Part("caption") String caption);
+                                     @Part("category") String category,
+                                     @Part("caption") String caption);
 }

@@ -1,24 +1,38 @@
 package com.lovecats.catlover.capsules.newpost.view;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.widget.EditText;
 
 import com.lovecats.catlover.capsules.newpost.interactor.NewPostInteractor;
+import com.lovecats.catlover.models.catpost.CatPostEntity;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class NewPostPresenterImpl implements NewPostPresenter {
+
     private static final int SELECT_PHOTO = 100;
+    private static final int REQUEST_TAKE_PHOTO = 1;
 
     private final NewPostInteractor newPostInteractor;
     private final NewPostView newPostView;
     private Context mContext;
+    private Uri imageUri;
 
     public NewPostPresenterImpl(NewPostView newPostView, NewPostInteractor newPostInteractor) {
         this.newPostView = newPostView;
@@ -40,32 +54,109 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     }
 
     @Override
-    public void onActivityResult(Intent data) {
+    public void takeNewImage() {
+        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, doMagic());
+        ((Activity)mContext).startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+    }
 
-        Observable<String> uriObservable = Observable.<String>create((observer)-> {
-            String path = getRealPathFromURI(data.getData());
-            observer.onNext(path);
+    @DebugLog
+    @Override
+    public void onActivityResult(Intent data) {
+        if (data != null)
+            this.imageUri = data.getData();
+        newPostView.choiceMade();
+        newPostView.setPreview(imageUri);
+    }
+
+    @Override
+    public void sendPost(EditText caption, EditText link) {
+
+        CatPostEntity catPostEntity = new CatPostEntity();
+        catPostEntity.setCaption(caption.getText().toString());
+
+        if (link.getText().length() > 0)
+            catPostEntity.setImageUrl(link.getText().toString());
+
+        catPostEntity.setCategory("space");
+
+        sendPostForUri(catPostEntity, imageUri);
+    }
+
+    @DebugLog
+    private void sendPostForUri(CatPostEntity catPostEntity, Uri uri) {
+
+        Observable<CatPostEntity> uriObservable = Observable.<CatPostEntity>create((observer)-> {
+            System.out.println(uri.toString());
+            String path = getRealPathFromURI(uri);
+            System.out.println(path);
+            catPostEntity.setImagePath(path);
+            observer.onNext(catPostEntity);
             observer.onCompleted();
         });
 
         uriObservable.subscribeOn(Schedulers.io())
-                .flatMap((path) -> newPostInteractor.createPost(path))
+                .flatMap(newPostInteractor::createPost)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         success -> System.out.println(success.getImageUrl()),
-                        error -> error.printStackTrace() );
+                        error -> error.printStackTrace());
     }
 
-    public String getRealPathFromURI(Uri uri) {
+    private Uri doMagic() {
 
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String timestamp = Long.toString(new Date().getTime());
+        String imagePath =  "/sdcard/" + timestamp + ".jpg";
 
-        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
+        ContentValues v = new ContentValues();
 
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
+        v.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
 
-        return cursor.getString(column_index);
+        File f = new File(imagePath);
+
+        File parent = f.getParentFile() ;
+
+        String path = parent.toString().toLowerCase() ;
+
+        String name = parent.getName().toLowerCase() ;
+
+        v.put(MediaStore.Images.ImageColumns.BUCKET_ID, path.hashCode());
+
+        v.put(MediaStore.Images.Media.SIZE, f.length()) ;
+
+        v.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, name);
+
+        f = null;
+
+        v.put("_data", imagePath) ;
+
+        ContentResolver c = mContext.getContentResolver() ;
+
+        imageUri = c.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, v);
+
+        return imageUri;
+    }
+
+    @DebugLog
+    private String getRealPathFromURI(Uri uri) {
+        System.out.println(uri.toString());
+
+        String url = "";
+        try {
+            String[] projection = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
+
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+            cursor.moveToFirst();
+            url = cursor.getString(column_index);
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 }

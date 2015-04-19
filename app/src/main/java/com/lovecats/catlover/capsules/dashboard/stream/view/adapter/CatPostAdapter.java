@@ -93,7 +93,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             String commentsNumber = Integer.toString(catPostEntity.getComments().size());
             ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
-            int votesCount = catPostEntity.getTotalVotesCount();
+            int votesCount = catPostEntity.getVotesCount();
 
 
             String votesNumber = "";

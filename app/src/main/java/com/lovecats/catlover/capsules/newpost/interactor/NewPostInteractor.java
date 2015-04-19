@@ -7,5 +7,5 @@ import rx.Observable;
 
 public interface NewPostInteractor {
 
-    Observable<CatPostEntity> createPost(String filename);
+    Observable<CatPostEntity> createPost(CatPostEntity catPostEntity);
 }

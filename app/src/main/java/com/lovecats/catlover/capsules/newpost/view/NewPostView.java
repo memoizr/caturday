@@ -1,9 +1,15 @@
 package com.lovecats.catlover.capsules.newpost.view;
 
-/**
- * Created by Cat#2 on 18/04/15.
- */
+import android.net.Uri;
+
 public interface NewPostView {
     void initToolbar();
     void animateIn();
+
+    void choiceMade();
+
+    void choiceUnmade();
+
+    void setPreview(Uri uri);
+    void setPreview(String url);
 }

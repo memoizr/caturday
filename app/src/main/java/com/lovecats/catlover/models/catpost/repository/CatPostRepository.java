@@ -17,5 +17,5 @@ public interface CatPostRepository {
 
     Collection<CatPostEntity> getRandomCatPosts(int howMany);
 
-    Observable<CatPostEntity> createPost(String filename);
+    Observable<CatPostEntity> createPost(CatPostEntity catPostEntity);
 }

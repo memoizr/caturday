@@ -1,7 +1,7 @@
 package com.lovecats.catlover.models.catpost.datastore;
 
 import com.lovecats.catlover.capsules.common.Config;
-import com.lovecats.catlover.capsules.dashboard.stream.api.CatPostApi;
+import com.lovecats.catlover.models.catpost.api.CatPostApi;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 
 import java.io.File;
@@ -13,9 +13,12 @@ import retrofit.RestAdapter;
 import retrofit.mime.TypedFile;
 import rx.Observable;
 
-public class CatStreamCloudDataStore implements CatPostDataStore {
+public class CatPostCloudDataStore implements CatPostDataStore {
 
-    public CatStreamCloudDataStore() {
+    private final CatPostApi catPostApi;
+
+    public CatPostCloudDataStore(CatPostApi catPostApi) {
+        this.catPostApi = catPostApi;
     }
 
     @Override
@@ -52,20 +55,12 @@ public class CatStreamCloudDataStore implements CatPostDataStore {
         return null;
     }
 
-    public Observable<CatPostEntity> createPost(String path) {
-        // TODO  do this properly!
+    public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
 
-        String endpoint = Config.getEndpoint();
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(endpoint)
-                .build();
-
-        final CatPostApi api = adapter.create(CatPostApi.class);
         System.out.println("and here");
-        TypedFile typedFile = new TypedFile("multipart/form-data", new File(path));
-        String description = "hello, this is description speaking";
+        TypedFile typedFile = new TypedFile("multipart/form-data", new File(catPostEntity.getImagePath()));
 
-        return api.upload(typedFile, description);
+        return catPostApi.upload(typedFile, catPostEntity.getCategory(), catPostEntity.getCaption());
     }
 
 }

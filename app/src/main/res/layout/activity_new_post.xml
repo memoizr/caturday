@@ -1,82 +1,139 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lovecats.catlover.capsules.newpost.view.NewPostActivity">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:visibility="invisible"
         android:id="@+id/reveal_V"
-        android:background="@color/accent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/accent"
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <TextView
-            android:paddingTop="72dp"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="72dp"
-            android:text="New Post"
-            android:textColor="@color/white"
-            android:id="@+id/new_post_title"
             android:layout_width="wrap_content"
-            android:textSize="32dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:paddingTop="72dp"
+            android:text="Create New Post"
+            android:textColor="@color/white"
+            android:textSize="32dp" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:hint="Enter Caption"
+            android:id="@+id/caption_ET"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
             android:layout_marginRight="72dp"
-            android:layout_width="match_parent"
-            app:floatingLabel="highlight"
+            android:layout_marginTop="16dp"
+            android:hint="Enter Caption"
             app:baseColor="@android:color/white"
+            app:floatingLabel="highlight"
             app:maxCharacters="20"
             app:primaryColor="@color/white"
             app:singleLineEllipsis="true" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:hint="Enter URL"
+            android:id="@+id/link_ET"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
             android:layout_marginRight="72dp"
-            android:layout_width="match_parent"
-            app:floatingLabel="highlight"
+            android:hint="Enter URL"
+            android:visibility="gone"
             app:baseColor="@android:color/white"
+            app:floatingLabel="highlight"
             app:primaryColor="@color/white"
             app:singleLineEllipsis="true" />
+        
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/accent_dark">
 
-        <Button
-            android:id="@+id/upload_image_B"
-            android:text="Upload Image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/preview_IV"
+                android:layout_width="match_parent"
+                android:layout_height="156dp"
+                android:maxHeight="72dp"
+                android:scaleType="centerInside"
+                android:visibility="gone"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="56dp"
-            android:layout_height="wrap_content">
+        <HorizontalScrollView
+            android:id="@+id/choices_HSV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingTop="8dp">
 
             <Button
-                android:text="Publish"
-                android:id="@+id/login_submit_B"
-                android:background="@drawable/tab_selector"
+                android:id="@+id/take_photo_B"
+                style="@style/NewPostButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="56dp" />
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_camera_alt_white_48dp"
+                android:text="New photo"/>
+
+            <Button
+                android:id="@+id/upload_image_B"
+                style="@style/NewPostButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_collections_white_48dp"
+                android:text="From gallery"/>
+
+            <Button
+                android:id="@+id/link_image_B"
+                style="@style/NewPostButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_link_white_48dp"
+                android:text="From link"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="56dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_B"
+                style="@style/CallToActionButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:text="Cancel" />
+
+            <Button
+                android:id="@+id/submit_B"
+                style="@style/CallToActionButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:text="Publish" />
         </LinearLayout>
+
     </LinearLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:paddingTop="@dimen/status_bar_size"
-        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingTop="@dimen/status_bar_size"/>
+</FrameLayout>

@@ -18,8 +18,7 @@ public class NewPostInteractorImpl implements NewPostInteractor {
     }
 
     @Override
-    public Observable<CatPostEntity> createPost(String filename) {
-        return catPostRepository.createPost(filename);
-
+    public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
+        return catPostRepository.createPost(catPostEntity);
     }
 }
