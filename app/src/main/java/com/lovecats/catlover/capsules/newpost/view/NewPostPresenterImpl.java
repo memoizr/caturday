@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,7 +15,9 @@ import android.widget.EditText;
 import com.lovecats.catlover.capsules.newpost.interactor.NewPostInteractor;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,6 +68,37 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     public void onActivityResult(Intent data) {
         if (data != null)
             this.imageUri = data.getData();
+        try {
+
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageUri);
+
+            final int maxSize = 768;
+            int outWidth;
+            int outHeight;
+            int inWidth = bitmap.getWidth();
+            int inHeight = bitmap.getHeight();
+            if(inWidth > inHeight){
+                outWidth = maxSize;
+                outHeight = (inHeight * maxSize) / inWidth;
+            } else {
+                outHeight = maxSize;
+                outWidth = (inWidth * maxSize) / inHeight;
+            }
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, outWidth, outHeight, false);
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+            File f = new File(getRealPathFromURI(imageUri));
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         newPostView.choiceMade();
         newPostView.setPreview(imageUri);
     }
@@ -113,18 +147,10 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         v.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
 
         File f = new File(imagePath);
-
         File parent = f.getParentFile() ;
 
         String path = parent.toString().toLowerCase() ;
-
-        String name = parent.getName().toLowerCase() ;
-
         v.put(MediaStore.Images.ImageColumns.BUCKET_ID, path.hashCode());
-
-        v.put(MediaStore.Images.Media.SIZE, f.length()) ;
-
-        v.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, name);
 
         f = null;
 

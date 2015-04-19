@@ -8,7 +8,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -27,22 +26,22 @@
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/user_image_IV"
                 android:src="@drawable/donkey"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 app:riv_corner_radius="36dp"/>
 
             <TextView
                 android:id="@+id/user_name_TV"
                 android:layout_toRightOf="@+id/user_image_IV"
+                android:layout_alignTop="@+id/user_image_IV"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/deepblack"
                 android:text="Random Chool"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -56,12 +55,11 @@
 
             <TextView
                 android:id="@+id/caption_TV"
-                android:layout_below="@+id/user_image_IV"
+                android:layout_below="@+id/date_TV"
                 android:textSize="14sp"
                 android:textColor="@color/deepblack"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="64dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -71,17 +69,17 @@
                 android:layout_alignParentRight="true"
                 style="@style/CardButtonStyle"
                 android:paddingTop="16dp"
-                android:paddingRight="8dp"
+                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <ImageView
                 android:id="@+id/cardCat_IV"
-                android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
+                android:layout_marginTop="8dp"
                 android:layout_below="@id/caption_TV"
                 android:layout_width="match_parent"
-                android:layout_height="256dp" />
+                android:layout_height="264dp" />
 
         </RelativeLayout>
         </FrameLayout>
@@ -94,7 +92,7 @@
             <Button
                 android:id="@+id/votes_B"
                 android:drawableLeft="@drawable/ic_plus_one_grey600_24dp"
-                android:paddingLeft="16dp"
+                android:paddingLeft="8dp"
                 style="@style/CardButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -114,6 +112,7 @@
             <Button
                 android:id="@+id/share_B"
                 android:paddingLeft="16dp"
+                android:text="34"
                 style="@style/CardButtonStyle"
                 android:drawableLeft="@drawable/ic_share_grey600_24dp"
                 android:layout_width="wrap_content"
