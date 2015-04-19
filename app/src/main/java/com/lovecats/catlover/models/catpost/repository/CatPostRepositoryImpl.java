@@ -9,6 +9,8 @@ import com.lovecats.catlover.models.catpost.db.CatPostDb;
 import java.util.Collection;
 import java.util.HashSet;
 
+import rx.Observable;
+
 public class CatPostRepositoryImpl implements CatPostRepository {
 
     private CatPostLocalDataStore catPostLocalDataStore;
@@ -69,5 +71,12 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public Collection<CatPostEntity> getRandomCatPosts(int howMany) {
         return catPostLocalDataStore.getRandomCatPosts(howMany);
+    }
+
+    @Override
+    public Observable<CatPostEntity> createPost(String filename) {
+        System.out.println("been here");
+        CatStreamCloudDataStore catStreamCloudDataStore = new CatStreamCloudDataStore();
+        return catStreamCloudDataStore.createPost(filename);
     }
 }

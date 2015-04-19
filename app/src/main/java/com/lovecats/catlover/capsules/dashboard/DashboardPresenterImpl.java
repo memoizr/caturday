@@ -1,13 +1,12 @@
 package com.lovecats.catlover.capsules.dashboard;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.common.BaseFragment;
-import com.lovecats.catlover.capsules.newpost.NewPostActivity;
+import com.lovecats.catlover.capsules.newpost.view.NewPostActivity;
 
 /**
  * Created by user on 29/03/15.

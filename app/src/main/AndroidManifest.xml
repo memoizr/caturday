@@ -48,7 +48,7 @@
         </activity>
         <activity
             android:theme="@style/Theme.Transparent"
-            android:name=".capsules.newpost.NewPostActivity"
+            android:name=".capsules.newpost.view.NewPostActivity"
             android:label="@string/title_activity_new_post" >
         </activity>
     </application>
