@@ -1,11 +1,13 @@
 package com.lovecats.catlover.capsules.dashboard.stream;
 
 import com.lovecats.catlover.AppModule;
+import com.lovecats.catlover.capsules.common.Events.EventsModule;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenter;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenterImpl;
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatStreamFragment;
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatStreamView;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -34,7 +36,8 @@ public class CatStreamModule {
     @Provides
     @Singleton
     public CatStreamPresenter provideCatStreamPresenter(CatStreamView catStreamView,
-                                                        CatStreamInteractor catStreamInteractor) {
-        return new CatStreamPresenterImpl(catStreamView, catStreamInteractor);
+                                                        CatStreamInteractor catStreamInteractor,
+                                                        Bus eventBus) {
+        return new CatStreamPresenterImpl(catStreamView, catStreamInteractor, eventBus);
     }
 }

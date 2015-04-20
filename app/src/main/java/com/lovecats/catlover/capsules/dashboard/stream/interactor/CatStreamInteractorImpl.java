@@ -42,4 +42,9 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
             }
         });
     }
+
+    @Override
+    public void eraseCache() {
+        catPostRepository.eraseCache();
+    }
 }

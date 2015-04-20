@@ -78,4 +78,9 @@ public class CatPostRepositoryImpl implements CatPostRepository {
         System.out.println("been here");
         return catPostCloudDataStore.createPost(catPostEntity);
     }
+
+    @Override
+    public void eraseCache() {
+        catPostLocalDataStore.eraseCache();
+    }
 }

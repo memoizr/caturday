@@ -26,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
 import com.lovecats.catlover.capsules.main.view.MainActivity;
 import com.lovecats.catlover.R;
@@ -104,7 +106,10 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             myViewHolder.vote_B.setText(votesNumber);
 
-            Picasso.with(mContext).load(catPostEntity.getImageUrl()).into(myViewHolder.cat_IV);
+            Glide.with(mContext)
+                    .load(catPostEntity.getImageUrl())
+                    .centerCrop()
+                    .into(myViewHolder.cat_IV);
 
             myViewHolder.options_B.setOnClickListener(this::showPopup);
 

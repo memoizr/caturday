@@ -2,6 +2,8 @@ package com.lovecats.catlover.capsules.dashboard;
 
 
 import com.lovecats.catlover.AppModule;
+import com.lovecats.catlover.capsules.common.Events.EventsModule;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -28,7 +30,7 @@ public class DashboardModule {
     }
 
     @Provides @Singleton
-    public DashboardPresenter provideDashboardPresenter(DashboardView dashboardView) {
-        return new DashboardPresenterImpl(dashboardView);
+    public DashboardPresenter provideDashboardPresenter(DashboardView dashboardView, Bus eventBus) {
+        return new DashboardPresenterImpl(dashboardView, eventBus);
     }
 }

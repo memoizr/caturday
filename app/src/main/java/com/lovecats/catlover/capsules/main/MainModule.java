@@ -15,6 +15,7 @@ import com.lovecats.catlover.capsules.main.view.MainActivity;
 import com.lovecats.catlover.models.catpost.repository.CatPostRepository;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -43,8 +44,9 @@ public class MainModule {
         return new MainInteractorImpl(userRepository, catPostRepository);
     }
 
-    @Provides @Singleton public MainPresenter provideMainPresenter(MainInteractor mainInteractor) {
-       return new MainPresenterImpl((MainActivity) context, mainInteractor);
+    @Provides @Singleton public MainPresenter provideMainPresenter(MainInteractor mainInteractor,
+                                                                   Bus bus) {
+       return new MainPresenterImpl((MainActivity) context, mainInteractor, bus);
     }
 
     @Provides @Singleton public CollapsibleView provideCollapsibleView() {

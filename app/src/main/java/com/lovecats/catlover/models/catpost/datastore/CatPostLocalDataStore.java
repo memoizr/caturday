@@ -37,4 +37,8 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     public void createMultipleCatPost(Collection<CatPostEntity> catPostEntityCollection) {
         catPostDb.createMultiplePost(catPostEntityCollection);
     }
+
+    public void eraseCache() {
+        catPostDb.eraseCache();
+    }
 }

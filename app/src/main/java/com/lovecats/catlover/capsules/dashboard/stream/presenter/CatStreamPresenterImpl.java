@@ -6,31 +6,50 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
+import com.lovecats.catlover.capsules.common.Events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.capsules.dashboard.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatStreamView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import hugo.weaving.DebugLog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     private final CatStreamView catStreamView;
     private final CatStreamInteractor catStreamInteractor;
+    private final Bus eventBus;
     private ScrollEventListener scrollEventListener;
     private static final String WARN_NO_LISTENER = "No Listeners attached";
     private Context context;
     private String streamType;
 
-    public CatStreamPresenterImpl(CatStreamView catStreamView, CatStreamInteractor catStreamInteractor) {
+    public CatStreamPresenterImpl(CatStreamView catStreamView,
+                                  CatStreamInteractor catStreamInteractor,
+                                  Bus eventBus) {
         this.catStreamView = catStreamView;
         this.catStreamInteractor = catStreamInteractor;
+        this.eventBus = eventBus;
+
+        eventBus.register(this);
+    }
+
+    @Subscribe
+    public void refreshHappened(StreamRefreshedEvent event) {
+        refreshCollection(streamType);
     }
 
     @Override
@@ -72,6 +91,23 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         scrollEventListener.onScrollStateChanged(scrollState);
     }
 
+    private void refreshCollection(String streamType) {
+        this.streamType = streamType;
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .doOnEach((s) -> {
+                    catStreamInteractor.eraseCache();
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> onRefreshComplete());
+    }
+
+    @DebugLog
+    private void onRefreshComplete() {
+        setAdapterByType(streamType);
+        eventBus.post(new StreamRefreshCompletedEvent());
+    }
+
     @Override
     public void setAdapterByType(String streamType) {
         this.streamType = streamType;
@@ -81,6 +117,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
+                System.out.println(new ArrayList(catPostCollection).get(0));
                 CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
                 catStreamView.setAdapter(adapter);
             }

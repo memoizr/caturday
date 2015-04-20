@@ -18,4 +18,6 @@ public interface CatPostRepository {
     Collection<CatPostEntity> getRandomCatPosts(int howMany);
 
     Observable<CatPostEntity> createPost(CatPostEntity catPostEntity);
+
+    void eraseCache();
 }
