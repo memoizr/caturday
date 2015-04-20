@@ -121,9 +121,10 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     private void sendPostForUri(CatPostEntity catPostEntity, Uri uri) {
 
         Observable<CatPostEntity> uriObservable = Observable.<CatPostEntity>create((observer)-> {
-            System.out.println(uri.toString());
-            String path = getRealPathFromURI(uri);
-            System.out.println(path);
+            String path = "";
+            if (uri != null) {
+                path = getRealPathFromURI(uri);
+            }
             catPostEntity.setImagePath(path);
             observer.onNext(catPostEntity);
             observer.onCompleted();

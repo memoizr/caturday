@@ -27,4 +27,6 @@ public interface CatPostApi {
     Observable<CatPostEntity> upload(@Part("image_file") TypedFile file,
                                      @Part("category") String category,
                                      @Part("caption") String caption);
+    @POST("/cat_post")
+    Observable<CatPostEntity> uploadWithUrl(@Body CatPostEntity catPostEntity);
 }

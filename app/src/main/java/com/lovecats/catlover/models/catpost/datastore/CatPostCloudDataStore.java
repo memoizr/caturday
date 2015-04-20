@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import hugo.weaving.DebugLog;
 import retrofit.RestAdapter;
 import retrofit.mime.TypedFile;
 import rx.Observable;
@@ -55,12 +56,17 @@ public class CatPostCloudDataStore implements CatPostDataStore {
         return null;
     }
 
+    @DebugLog
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
 
         System.out.println("and here");
-        TypedFile typedFile = new TypedFile("multipart/form-data", new File(catPostEntity.getImagePath()));
+        String path = catPostEntity.getImagePath();
 
-        return catPostApi.upload(typedFile, catPostEntity.getCategory(), catPostEntity.getCaption());
+        if (path.length() > 0) {
+            TypedFile typedFile = new TypedFile("multipart/form-data", new File(catPostEntity.getImagePath()));
+            return catPostApi.upload(typedFile, catPostEntity.getCategory(), catPostEntity.getCaption());
+        } else {
+            return catPostApi.uploadWithUrl(catPostEntity);
+        }
     }
-
 }
