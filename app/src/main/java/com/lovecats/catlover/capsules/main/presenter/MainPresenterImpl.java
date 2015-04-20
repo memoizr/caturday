@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
 import com.lovecats.catlover.capsules.login.LoginActivity;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
@@ -17,6 +18,8 @@ import com.lovecats.catlover.capsules.main.view.MainView;
 import com.lovecats.catlover.capsules.settings.SettingsActivity;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.util.animation.ImageAnimation;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.util.Collection;
 
@@ -30,12 +33,20 @@ public class MainPresenterImpl implements MainPresenter {
     private final MainView mainView;
     private final Activity mainViewActivity;
     private final MainInteractor mainInteractor;
+    private final Bus bus;
     private ImageAnimation backgroundImageAnimation;
 
-    public MainPresenterImpl(MainView mainView, MainInteractor mainInteractor) {
+    public MainPresenterImpl(MainView mainView, MainInteractor mainInteractor, Bus bus) {
         this.mainView = mainView;
         this.mainViewActivity = (Activity) mainView;
         this.mainInteractor = mainInteractor;
+        this.bus = bus;
+        bus.register(this);
+    }
+
+    @Subscribe
+    public void onRefreshComplete(StreamRefreshCompletedEvent event){
+        mainView.onRefreshCompleted();
     }
 
     @Override
@@ -80,7 +91,6 @@ public class MainPresenterImpl implements MainPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry()
                 .subscribe((s) -> {
-
                     MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
                     defaultSliderView.image(s.getImageUrl())
                             .setScaleType(BaseSliderView.ScaleType.CenterCrop);

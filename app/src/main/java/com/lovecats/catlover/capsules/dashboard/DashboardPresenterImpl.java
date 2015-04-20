@@ -1,24 +1,33 @@
 package com.lovecats.catlover.capsules.dashboard;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
+import com.lovecats.catlover.capsules.common.Events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.common.BaseFragment;
-import com.lovecats.catlover.capsules.newpost.NewPostActivity;
+import com.lovecats.catlover.capsules.newpost.view.NewPostActivity;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
-/**
- * Created by user on 29/03/15.
- */
 public class DashboardPresenterImpl extends DashboardPresenter {
 
+    private final Bus eventBus;
     private DashboardView dashboardView;
     private FragmentActivity activity;
 
-    public DashboardPresenterImpl(DashboardView dashboardView){
+    public DashboardPresenterImpl(DashboardView dashboardView, Bus eventBus){
         this.dashboardView = dashboardView;
+        this.eventBus = eventBus;
+
+        eventBus.register(this);
+    }
+
+    @Subscribe
+    public void onRefreshCompleted(StreamRefreshCompletedEvent event) {
+        dashboardView.setRefreshing(false);
     }
 
     @Override
@@ -96,13 +105,7 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
     @Override
     public void onRefresh() {
-//        CatPostFetcher.getSession().fetchCatPosts(new CatPostFetcher.CatPostFetcherCallbacks() {
-//
-//            @Override
-//            public void onSuccess(List<CatPostModel> catPostModels) {
-//                swipe_container.setRefreshing(false);
-//                ((MainActivity) getActivity()).doneSlideshow();
-//            }
-//        });
+        System.out.println("should be working....");
+        eventBus.post(new StreamRefreshedEvent());
     }
 }

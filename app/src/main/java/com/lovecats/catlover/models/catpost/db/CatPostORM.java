@@ -101,6 +101,11 @@ public class CatPostORM implements CatPostDb {
         insertOrUpdateInTx(catPostCollection);
     }
 
+    @Override
+    public void eraseCache() {
+        getCatPostDao().deleteAll();
+    }
+
     private CatPost mapToCatPost(CatPostEntity catPostEntity){
 
         CatPost catPost = CatPostMapper.fromEntity(catPostEntity);

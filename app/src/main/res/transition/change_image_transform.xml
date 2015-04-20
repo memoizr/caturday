@@ -5,7 +5,6 @@
         android:interpolator="@android:interpolator/decelerate_quint"
         />
   <changeImageTransform
-
       android:interpolator="@android:interpolator/decelerate_quint"
       />
 </transitionSet>

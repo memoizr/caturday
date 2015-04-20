@@ -1,5 +1,6 @@
 package com.lovecats.catlover.capsules.main.view;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -7,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
@@ -27,6 +29,8 @@ import com.lovecats.catlover.util.animation.ImageAnimation;
 import com.lovecats.catlover.util.helper.AnimationHelper;
 import com.lovecats.catlover.util.helper.DrawerArrowHelper;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperTanAccelerateInterpolator;
+import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +59,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip slidingTabs_PSTS;
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
+    @InjectView(R.id.reveal_V) View reveal;
     private ActionBarDrawerToggle mDrawerToggle;
     private ImageAnimation backgroundImageAnimation;
     private boolean statusTransparent = true;
@@ -129,7 +134,28 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
 
     @Override
     public void onRefreshCompleted() {
-//        slide_show_V.flash();
+        System.out.print("heyyyyyyyyyyyy");
+        reveal().addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                fade();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     public void pauseSliderAnimation() {
@@ -137,7 +163,37 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     }
 
     public void resumeSliderAnimation() {
+
         mainPresenter.resumeSliderAnimation();
+    }
+
+    private Animator reveal() {
+        // get the center for the clipping circle
+        int cx = reveal.getWidth() / 2;
+        int cy = reveal.getTop() + 96;
+
+        // get the final radius for the clipping circle
+        int finalRadius = (int) Math.sqrt(Math.pow(reveal.getWidth(), 2) + Math.pow(reveal.getHeight(), 2));
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
+
+        anim.setDuration(400);
+        anim.setInterpolator(new HyperTanAccelerateInterpolator());
+
+        // make the view visible and start the animation
+        reveal.setVisibility(View.VISIBLE);
+        reveal.setAlpha(1f);
+        anim.start();
+        return anim;
+    }
+
+    private void fade() {
+        reveal.animate()
+                .alpha(0f).setDuration(600)
+                .setInterpolator(new HyperTanDecelerateInterpolator())
+                .start();
     }
 
     @Override

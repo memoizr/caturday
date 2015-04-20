@@ -3,25 +3,27 @@ package com.lovecats.catlover.models.catpost.repository;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.datastore.CatPostDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostLocalDataStore;
-import com.lovecats.catlover.models.catpost.datastore.CatStreamCloudDataStore;
+import com.lovecats.catlover.models.catpost.datastore.CatPostCloudDataStore;
 import com.lovecats.catlover.models.catpost.db.CatPostDb;
 
 import java.util.Collection;
 import java.util.HashSet;
 
+import rx.Observable;
+
 public class CatPostRepositoryImpl implements CatPostRepository {
 
     private CatPostLocalDataStore catPostLocalDataStore;
-    private CatStreamCloudDataStore catStreamCloudDataStore;
+    private CatPostCloudDataStore catPostCloudDataStore;
 
-    public CatPostRepositoryImpl(CatPostDb catPostDb) {
-        this.catPostLocalDataStore = new CatPostLocalDataStore(catPostDb);
-        this.catStreamCloudDataStore = new CatStreamCloudDataStore();
+    public CatPostRepositoryImpl(CatPostLocalDataStore catPostLocalDataStore, CatPostCloudDataStore catPostCloudDataStore) {
+        this.catPostLocalDataStore = catPostLocalDataStore;
+        this.catPostCloudDataStore = catPostCloudDataStore;
     }
 
     private CatPostDataStore catPostFactory(boolean fromNetwork) {
         if (fromNetwork)
-            return new CatStreamCloudDataStore();
+            return catPostCloudDataStore;
         else
             return catPostLocalDataStore;
     }
@@ -69,5 +71,16 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public Collection<CatPostEntity> getRandomCatPosts(int howMany) {
         return catPostLocalDataStore.getRandomCatPosts(howMany);
+    }
+
+    @Override
+    public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
+        System.out.println("been here");
+        return catPostCloudDataStore.createPost(catPostEntity);
+    }
+
+    @Override
+    public void eraseCache() {
+        catPostLocalDataStore.eraseCache();
     }
 }

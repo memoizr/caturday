@@ -1,6 +1,7 @@
 package com.lovecats.catlover.api;
 
 import com.lovecats.catlover.capsules.common.Config;
+import com.lovecats.catlover.models.catpost.api.CatPostApi;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 
@@ -43,5 +44,13 @@ public class ApiModule {
                         .setRequestInterceptor(requestInterceptor)
                         .build();
                 return adapter;
+        }
+
+        @Provides
+        @Singleton
+        public CatPostApi provideCatPostApi(RestAdapter restAdapter) {
+
+                final CatPostApi api = restAdapter.create(CatPostApi.class);
+                return api;
         }
 }

@@ -14,4 +14,6 @@ public interface CatStreamInteractor {
                                String streamType,
                                boolean fromNetwork,
                                Callback<Collection<CatPostEntity>> callback);
+
+    void eraseCache();
 }

@@ -1,19 +1,23 @@
 package com.lovecats.catlover.models.catpost;
 
 
+import android.net.Uri;
+
 import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
+import retrofit.mime.TypedFile;
 
 @Data
 public class CatPostEntity {
     @SerializedName("image_url") private String imageUrl;
-    @SerializedName("negative_votes_count") private String negativeVotesCount;
-    @SerializedName("positive_votes_count") private String positiveVotesCount;
-    @SerializedName("reshares_count") private String resharesCount;
+    @SerializedName("reshare_count") private String resharesCount;
+    @SerializedName("download_count") private String downloadCount;
     @SerializedName("id") private String serverId;
-    @SerializedName("total_votes_count") private int totalVotesCount;
+    @SerializedName("votes_count") private int votesCount;
+
+    private String imagePath;
     private JsonArray comments;
     private String commentsJSON;
     private String caption;
