@@ -35,6 +35,7 @@ public class AppModule {
     public AppModule(App app) {
         this.app = app;
     }
+
     @Provides @Singleton
     public Application provideApplication() {
         return app;

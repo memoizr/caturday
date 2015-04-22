@@ -1,5 +1,7 @@
 package com.lovecats.catlover.models.user;
 
+import com.lovecats.catlover.util.data.GsonMapper;
+
 import greendao.User;
 
 public class UserMapper {
@@ -14,7 +16,7 @@ public class UserMapper {
         user.setEmail(userEntity.getEmail());
         user.setLastName(userEntity.getLastName());
         user.setInfo(userEntity.getInfo());
-        user.setFavorites(userEntity.getFavorites());
+        user.setFavorites(userEntity.getFavorites().toString());
         user.setFirstName(userEntity.getFirstName());
         return user;
     }
@@ -29,7 +31,7 @@ public class UserMapper {
         userEntity.setEmail(user.getEmail());
         userEntity.setLastName(user.getLastName());
         userEntity.setInfo(user.getInfo());
-        userEntity.setFavorites(user.getFavorites());
+        userEntity.setFavorites(GsonMapper.toJsonArray(user.getFavorites()));
         userEntity.setFirstName(user.getFirstName());
         return userEntity;
     }

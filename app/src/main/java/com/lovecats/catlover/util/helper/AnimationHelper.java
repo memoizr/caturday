@@ -14,7 +14,6 @@ import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
 public class AnimationHelper {
     private static final int GLIDE_DISTANCE = 400;
     private static final int MEDIUM_GLIDE_DISTANCE = 200;
-    private static final int SMALL_GLIDE_DISTANCE = 80;
 
     public static void glideUp(ViewGroup viewGroup) {
         int count = viewGroup.getChildCount();
@@ -161,12 +160,8 @@ public class AnimationHelper {
                 colorFrom,
                 colorTo);
         va.setDuration(300);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                         @Override
-                         public void onAnimationUpdate(ValueAnimator animation) {
-                                     mView.setBackgroundColor((Integer) animation.getAnimatedValue());
-                             }
-                         }
+        va.addUpdateListener(animation ->
+                        mView.setBackgroundColor((Integer) animation.getAnimatedValue())
         );
         va.start();
     }
@@ -178,12 +173,8 @@ public class AnimationHelper {
                     colorFrom,
                     colorTo);
             va.setDuration(300);
-            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                     @Override
-                                     public void onAnimationUpdate(ValueAnimator animation) {
-                                         mView.setTextColor((Integer) animation.getAnimatedValue());
-                                     }
-                                 }
+            va.addUpdateListener(animation ->
+                            mView.setTextColor((Integer) animation.getAnimatedValue())
             );
             va.start();
         }

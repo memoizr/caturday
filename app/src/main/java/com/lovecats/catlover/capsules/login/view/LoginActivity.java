@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.login;
+package com.lovecats.catlover.capsules.login.view;
 
 import android.animation.Animator;
 import android.content.Context;
@@ -15,8 +15,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.login.LoginModule;
 import com.lovecats.catlover.data.LoginHandler;
 import com.lovecats.catlover.util.helper.AnimationHelper;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,7 +32,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends BaseActionBarActivity implements LoginView {
     @InjectView(R.id.username_TV) EditText username_TV;
     @InjectView(R.id.email_TV) EditText email_TV;
     @InjectView(R.id.password_TV) EditText password_TV;
@@ -38,6 +45,8 @@ public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.progress_bar) ProgressBar progress_bar;
     @InjectView(R.id.done_V) View done;
     @InjectView(R.id.reveal_done_V) View reveal_done;
+
+    @Inject LoginPresenter loginPresenter;
 
 
     @Override
@@ -52,17 +61,20 @@ public class LoginActivity extends ActionBarActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         AnimationHelper.glideUp(glide_container);
         showKeyboard();
     }
 
+    @Override
+    protected List<Object> getModules() {
+        return Arrays.asList(new LoginModule(this));
+    }
+
     private void showKeyboard() {
-        glide_container.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-            }
+        glide_container.postDelayed(() -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
         }, 700);
     }
 
@@ -74,80 +86,12 @@ public class LoginActivity extends ActionBarActivity {
     @OnClick(R.id.login_submit_B)
     public void login() {
         hideKeyboard();
-        final Context mContext = this;
-
-        LoginHandler.performLogin(password_TV.getText().toString(), email_TV.getText().toString(), new Callback() {
-            @Override
-            public void success(Object user, Response response) {
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        AnimationHelper.zoomOut(progress_bar);
-                    }
-                }, 600);
-
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        AnimationHelper.zoomIn(done);
-                    }
-                }, 1000);
-
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        AnimationHelper.circularReveal(reveal_done, done.getLeft() + done.getWidth()/2, done.getTop() + done.getWidth()/2, null);
-                    }
-                }, 1400);
-
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        backPressed();
-                    }
-                }, 2200);
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                    }
-                }, 2100);
-            }
-
-
-            @Override
-            public void failure(RetrofitError error) {
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        AnimationHelper.glideOutAndHide(progress_bar);
-                    }
-                }, 500);
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        AnimationHelper.glideInAndShow(glide_container);
-                    }
-                }, 900);
-                progress_bar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.shake);
-                        password_TV.startAnimation(animation);
-                        email_TV.startAnimation(animation);
-
-                    }
-                }, 1150);
-                error.printStackTrace();
-            }
-        });
+        loginPresenter.performLogin(
+                email_TV.getText().toString(),
+                password_TV.getText().toString());
 
         AnimationHelper.glideAwayAndHide(glide_container);
-        progress_bar.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                AnimationHelper.glideInAndShow(progress_bar);
-            }
-        }, 400);
+        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(progress_bar), 400);
     }
 
     @OnClick(R.id.create_account_B)
@@ -170,12 +114,7 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        login_reveal.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                circularReveal();
-            }
-        }, 32);
+        login_reveal.postDelayed(() -> circularReveal(), 32);
     }
 
     public void circularReveal() {
@@ -190,9 +129,6 @@ public class LoginActivity extends ActionBarActivity {
         int cy = login_reveal.getTop() + 96;
 
         Animator.AnimatorListener listener = new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -200,13 +136,9 @@ public class LoginActivity extends ActionBarActivity {
                 backPressed();
             }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
+            @Override public void onAnimationStart(Animator animation) { }
+            @Override public void onAnimationCancel(Animator animation) { }
+            @Override public void onAnimationRepeat(Animator animation) { }
         };
 
         AnimationHelper.circularHide(login_reveal, cx, cy, listener);
@@ -215,12 +147,7 @@ public class LoginActivity extends ActionBarActivity {
     private void setUpToolbar(){
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
     }
 
@@ -232,5 +159,28 @@ public class LoginActivity extends ActionBarActivity {
 
     private void backPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void successAnimation() {
+        progress_bar.postDelayed(() -> AnimationHelper.zoomOut(progress_bar), 600);
+        progress_bar.postDelayed(() -> AnimationHelper.zoomIn(done), 1000);
+        progress_bar.postDelayed(() ->
+                AnimationHelper.circularReveal(
+                        reveal_done, done.getLeft() + done.getWidth() / 2,
+                        done.getTop() + done.getWidth() / 2, null), 1400);
+        progress_bar.postDelayed(() -> backPressed(), 2200);
+    }
+
+    @Override
+    public void failureAnimation() {
+        progress_bar.postDelayed(() -> AnimationHelper.glideOutAndHide(progress_bar), 500);
+        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(glide_container), 900);
+        progress_bar.postDelayed(() -> {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
+            password_TV.startAnimation(animation);
+            email_TV.startAnimation(animation);
+
+        }, 1150);
     }
 }

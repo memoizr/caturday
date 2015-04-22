@@ -12,7 +12,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
-import com.lovecats.catlover.capsules.login.LoginActivity;
+import com.lovecats.catlover.capsules.login.view.LoginActivity;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
 import com.lovecats.catlover.capsules.main.view.MainView;
 import com.lovecats.catlover.capsules.settings.SettingsActivity;

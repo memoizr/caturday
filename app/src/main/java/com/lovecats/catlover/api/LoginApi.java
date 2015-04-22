@@ -9,6 +9,6 @@ import retrofit.http.POST;
 
 public interface LoginApi {
     @POST("/sessions.json")
-    public void getToken(@Body LoginWrapper loginWrapper, Callback<AuthModel> response);
+    void getToken(@Body LoginWrapper loginWrapper, Callback<AuthModel> response);
 }
 
