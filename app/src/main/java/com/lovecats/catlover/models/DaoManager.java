@@ -1,4 +1,4 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.models;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

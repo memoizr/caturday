@@ -1,14 +1,9 @@
 package com.lovecats.catlover.ui.activities.profile;
 
-import android.app.Activity;
-import android.view.View;
-import android.widget.TextView;
-
 import com.lovecats.catlover.BuildConfig;
 import com.lovecats.catlover.CustomRoboelectricRunner;
 import com.lovecats.catlover.data.user.UserModel;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 

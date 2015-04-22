@@ -3,7 +3,6 @@ package com.lovecats.catlover.capsules.login.view;
 import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.login.LoginModule;
-import com.lovecats.catlover.data.LoginHandler;
 import com.lovecats.catlover.util.helper.AnimationHelper;
 
 import java.util.Arrays;
@@ -28,9 +26,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class LoginActivity extends BaseActionBarActivity implements LoginView {
     @InjectView(R.id.username_TV) EditText username_TV;

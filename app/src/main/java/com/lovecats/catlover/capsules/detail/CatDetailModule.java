@@ -1,9 +1,8 @@
 package com.lovecats.catlover.capsules.detail;
 
 import com.lovecats.catlover.AppModule;
-import com.lovecats.catlover.capsules.common.Config;
-import com.lovecats.catlover.capsules.detail.api.CommentApi;
-import com.lovecats.catlover.capsules.detail.api.VoteApi;
+import com.lovecats.catlover.models.comment.api.CommentApi;
+import com.lovecats.catlover.models.vote.api.VoteApi;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractor;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractorImpl;
 import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
@@ -26,7 +25,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
 @Module(

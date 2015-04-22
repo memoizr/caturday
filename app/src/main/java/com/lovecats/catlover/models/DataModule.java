@@ -1,7 +1,4 @@
-package com.lovecats.catlover.data;
-
-import android.app.Application;
-import android.content.Context;
+package com.lovecats.catlover.models;
 
 import javax.inject.Singleton;
 

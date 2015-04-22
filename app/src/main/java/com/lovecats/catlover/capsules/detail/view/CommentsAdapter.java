@@ -65,8 +65,8 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             CommentEntity commentEntity = commentEntities.get(position);
 
             ((CommentsViewHolder) holder).tvComment.setText(commentEntity.getContent());
-            ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUser().getUsername());
-            String url = commentEntity.getUser().getImage_url();
+            ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUserEntity().getUsername());
+            String url = commentEntity.getUserEntity().getImageUrl();
             Picasso.with(context).load(url).into(((CommentsViewHolder)holder).profileImage);
         }
     }

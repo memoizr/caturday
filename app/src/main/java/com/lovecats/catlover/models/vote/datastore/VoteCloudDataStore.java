@@ -1,6 +1,6 @@
 package com.lovecats.catlover.models.vote.datastore;
 
-import com.lovecats.catlover.capsules.detail.api.VoteApi;
+import com.lovecats.catlover.models.vote.api.VoteApi;
 import com.lovecats.catlover.models.vote.VoteEntity;
 
 import rx.Observable;

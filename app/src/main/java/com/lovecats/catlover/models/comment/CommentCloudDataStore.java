@@ -1,6 +1,6 @@
 package com.lovecats.catlover.models.comment;
 
-import com.lovecats.catlover.capsules.detail.api.CommentApi;
+import com.lovecats.catlover.models.comment.api.CommentApi;
 
 import rx.Observable;
 
