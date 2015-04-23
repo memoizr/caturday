@@ -8,6 +8,7 @@ import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 import rx.Observable;
@@ -29,4 +30,7 @@ public interface CatPostApi {
                                      @Part("caption") String caption);
     @POST("/cat_post")
     Observable<CatPostEntity> uploadWithUrl(@Body CatPostEntity catPostEntity);
+
+    @GET("/cat_post/{id}")
+    Observable<CatPostEntity> getPost(@Path("id") String serverId);
 }

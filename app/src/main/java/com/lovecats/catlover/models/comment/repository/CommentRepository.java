@@ -1,5 +1,6 @@
 package com.lovecats.catlover.models.comment.repository;
 
+import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.comment.CommentEntity;
 
 import rx.Observable;
@@ -9,5 +10,5 @@ import rx.Observable;
  */
 public interface CommentRepository {
 
-    Observable<CommentEntity> sendComment(CommentEntity commentEntity);
+    Observable<CatPostEntity> sendComment(CommentEntity commentEntity);
 }

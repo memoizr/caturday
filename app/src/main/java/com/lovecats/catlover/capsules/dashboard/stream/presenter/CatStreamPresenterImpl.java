@@ -10,7 +10,7 @@ import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.Events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
-import com.lovecats.catlover.capsules.dashboard.stream.view.adapter.CatPostAdapter;
+import com.lovecats.catlover.capsules.dashboard.stream.view.CatPostAdapter;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatStreamView;
 import com.squareup.otto.Bus;
@@ -19,7 +19,6 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import hugo.weaving.DebugLog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -102,30 +101,31 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 .subscribe(s -> onRefreshComplete());
     }
 
-    @DebugLog
     private void onRefreshComplete() {
         setAdapterByType(streamType);
         eventBus.post(new StreamRefreshCompletedEvent());
     }
 
     @Override
+    public void addItemsToAdapter(ArrayList<CatPostEntity> catPostEntities) {
+        System.out.println("addItemsToAdapter");
+        catStreamView.getAdapter().setItems(catPostEntities);
+    }
+
+    @Override
     public void setAdapterByType(String streamType) {
         this.streamType = streamType;
+        System.out.println("setAdapterByType");
         catStreamInteractor.getCatPostPageAndType(0,
                 streamType,
                 false,
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-                System.out.println(new ArrayList(catPostCollection).get(0));
-                CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
-                catStreamView.setAdapter(adapter);
+                catStreamView.getAdapter().setItems(new ArrayList<>(catPostCollection));
             }
 
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
+            @Override public void failure(RetrofitError error) {  }
         });
     }
 
@@ -138,14 +138,12 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-                CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
+                CatPostAdapter adapter = catStreamView.getAdapter();
                 adapter.addItems(catPostCollection);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                System.out.println("failure");
-            }
+            public void failure(RetrofitError error) { }
         });
     }
 }

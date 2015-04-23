@@ -4,7 +4,6 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.datastore.CatPostDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostCloudDataStore;
-import com.lovecats.catlover.models.catpost.db.CatPostDb;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,6 +30,8 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
 
+
+        System.out.println("catrepository");
         Collection<CatPostEntity> catPostEntities = retrieveCatPosts(page, category, fromNetwork);
 
         if (catPostEntities.size() == 0) {
@@ -38,8 +39,8 @@ public class CatPostRepositoryImpl implements CatPostRepository {
             catPostEntities = retrieveCatPosts(page, category, fromNetwork);
         }
 
-        if (fromNetwork)
-            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+//        if (fromNetwork)
+//            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
 
         return catPostEntities;
     }
@@ -49,8 +50,8 @@ public class CatPostRepositoryImpl implements CatPostRepository {
         CatPostDataStore catPostDataStore = catPostFactory(fromNetwork);
         Collection<CatPostEntity> catPostEntities = catPostDataStore.getCatPostsForPageAndCategory(page, category);
 
-        if (fromNetwork)
-            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+//        if (fromNetwork)
+//            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
 
         return catPostEntities;
     }
@@ -73,12 +74,16 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
     @Override
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
-        System.out.println("been here");
         return catPostCloudDataStore.createPost(catPostEntity);
     }
 
     @Override
     public void eraseCache() {
         catPostLocalDataStore.eraseCache();
+    }
+
+    @Override
+    public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
+        return catPostLocalDataStore.updateCatPost(catPostEntity);
     }
 }

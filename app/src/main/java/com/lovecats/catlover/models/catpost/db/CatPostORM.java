@@ -97,6 +97,7 @@ public class CatPostORM implements CatPostDb {
     @Override
     public void createMultiplePost(Collection<CatPostEntity> catPostEntities) {
         Collection<CatPost> catPostCollection;
+        System.out.println("multiple from orm");
 
         catPostCollection = CatPostMapper.fromEntity(catPostEntities);
 
@@ -106,6 +107,21 @@ public class CatPostORM implements CatPostDb {
     @Override
     public void eraseCache() {
         getCatPostDao().deleteAll();
+    }
+
+    @Override
+    public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
+
+        CatPost catPost = getCatPostDao()
+                .queryBuilder()
+                .where(CatPostDao.Properties.ServerId.eq(catPostEntity.getServerId()))
+                .uniqueOrThrow();
+
+        catPostEntity.setId(catPost.getId());
+
+        getCatPostDao().update(CatPostMapper.fromEntity(catPostEntity));
+
+        return Observable.just(catPostEntity);
     }
 
     private CatPost mapToCatPost(CatPostEntity catPostEntity){

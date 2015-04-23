@@ -2,7 +2,9 @@ package com.lovecats.catlover.capsules.detail.view;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -33,6 +35,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.capsules.dashboard.stream.view.CatPostAdapter;
 import com.lovecats.catlover.util.helper.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.detail.CatDetailModule;
@@ -49,7 +52,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import hugo.weaving.DebugLog;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
@@ -67,10 +69,8 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     private ViewGroup header;
     private int captionHeight;
     private int vibrant;
-    private int muted;
-    private int darkMuted;
-    private int vibrantLight;
     private boolean activityClosed = false;
+    private int recyclerPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,21 +82,24 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        catDetailPresenter.create(this, getIntent().getExtras());
+        Bundle extras = getIntent().getExtras();
+        recyclerPosition = extras.getInt(CatPostAdapter.RECYCLER_POSITION);
+
+        catDetailPresenter.create(this, extras);
     }
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.<Object>asList(new CatDetailModule(this));
+        return Arrays.asList(new CatDetailModule(this));
     }
 
     private void setupPalette(BitmapDrawable bitmapDrawable) {
         Bitmap mBitmap = bitmapDrawable.getBitmap();
         Palette palette = Palette.generate(mBitmap);
         vibrant = palette.getVibrantColor(0x000000);
-        muted = palette.getMutedColor(0x000000);
-        darkMuted = palette.getDarkMutedColor(0x000000);
-        vibrantLight = palette.getLightVibrantColor(0x000000);
+//        muted = palette.getMutedColor(0x000000);
+//        darkMuted = palette.getDarkMutedColor(0x000000);
+//        vibrantLight = palette.getLightVibrantColor(0x000000);
         caption_V.setBackgroundColor(vibrant);
     }
 
@@ -224,7 +227,8 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
 
         Rect r = new Rect();
         mChildOfContent.getWindowVisibleDisplayFrame(r);
-        final int headerHeight = r.bottom - 8;
+
+        final int headerHeight = r.bottom;
 
         CommentsAdapter adapter =
                 new CommentsAdapter(headerHeight);
@@ -304,7 +308,6 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         });
     }
 
-    @DebugLog
     @Override
     public void updateButton(boolean favorited) {
         if (favorited)

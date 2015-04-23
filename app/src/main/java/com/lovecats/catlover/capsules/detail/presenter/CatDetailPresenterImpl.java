@@ -18,7 +18,6 @@ import com.lovecats.catlover.capsules.detail.view.CatDetailView;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.util.helper.ShareHelper;
 import com.lovecats.catlover.util.data.GsonConverter;
-import com.lovecats.catlover.util.concurrent.WorkerCallback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -80,14 +79,14 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     public void setCatPostEntity(CatPostEntity entity) {
+        catDetailView.setRecyclerViewAdapter(getCommentEntities(entity));
+    }
+
+    private List<CommentEntity> getCommentEntities(CatPostEntity entity) {
         catPostEntity = entity;
         JsonArray array = catPostEntity.getComments();
 
-        List<CommentEntity> commentEntities =
-                GsonConverter.fromJsonArrayToTypeArray(array, CommentEntity.class);
-
-        catDetailView.setRecyclerViewAdapter(commentEntities);
-
+        return GsonConverter.fromJsonArrayToTypeArray(array, CommentEntity.class);
     }
 
     @Override
@@ -96,11 +95,15 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         catDetailInteractor.sendComment(comment, catPostServerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(commentEntity -> {
-                    catDetailView.getCommentsAdapter().addCommentEntity(commentEntity);
-                    catDetailView.clearCommentET();
-                    catDetailView.scrollToBottom();
-                });
+                .flatMap(catDetailInteractor::updateCatPost)
+                .subscribe(catPostEntity -> {
+                            catDetailView.getCommentsAdapter().setCommentEntities(
+                                    getCommentEntities(catPostEntity));
+                            catDetailView.clearCommentET();
+                            catDetailView.scrollToBottom();
+                        },
+                        e -> e.printStackTrace()
+                );
     }
 
     @Override
@@ -112,10 +115,9 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         voteEntity -> {
-                            System.out.println(voteEntity);
                             catDetailView.updateButton(voteEntity.getPositive());
                         },
-                                    error -> error.printStackTrace()
+                        error -> error.printStackTrace()
                 );
     }
 
@@ -160,16 +162,8 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onBitmapFailed(Drawable arg0) {
-                return;
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable arg0) {
-                return;
-            }
+            @Override public void onBitmapFailed(Drawable arg0){}
+            @Override public void onPrepareLoad(Drawable arg0){}
         };
 
         Picasso.with(context)

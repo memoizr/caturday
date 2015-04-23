@@ -1,6 +1,7 @@
 package com.lovecats.catlover.capsules.dashboard.stream.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,6 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.listener.EndlessScrollListener;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
-import com.lovecats.catlover.capsules.dashboard.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.dashboard.stream.CatStreamModule;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenter;
@@ -28,29 +28,34 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 
 public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
-    private List<CatPostEntity> mCatPosts = new ArrayList<>();
-    private CatPostAdapter catPostAdapter;
+    private String streamType;
 
     public CatStreamFragment() {
     }
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.<Object>asList(new CatStreamModule(this));
+        return Arrays.asList(new CatStreamModule(this));
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         catStreamPresenter.onAttach(activity);
-        System.out.println(1);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        RecyclerView.Adapter adapter = getAdapter();
+//        if (adapter != null)
+//            catStreamPresenter.setAdapterByType(streamType);
     }
 
     @Override
@@ -59,9 +64,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
         View rootView = inflater.inflate(R.layout.fragment_cat_stream, container, false);
 
-
         ButterKnife.inject(this, rootView);
-        System.out.println(2);
 
         return rootView;
     }
@@ -69,15 +72,12 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        System.out.println(3);
 
         catStreamPresenter.onViewCreated();
 
-        catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
-
         Bundle bundle = getArguments();
 
-        String streamType = bundle.getString(DashboardPageAdapter.STREAM_CATEGORY);
+        streamType = bundle.getString(DashboardPageAdapter.STREAM_CATEGORY);
 
         catStreamPresenter.setAdapterByType(streamType);
     }
@@ -101,15 +101,19 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     }
 
     @Override
-    public RecyclerView.Adapter getAdapter() {
-        return cats_stream_RV.getAdapter();
+    public CatPostAdapter getAdapter() {
+        return (CatPostAdapter) cats_stream_RV.getAdapter();
     }
 
     @Override
-    public void initializeRecyclerView(ObservableScrollViewCallbacks listener, RecyclerView.LayoutManager layoutManager) {
+    public void initializeRecyclerView(
+            ObservableScrollViewCallbacks listener,
+            RecyclerView.LayoutManager layoutManager) {
+
         cats_stream_RV.setLayoutManager(layoutManager);
 
         cats_stream_RV.setScrollViewCallbacks(listener);
+        cats_stream_RV.setAdapter(new CatPostAdapter(getActivity()));
         cats_stream_RV.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int previousTotalItemCount) {

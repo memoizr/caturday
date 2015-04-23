@@ -30,6 +30,7 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
                                       final String streamType,
                                       boolean fromNetwork,
                                       final Callback<Collection<CatPostEntity>> callback) {
+        System.out.println("getCatPostPageAndType");
 
         threadExecutor.execute(() -> {
             try {

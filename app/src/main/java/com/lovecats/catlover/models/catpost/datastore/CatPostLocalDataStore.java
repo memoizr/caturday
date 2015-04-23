@@ -6,6 +6,7 @@ import com.lovecats.catlover.models.catpost.db.CatPostDb;
 import java.util.Collection;
 import java.util.HashSet;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 
 public class CatPostLocalDataStore implements CatPostDataStore {
@@ -37,7 +38,13 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     }
 
     public void createMultipleCatPost(Collection<CatPostEntity> catPostEntityCollection) {
+        System.out.println("creating multiple");
         catPostDb.createMultiplePost(catPostEntityCollection);
+    }
+
+    @DebugLog
+    public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
+       return catPostDb.updateCatPost(catPostEntity);
     }
 
     public void eraseCache() {

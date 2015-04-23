@@ -12,6 +12,7 @@ public class CatPostMapper {
 
     public static CatPost fromEntity(CatPostEntity catPostEntity) {
         CatPost catPost = new CatPost();
+        catPost.setId(catPostEntity.getId());
         catPost.setCaption(catPostEntity.getCaption());
         catPost.setServerId(catPostEntity.getServerId());
         catPost.setCategory(catPostEntity.getCategory());
@@ -36,6 +37,7 @@ public class CatPostMapper {
 
     public static CatPostEntity toEntity(CatPost catPost) {
         CatPostEntity catPostEntity = new CatPostEntity();
+        catPostEntity.setId(catPost.getId());
         catPostEntity.setCaption(catPost.getCaption());
         catPostEntity.setServerId(catPost.getServerId());
         catPostEntity.setCategory(catPost.getCategory());

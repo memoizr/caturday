@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.dashboard.stream.view.adapter;
+package com.lovecats.catlover.capsules.dashboard.stream.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,33 +8,24 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
 import com.lovecats.catlover.capsules.main.view.MainActivity;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.util.helper.ShareHelper;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,17 +33,18 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import lombok.Setter;
 
 public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int REQUEST_CODE = 0;
     private Context mContext;
     private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    public static final String RECYCLER_POSITION = "recyclerPosition";
 
-    public CatPostAdapter(Context context, @NonNull List<CatPostEntity> catPosts) {
+    public CatPostAdapter(Context context) {
         mContext = context;
-        mCatPosts.add(new CatPostEntity());
-        mCatPosts.addAll(catPosts);
     }
 
     //TODO optimize this class. Shame on you!
@@ -77,14 +69,14 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof EmptyHeader) {
         } else {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
 
-            final CatPostEntity catPostEntity = mCatPosts.get(i);
+            final CatPostEntity catPostEntity = mCatPosts.get(position);
 
-            final String transitionName = "catTransition" + i;
+            final String transitionName = "catTransition" + position;
 
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
@@ -112,7 +104,7 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             myViewHolder.share_B.setOnClickListener(view -> {
                 ShareHelper.shareLinkAction("Check out this cat!",
-                        mCatPosts.get(i).getImageUrl(),
+                        mCatPosts.get(position).getImageUrl(),
                         mContext);
             });
 
@@ -131,7 +123,9 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 intent.putExtra("transition", transitionName);
                 intent.putExtra("url", catPostEntity.getImageUrl());
                 intent.putExtra("serverId", catPostEntity.getServerId());
-                ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                intent.putExtra(RECYCLER_POSITION, position);
+                ActivityCompat.startActivityForResult((Activity) mContext, intent, REQUEST_CODE, options.toBundle());
+                System.out.println("+++++++++++++++++++++++++++++++");
             });
         }
     }
@@ -140,20 +134,21 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mCatPosts.addAll(catPostCollection);
         notifyDataSetChanged();
     }
-    public void showPopupWindow(View v) {
-        PopupWindow popupWindow = new PopupWindow(mContext);
 
-        LayoutInflater inflater = (LayoutInflater)   mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View view = inflater.inflate(R.layout.menu_card, null);
-
-
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setContentView(view);
-        popupWindow.showAsDropDown(v);
-    }
+//    public void showPopupWindow(View v) {
+//        PopupWindow popupWindow = new PopupWindow(mContext);
+//
+//        LayoutInflater inflater = (LayoutInflater)   mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//
+//        View view = inflater.inflate(R.layout.menu_card, null);
+//
+//
+//        popupWindow.setFocusable(true);
+//        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setContentView(view);
+//        popupWindow.showAsDropDown(v);
+//    }
 
     public void showPopup(View v) {
         Context wrapper = new ContextThemeWrapper(mContext, R.style.PopupMenuStyle);
@@ -180,6 +175,11 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private boolean isPositionHeader(int position) {
         return position == 0;
+    }
+
+    public void setItems(ArrayList<CatPostEntity> items) {
+        this.mCatPosts = items;
+        notifyDataSetChanged();
     }
 
     class EmptyHeader extends RecyclerView.ViewHolder {

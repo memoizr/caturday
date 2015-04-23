@@ -2,6 +2,7 @@ package com.lovecats.catlover.capsules.main.view;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
 import com.lovecats.catlover.capsules.dashboard.DashboardFragment;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
+import com.lovecats.catlover.capsules.dashboard.stream.view.CatPostAdapter;
 import com.lovecats.catlover.capsules.drawer.view.DrawerActivity;
 import com.lovecats.catlover.capsules.drawer.view.NavigationFragment;
 import com.lovecats.catlover.capsules.favorites.view.FavoritesFragment;
@@ -280,6 +282,12 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
             adjustToolbarOnEndOfScroll();
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        System.out.println("fooooooooo " + data.getExtras().getInt(CatPostAdapter.RECYCLER_POSITION));
+//    }
 
     private void adjustToolbarOnEndOfScroll() {
         float shiftY = -title_container_RL.getTranslationY();

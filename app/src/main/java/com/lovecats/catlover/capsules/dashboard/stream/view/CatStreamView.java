@@ -16,5 +16,5 @@ public interface CatStreamView {
 
     void setAdapter(RecyclerView.Adapter adapter);
 
-    RecyclerView.Adapter getAdapter();
+    CatPostAdapter getAdapter();
 }

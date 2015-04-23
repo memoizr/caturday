@@ -1,5 +1,6 @@
 package com.lovecats.catlover.capsules.dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
