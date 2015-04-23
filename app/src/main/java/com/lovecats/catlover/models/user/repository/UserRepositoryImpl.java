@@ -36,8 +36,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public HashSet<String> getAllFavoritePost() {
-        return userORM.getFavoriteCatPosts();
+    public Observable<HashSet<String>> getAllFavoritePost() {
+        return Observable.just(userORM.getFavoriteCatPosts());
     }
 
     @Override

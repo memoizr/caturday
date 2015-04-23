@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.drawer;
+package com.lovecats.catlover.capsules.drawer.view;
 
 import android.app.Activity;
 

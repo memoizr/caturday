@@ -6,6 +6,8 @@ import com.lovecats.catlover.models.catpost.db.CatPostDb;
 import java.util.Collection;
 import java.util.HashSet;
 
+import rx.Observable;
+
 public class CatPostLocalDataStore implements CatPostDataStore {
 
     private CatPostDb catPostDb;
@@ -25,7 +27,7 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     }
 
     @Override
-    public CatPostEntity getCatPost(String serverId) {
+    public Observable<CatPostEntity> getCatPost(String serverId) {
         return catPostDb.getCatPostForServerId(serverId);
     }
 

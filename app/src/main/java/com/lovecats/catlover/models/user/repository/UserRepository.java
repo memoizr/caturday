@@ -14,7 +14,7 @@ public interface UserRepository {
 
     void removeFavoritePost(String serverId);
 
-    HashSet<String> getAllFavoritePost();
+    Observable<HashSet<String>> getAllFavoritePost();
 
     Observable<UserEntity> login(String email, String password);
 

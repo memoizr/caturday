@@ -8,6 +8,9 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 
 import java.util.Collection;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class FavoritesPresenterImpl implements FavoritesPresenter {
     private final FavoritesView favoritesView;
     private final FavoritesInteractor favoritesInteractor;
@@ -23,8 +26,11 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
     public void create(Context context) {
         this.context = context;
         favoritesView.initRecyclerView();
-        Collection<CatPostEntity> catPostEntityCollection = favoritesInteractor.getFavoriteCatPosts();
-
-        favoritesView.setRecyclerViewAdapter(catPostEntityCollection);
+        favoritesInteractor.getFavoriteCatPosts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> {
+                    favoritesView.setRecyclerViewAdapter(s);
+                });
     }
 }

@@ -81,7 +81,6 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-
     public void addCommentEntity(CommentEntity commentEntity) {
         this.commentEntities.add(commentEntity);
         notifyDataSetChanged();

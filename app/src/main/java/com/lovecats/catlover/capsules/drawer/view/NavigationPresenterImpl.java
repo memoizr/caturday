@@ -1,11 +1,9 @@
-package com.lovecats.catlover.capsules.drawer;
+package com.lovecats.catlover.capsules.drawer.view;
 
 import android.app.Activity;
 import android.content.Intent;
 
 import com.lovecats.catlover.capsules.drawer.interactor.NavigationInteractor;
-import com.lovecats.catlover.capsules.drawer.view.DrawerActivity;
-import com.lovecats.catlover.capsules.drawer.view.NavigationView;
 import com.lovecats.catlover.capsules.profile.view.ProfileActivity;
 import com.lovecats.catlover.models.user.UserEntity;
 

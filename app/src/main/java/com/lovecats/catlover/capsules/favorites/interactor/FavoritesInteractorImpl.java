@@ -9,9 +9,6 @@ import java.util.HashSet;
 
 import rx.Observable;
 
-/**
- * Created by Cat#2 on 07/04/15.
- */
 public class FavoritesInteractorImpl implements FavoritesInteractor {
 
     private final UserRepository userRepository;
@@ -24,12 +21,9 @@ public class FavoritesInteractorImpl implements FavoritesInteractor {
     }
 
     @Override
-    public Collection<CatPostEntity> getFavoriteCatPosts() {
-        HashSet<String> favoriteIds = userRepository.getAllFavoritePost();
-        Collection<CatPostEntity> catPostEntities = catPostRepository.getCatPostsForIds(favoriteIds);
-        System.out.println("interactor " + catPostEntities.size());
-
-        return catPostEntities;
+    public Observable<Collection<CatPostEntity>> getFavoriteCatPosts() {
+        Observable<HashSet<String>> favoriteIds = userRepository.getAllFavoritePost();
+        return favoriteIds.flatMap(catPostRepository::getCatPostsForIds);
 
     }
 }

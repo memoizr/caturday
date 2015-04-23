@@ -11,9 +11,9 @@ public interface CatPostRepository {
 
     Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork);
 
-    Collection<CatPostEntity> getCatPostsForIds(HashSet<String> ids);
+    Observable<Collection<CatPostEntity>> getCatPostsForIds(HashSet<String> ids);
 
-    CatPostEntity getCatPost(String serverId);
+    Observable<CatPostEntity> getCatPost(String serverId);
 
     Collection<CatPostEntity> getRandomCatPosts(int howMany);
 

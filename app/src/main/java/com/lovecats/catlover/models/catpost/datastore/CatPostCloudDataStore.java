@@ -47,7 +47,7 @@ public class CatPostCloudDataStore implements CatPostDataStore {
     }
 
     @Override
-    public CatPostEntity getCatPost(String serverId) {
+    public Observable<CatPostEntity> getCatPost(String serverId) {
         return null;
     }
 

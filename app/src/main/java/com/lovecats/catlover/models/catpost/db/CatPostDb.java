@@ -5,9 +5,11 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import java.util.Collection;
 import java.util.HashSet;
 
+import rx.Observable;
+
 public interface CatPostDb {
 
-    CatPostEntity getCatPostForServerId(String id);
+    Observable<CatPostEntity> getCatPostForServerId(String id);
 
     Collection<CatPostEntity> getPostsForPageAndCategory(int page, String category);
 

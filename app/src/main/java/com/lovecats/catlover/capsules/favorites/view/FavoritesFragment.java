@@ -1,14 +1,12 @@
 package com.lovecats.catlover.capsules.favorites.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseFragment;
 import com.lovecats.catlover.capsules.favorites.FavoritesModule;
@@ -24,7 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import greendao.CatPost;
+import hugo.weaving.DebugLog;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesView {
 
@@ -54,7 +52,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesView {
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.<Object>asList(new FavoritesModule(this));
+        return Arrays.asList(new FavoritesModule(this));
     }
 
     @Override
@@ -66,6 +64,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesView {
         recyclerView.setAdapter(favoritesAdapter);
     }
 
+    @DebugLog
     @Override
     public void setRecyclerViewAdapter(Collection<CatPostEntity> catPostList) {
 

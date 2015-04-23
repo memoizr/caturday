@@ -3,6 +3,7 @@ package com.lovecats.catlover.capsules.detail.view;
 import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -49,6 +50,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
@@ -137,12 +139,18 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
                 .fitCenter()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onException(
+                            Exception e, String model,
+                            Target<GlideDrawable> target,
+                            boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(
+                            GlideDrawable resource,
+                            String model, Target<GlideDrawable> target,
+                            boolean isFromMemoryCache, boolean isFirstResource) {
                         new PhotoViewAttacher(cat_detail_IV);
                         return false;
                     }
@@ -281,9 +289,15 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         });
     }
 
+    @DebugLog
     @Override
-    public void initButton() {
-
+    public void updateButton(boolean favorited) {
+        if (favorited)
+            favorite_B.setBackgroundTintList(
+                    ColorStateList.valueOf(getResources().getColor(R.color.primary)));
+        else
+            favorite_B.setBackgroundTintList(
+                    ColorStateList.valueOf(getResources().getColor(R.color.teal)));
     }
 
     @Override

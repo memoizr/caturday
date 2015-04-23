@@ -1,6 +1,7 @@
 package com.lovecats.catlover.capsules.detail.interactor;
 
 import com.lovecats.catlover.models.comment.CommentEntity;
+
 import com.lovecats.catlover.models.comment.repository.CommentRepository;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.models.user.repository.UserRepository;
@@ -10,9 +11,6 @@ import com.lovecats.catlover.models.vote.VoteEntity;
 import com.lovecats.catlover.models.vote.repository.VoteRepository;
 import com.lovecats.catlover.util.concurrent.PostExecutionThread;
 import com.lovecats.catlover.util.concurrent.ThreadExecutor;
-import com.lovecats.catlover.util.concurrent.WorkerCallback;
-
-import java.util.Arrays;
 
 import rx.Observable;
 
@@ -43,11 +41,8 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     }
 
     @Override
-    public void getPostFromId(final String serverId, final WorkerCallback<CatPostEntity> callback) {
-        threadExecutor.execute(() -> {
-            final CatPostEntity catPostEntity = catPostRepository.getCatPost(serverId);
-            postExecutionThread.post(() -> callback.done(catPostEntity));
-        });
+    public Observable<CatPostEntity> getPostFromId(final String serverId) {
+            return catPostRepository.getCatPost(serverId);
     }
 
     @Override
@@ -65,7 +60,7 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     }
 
     @Override
-    public Observable<VoteEntity> sendVote(String serverId) {
+    public Observable<VoteEntity> sendVote(String serverId, boolean positive) {
 
         UserEntity user = userRepository.getCurrentUser();
 
@@ -73,14 +68,31 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
         voteEntity.setVoteableId(serverId);
         voteEntity.setVoteableType(VoteEntity.VOTEABLE_TYPE_CAT_POST);
         voteEntity.setUserId(user.getServerId());
+        voteEntity.setPositive(positive);
 
-        addFavorite(serverId);
+        if (positive)
+            addFavorite(serverId);
+        else
+            removeFavorite(serverId);
 
         return  voteRepository.sendVote(voteEntity);
     }
 
+    @Override
+    public Observable<Boolean> isFavorite(String serverId) {
+        return userRepository.getAllFavoritePost()
+                .flatMap(hash -> Observable.from(hash))
+                .filter(s -> s.equals(serverId))
+                .count()
+                .map(count -> count > 0);
+    }
+
     private void addFavorite(String serverId) {
         userRepository.addFavoritePost(serverId);
+    }
+
+    private void removeFavorite(String serverId) {
+        userRepository.removeFavoritePost(serverId);
     }
 
 

@@ -60,14 +60,23 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         catDetailView.initImageView(url);
         catDetailView.initToolbar();
         catDetailView.initIMEListener();
+
+        catDetailInteractor.isFavorite(catPostServerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(catDetailView::updateButton);
     }
 
     private void getCatPostFromId(String serverId) {
-        catDetailInteractor.getPostFromId(serverId, new WorkerCallback<CatPostEntity>() {
-            public void done(CatPostEntity entity) {
-                setCatPostEntity(entity);
-            }
-        });
+        catDetailInteractor.getPostFromId(serverId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        CatPostEntity -> {
+                    setCatPostEntity(CatPostEntity);
+                },
+                        error-> error.printStackTrace()
+                );
     }
 
     public void setCatPostEntity(CatPostEntity entity) {
@@ -78,6 +87,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                 GsonConverter.fromJsonArrayToTypeArray(array, CommentEntity.class);
 
         catDetailView.setRecyclerViewAdapter(commentEntities);
+
     }
 
     @Override
@@ -93,10 +103,18 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
     @Override
     public void favoritePost() {
-        catDetailInteractor.sendVote(catPostServerId)
+        catDetailInteractor
+                .isFavorite(catPostServerId)
                 .subscribeOn(Schedulers.io())
+                .flatMap(positive -> catDetailInteractor.sendVote(catPostServerId, !positive))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(voteEntity -> System.out.println("done, my friend!"));
+                .subscribe(
+                        voteEntity -> {
+                            System.out.println(voteEntity);
+                            catDetailView.updateButton(voteEntity.getPositive());
+                        },
+                                    error -> error.printStackTrace()
+                );
     }
 
     @Override

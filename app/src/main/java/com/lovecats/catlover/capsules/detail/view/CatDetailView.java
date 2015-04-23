@@ -16,7 +16,7 @@ public interface CatDetailView {
 
     void setRecyclerViewAdapter(List<CommentEntity> commentEntities);
 
-    void initButton();
+    void updateButton(boolean favorited);
 
     void initCaptionHeader();
 
