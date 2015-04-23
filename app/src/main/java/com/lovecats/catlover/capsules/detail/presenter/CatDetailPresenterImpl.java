@@ -98,6 +98,8 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(commentEntity -> {
                     catDetailView.getCommentsAdapter().addCommentEntity(commentEntity);
+                    catDetailView.clearCommentET();
+                    catDetailView.scrollToBottom();
                 });
     }
 

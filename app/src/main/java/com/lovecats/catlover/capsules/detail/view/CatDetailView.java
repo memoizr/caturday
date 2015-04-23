@@ -18,11 +18,13 @@ public interface CatDetailView {
 
     void updateButton(boolean favorited);
 
-    void initCaptionHeader();
+    void scrollToBottom();
 
     void initCompat21();
 
     void hideKeyboard();
+
+    void clearCommentET();
 
     CommentsAdapter getCommentsAdapter();
 }

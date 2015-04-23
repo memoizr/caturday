@@ -80,7 +80,9 @@ public class FavoritesAdapter extends HeaderAdapter {
     }
 
     public void setCatPostEntities(List<CatPostEntity> catPostEntities) {
-        this.catPostEntities = catPostEntities;
+        this.catPostEntities = new ArrayList<>();
+        catPostEntities.add(new CatPostEntity());
+        this.catPostEntities.addAll(catPostEntities);
         notifyDataSetChanged();
     }
 //

@@ -2,7 +2,6 @@ package com.lovecats.catlover.ui.activities.profile;
 
 import com.lovecats.catlover.BuildConfig;
 import com.lovecats.catlover.CustomRoboelectricRunner;
-import com.lovecats.catlover.data.user.UserModel;
 
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
