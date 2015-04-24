@@ -20,4 +20,6 @@ public interface CatPostRepository {
     Observable<CatPostEntity> createPost(CatPostEntity catPostEntity);
 
     void eraseCache();
+
+    Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity);
 }

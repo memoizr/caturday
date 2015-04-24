@@ -4,7 +4,6 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.datastore.CatPostDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostCloudDataStore;
-import com.lovecats.catlover.models.catpost.db.CatPostDb;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -79,5 +78,10 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public void eraseCache() {
         catPostLocalDataStore.eraseCache();
+    }
+
+    @Override
+    public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
+        return catPostLocalDataStore.updateCatPost(catPostEntity);
     }
 }

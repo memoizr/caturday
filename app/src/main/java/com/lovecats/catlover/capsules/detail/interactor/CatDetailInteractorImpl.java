@@ -48,7 +48,8 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
         commentEntity.setContent(comment);
         commentEntity.setUserId(user.getServerId());
 
-        return commentRepository.sendComment(commentEntity);
+        return commentRepository.sendComment(commentEntity)
+                .doOnNext(catPostRepository::updateCatPost);
     }
 
     @Override

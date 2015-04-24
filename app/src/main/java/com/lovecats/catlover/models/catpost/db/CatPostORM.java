@@ -108,6 +108,18 @@ public class CatPostORM implements CatPostDb {
         getCatPostDao().deleteAll();
     }
 
+    @Override
+    public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
+        CatPost catPost = getCatPostDao()
+                .queryBuilder()
+                .where(CatPostDao.Properties.ServerId.eq(catPostEntity.getServerId()))
+                .uniqueOrThrow();
+
+        catPostEntity.setId(catPost.getId());
+        getCatPostDao().update(CatPostMapper.fromEntity(catPostEntity));
+        return Observable.just(catPostEntity);
+    }
+
     private CatPost mapToCatPost(CatPostEntity catPostEntity){
 
         CatPost catPost = CatPostMapper.fromEntity(catPostEntity);

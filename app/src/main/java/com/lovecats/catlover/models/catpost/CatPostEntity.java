@@ -19,4 +19,5 @@ public class CatPostEntity {
     private String caption;
     private String category;
     private String user;
+    private long id;
 }
