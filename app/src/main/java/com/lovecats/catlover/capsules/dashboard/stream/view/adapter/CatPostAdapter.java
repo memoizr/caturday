@@ -117,7 +117,6 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
             myViewHolder.vote_B.setOnClickListener(view -> {
-                System.out.println("Clicked!");
             });
 
             myViewHolder.catContainer.setOnClickListener(view -> {

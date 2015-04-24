@@ -10,7 +10,7 @@ public class CatPostEntity {
     @SerializedName("image_url") private String imageUrl;
     @SerializedName("reshare_count") private String resharesCount;
     @SerializedName("download_count") private String downloadCount;
-    @SerializedName("id") private String serverId;
+    @SerializedName("server_id") private String serverId;
     @SerializedName("vote_count") private int votesCount;
 
     private String imagePath;

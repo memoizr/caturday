@@ -12,7 +12,7 @@ public interface CatDetailInteractor {
 
     Observable<CatPostEntity> getPostFromId(String serverId);
 
-    Observable<CommentEntity> sendComment(String comment, String serverId);
+    Observable<CatPostEntity> sendComment(String comment, String serverId);
 
     Observable<VoteEntity> sendVote(String serverId, boolean positive);
 

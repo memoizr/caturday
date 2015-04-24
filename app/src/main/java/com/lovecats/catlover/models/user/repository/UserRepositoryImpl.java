@@ -19,7 +19,6 @@ public class UserRepositoryImpl implements UserRepository {
         this.userCloudDataStore = userCloudDataStore;
     }
 
-    @DebugLog
     @Override
     public UserEntity getCurrentUser() {
         return userORM.getLoggedInUser();

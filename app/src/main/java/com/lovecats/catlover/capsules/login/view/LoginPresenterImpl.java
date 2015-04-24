@@ -22,7 +22,6 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(userEntity -> {
-                            System.out.println(userEntity);
                             loginInteractor.saveUser(userEntity);
                             loginView.successAnimation();
                         },

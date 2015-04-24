@@ -73,7 +73,6 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
     @Override
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
-        System.out.println("been here");
         return catPostCloudDataStore.createPost(catPostEntity);
     }
 

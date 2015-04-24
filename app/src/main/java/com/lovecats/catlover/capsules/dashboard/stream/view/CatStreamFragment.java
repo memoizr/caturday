@@ -50,7 +50,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         catStreamPresenter.onAttach(activity);
-        System.out.println(1);
     }
 
     @Override
@@ -61,7 +60,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
 
         ButterKnife.inject(this, rootView);
-        System.out.println(2);
 
         return rootView;
     }
@@ -69,7 +67,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        System.out.println(3);
 
         catStreamPresenter.onViewCreated();
 

@@ -234,7 +234,6 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         comments_RV.setAdapter(adapter);
 
         caption_V.setOnTouchListener((v, event) -> {
-            System.out.println(event.getAction());
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
                 comments_RV.dispatchTouchEvent(event);
                 return true;
@@ -304,7 +303,6 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         });
     }
 
-    @DebugLog
     @Override
     public void updateButton(boolean favorited) {
         if (favorited)

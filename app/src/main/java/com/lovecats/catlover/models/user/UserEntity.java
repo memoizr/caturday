@@ -3,8 +3,6 @@ package com.lovecats.catlover.models.user;
 import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONArray;
-
 import lombok.Data;
 
 @Data

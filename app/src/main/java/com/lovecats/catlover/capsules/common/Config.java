@@ -41,7 +41,6 @@ public class Config {
     public static String getAuthToken() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
         String authToken = prefs.getString("authToken", null);
-        System.out.println(authToken);
         return authToken;
     }
 

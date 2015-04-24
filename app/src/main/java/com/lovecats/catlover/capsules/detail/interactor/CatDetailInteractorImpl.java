@@ -9,8 +9,6 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.repository.CatPostRepository;
 import com.lovecats.catlover.models.vote.VoteEntity;
 import com.lovecats.catlover.models.vote.repository.VoteRepository;
-import com.lovecats.catlover.util.concurrent.PostExecutionThread;
-import com.lovecats.catlover.util.concurrent.ThreadExecutor;
 
 import rx.Observable;
 
@@ -19,8 +17,6 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     private static final String TAG = CatDetailInteractorImpl.class.getCanonicalName();
 
     private final CatPostRepository catPostRepository;
-    private final PostExecutionThread postExecutionThread;
-    private final ThreadExecutor threadExecutor;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final VoteRepository voteRepository;
@@ -28,16 +24,12 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     public CatDetailInteractorImpl(CatPostRepository catPostRepository,
                                    UserRepository userRepository,
                                    CommentRepository commentRepository,
-                                   VoteRepository voteRepository,
-                                   ThreadExecutor threadExecutor,
-                                   PostExecutionThread postExecutionThread) {
+                                   VoteRepository voteRepository) {
 
         this.catPostRepository = catPostRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.voteRepository = voteRepository;
-        this.threadExecutor = threadExecutor;
-        this.postExecutionThread = postExecutionThread;
     }
 
     @Override
@@ -46,7 +38,7 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     }
 
     @Override
-    public Observable<CommentEntity> sendComment(String comment, String catPostServerId) {
+    public Observable<CatPostEntity> sendComment(String comment, String catPostServerId) {
         UserEntity user = userRepository.getCurrentUser();
 
         CommentEntity commentEntity = new CommentEntity();
@@ -81,7 +73,7 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     @Override
     public Observable<Boolean> isFavorite(String serverId) {
         return userRepository.getAllFavoritePost()
-                .flatMap(hash -> Observable.from(hash))
+                .flatMap(Observable::from)
                 .filter(s -> s.equals(serverId))
                 .count()
                 .map(count -> count > 0);

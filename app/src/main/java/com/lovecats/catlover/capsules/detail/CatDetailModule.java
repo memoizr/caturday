@@ -18,8 +18,6 @@ import com.lovecats.catlover.models.user.repository.UserRepository;
 import com.lovecats.catlover.models.vote.datastore.VoteCloudDataStore;
 import com.lovecats.catlover.models.vote.repository.VoteRepository;
 import com.lovecats.catlover.models.vote.repository.VoteRepositoryImpl;
-import com.lovecats.catlover.util.concurrent.PostExecutionThread;
-import com.lovecats.catlover.util.concurrent.ThreadExecutor;
 
 import javax.inject.Singleton;
 
@@ -51,16 +49,14 @@ public class CatDetailModule {
     @Singleton
     public CommentApi provideCommentApi(RestAdapter restAdapter) {
 
-        final CommentApi api = restAdapter.create(CommentApi.class);
-        return api;
+        return restAdapter.create(CommentApi.class);
     }
 
     @Provides
     @Singleton
     public VoteApi provideVoteApi(RestAdapter adapter) {
 
-        final VoteApi api = adapter.create(VoteApi.class);
-        return api;
+        return adapter.create(VoteApi.class);
     }
 
     @Provides
@@ -93,16 +89,12 @@ public class CatDetailModule {
             CatPostRepository catPostRepository,
             UserRepository userRepository,
             CommentRepository commentRepository,
-            VoteRepository voteRepository,
-            ThreadExecutor threadExecutor,
-            PostExecutionThread postExecutionThread) {
+            VoteRepository voteRepository) {
 
         return new CatDetailInteractorImpl(catPostRepository,
                 userRepository,
                 commentRepository,
-                voteRepository,
-                threadExecutor,
-                postExecutionThread);
+                voteRepository);
     }
 
     @Provides

@@ -63,7 +63,6 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         ((Activity)mContext).startActivityForResult(intent, REQUEST_TAKE_PHOTO);
     }
 
-    @DebugLog
     @Override
     public void onActivityResult(Intent data) {
         if (data != null)
@@ -117,7 +116,6 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         sendPostForUri(catPostEntity, imageUri);
     }
 
-    @DebugLog
     private void sendPostForUri(CatPostEntity catPostEntity, Uri uri) {
 
         Observable<CatPostEntity> uriObservable = Observable.<CatPostEntity>create((observer)-> {
@@ -164,9 +162,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         return imageUri;
     }
 
-    @DebugLog
     private String getRealPathFromURI(Uri uri) {
-        System.out.println(uri.toString());
 
         String url = "";
         try {

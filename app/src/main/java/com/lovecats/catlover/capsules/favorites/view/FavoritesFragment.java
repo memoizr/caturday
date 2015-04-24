@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesView {
 
@@ -64,7 +63,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesView {
         recyclerView.setAdapter(favoritesAdapter);
     }
 
-    @DebugLog
     @Override
     public void setRecyclerViewAdapter(Collection<CatPostEntity> catPostList) {
 

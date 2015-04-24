@@ -56,10 +56,8 @@ public class CatPostCloudDataStore implements CatPostDataStore {
         return null;
     }
 
-    @DebugLog
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
 
-        System.out.println("and here");
         String path = catPostEntity.getImagePath();
 
         if (path.length() > 0) {

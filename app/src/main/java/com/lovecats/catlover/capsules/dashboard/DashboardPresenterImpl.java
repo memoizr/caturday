@@ -105,7 +105,6 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
     @Override
     public void onRefresh() {
-        System.out.println("should be working....");
         eventBus.post(new StreamRefreshedEvent());
     }
 }
