@@ -77,37 +77,37 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void pauseSliderAnimation() {
-        backgroundImageAnimation.pauseAnimation();
+//        backgroundImageAnimation.pauseAnimation();
     }
 
     @Override
     public void resumeSliderAnimation() {
-        backgroundImageAnimation.resumeAnimation();
+//        backgroundImageAnimation.resumeAnimation();
     }
 
     private void initSliderLayout(SliderLayout sliderLayout) {
 
-        getRandomPosts(10)
-                .subscribeOn(Schedulers.io())
-                .flatMap(Observable::from)
-                .observeOn(AndroidSchedulers.mainThread())
-                .retry()
-                .subscribe((s) -> {
-                    MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
-                    defaultSliderView.image(s.getImageUrl())
-                            .setScaleType(BaseSliderView.ScaleType.CenterCrop);
-
-                    sliderLayout.addSlider(defaultSliderView);
-                },
-                        Throwable::printStackTrace
-                );
-
-
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
-        backgroundImageAnimation = new ImageAnimation();
-        sliderLayout.setCustomAnimation(backgroundImageAnimation);
-        sliderLayout.setDuration(10000);
-        sliderLayout.startAutoCycle();
+//        getRandomPosts(10)
+//                .subscribeOn(Schedulers.io())
+//                .flatMap(Observable::from)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .retry()
+//                .subscribe((s) -> {
+//                    MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
+//                    defaultSliderView.image(s.getImageUrl())
+//                            .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+//
+//                    sliderLayout.addSlider(defaultSliderView);
+//                },
+//                        Throwable::printStackTrace
+//                );
+//
+//
+//        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
+//        backgroundImageAnimation = new ImageAnimation();
+//        sliderLayout.setCustomAnimation(backgroundImageAnimation);
+//        sliderLayout.setDuration(10000);
+//        sliderLayout.startAutoCycle();
     }
 
 

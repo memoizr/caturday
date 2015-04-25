@@ -1,5 +1,7 @@
 package com.lovecats.catlover.models.catpost.mapper;
 
+import com.lovecats.catlover.models.user.UserEntity;
+import com.lovecats.catlover.util.data.GsonConverter;
 import com.lovecats.catlover.util.data.GsonMapper;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 
@@ -15,6 +17,7 @@ public class CatPostMapper {
         catPost.setCaption(catPostEntity.getCaption());
         catPost.setServerId(catPostEntity.getServerId());
         catPost.setCategory(catPostEntity.getCategory());
+        catPost.setUser(GsonConverter.fromEntityToJsonString(catPostEntity.getUser()));
         catPost.setComments(catPostEntity.getComments().toString());
         catPost.setImage_url(catPostEntity.getImageUrl());
         catPost.setTotalVotesCount(catPostEntity.getVotesCount());
@@ -39,6 +42,7 @@ public class CatPostMapper {
         catPostEntity.setCaption(catPost.getCaption());
         catPostEntity.setServerId(catPost.getServerId());
         catPostEntity.setCategory(catPost.getCategory());
+        catPostEntity.setUser(GsonConverter.fromJsonStringToEntity(catPost.getUser(), UserEntity.class));
         catPostEntity.setComments(GsonMapper.toJsonArray(catPost.getComments()));
         catPostEntity.setImageUrl(catPost.getImage_url());
         catPostEntity.setVotesCount(catPostEntity.getVotesCount());

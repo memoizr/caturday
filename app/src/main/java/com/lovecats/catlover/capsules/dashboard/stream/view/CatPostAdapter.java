@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.dashboard.stream.view.adapter;
+package com.lovecats.catlover.capsules.dashboard.stream.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,10 +29,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
 import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
 import com.lovecats.catlover.capsules.main.view.MainActivity;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
+import com.lovecats.catlover.models.user.UserEntity;
+import com.lovecats.catlover.models.user.UserMapper;
+import com.lovecats.catlover.util.data.GsonConverter;
+import com.lovecats.catlover.util.data.GsonMapper;
 import com.lovecats.catlover.util.helper.ShareHelper;
 import com.squareup.picasso.Picasso;
 
@@ -94,7 +99,6 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
             int votesCount = catPostEntity.getVotesCount();
 
-
             String votesNumber = "";
 
             if (votesCount != 0) {
@@ -107,6 +111,13 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .load(catPostEntity.getImageUrl())
                     .centerCrop()
                     .into(myViewHolder.cat_IV);
+
+
+            UserEntity user = catPostEntity.getUser();
+
+            myViewHolder.username_TV.setText(user.getUsername());
+
+            Glide.with(mContext).load(user.getImageUrl()).into(myViewHolder.user_image_IV);
 
             myViewHolder.options_B.setOnClickListener(this::showPopup);
 
@@ -196,6 +207,8 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @InjectView(R.id.votes_B) Button vote_B;
         @InjectView(R.id.share_B) View share_B;
         @InjectView(R.id.options_B) ImageButton options_B;
+        @InjectView(R.id.username_TV) TextView username_TV;
+        @InjectView(R.id.user_image_IV) ImageView user_image_IV;
 
         public CatsCardViewHolder(View v) {
             super(v);
