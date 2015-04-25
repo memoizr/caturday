@@ -21,8 +21,7 @@ public class LoginInteractorImpl implements LoginInteractor {
 
     @Override
     public Observable<UserEntity> performSignup(String username, String email, String password) {
-        //TODO signup
-        return userRepository.login(email, password);
+        return userRepository.signup(username, email, password);
     }
 
     @Override

@@ -29,4 +29,17 @@ public class UserCloudDataStore implements UserDataStore {
         }
         return userApi.login(loginEntity);
     }
+
+    public Observable<UserEntity> signup(String username, String email, String password) {
+        LoginEntity loginEntity = new LoginEntity();
+        loginEntity.setUsername(username);
+        loginEntity.setEmail(email);
+        try {
+            loginEntity.setPassword(Base64.encodeToString(password.getBytes("UTF8"), Base64.NO_WRAP));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return userApi.signup(loginEntity);
+    }
 }

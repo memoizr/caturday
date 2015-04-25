@@ -106,6 +106,19 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
         login_buttons.setVisibility(View.VISIBLE);
     }
 
+    @OnClick(R.id.signup_B)
+    public void clickSignUp() {
+        hideKeyboard();
+
+        loginPresenter.performSignup(
+                username_TV.getText().toString(),
+                email_TV.getText().toString(),
+                password_TV.getText().toString());
+
+        AnimationHelper.glideAwayAndHide(glide_container);
+        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(progress_bar), 400);
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();

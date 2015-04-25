@@ -46,7 +46,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Observable<UserEntity> signup(String username, String email, String password) {
-        return null;
+        return userCloudDataStore.signup(username, email, password);
     }
 
     @Override

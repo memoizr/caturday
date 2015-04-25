@@ -33,6 +33,16 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void performSignup(String username, String email, String password) {
-        loginInteractor.performSignup(username, email, password);
+        loginInteractor.performSignup(username, email, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(userEntity -> {
+                            loginInteractor.saveUser(userEntity);
+                            loginView.successAnimation();
+                        },
+                        e -> {
+                            loginView.failureAnimation();
+                            e.printStackTrace();
+                        });
     }
 }

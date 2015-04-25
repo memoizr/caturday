@@ -11,4 +11,7 @@ public interface UserApi {
 
     @POST("/sessions/login")
     Observable<UserEntity> login(@Body LoginEntity loginEntity);
+
+    @POST("/sessions/register")
+    Observable<UserEntity> signup(@Body LoginEntity loginEntity);
 }

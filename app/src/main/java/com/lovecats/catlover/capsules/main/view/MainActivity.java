@@ -40,6 +40,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
+import rx.Observable;
 
 public class MainActivity extends DrawerActivity implements ScrollEventListener,
         SlidingTabActivity, MainView {
@@ -309,6 +310,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
                     .start();
         }
     }
+
 
     @Override
     public void onRestart() {
