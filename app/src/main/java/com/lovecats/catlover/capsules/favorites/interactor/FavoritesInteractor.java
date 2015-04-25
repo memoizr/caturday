@@ -8,5 +8,5 @@ import rx.Observable;
 
 public interface FavoritesInteractor {
 
-    Collection<CatPostEntity> getFavoriteCatPosts();
+    Observable<Collection<CatPostEntity>> getFavoriteCatPosts();
 }

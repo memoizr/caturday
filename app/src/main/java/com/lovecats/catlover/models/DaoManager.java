@@ -1,4 +1,4 @@
-package com.lovecats.catlover.data;
+package com.lovecats.catlover.models;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,7 +26,6 @@ public class DaoManager {
     }
 
     private static void setupDatabase(){
-        System.out.println("setup");
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(sessionContext, "fool-db", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);

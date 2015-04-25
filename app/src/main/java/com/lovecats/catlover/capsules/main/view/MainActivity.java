@@ -40,6 +40,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
+import rx.Observable;
 
 public class MainActivity extends DrawerActivity implements ScrollEventListener,
         SlidingTabActivity, MainView {
@@ -310,6 +311,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
         }
     }
 
+
     @Override
     public void onRestart() {
         super.onRestart();
@@ -336,17 +338,18 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
         switch (position) {
             case 0:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, dashboardFragment)
+                        .replace(R.id.container, new DashboardFragment())
                         .commit();
                 break;
             case 1:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, favoritesFragment)
+                        .replace(R.id.container, new FavoritesFragment())
                         .commit();
                 break;
             default:
                 break;
         }
+        mDrawerLayout.postDelayed(() -> mDrawerLayout.closeDrawers(), 200);
     }
 
     @Override

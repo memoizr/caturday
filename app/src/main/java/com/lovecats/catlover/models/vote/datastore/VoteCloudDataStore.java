@@ -1,13 +1,10 @@
 package com.lovecats.catlover.models.vote.datastore;
 
-import com.lovecats.catlover.capsules.detail.api.VoteApi;
+import com.lovecats.catlover.models.vote.api.VoteApi;
 import com.lovecats.catlover.models.vote.VoteEntity;
 
 import rx.Observable;
 
-/**
- * Created by Cat#2 on 06/04/15.
- */
 public class VoteCloudDataStore {
 
     private final VoteApi voteApi;

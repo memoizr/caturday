@@ -55,16 +55,14 @@ public class CatPostRepositoryImpl implements CatPostRepository {
         return catPostEntities;
     }
 
-
-
     @Override
-    public Collection<CatPostEntity> getCatPostsForIds(HashSet<String> ids) {
+    public Observable<Collection<CatPostEntity>> getCatPostsForIds(HashSet<String> ids) {
         Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForServerIds(ids);
-        return catPostEntities;
+        return Observable.just(catPostEntities);
     }
 
     @Override
-    public CatPostEntity getCatPost(String serverId) {
+    public Observable<CatPostEntity> getCatPost(String serverId) {
         return catPostLocalDataStore.getCatPost(serverId);
     }
 
@@ -75,7 +73,6 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
     @Override
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
-        System.out.println("been here");
         return catPostCloudDataStore.createPost(catPostEntity);
     }
 

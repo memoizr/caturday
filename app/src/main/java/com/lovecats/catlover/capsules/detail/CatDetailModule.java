@@ -1,9 +1,8 @@
 package com.lovecats.catlover.capsules.detail;
 
 import com.lovecats.catlover.AppModule;
-import com.lovecats.catlover.capsules.common.Config;
-import com.lovecats.catlover.capsules.detail.api.CommentApi;
-import com.lovecats.catlover.capsules.detail.api.VoteApi;
+import com.lovecats.catlover.models.comment.api.CommentApi;
+import com.lovecats.catlover.models.vote.api.VoteApi;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractor;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractorImpl;
 import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
@@ -19,14 +18,11 @@ import com.lovecats.catlover.models.user.repository.UserRepository;
 import com.lovecats.catlover.models.vote.datastore.VoteCloudDataStore;
 import com.lovecats.catlover.models.vote.repository.VoteRepository;
 import com.lovecats.catlover.models.vote.repository.VoteRepositoryImpl;
-import com.lovecats.catlover.util.concurrent.PostExecutionThread;
-import com.lovecats.catlover.util.concurrent.ThreadExecutor;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
 @Module(
@@ -53,16 +49,14 @@ public class CatDetailModule {
     @Singleton
     public CommentApi provideCommentApi(RestAdapter restAdapter) {
 
-        final CommentApi api = restAdapter.create(CommentApi.class);
-        return api;
+        return restAdapter.create(CommentApi.class);
     }
 
     @Provides
     @Singleton
     public VoteApi provideVoteApi(RestAdapter adapter) {
 
-        final VoteApi api = adapter.create(VoteApi.class);
-        return api;
+        return adapter.create(VoteApi.class);
     }
 
     @Provides
@@ -95,16 +89,12 @@ public class CatDetailModule {
             CatPostRepository catPostRepository,
             UserRepository userRepository,
             CommentRepository commentRepository,
-            VoteRepository voteRepository,
-            ThreadExecutor threadExecutor,
-            PostExecutionThread postExecutionThread) {
+            VoteRepository voteRepository) {
 
         return new CatDetailInteractorImpl(catPostRepository,
                 userRepository,
                 commentRepository,
-                voteRepository,
-                threadExecutor,
-                postExecutionThread);
+                voteRepository);
     }
 
     @Provides

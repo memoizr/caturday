@@ -12,4 +12,5 @@ public class VoteEntity {
     @SerializedName("user_id") private String userId;
     @SerializedName("voteable_type") private String voteableType;
     @SerializedName("voteable_id") private String voteableId;
+    private Boolean positive;
 }

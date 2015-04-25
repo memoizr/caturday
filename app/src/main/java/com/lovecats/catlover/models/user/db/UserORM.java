@@ -11,6 +11,7 @@ import java.util.HashSet;
 import greendao.DaoSession;
 import greendao.User;
 import greendao.UserDao;
+import rx.Observable;
 
 public class UserORM {
 
@@ -23,14 +24,14 @@ public class UserORM {
         this.daoSession = daoSession;
     }
 
-    public User logInUser(UserEntity userEntity) {
+    public Observable<UserEntity> logInUser(UserEntity userEntity) {
 
         performLogout();
         User user = UserMapper.fromEntity(userEntity);
         user.setLoggedIn(true);
-        long id = getUserDao().insertOrReplace(user);
+        getUserDao().insertOrReplace(user);
 
-        return getUserDao().loadByRowId(id);
+        return Observable.just(userEntity);
     }
 
     private UserDao getUserDao() {

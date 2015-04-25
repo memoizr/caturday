@@ -12,7 +12,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
-import com.lovecats.catlover.capsules.login.LoginActivity;
+import com.lovecats.catlover.capsules.login.view.LoginActivity;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
 import com.lovecats.catlover.capsules.main.view.MainView;
 import com.lovecats.catlover.capsules.settings.SettingsActivity;
@@ -61,6 +61,8 @@ public class MainPresenterImpl implements MainPresenter {
         mainView.setupCollapsibleToolbar(toolbar);
 
         initMenuClickListener(toolbar);
+
+        Observable.defer(() -> Observable.just(1));
     }
 
     @Override
@@ -87,7 +89,7 @@ public class MainPresenterImpl implements MainPresenter {
 
         getRandomPosts(10)
                 .subscribeOn(Schedulers.io())
-                .flatMap((iterable) -> Observable.from(iterable))
+                .flatMap(Observable::from)
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry()
                 .subscribe((s) -> {
@@ -96,7 +98,10 @@ public class MainPresenterImpl implements MainPresenter {
                             .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
                     sliderLayout.addSlider(defaultSliderView);
-                });
+                },
+                        Throwable::printStackTrace
+                );
+
 
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
         backgroundImageAnimation = new ImageAnimation();
@@ -104,6 +109,7 @@ public class MainPresenterImpl implements MainPresenter {
         sliderLayout.setDuration(10000);
         sliderLayout.startAutoCycle();
     }
+
 
     private void initMenuClickListener(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(

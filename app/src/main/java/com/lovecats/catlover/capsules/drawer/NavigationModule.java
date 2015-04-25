@@ -4,6 +4,8 @@ import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.drawer.interactor.NavigationInteractor;
 import com.lovecats.catlover.capsules.drawer.interactor.NavigationInteractorImpl;
 import com.lovecats.catlover.capsules.drawer.view.NavigationFragment;
+import com.lovecats.catlover.capsules.drawer.view.NavigationPresenter;
+import com.lovecats.catlover.capsules.drawer.view.NavigationPresenterImpl;
 import com.lovecats.catlover.capsules.drawer.view.NavigationView;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;

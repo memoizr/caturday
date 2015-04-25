@@ -23,10 +23,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(
-        injects = {
-                MainActivity.class,
-
-        },
+        injects = MainActivity.class,
         includes = UserModule.class,
         addsTo = AppModule.class
 )
@@ -53,7 +50,7 @@ public class MainModule {
         return new CollapsibleView(context);
     }
 
-    @Provides @Singleton public DashboardFragment provideDashboardFragment() {
+    @Provides public DashboardFragment provideDashboardFragment() {
         return new DashboardFragment();
     }
 
@@ -61,7 +58,7 @@ public class MainModule {
         return new NavigationFragment();
     }
 
-    @Provides @Singleton public FavoritesFragment provideFavoritesFragment() {
+    @Provides public FavoritesFragment provideFavoritesFragment() {
         return new FavoritesFragment();
     }
 }

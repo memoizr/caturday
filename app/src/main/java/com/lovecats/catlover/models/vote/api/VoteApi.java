@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.detail.api;
+package com.lovecats.catlover.models.vote.api;
 
 import com.lovecats.catlover.models.vote.VoteEntity;
 

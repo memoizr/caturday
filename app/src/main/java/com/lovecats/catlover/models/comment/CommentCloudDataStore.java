@@ -1,6 +1,7 @@
 package com.lovecats.catlover.models.comment;
 
-import com.lovecats.catlover.capsules.detail.api.CommentApi;
+import com.lovecats.catlover.models.catpost.CatPostEntity;
+import com.lovecats.catlover.models.comment.api.CommentApi;
 
 import rx.Observable;
 
@@ -12,7 +13,8 @@ public class CommentCloudDataStore {
         this.commentApi = commentApi;
     }
 
-    public Observable<CommentEntity> sendComment(CommentEntity comment) {
+    public Observable<CatPostEntity> sendComment(CommentEntity comment) {
+
         return commentApi.postComment(comment);
     }
 }

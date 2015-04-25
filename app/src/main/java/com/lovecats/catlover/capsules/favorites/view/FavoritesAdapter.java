@@ -13,6 +13,7 @@ import com.lovecats.catlover.capsules.common.view.HeaderAdapter;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -20,7 +21,7 @@ import butterknife.InjectView;
 
 public class FavoritesAdapter extends HeaderAdapter {
     private int headerHeight;
-    private List<CatPostEntity> catPostEntities;
+    private List<CatPostEntity> catPostEntities = new ArrayList<>();
     private Context context;
 
     public FavoritesAdapter(int headerHeight) {
@@ -79,7 +80,9 @@ public class FavoritesAdapter extends HeaderAdapter {
     }
 
     public void setCatPostEntities(List<CatPostEntity> catPostEntities) {
-        this.catPostEntities = catPostEntities;
+        this.catPostEntities = new ArrayList<>();
+        catPostEntities.add(new CatPostEntity());
+        this.catPostEntities.addAll(catPostEntities);
         notifyDataSetChanged();
     }
 //

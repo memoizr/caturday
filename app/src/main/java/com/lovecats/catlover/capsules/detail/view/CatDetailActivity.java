@@ -3,6 +3,7 @@ package com.lovecats.catlover.capsules.detail.view;
 import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -24,7 +26,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -39,7 +40,6 @@ import com.lovecats.catlover.models.comment.CommentEntity;
 import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
 import com.lovecats.catlover.capsules.common.view.views.ExpandingView;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
-import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +49,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
@@ -137,12 +138,18 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
                 .fitCenter()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onException(
+                            Exception e, String model,
+                            Target<GlideDrawable> target,
+                            boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(
+                            GlideDrawable resource,
+                            String model, Target<GlideDrawable> target,
+                            boolean isFromMemoryCache, boolean isFirstResource) {
                         new PhotoViewAttacher(cat_detail_IV);
                         return false;
                     }
@@ -170,12 +177,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
                                             comments_RV.smoothScrollBy(0, -heightDifference);
                                         } else {
                                             comments_RV.smoothScrollBy(0, -heightDifference);
-                                            comments_RV.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    comments_RV.setPadding(0, 0, 0, 0);
-                                                }
-                                            }, 416);
+                                            comments_RV.postDelayed(() -> comments_RV.setPadding(0, 0, 0, 0), 416);
                                         }
                                     }
 
@@ -204,22 +206,42 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         toolbar.setOnMenuItemClickListener(catDetailPresenter);
     }
 
+    private void showComment() {
+
+        int currentScroll = comments_RV.getCurrentScrollY();
+        int targetScroll = 2 * caption_V.getHeight();
+        if (currentScroll < targetScroll)
+        comments_RV.postDelayed(() ->
+                comments_RV.smoothScrollBy(0, targetScroll - currentScroll), 200 );
+    }
+
     @Override
     public void setRecyclerViewAdapter(List<CommentEntity> commentEntities) {
 
-        captionHeight = getResources().getDimensionPixelSize(R.dimen.caption_height);
+        captionHeight = caption_V.getHeight();
         FrameLayout content = (FrameLayout) findViewById(android.R.id.content);
         View mChildOfContent = content.getChildAt(0);
 
         Rect r = new Rect();
         mChildOfContent.getWindowVisibleDisplayFrame(r);
-        final int headerHeight = r.bottom;
+        final int headerHeight = r.bottom - 8;
 
         CommentsAdapter adapter =
                 new CommentsAdapter(headerHeight);
         adapter.setCommentEntities(commentEntities);
+        new_comment_V.setTranslationY(new_comment_V.getHeight());
 
         comments_RV.setAdapter(adapter);
+
+        caption_V.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                comments_RV.dispatchTouchEvent(event);
+                return true;
+            } else {
+                showComment();
+            }
+            return false;
+        });
 
         comments_RV.setOnTouchListener((v, event) -> {
             if (event.getY() > headerBottom - captionHeight) {
@@ -235,11 +257,12 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         final int maxScroll = headerHeight - caption_V.getMaxHeight();
         final int offset = maxScroll - caption_V.getMinHeight();
 
+
         comments_RV.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
             @Override
             public void onScrollChanged(int i, boolean b, boolean b2) {
                 headerBottom = headerHeight - i;
-                new_comment_V.animate().cancel();
+                int newCommentHeight = new_comment_V.getHeight();
                 if (i <= maxScroll) {
                     caption_V.setTranslationY((float) -i);
                     if (i >= offset) {
@@ -257,17 +280,16 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
                         caption_V.setExpandedLevel(0);
                     }
 
-                    if (i < 400 + new_comment_V.getHeight()) {
-                        if (i > 400) {
-                            new_comment_V.setTranslationY((float) -i + 400);
-                        }
-                    } else {
-                        new_comment_V.setTranslationY((float) -120);
-                    }
                 } else {
                     caption_V.getBackground().setAlpha(255);
                     caption_V.setTranslationY((float) -maxScroll - 2);
                     caption_V.setExpandedLevel(1f);
+                }
+
+                if (i < 2 * newCommentHeight) {
+                    new_comment_V.setTranslationY((float) -i/2 + newCommentHeight);
+                } else {
+//                    new_comment_V.setTranslationY((float) 0);
                 }
             }
 
@@ -282,18 +304,29 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     }
 
     @Override
-    public void initButton() {
-
+    public void updateButton(boolean favorited) {
+        if (favorited)
+            favorite_B.setBackgroundTintList(
+                    ColorStateList.valueOf(getResources().getColor(R.color.primary)));
+        else
+            favorite_B.setBackgroundTintList(
+                    ColorStateList.valueOf(getResources().getColor(R.color.teal)));
     }
 
     @Override
-    public void initCaptionHeader() {
-
+    public void scrollToBottom() {
+        int position = comments_RV.getAdapter().getItemCount() -1;
+        comments_RV.postDelayed(() -> comments_RV.smoothScrollToPosition(position), 100);
     }
 
     @Override
     public void initCompat21() {
         setUpActivityTransitions();
+    }
+
+    @Override
+    public void clearCommentET() {
+        comment_ET.setText("");
     }
 
     @Override

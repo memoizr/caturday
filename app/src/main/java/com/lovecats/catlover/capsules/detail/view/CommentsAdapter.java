@@ -45,6 +45,12 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
             header.getLayoutParams().height = headerHeight;
             return new EmptyHeader(header);
+        } else if (viewType == TYPE_FOOTER) {
+
+            View header = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.v_footer_comments, parent, false);
+
+            return new EmptyHeader(header);
         }
 
         throw new RuntimeException("there is no type that matches the type " + viewType +
@@ -55,32 +61,34 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
+        else if (isPositionFooter(position))
+            return TYPE_FOOTER;
         return TYPE_ITEM;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
+        int position = i -1;
 
         if (holder instanceof CommentsViewHolder) {
             CommentEntity commentEntity = commentEntities.get(position);
 
             ((CommentsViewHolder) holder).tvComment.setText(commentEntity.getContent());
-            ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUser().getUsername());
-            String url = commentEntity.getUser().getImage_url();
+            ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUserEntity().getUsername());
+            String url = commentEntity.getUserEntity().getImageUrl();
             Picasso.with(context).load(url).into(((CommentsViewHolder)holder).profileImage);
         }
     }
 
     @Override
     public int getItemCount() {
-        return commentEntities.size();
+        return commentEntities.size() + 2;
     }
 
     public void setCommentEntities(List<CommentEntity> commentEntities) {
         this.commentEntities = commentEntities;
         notifyDataSetChanged();
     }
-
 
     public void addCommentEntity(CommentEntity commentEntity) {
         this.commentEntities.add(commentEntity);

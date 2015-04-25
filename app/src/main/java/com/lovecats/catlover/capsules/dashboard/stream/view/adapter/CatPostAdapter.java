@@ -3,6 +3,7 @@ package com.lovecats.catlover.capsules.dashboard.stream.view.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -35,22 +36,23 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.util.helper.ShareHelper;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import lombok.Setter;
 
 public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    @Setter private List<CatPostEntity> mCatPosts;
+    private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    public CatPostAdapter(Context context, List<CatPostEntity> catPosts) {
+    public CatPostAdapter(Context context, @NonNull List<CatPostEntity> catPosts) {
         mContext = context;
-        mCatPosts = catPosts;
+        mCatPosts.add(new CatPostEntity());
+        mCatPosts.addAll(catPosts);
     }
 
     //TODO optimize this class. Shame on you!
@@ -77,11 +79,6 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof EmptyHeader) {
-
-            //TODO make my mind up whether to use staggered grid or not
-//            StaggeredGridLayoutManager.LayoutParams layoutParams =
-//                    (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
-//            layoutParams.setFullSpan(true);
         } else {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
 
@@ -120,7 +117,6 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
             myViewHolder.vote_B.setOnClickListener(view -> {
-                System.out.println("Clicked!");
             });
 
             myViewHolder.catContainer.setOnClickListener(view -> {

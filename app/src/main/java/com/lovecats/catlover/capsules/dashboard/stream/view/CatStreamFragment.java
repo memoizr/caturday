@@ -20,6 +20,7 @@ import com.lovecats.catlover.capsules.dashboard.stream.CatStreamModule;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenter;
 import com.lovecats.catlover.capsules.common.BaseFragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,13 +28,14 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import hugo.weaving.DebugLog;
 
 public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
-    private List<CatPostEntity> mCatPosts;
+    private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private CatPostAdapter catPostAdapter;
 
     public CatStreamFragment() {

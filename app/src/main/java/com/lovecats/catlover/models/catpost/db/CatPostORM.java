@@ -12,6 +12,7 @@ import java.util.List;
 import greendao.CatPost;
 import greendao.CatPostDao;
 import greendao.DaoSession;
+import rx.Observable;
 
 public class CatPostORM implements CatPostDb {
 
@@ -26,12 +27,13 @@ public class CatPostORM implements CatPostDb {
     }
 
     @Override
-    public CatPostEntity getCatPostForServerId(String id) {
+    public Observable<CatPostEntity> getCatPostForServerId(String id) {
         CatPost catPost = getCatPostDao()
                 .queryBuilder()
                 .where(CatPostDao.Properties.ServerId.eq(id))
                 .uniqueOrThrow();
-        return CatPostMapper.toEntity(catPost);
+
+        return Observable.just(CatPostMapper.toEntity(catPost));
     }
 
     @Override

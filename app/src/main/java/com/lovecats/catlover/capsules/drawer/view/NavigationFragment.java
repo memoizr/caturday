@@ -1,5 +1,7 @@
 package com.lovecats.catlover.capsules.drawer.view;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,6 @@ import android.widget.TextView;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseFragment;
 import com.lovecats.catlover.capsules.drawer.NavigationModule;
-import com.lovecats.catlover.capsules.drawer.NavigationPresenter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,8 +80,21 @@ public class NavigationFragment extends BaseFragment implements NavigationView, 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position , long id) {
         navigationPresenter.onNavigationInteraction(getActivity(), position);
+        TextView tv = (TextView) v.findViewById(R.id.text1);
+        setItemNormal(adapterView);
+        tv.setTextColor(getResources().getColor(R.color.accent));
+        tv.setTypeface(null, Typeface.BOLD);
     }
 
+    private void setItemNormal(AdapterView av) {
+    for (int i=0; i< av.getChildCount(); i++)
+    {
+        View v = av.getChildAt(i);
+        TextView txtview = (TextView) v.findViewById(R.id.text1);
+        txtview.setTypeface(null, Typeface.NORMAL);
+        txtview.setTextColor(Color.BLACK);
+    }
+}
     @Override
     protected List<Object> getModules() {
         return Arrays.asList(new NavigationModule(this));

@@ -18,7 +18,6 @@ import com.lovecats.catlover.capsules.detail.view.CatDetailView;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.util.helper.ShareHelper;
 import com.lovecats.catlover.util.data.GsonConverter;
-import com.lovecats.catlover.util.concurrent.WorkerCallback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -32,7 +31,6 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
     private final CatDetailInteractor catDetailInteractor;
     private final CatDetailView catDetailView;
-    private CatPostEntity catPostEntity;
     private String url;
     private String catPostServerId;
     private Context context;
@@ -60,24 +58,34 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         catDetailView.initImageView(url);
         catDetailView.initToolbar();
         catDetailView.initIMEListener();
+
+        catDetailInteractor.isFavorite(catPostServerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(catDetailView::updateButton);
     }
 
     private void getCatPostFromId(String serverId) {
-        catDetailInteractor.getPostFromId(serverId, new WorkerCallback<CatPostEntity>() {
-            public void done(CatPostEntity entity) {
-                setCatPostEntity(entity);
-            }
-        });
+        catDetailInteractor.getPostFromId(serverId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        CatPostEntity -> {
+                            setCatPostEntity(CatPostEntity);
+                        },
+                        Throwable::printStackTrace
+                );
     }
 
     public void setCatPostEntity(CatPostEntity entity) {
-        catPostEntity = entity;
-        JsonArray array = catPostEntity.getComments();
 
-        List<CommentEntity> commentEntities =
-                GsonConverter.fromJsonArrayToTypeArray(array, CommentEntity.class);
+        catDetailView.setRecyclerViewAdapter(getCommentEntities(entity));
+    }
 
-        catDetailView.setRecyclerViewAdapter(commentEntities);
+    private List<CommentEntity> getCommentEntities(CatPostEntity entity) {
+        JsonArray array = entity.getComments();
+
+        return GsonConverter.fromJsonArrayToTypeArray(array, CommentEntity.class);
     }
 
     @Override
@@ -86,17 +94,32 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         catDetailInteractor.sendComment(comment, catPostServerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(commentEntity -> {
-                    catDetailView.getCommentsAdapter().addCommentEntity(commentEntity);
-                });
+                .subscribe(
+                        catPostEntity -> {
+                            catDetailView.getCommentsAdapter().setCommentEntities(
+                                    getCommentEntities(catPostEntity));
+                            catDetailView.clearCommentET();
+                            catDetailView.scrollToBottom();
+                        },
+
+                        Throwable::printStackTrace
+                );
     }
 
     @Override
     public void favoritePost() {
-        catDetailInteractor.sendVote(catPostServerId)
+        catDetailInteractor
+                .isFavorite(catPostServerId)
                 .subscribeOn(Schedulers.io())
+                .flatMap(positive -> catDetailInteractor.sendVote(catPostServerId, !positive))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(voteEntity -> System.out.println("done, my friend!"));
+                .subscribe(
+                        voteEntity -> {
+                            catDetailView.updateButton(voteEntity.getPositive());
+                        },
+
+                        Throwable::printStackTrace
+                );
     }
 
     @Override
@@ -143,12 +166,10 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
             @Override
             public void onBitmapFailed(Drawable arg0) {
-                return;
             }
 
             @Override
             public void onPrepareLoad(Drawable arg0) {
-                return;
             }
         };
 

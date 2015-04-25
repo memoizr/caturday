@@ -3,7 +3,7 @@ package com.lovecats.catlover;
 import android.app.Application;
 
 import com.lovecats.catlover.capsules.common.Config;
-import com.lovecats.catlover.data.DaoManager;
+import com.lovecats.catlover.models.DaoManager;
 
 import java.util.Arrays;
 import java.util.List;

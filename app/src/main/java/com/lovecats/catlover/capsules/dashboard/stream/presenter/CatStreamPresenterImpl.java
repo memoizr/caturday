@@ -19,7 +19,6 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import hugo.weaving.DebugLog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -102,7 +101,6 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 .subscribe(s -> onRefreshComplete());
     }
 
-    @DebugLog
     private void onRefreshComplete() {
         setAdapterByType(streamType);
         eventBus.post(new StreamRefreshCompletedEvent());
@@ -117,7 +115,6 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 new Callback<Collection<CatPostEntity>>() {
             @Override
             public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-                System.out.println(new ArrayList(catPostCollection).get(0));
                 CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
                 catStreamView.setAdapter(adapter);
             }
@@ -144,7 +141,6 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
             @Override
             public void failure(RetrofitError error) {
-                System.out.println("failure");
             }
         });
     }

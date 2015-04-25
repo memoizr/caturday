@@ -148,7 +148,6 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         choiceUnmade();
     }
 
-    @DebugLog
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -194,7 +193,6 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
     @Override
     public void setPreview(String url) {
-        System.out.println("heyyy");
         if (url.length() > 0)
             Picasso.with(this).load(url).fit().centerInside().into(preview);
     }
