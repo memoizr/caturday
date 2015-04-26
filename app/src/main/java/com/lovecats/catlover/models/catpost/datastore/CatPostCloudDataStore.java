@@ -35,7 +35,7 @@ public class CatPostCloudDataStore implements CatPostDataStore {
         try {
             catPostEntities = api.getPosts(page, category);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return catPostEntities;

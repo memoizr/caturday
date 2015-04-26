@@ -121,7 +121,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
             @Override
             public void failure(RetrofitError error) {
-
+                error.printStackTrace();
             }
         });
     }
@@ -141,6 +141,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
             @Override
             public void failure(RetrofitError error) {
+                error.printStackTrace();
             }
         });
     }

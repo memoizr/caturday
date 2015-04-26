@@ -38,7 +38,7 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
 
             postExecutionThread.post(() -> callback.success(catPostCollection, null));
             } catch (Error e) {
-
+                e.printStackTrace();
             }
         });
     }
