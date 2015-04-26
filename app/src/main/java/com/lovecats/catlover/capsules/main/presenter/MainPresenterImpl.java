@@ -77,12 +77,14 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void pauseSliderAnimation() {
-        backgroundImageAnimation.pauseAnimation();
+        if (backgroundImageAnimation != null)
+            backgroundImageAnimation.pauseAnimation();
     }
 
     @Override
     public void resumeSliderAnimation() {
-        backgroundImageAnimation.resumeAnimation();
+        if (backgroundImageAnimation != null)
+            backgroundImageAnimation.resumeAnimation();
     }
 
     private void initSliderLayout(SliderLayout sliderLayout) {

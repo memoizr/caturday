@@ -10,7 +10,7 @@ import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.Events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
-import com.lovecats.catlover.capsules.dashboard.stream.view.adapter.CatPostAdapter;
+import com.lovecats.catlover.capsules.dashboard.stream.view.CatPostAdapter;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatStreamView;
 import com.squareup.otto.Bus;
@@ -121,7 +121,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
             @Override
             public void failure(RetrofitError error) {
-
+                error.printStackTrace();
             }
         });
     }
@@ -141,6 +141,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
             @Override
             public void failure(RetrofitError error) {
+                error.printStackTrace();
             }
         });
     }

@@ -14,7 +14,6 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.listener.EndlessScrollListener;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
-import com.lovecats.catlover.capsules.dashboard.stream.view.adapter.CatPostAdapter;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.dashboard.stream.CatStreamModule;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenter;
@@ -28,7 +27,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import hugo.weaving.DebugLog;
 
 public class CatStreamFragment extends BaseFragment implements CatStreamView {
 

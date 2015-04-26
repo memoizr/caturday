@@ -24,7 +24,7 @@ public class UserCloudDataStore implements UserDataStore {
         loginEntity.setEmail(email);
         try {
             loginEntity.setPassword(Base64.encodeToString(password.getBytes("UTF8"), Base64.NO_WRAP));
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return userApi.login(loginEntity);
@@ -36,7 +36,7 @@ public class UserCloudDataStore implements UserDataStore {
         loginEntity.setEmail(email);
         try {
             loginEntity.setPassword(Base64.encodeToString(password.getBytes("UTF8"), Base64.NO_WRAP));
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

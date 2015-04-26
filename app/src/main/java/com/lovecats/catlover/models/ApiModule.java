@@ -9,7 +9,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import hugo.weaving.DebugLog;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
