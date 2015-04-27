@@ -29,4 +29,8 @@ public interface UserRepository {
     Observable<UserEntity> updateUser(UserEntity userEntity);
 
     Observable<UserEntity> getUserForId(String id);
+
+    Observable<UserEntity> followUser(String serverId);
+
+    Observable<UserEntity> unfollowUser(String serverId);
 }

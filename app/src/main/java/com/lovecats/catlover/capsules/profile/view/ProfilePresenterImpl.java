@@ -2,8 +2,11 @@ package com.lovecats.catlover.capsules.profile.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.common.events.UserAvailableEvent;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
@@ -33,6 +36,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void onCreate(Context context) {
         this.context = context;
+        Toolbar toolbar = profileView.getToolbar();
         String id = ((Activity) context).getIntent().getExtras().getString(ProfileActivity.EXTRA_ID);
         profileInteractor.getUserForId(id)
                 .subscribeOn(Schedulers.io())
@@ -40,17 +44,17 @@ public class ProfilePresenterImpl implements ProfilePresenter {
                 .subscribe(this::setUser, Throwable::printStackTrace);
 
         profileView.showButton(userLoggedIn());
-        profileView.setupCollapsibleToolbar(profileView.getToolbar());
+        profileView.setupCollapsibleToolbar(toolbar);
+        initMenuClickListener(toolbar);
         initViewPager();
     }
 
     private void setUser(UserEntity userEntity) {
+        this.user = userEntity;
         profileView.setUsername(userEntity.getUsername());
         profileView.setProfileImage(userEntity.getImageUrl());
         profileView.setCoverImage(userEntity.getCoverImageUrl());
         bus.post(new UserAvailableEvent(userEntity));
-
-        System.out.println(bus.hashCode());
     }
 
     private void initViewPager() {
@@ -75,5 +79,32 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void updateUserName(String userName) {
         profileInteractor.updateUserName(userName);
+    }
+
+    @Override
+    public void prepareOptionsMenu(Menu menu) {
+
+    }
+
+    private void initMenuClickListener(Toolbar toolbar) {
+        toolbar.setOnMenuItemClickListener(
+                item -> {
+                    if (item.getItemId() == R.id.action_follow) {
+
+                        profileInteractor.followUser(user.getServerId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(System.out::println, Throwable::printStackTrace);
+
+                    } else if (item.getItemId() == R.id.action_unfollow) {
+
+                        profileInteractor.unfollowUser(user.getServerId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(System.out::println, Throwable::printStackTrace);
+
+                    }
+                    return true;
+                });
     }
 }

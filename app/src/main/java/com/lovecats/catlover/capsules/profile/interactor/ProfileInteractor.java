@@ -13,4 +13,8 @@ public interface ProfileInteractor {
     void updateUserName(String userName);
 
     Observable<UserEntity> getUserForId(String serverId);
+
+    Observable<UserEntity> followUser(String serverId);
+
+    Observable<UserEntity> unfollowUser(String serverId);
 }

@@ -74,5 +74,15 @@ public class UserRepositoryImpl implements UserRepository {
         return userCloudDataStore.getUserForId(id);
     }
 
+    @Override
+    public Observable<UserEntity> followUser(String serverId) {
+        return userCloudDataStore.followUser(serverId);
+    }
+
+    @Override
+    public Observable<UserEntity> unfollowUser(String serverId) {
+        return userCloudDataStore.unfollowUser(serverId);
+    }
+
 
 }

@@ -4,6 +4,7 @@ import com.lovecats.catlover.models.user.LoginEntity;
 import com.lovecats.catlover.models.user.UserEntity;
 
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
@@ -23,4 +24,10 @@ public interface UserApi {
 
     @PUT("/user")
     Observable<UserEntity> updateUser(UserEntity userEntity);
+
+    @POST("/follow")
+    Observable<UserEntity> followUser(@Body String serverId);
+
+    @DELETE("/follow")
+    Observable<UserEntity> unfollowUser(@Body String serverId);
 }

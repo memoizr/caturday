@@ -52,4 +52,12 @@ public class UserCloudDataStore implements UserDataStore {
     public Observable<UserEntity> getUserForId(String serverId) {
         return userApi.getUserForId(serverId);
     }
+
+    public Observable<UserEntity> unfollowUser(String serverId) {
+        return userApi.unfollowUser(serverId);
+    }
+
+    public Observable<UserEntity> followUser(String serverId) {
+        return userApi.followUser(serverId);
+    }
 }

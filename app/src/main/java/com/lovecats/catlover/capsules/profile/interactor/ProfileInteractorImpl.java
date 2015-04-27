@@ -32,4 +32,14 @@ public class ProfileInteractorImpl implements ProfileInteractor{
     public Observable<UserEntity> getUserForId(String serverId) {
         return userRepository.getUserForId(serverId);
     }
+
+    @Override
+    public Observable<UserEntity> followUser(String serverId) {
+        return userRepository.followUser(serverId);
+    }
+
+    @Override
+    public Observable<UserEntity> unfollowUser(String serverId) {
+        return userRepository.unfollowUser(serverId);
+    }
 }
