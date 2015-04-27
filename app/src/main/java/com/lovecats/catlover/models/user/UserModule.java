@@ -3,7 +3,6 @@ package com.lovecats.catlover.models.user;
 import com.lovecats.catlover.capsules.common.Config;
 import com.lovecats.catlover.models.user.api.UserApi;
 import com.lovecats.catlover.models.user.datastore.UserCloudDataStore;
-import com.lovecats.catlover.models.user.datastore.UserLocalDataStore;
 import com.lovecats.catlover.models.user.db.UserORM;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 import com.lovecats.catlover.models.user.repository.UserRepositoryImpl;

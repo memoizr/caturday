@@ -15,9 +15,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-/**
- * Created by user on 24/02/15.
- */
 public class CollapsibleView extends FrameLayout {
     @InjectView(R.id.titleContainer_RL) ViewGroup profileContainer_RL;
     @InjectView(R.id.logo_IV) ImageView logo_IV;

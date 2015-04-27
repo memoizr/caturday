@@ -20,4 +20,5 @@ public class UserEntity {
     @SerializedName("authentication_token") private String authToken;
     @SerializedName("server_id") private String serverId;
     @SerializedName("image_url") private String imageUrl;
+    @SerializedName("cover_image_url") private String coverImageUrl;
 }

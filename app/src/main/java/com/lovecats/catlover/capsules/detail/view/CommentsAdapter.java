@@ -1,6 +1,8 @@
 package com.lovecats.catlover.capsules.detail.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.view.HeaderAdapter;
+import com.lovecats.catlover.capsules.profile.view.ProfileActivity;
 import com.lovecats.catlover.models.comment.CommentEntity;
 import com.squareup.picasso.Picasso;
 
@@ -76,7 +80,14 @@ public class CommentsAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             ((CommentsViewHolder) holder).tvComment.setText(commentEntity.getContent());
             ((CommentsViewHolder) holder).tvName.setText(commentEntity.getUserEntity().getUsername());
             String url = commentEntity.getUserEntity().getImageUrl();
-            Picasso.with(context).load(url).into(((CommentsViewHolder)holder).profileImage);
+            Glide.with(context).load(url).into(((CommentsViewHolder)holder).profileImage);
+
+
+            ((CommentsViewHolder) holder).profileImage.setOnClickListener(view  -> {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra(ProfileActivity.EXTRA_ID, commentEntity.getUserEntity().getServerId());
+                context.startActivity(intent);
+            });
         }
     }
 

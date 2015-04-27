@@ -42,4 +42,14 @@ public class UserCloudDataStore implements UserDataStore {
 
         return userApi.signup(loginEntity);
     }
+
+    @Override
+    public Observable<UserEntity> updateUser(UserEntity userEntity) {
+        return userApi.updateUser(userEntity);
+    }
+
+    @Override
+    public Observable<UserEntity> getUserForId(String serverId) {
+        return userApi.getUserForId(serverId);
+    }
 }

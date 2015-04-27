@@ -13,7 +13,7 @@ public class CatPost {
     private Long id;
     private String serverId;
     private String caption;
-    private String image_url;
+    private String imageUrl;
     private String user;
     private String comments;
     private String category;
@@ -35,11 +35,11 @@ public class CatPost {
         this.id = id;
     }
 
-    public CatPost(Long id, String serverId, String caption, String image_url, String user, String comments, String category, Integer downloadCount, Integer totalVotesCount) {
+    public CatPost(Long id, String serverId, String caption, String imageUrl, String user, String comments, String category, Integer downloadCount, Integer totalVotesCount) {
         this.id = id;
         this.serverId = serverId;
         this.caption = caption;
-        this.image_url = image_url;
+        this.imageUrl = imageUrl;
         this.user = user;
         this.comments = comments;
         this.category = category;
@@ -77,12 +77,12 @@ public class CatPost {
         this.caption = caption;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getUser() {

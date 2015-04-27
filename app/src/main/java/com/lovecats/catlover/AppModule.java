@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.lovecats.catlover.models.ApiModule;
 import com.lovecats.catlover.capsules.common.ConfigModule;
-import com.lovecats.catlover.capsules.common.Events.EventsModule;
+import com.lovecats.catlover.capsules.common.events.BusModule;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractorModule;
 import com.lovecats.catlover.models.DataModule;
 import com.lovecats.catlover.util.concurrent.ThreadModule;
@@ -23,7 +23,7 @@ import dagger.Provides;
                 DataModule.class,
                 CatStreamInteractorModule.class,
                 ThreadModule.class,
-                EventsModule.class,
+                BusModule.class,
                 ApiModule.class
         }
 )

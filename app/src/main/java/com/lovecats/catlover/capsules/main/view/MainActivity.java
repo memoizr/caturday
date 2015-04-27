@@ -50,7 +50,6 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
 
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
-    @Inject FavoritesFragment favoritesFragment;
     @Inject MainPresenter mainPresenter;
     @Inject NavigationFragment navigationFragment;
 
@@ -62,7 +61,6 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
     @InjectView(R.id.reveal_V) View reveal;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ImageAnimation backgroundImageAnimation;
     private boolean statusTransparent = true;
     private boolean transparent = true;
     private int titleCollapsed;
@@ -135,7 +133,6 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
 
     @Override
     public void onRefreshCompleted() {
-        System.out.print("heyyyyyyyyyyyy");
         reveal().addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -349,7 +346,7 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
             default:
                 break;
         }
-        mDrawerLayout.postDelayed(() -> mDrawerLayout.closeDrawers(), 200);
+        mDrawerLayout.postDelayed(mDrawerLayout::closeDrawers, 200);
     }
 
     @Override

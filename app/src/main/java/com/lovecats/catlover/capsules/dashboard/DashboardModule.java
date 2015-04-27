@@ -2,7 +2,6 @@ package com.lovecats.catlover.capsules.dashboard;
 
 
 import com.lovecats.catlover.AppModule;
-import com.lovecats.catlover.capsules.common.Events.EventsModule;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;

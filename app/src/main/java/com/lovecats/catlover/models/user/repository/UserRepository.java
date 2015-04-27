@@ -26,9 +26,7 @@ public interface UserRepository {
 
     void logout();
 
-    void updateUserName(String userName);
+    Observable<UserEntity> updateUser(UserEntity userEntity);
 
-    void updateDescription(String userDescription);
-
-    void updateEmail(String userEmail);
+    Observable<UserEntity> getUserForId(String id);
 }

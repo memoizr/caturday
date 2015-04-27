@@ -3,9 +3,8 @@ package com.lovecats.catlover.capsules.profile.interactor;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 
-/**
- * Created by user on 28/03/15.
- */
+import rx.Observable;
+
 public class ProfileInteractorImpl implements ProfileInteractor{
 
     private UserRepository userRepository;
@@ -25,12 +24,12 @@ public class ProfileInteractorImpl implements ProfileInteractor{
     }
 
     @Override
-    public UserEntity getUser() {
-        return userRepository.getCurrentUser();
+    public void updateUserName(String userName) {
+//        userRepository.updateUserName(userName);
     }
 
     @Override
-    public void updateUserName(String userName) {
-        userRepository.updateUserName(userName);
+    public Observable<UserEntity> getUserForId(String serverId) {
+        return userRepository.getUserForId(serverId);
     }
 }

@@ -11,6 +11,7 @@ public class NavigationPresenterImpl implements NavigationPresenter {
 
     private NavigationView navigationView;
     private NavigationInteractor navigationInteractor;
+    private UserEntity userEntity;
 
     public NavigationPresenterImpl(NavigationView navigationView,
                                    NavigationInteractor navigationInteractor) {
@@ -26,7 +27,7 @@ public class NavigationPresenterImpl implements NavigationPresenter {
         boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();
 
         if (isUserLoggedIn) {
-            UserEntity userEntity = navigationInteractor.getLoggedInUser();
+            userEntity = navigationInteractor.getLoggedInUser();
             navigationView.setUserEmail(userEntity.getEmail());
             navigationView.setUsername(userEntity.getUsername());
         }
@@ -44,6 +45,8 @@ public class NavigationPresenterImpl implements NavigationPresenter {
     @Override
     public void onProfileClicked(Activity activity) {
         Intent profileIntent = new Intent(activity, ProfileActivity.class);
+        System.out.println(userEntity);
+        profileIntent.putExtra(ProfileActivity.EXTRA_ID, userEntity.getServerId());
         activity.startActivity(profileIntent);
     }
 }

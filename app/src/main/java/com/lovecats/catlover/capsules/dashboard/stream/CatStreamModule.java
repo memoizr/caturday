@@ -1,7 +1,6 @@
 package com.lovecats.catlover.capsules.dashboard.stream;
 
 import com.lovecats.catlover.AppModule;
-import com.lovecats.catlover.capsules.common.Events.EventsModule;
 import com.lovecats.catlover.capsules.dashboard.stream.interactor.CatStreamInteractor;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenter;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenterImpl;

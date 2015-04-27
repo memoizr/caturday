@@ -9,7 +9,8 @@ public class User {
     private Long id;
     private String serverId;
     private String username;
-    private String image_url;
+    private String imageUrl;
+    private String coverImageUrl;
     private String authToken;
     private String email;
     private String info;
@@ -26,11 +27,12 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String serverId, String username, String image_url, String authToken, String email, String info, String favorites, String firstName, String lastName, String description, Boolean loggedIn) {
+    public User(Long id, String serverId, String username, String imageUrl, String coverImageUrl, String authToken, String email, String info, String favorites, String firstName, String lastName, String description, Boolean loggedIn) {
         this.id = id;
         this.serverId = serverId;
         this.username = username;
-        this.image_url = image_url;
+        this.imageUrl = imageUrl;
+        this.coverImageUrl = coverImageUrl;
         this.authToken = authToken;
         this.email = email;
         this.info = info;
@@ -65,12 +67,20 @@ public class User {
         this.username = username;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCoverImageUrl() {
+        return coverImageUrl;
+    }
+
+    public void setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl;
     }
 
     public String getAuthToken() {

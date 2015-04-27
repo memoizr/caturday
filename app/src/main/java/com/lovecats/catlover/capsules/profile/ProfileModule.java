@@ -9,6 +9,7 @@ import com.lovecats.catlover.capsules.profile.view.ProfilePresenterImpl;
 import com.lovecats.catlover.capsules.profile.view.ProfileView;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -38,7 +39,10 @@ public class ProfileModule {
         return profileView;
     }
 
-    @Provides @Singleton public ProfilePresenter provideProfilePresenter(ProfileView profileView, ProfileInteractor profileInteractor) {
-        return new ProfilePresenterImpl(profileView, profileInteractor);
+    @Provides @Singleton public ProfilePresenter provideProfilePresenter(
+            ProfileView profileView,
+            ProfileInteractor profileInteractor,
+            Bus bus) {
+        return new ProfilePresenterImpl(profileView, profileInteractor, bus);
     }
 }

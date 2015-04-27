@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
+import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
 import com.lovecats.catlover.capsules.login.view.LoginActivity;
 import com.lovecats.catlover.capsules.main.interactor.MainInteractor;
@@ -61,8 +61,6 @@ public class MainPresenterImpl implements MainPresenter {
         mainView.setupCollapsibleToolbar(toolbar);
 
         initMenuClickListener(toolbar);
-
-        Observable.defer(() -> Observable.just(1));
     }
 
     @Override

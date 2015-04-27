@@ -65,13 +65,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateUserName(String userName) {
-        userORM.updateUserName(userName);
+    public Observable<UserEntity> updateUser(UserEntity userEntity) {
+        return userCloudDataStore.updateUser(userEntity);
     }
 
     @Override
-    public void updateDescription(String userDescription) {  }
+    public Observable<UserEntity> getUserForId(String id) {
+        return userCloudDataStore.getUserForId(id);
+    }
 
-    @Override
-    public void updateEmail(String userEmail) {}
+
 }
