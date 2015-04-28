@@ -22,12 +22,8 @@ public class UserModule {
 
         @Provides
         @Singleton
-        public UserApi provideUserApi() {
-                String endpoint = Config.getEndpoint();
+        public UserApi provideUserApi(RestAdapter adapter) {
 
-                RestAdapter adapter = new RestAdapter.Builder()
-                        .setEndpoint(endpoint)
-                        .build();
                 final UserApi api = adapter.create(UserApi.class);
                 return api;
         }

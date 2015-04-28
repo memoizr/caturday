@@ -1,16 +1,14 @@
 package com.lovecats.catlover.models.session.db;
 
-import com.google.gson.Gson;
 import com.lovecats.catlover.models.session.SessionEntity;
+
+import java.util.List;
 
 import greendao.DaoSession;
 import greendao.Session;
 import greendao.SessionDao;
 import rx.Observable;
 
-/**
- * Created by Cat#2 on 28/04/15.
- */
 public class SessionORM {
 
     private DaoSession daoSession;
@@ -36,11 +34,21 @@ public class SessionORM {
         getSessionDao().deleteAll();
     }
 
-    public boolean sessionLoggedIn() {
+    public boolean sessionAvailable() {
         return getSessionDao().count() > 0;
     }
 
     private SessionDao getSessionDao() {
         return daoSession.getSessionDao();
+    }
+
+    public SessionEntity currentSession() {
+        List<Session> sessions = getSessionDao().loadAll();
+        SessionEntity sessionEntity = new SessionEntity();
+        if (sessions.size() > 0) {
+            sessionEntity.setAuthToken(sessions.get(0).getAuthToken());
+        }
+
+        return sessionEntity;
     }
 }

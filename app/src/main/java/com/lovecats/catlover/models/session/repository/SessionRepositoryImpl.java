@@ -46,6 +46,16 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
+    public boolean sessionAvailable() {
+        return localDataStore.sessionAvailable();
+    }
+
+    @Override
+    public SessionEntity currentSession() {
+        return localDataStore.currentSession();
+    }
+
+    @Override
     public void logout(String authToken) {
         localDataStore.logout();
         userORM.performLogout();

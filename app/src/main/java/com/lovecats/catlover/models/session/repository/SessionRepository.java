@@ -11,5 +11,9 @@ public interface SessionRepository {
 
     Observable<UserEntity> signup(SessionEntity sessionEntity);
 
+    boolean sessionAvailable();
+
+    SessionEntity currentSession();
+
     void logout(String authToken);
 }

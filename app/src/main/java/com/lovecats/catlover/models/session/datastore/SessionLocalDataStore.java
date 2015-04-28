@@ -24,4 +24,14 @@ public class SessionLocalDataStore {
 
         sessionORM.performLogout();
     }
+
+    public boolean sessionAvailable() {
+
+        return sessionORM.sessionAvailable();
+    }
+
+    public SessionEntity currentSession() {
+
+        return sessionORM.currentSession();
+    }
 }
