@@ -1,5 +1,7 @@
 package com.lovecats.catlover.models.session.datastore;
 
+import android.util.Base64;
+
 import com.lovecats.catlover.models.session.SessionEntity;
 import com.lovecats.catlover.models.session.api.SessionApi;
 import com.lovecats.catlover.models.user.UserEntity;
@@ -16,10 +18,22 @@ public class SessionCloudDataStore implements SessionDataStore {
 
     @Override
     public Observable<UserEntity> login(SessionEntity sessionEntity) {
-        return sessionApi.login(sessionEntity);
+        return sessionApi.login(encodePassword(sessionEntity));
     }
 
     public Observable<UserEntity> signup(SessionEntity sessionEntity) {
-        return sessionApi.signup(sessionEntity);
+        return sessionApi.signup(encodePassword(sessionEntity));
+    }
+
+    private SessionEntity encodePassword(SessionEntity sessionEntity) {
+
+        String password = sessionEntity.getPassword();
+        try {
+            password = Base64.encodeToString(password.getBytes("UTF8"), Base64.NO_WRAP);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        sessionEntity.setPassword(password);
+        return sessionEntity;
     }
 }

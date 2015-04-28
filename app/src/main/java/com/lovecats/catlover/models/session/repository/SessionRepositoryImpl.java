@@ -35,6 +35,17 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
+    public Observable<UserEntity> signup(SessionEntity sessionEntity) {
+        return cloudDataStore.signup(sessionEntity)
+                .doOnNext(user -> {
+                    SessionEntity entity = new SessionEntity();
+                    entity.setAuthToken(user.getAuthToken());
+                    localDataStore.login(entity);
+                    userORM.logInUser(user);
+                });
+    }
+
+    @Override
     public void logout(String authToken) {
         localDataStore.logout();
         userORM.performLogout();

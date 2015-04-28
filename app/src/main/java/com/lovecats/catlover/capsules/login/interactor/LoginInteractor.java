@@ -11,5 +11,5 @@ public interface LoginInteractor {
 
     Observable<UserEntity> performSignup(String username, String email, String password);
 
-    Observable<UserEntity> saveUser(UserEntity userEntity);
+//    Observable<UserEntity> saveUser(UserEntity userEntity);
 }

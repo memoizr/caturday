@@ -7,15 +7,19 @@ import com.lovecats.catlover.models.session.datastore.SessionLocalDataStore;
 import com.lovecats.catlover.models.session.db.SessionORM;
 import com.lovecats.catlover.models.session.repository.SessionRepository;
 import com.lovecats.catlover.models.session.repository.SessionRepositoryImpl;
-import com.lovecats.catlover.models.user.datastore.UserLocalDataStore;
 import com.lovecats.catlover.models.user.db.UserORM;
 
 import javax.inject.Singleton;
 
+import dagger.Module;
 import dagger.Provides;
 import greendao.DaoSession;
 import retrofit.RestAdapter;
 
+@Module(
+        library = true,
+        complete = false
+)
 public class SessionModule {
 
     @Provides

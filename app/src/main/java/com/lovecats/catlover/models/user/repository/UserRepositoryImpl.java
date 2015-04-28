@@ -39,20 +39,20 @@ public class UserRepositoryImpl implements UserRepository {
         return Observable.just(userORM.getFavoriteCatPosts());
     }
 
-    @Override
-    public Observable<UserEntity> login(String email, String password) {
-        return userCloudDataStore.login(email, password);
-    }
+//    @Override
+//    public Observable<UserEntity> login(String email, String password) {
+//        return userCloudDataStore.login(email, password);
+//    }
+//
+//    @Override
+//    public Observable<UserEntity> signup(String username, String email, String password) {
+//        return userCloudDataStore.signup(username, email, password);
+//    }
 
-    @Override
-    public Observable<UserEntity> signup(String username, String email, String password) {
-        return userCloudDataStore.signup(username, email, password);
-    }
-
-    @Override
-    public Observable<UserEntity> saveUser(UserEntity userEntity) {
-        return userORM.logInUser(userEntity);
-    }
+//    @Override
+//    public Observable<UserEntity> saveUser(UserEntity userEntity) {
+//        return userORM.logInUser(userEntity);
+//    }
 
     @Override
     public boolean userLoggedIn() {

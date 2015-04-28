@@ -9,5 +9,7 @@ public interface SessionRepository {
 
     Observable<UserEntity> login(SessionEntity sessionEntity);
 
+    Observable<UserEntity> signup(SessionEntity sessionEntity);
+
     void logout(String authToken);
 }

@@ -10,7 +10,7 @@ public class UserMapper {
         User user = new User();
         user.setUsername(userEntity.getUsername());
         user.setServerId(userEntity.getServerId());
-        user.setAuthToken(userEntity.getAuthToken());
+//        user.setAuthToken(userEntity.getAuthToken());
         user.setDescription(userEntity.getDescription());
         user.setImageUrl(userEntity.getImageUrl());
         user.setCoverImageUrl(userEntity.getCoverImageUrl());
@@ -27,7 +27,7 @@ public class UserMapper {
         userEntity.setUsername(user.getUsername());
 
         userEntity.setServerId(user.getServerId());
-        userEntity.setAuthToken(user.getAuthToken());
+//        userEntity.setAuthToken(user.getAuthToken());
         userEntity.setDescription(user.getDescription());
         userEntity.setCoverImageUrl(user.getCoverImageUrl());
         userEntity.setImageUrl(user.getImageUrl());

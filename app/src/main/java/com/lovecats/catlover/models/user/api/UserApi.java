@@ -1,6 +1,5 @@
 package com.lovecats.catlover.models.user.api;
 
-import com.lovecats.catlover.models.user.LoginEntity;
 import com.lovecats.catlover.models.user.UserEntity;
 
 import retrofit.http.Body;
