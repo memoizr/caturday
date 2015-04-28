@@ -1,9 +1,11 @@
-package com.lovecats.catlover.models.user;
+package com.lovecats.catlover.models.session;
 
 import lombok.Data;
 
 @Data
-public class LoginEntity {
+public class SessionEntity {
+
+    private String authToken;
     private String username;
     private String email;
     private String password;

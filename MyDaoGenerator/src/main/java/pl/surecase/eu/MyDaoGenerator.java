@@ -18,7 +18,6 @@ public class MyDaoGenerator {
         user.addStringProperty("username");
         user.addStringProperty("imageUrl");
         user.addStringProperty("coverImageUrl");
-        user.addStringProperty("authToken");
         user.addStringProperty("email");
         user.addStringProperty("info");
         user.addStringProperty("favorites");
@@ -37,6 +36,9 @@ public class MyDaoGenerator {
         catPost.addStringProperty("category");
         catPost.addIntProperty("downloadCount");
         catPost.addIntProperty("totalVotesCount");
+
+        Entity session = schema.addEntity("Session");
+        session.addStringProperty("authToken");
 
         Entity comment = schema.addEntity("Comment");
         comment.addIdProperty();

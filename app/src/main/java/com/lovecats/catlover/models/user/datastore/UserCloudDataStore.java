@@ -6,8 +6,6 @@ import com.lovecats.catlover.models.user.LoginEntity;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.models.user.api.UserApi;
 
-import java.io.UnsupportedEncodingException;
-
 import rx.Observable;
 
 public class UserCloudDataStore implements UserDataStore {
