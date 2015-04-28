@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.profile.following;
+package com.lovecats.catlover.capsules.profile.following.view;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.profile.following.FollowingModule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +52,12 @@ public class FollowingFragment extends BaseFragment implements FollowingView {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         following_RV.setLayoutManager(layoutManager);
+        following_RV.setAdapter(new FollowingAdapter(45));
+    }
+
+    @Override
+    public FollowingAdapter getAdapter() {
+        return (FollowingAdapter) following_RV.getAdapter();
     }
 
     @Override

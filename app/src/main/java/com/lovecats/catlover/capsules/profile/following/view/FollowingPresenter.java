@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.profile.following;
+package com.lovecats.catlover.capsules.profile.following.view;
 
 import android.content.Context;
 

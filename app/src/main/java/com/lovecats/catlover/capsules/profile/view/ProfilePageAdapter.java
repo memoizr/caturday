@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.lovecats.catlover.capsules.profile.following.FollowingFragment;
+import com.lovecats.catlover.capsules.profile.following.view.FollowingFragment;
 import com.lovecats.catlover.capsules.profile.info.UserInfoFragment;
 
 public class ProfilePageAdapter extends FragmentPagerAdapter{

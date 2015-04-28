@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.profile.following;
+package com.lovecats.catlover.capsules.profile.following.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.view.HeaderAdapter;
 import com.lovecats.catlover.models.user.UserEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -20,7 +22,7 @@ import butterknife.InjectView;
 public class FollowingAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
     private int headerHeight;
-    private List<UserEntity> userEntitities;
+    private List<UserEntity> userEntitities = new ArrayList();
     private Context context;
 
     public FollowingAdapter(int headerHeight) {
@@ -34,7 +36,7 @@ public class FollowingAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
         if (viewType == TYPE_ITEM) {
             View comment = LayoutInflater.from(context)
-                    .inflate(R.layout.v_comment, parent, false);
+                    .inflate(R.layout.v_user, parent, false);
 
             return new UsersViewHolder(comment);
 
@@ -61,12 +63,11 @@ public class FollowingAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof UsersViewHolder) {
-//                UserEntity userEntity = userEntitities.get(position);
-//
-//                ((UsersViewHolder) holder).tvComment.setText(commentEntity.getContent());
-//                ((UsersViewHolder) holder).tvName.setText(commentEntity.getUser().getUsername());
-//                String url = commentEntity.getUser().getImage_url();
-//                Picasso.with(context).load(url).into(((UsersViewHolder)holder).profileImage);
+                UserEntity userEntity = userEntitities.get(position);
+
+                ((UsersViewHolder) holder).tvName.setText(userEntity.getUsername());
+                String url = userEntity.getImageUrl();
+                Glide.with(context).load(url).into(((UsersViewHolder)holder).profileImage);
         }
     }
 
@@ -75,20 +76,19 @@ public class FollowingAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         return userEntitities.size();
     }
 
-    public void setCommentEntities(List<UserEntity> userEntitities) {
+    public void setUserEntities(List<UserEntity> userEntitities) {
         this.userEntitities = userEntitities;
         notifyDataSetChanged();
     }
 
 
-    public void addCommentEntity(UserEntity userEntity) {
+    public void addUserEntitities(UserEntity userEntity) {
         this.userEntitities.add(userEntity);
         notifyDataSetChanged();
     }
 
     class UsersViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.user_name_TV) TextView tvName;
-        @InjectView(R.id.comment_TV) TextView tvComment;
+        @InjectView(R.id.username_TV) TextView tvName;
         @InjectView(R.id.user_image_IV) ImageView profileImage;
 
         public UsersViewHolder(View itemView) {
