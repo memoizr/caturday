@@ -2,10 +2,8 @@ package com.lovecats.catlover.capsules.profile.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.Menu;
 
-/**
- * Created by user on 28/03/15.
- */
 public interface ProfilePresenter {
 
     void logout();
@@ -15,4 +13,6 @@ public interface ProfilePresenter {
     boolean userLoggedIn();
 
     void updateUserName(String userName);
+
+    void prepareOptionsMenu(Menu menu);
 }

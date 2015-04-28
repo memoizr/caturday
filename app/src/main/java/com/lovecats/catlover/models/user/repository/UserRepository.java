@@ -16,19 +16,21 @@ public interface UserRepository {
 
     Observable<HashSet<String>> getAllFavoritePost();
 
-    Observable<UserEntity> login(String email, String password);
+//    Observable<UserEntity> login(String email, String password);
 
-    Observable<UserEntity> signup(String username, String email, String password);
-
-    Observable<UserEntity> saveUser(UserEntity userEntity);
+//    Observable<UserEntity> signup(String username, String email, String password);
+//
+//    Observable<UserEntity> saveUser(UserEntity userEntity);
 
     boolean userLoggedIn();
 
     void logout();
 
-    void updateUserName(String userName);
+    Observable<UserEntity> updateUser(UserEntity userEntity);
 
-    void updateDescription(String userDescription);
+    Observable<UserEntity> getUserForId(String id);
 
-    void updateEmail(String userEmail);
+    Observable<UserEntity> followUser(String serverId);
+
+    Observable<UserEntity> unfollowUser(String serverId);
 }

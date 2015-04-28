@@ -2,7 +2,8 @@ package com.lovecats.catlover.models;
 
 import com.lovecats.catlover.capsules.common.Config;
 import com.lovecats.catlover.models.catpost.api.CatPostApi;
-import com.lovecats.catlover.models.user.UserModule;
+import com.lovecats.catlover.models.session.SessionModule;
+import com.lovecats.catlover.models.session.repository.SessionRepository;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 
 import javax.inject.Singleton;
@@ -14,23 +15,18 @@ import retrofit.RestAdapter;
 
 @Module(
         complete = false,
-        includes = UserModule.class,
+        includes = SessionModule.class,
         library = true
 )
 public class ApiModule {
 
-        @Provides @Singleton RequestInterceptor provideRequestInterceptor(UserRepository userRepository){
+        @Provides @Singleton RequestInterceptor provideRequestInterceptor(
+                SessionRepository sessionRepository){
 
-                String tryAuthToken = "";
-
-                if (userRepository.userLoggedIn()) {
-                        tryAuthToken = userRepository.getCurrentUser().getAuthToken();
-                }
-
-                String authToken = tryAuthToken;
+                String tryAuthToken = sessionRepository.currentSession().getAuthToken();
 
                 RequestInterceptor interceptor = requestFacade ->
-                        requestFacade.addHeader("Auth-Token", authToken);
+                        requestFacade.addHeader("Auth-Token", tryAuthToken);
 
                 return interceptor;
         }

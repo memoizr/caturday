@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
-import com.lovecats.catlover.capsules.common.Events.StreamRefreshedEvent;
+import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
+import com.lovecats.catlover.capsules.common.events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.capsules.dashboard.stream.view.CatPostAdapter;

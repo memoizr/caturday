@@ -1,11 +1,11 @@
 package com.lovecats.catlover.capsules.profile.following;
 
 import com.lovecats.catlover.AppModule;
-import com.lovecats.catlover.capsules.profile.info.UserInfoFragment;
-import com.lovecats.catlover.capsules.profile.info.UserInfoPresenter;
-import com.lovecats.catlover.capsules.profile.info.UserInfoPresenterImpl;
-import com.lovecats.catlover.capsules.profile.info.UserInfoView;
-import com.lovecats.catlover.models.user.UserModule;
+import com.lovecats.catlover.capsules.profile.following.view.FollowingFragment;
+import com.lovecats.catlover.capsules.profile.following.view.FollowingPresenter;
+import com.lovecats.catlover.capsules.profile.following.view.FollowingPresenterImpl;
+import com.lovecats.catlover.capsules.profile.following.view.FollowingView;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -31,7 +31,9 @@ public class FollowingModule {
     }
 
     @Provides @Singleton public FollowingPresenter provideFollowingPresenter(
-            FollowingView followingView) {
-        return new FollowingPresenterImpl(followingView);
+            FollowingView followingView,
+            Bus bus) {
+
+        return new FollowingPresenterImpl(followingView, bus);
     }
 }

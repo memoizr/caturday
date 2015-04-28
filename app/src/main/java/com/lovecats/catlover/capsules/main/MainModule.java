@@ -57,8 +57,4 @@ public class MainModule {
     @Provides @Singleton public NavigationFragment provideNavigationFragment() {
         return new NavigationFragment();
     }
-
-    @Provides public FavoritesFragment provideFavoritesFragment() {
-        return new FavoritesFragment();
-    }
 }

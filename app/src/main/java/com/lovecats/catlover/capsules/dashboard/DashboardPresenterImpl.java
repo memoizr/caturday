@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.lovecats.catlover.capsules.common.Events.StreamRefreshCompletedEvent;
-import com.lovecats.catlover.capsules.common.Events.StreamRefreshedEvent;
+import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
+import com.lovecats.catlover.capsules.common.events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.common.BaseFragment;
 import com.lovecats.catlover.capsules.newpost.view.NewPostActivity;

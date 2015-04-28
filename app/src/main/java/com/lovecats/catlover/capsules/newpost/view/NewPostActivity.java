@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.newpost.NewPostModule;
@@ -188,7 +189,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
     @Override
     public void setPreview(Uri uri) {
-        Picasso.with(this).load(uri).into(preview);
+        Glide.with(this).load(uri).into(preview);
     }
 
     @Override

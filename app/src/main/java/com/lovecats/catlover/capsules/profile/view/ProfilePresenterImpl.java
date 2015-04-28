@@ -2,39 +2,65 @@ package com.lovecats.catlover.capsules.profile.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.events.UserAvailableEvent;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
+import com.lovecats.catlover.models.user.UserEntity;
+import com.squareup.otto.Bus;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
 
+    private final Bus bus;
     private ProfileView profileView;
     private ProfileInteractor profileInteractor;
     private Context context;
+    private UserEntity user;
 
-    public ProfilePresenterImpl(ProfileView profileView, ProfileInteractor profileInteractor) {
+    public ProfilePresenterImpl(ProfileView profileView,
+                                ProfileInteractor profileInteractor,
+                                Bus bus) {
         this.profileView = profileView;
         this.profileInteractor = profileInteractor;
+        this.bus = bus;
     }
 
     @Override
     public void onCreate(Context context) {
         this.context = context;
-        if (profileInteractor.userLoggedIn()) {
-            profileView.setUserName(profileInteractor.getUser().getUsername());
-        }
-        profileInteractor.getUser();
+        Toolbar toolbar = profileView.getToolbar();
+        String id = ((Activity) context).getIntent().getExtras().getString(ProfileActivity.EXTRA_ID);
+        profileInteractor.getUserForId(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setUser, Throwable::printStackTrace);
+
         profileView.showButton(userLoggedIn());
-        profileView.initToolbar();
+        profileView.setupCollapsibleToolbar(toolbar);
+        initMenuClickListener(toolbar);
         initViewPager();
+    }
+
+    private void setUser(UserEntity userEntity) {
+        this.user = userEntity;
+        profileView.setUsername(userEntity.getUsername());
+        profileView.setProfileImage(userEntity.getImageUrl());
+        profileView.setCoverImage(userEntity.getCoverImageUrl());
+        bus.post(new UserAvailableEvent(userEntity));
     }
 
     private void initViewPager() {
 
-        ProfilePageAdapter adapter = new ProfilePageAdapter(((BaseActionBarActivity)context).getSupportFragmentManager());
+        ProfilePageAdapter adapter =
+                new ProfilePageAdapter(((BaseActionBarActivity)context).getSupportFragmentManager());
         PagerSlidingTabStrip pager = ((SlidingTabActivity) context).getSlidingTabStrip();
         profileView.initializePager(adapter, pager);
     }
@@ -42,7 +68,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void logout() {
         profileInteractor.logout();
-        profileView.onPostLogout();
         profileView.showButton(false);
     }
 
@@ -54,5 +79,32 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void updateUserName(String userName) {
         profileInteractor.updateUserName(userName);
+    }
+
+    @Override
+    public void prepareOptionsMenu(Menu menu) {
+
+    }
+
+    private void initMenuClickListener(Toolbar toolbar) {
+        toolbar.setOnMenuItemClickListener(
+                item -> {
+                    if (item.getItemId() == R.id.action_follow) {
+
+                        profileInteractor.followUser(user.getServerId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(System.out::println, Throwable::printStackTrace);
+
+                    } else if (item.getItemId() == R.id.action_unfollow) {
+
+                        profileInteractor.unfollowUser(user.getServerId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(System.out::println, Throwable::printStackTrace);
+
+                    }
+                    return true;
+                });
     }
 }

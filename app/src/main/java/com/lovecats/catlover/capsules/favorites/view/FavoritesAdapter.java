@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.view.HeaderAdapter;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
@@ -65,7 +66,7 @@ public class FavoritesAdapter extends HeaderAdapter {
             CatPostEntity catPostEntity = catPostEntities.get(position);
             String url = catPostEntity.getImageUrl();
 
-            Picasso.with(context).load(url).into(((FavoritesViewHolder) holder).favoriteImage);
+            Glide.with(context).load(url).into(((FavoritesViewHolder) holder).favoriteImage);
         } else {
             StaggeredGridLayoutManager.LayoutParams layoutParams =
                     (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();

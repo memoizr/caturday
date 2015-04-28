@@ -83,6 +83,7 @@
                 android:layout_height="264dp" />
 
         </RelativeLayout>
+
         </FrameLayout>
 
         <LinearLayout
@@ -112,7 +113,7 @@
 
             <Button
                 android:id="@+id/share_B"
-                android:paddingLeft="16dp"
+                android:paddingLeft="17dp"
                 android:text="34"
                 style="@style/CardButtonStyle"
                 android:drawableLeft="@drawable/ic_share_grey600_24dp"

@@ -10,9 +10,10 @@ public class UserMapper {
         User user = new User();
         user.setUsername(userEntity.getUsername());
         user.setServerId(userEntity.getServerId());
-        user.setAuthToken(userEntity.getAuthToken());
+//        user.setAuthToken(userEntity.getAuthToken());
         user.setDescription(userEntity.getDescription());
-        user.setImage_url(userEntity.getImageUrl());
+        user.setImageUrl(userEntity.getImageUrl());
+        user.setCoverImageUrl(userEntity.getCoverImageUrl());
         user.setEmail(userEntity.getEmail());
         user.setLastName(userEntity.getLastName());
         user.setInfo(userEntity.getInfo());
@@ -24,10 +25,12 @@ public class UserMapper {
     public static UserEntity fromUser(User user) {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(user.getUsername());
+
         userEntity.setServerId(user.getServerId());
-        userEntity.setAuthToken(user.getAuthToken());
+//        userEntity.setAuthToken(user.getAuthToken());
         userEntity.setDescription(user.getDescription());
-        userEntity.setImageUrl(user.getImage_url());
+        userEntity.setCoverImageUrl(user.getCoverImageUrl());
+        userEntity.setImageUrl(user.getImageUrl());
         userEntity.setEmail(user.getEmail());
         userEntity.setLastName(user.getLastName());
         userEntity.setInfo(user.getInfo());

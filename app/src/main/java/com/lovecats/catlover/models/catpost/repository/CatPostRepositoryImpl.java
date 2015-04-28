@@ -4,7 +4,6 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.models.catpost.datastore.CatPostDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostLocalDataStore;
 import com.lovecats.catlover.models.catpost.datastore.CatPostCloudDataStore;
-import com.lovecats.catlover.models.catpost.db.CatPostDb;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,8 +33,7 @@ public class CatPostRepositoryImpl implements CatPostRepository {
         Collection<CatPostEntity> catPostEntities = retrieveCatPosts(page, category, fromNetwork);
 
         if (catPostEntities.size() == 0) {
-            fromNetwork = true;
-            catPostEntities = retrieveCatPosts(page, category, fromNetwork);
+            catPostEntities = retrieveCatPosts(page, category, true);
         }
 
         if (fromNetwork)

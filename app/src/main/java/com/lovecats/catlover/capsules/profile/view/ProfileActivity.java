@@ -2,15 +2,17 @@ package com.lovecats.catlover.capsules.profile.view;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.profile.ProfileModule;
 
@@ -21,14 +23,18 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActionBarActivity implements SlidingTabActivity, ProfileView {
+    public static final String EXTRA_ID = "server_id";
     @InjectView(R.id.profile_VP) ViewPager profile_VP;
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip sliding_PSTS;
+    @InjectView(R.id.cover_image_IV) ImageView coverImageIV;
 
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @Inject ProfilePresenter profilePresenter;
+    private int titleMaxHeight;
+    private int titleMinHeight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,8 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        System.out.println(getIntent().getExtras().get(EXTRA_ID));
 
         profilePresenter.onCreate(this);
     }
@@ -66,9 +74,26 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
    }
 
     @Override
-    public void initToolbar() {
-        toolbar.setTitle("Username");
+    public void setProfileImage(String imageUrl) {
+
+    }
+
+    @Override
+    public void setCoverImage(String coverImageUrl) {
+        Glide.with(this).load(coverImageUrl).into(coverImageIV);
+    }
+
+    @Override
+    public void setupCollapsibleToolbar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+
+        CollapsibleView collapsibleView = new CollapsibleView(this);
+
+        toolbar.addView(collapsibleView);
+
+        titleMaxHeight = collapsibleView.getMaxHeight();
+        titleMinHeight = collapsibleView.getMinHeight();
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -76,22 +101,31 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
     }
 
     @Override
-    public void setUserName(String string) {
-//        user_name_ET.setText(string);
-    }
-
-//    @OnClick(R.id.logout)
-    public void clickLogout() {
-        profilePresenter.logout();
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Override
-    public void onPostLogout() {
-//        logout.setVisibility(View.GONE);
+    public void setUsername(String string) {
+//        user_name_ET.setText(string);
     }
 
     @Override
     public PagerSlidingTabStrip getSlidingTabStrip() {
         return sliding_PSTS;
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        profilePresenter.prepareOptionsMenu(menu);
+        return true;
+    }
+
 }

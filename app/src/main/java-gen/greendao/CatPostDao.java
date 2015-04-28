@@ -26,7 +26,7 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property ServerId = new Property(1, String.class, "serverId", false, "SERVER_ID");
         public final static Property Caption = new Property(2, String.class, "caption", false, "CAPTION");
-        public final static Property Image_url = new Property(3, String.class, "image_url", false, "IMAGE_URL");
+        public final static Property ImageUrl = new Property(3, String.class, "imageUrl", false, "IMAGE_URL");
         public final static Property User = new Property(4, String.class, "user", false, "USER");
         public final static Property Comments = new Property(5, String.class, "comments", false, "COMMENTS");
         public final static Property Category = new Property(6, String.class, "category", false, "CATEGORY");
@@ -53,7 +53,7 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'SERVER_ID' TEXT UNIQUE ," + // 1: serverId
                 "'CAPTION' TEXT," + // 2: caption
-                "'IMAGE_URL' TEXT," + // 3: image_url
+                "'IMAGE_URL' TEXT," + // 3: imageUrl
                 "'USER' TEXT," + // 4: user
                 "'COMMENTS' TEXT," + // 5: comments
                 "'CATEGORY' TEXT," + // 6: category
@@ -90,9 +90,9 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
             stmt.bindString(3, caption);
         }
  
-        String image_url = entity.getImage_url();
-        if (image_url != null) {
-            stmt.bindString(4, image_url);
+        String imageUrl = entity.getImageUrl();
+        if (imageUrl != null) {
+            stmt.bindString(4, imageUrl);
         }
  
         String user = entity.getUser();
@@ -140,7 +140,7 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // serverId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // caption
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // image_url
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // imageUrl
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // user
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // comments
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // category
@@ -156,7 +156,7 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setServerId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCaption(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setImage_url(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setImageUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setUser(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setComments(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCategory(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));

@@ -26,8 +26,8 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property ServerId = new Property(1, String.class, "serverId", false, "SERVER_ID");
         public final static Property Username = new Property(2, String.class, "username", false, "USERNAME");
-        public final static Property Image_url = new Property(3, String.class, "image_url", false, "IMAGE_URL");
-        public final static Property AuthToken = new Property(4, String.class, "authToken", false, "AUTH_TOKEN");
+        public final static Property ImageUrl = new Property(3, String.class, "imageUrl", false, "IMAGE_URL");
+        public final static Property CoverImageUrl = new Property(4, String.class, "coverImageUrl", false, "COVER_IMAGE_URL");
         public final static Property Email = new Property(5, String.class, "email", false, "EMAIL");
         public final static Property Info = new Property(6, String.class, "info", false, "INFO");
         public final static Property Favorites = new Property(7, String.class, "favorites", false, "FAVORITES");
@@ -53,8 +53,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'SERVER_ID' TEXT UNIQUE ," + // 1: serverId
                 "'USERNAME' TEXT," + // 2: username
-                "'IMAGE_URL' TEXT," + // 3: image_url
-                "'AUTH_TOKEN' TEXT," + // 4: authToken
+                "'IMAGE_URL' TEXT," + // 3: imageUrl
+                "'COVER_IMAGE_URL' TEXT," + // 4: coverImageUrl
                 "'EMAIL' TEXT," + // 5: email
                 "'INFO' TEXT," + // 6: info
                 "'FAVORITES' TEXT," + // 7: favorites
@@ -93,14 +93,14 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindString(3, username);
         }
  
-        String image_url = entity.getImage_url();
-        if (image_url != null) {
-            stmt.bindString(4, image_url);
+        String imageUrl = entity.getImageUrl();
+        if (imageUrl != null) {
+            stmt.bindString(4, imageUrl);
         }
  
-        String authToken = entity.getAuthToken();
-        if (authToken != null) {
-            stmt.bindString(5, authToken);
+        String coverImageUrl = entity.getCoverImageUrl();
+        if (coverImageUrl != null) {
+            stmt.bindString(5, coverImageUrl);
         }
  
         String email = entity.getEmail();
@@ -152,8 +152,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // serverId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // username
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // image_url
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // authToken
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // imageUrl
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // coverImageUrl
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // email
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // info
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // favorites
@@ -171,8 +171,8 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setServerId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setUsername(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setImage_url(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setAuthToken(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setImageUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCoverImageUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setEmail(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setInfo(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setFavorites(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));

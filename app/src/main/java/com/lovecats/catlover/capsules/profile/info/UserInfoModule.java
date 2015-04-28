@@ -1,6 +1,7 @@
 package com.lovecats.catlover.capsules.profile.info;
 
 import com.lovecats.catlover.AppModule;
+import com.lovecats.catlover.capsules.common.events.BusModule;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractorImpl;
 import com.lovecats.catlover.capsules.profile.view.ProfileActivity;
@@ -9,6 +10,7 @@ import com.lovecats.catlover.capsules.profile.view.ProfilePresenterImpl;
 import com.lovecats.catlover.capsules.profile.view.ProfileView;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -19,7 +21,9 @@ import dagger.Provides;
         injects = {
                 UserInfoFragment.class
         },
-        includes = UserModule.class,
+        includes = {
+                UserModule.class
+        },
         addsTo = AppModule.class
 )
 public class UserInfoModule {
@@ -35,7 +39,7 @@ public class UserInfoModule {
     }
 
     @Provides @Singleton public UserInfoPresenter provideUserInfoPresenter(
-            UserInfoView userInfoView) {
-        return new UserInfoPresenterImpl(userInfoView);
+            UserInfoView userInfoView, Bus bus) {
+        return new UserInfoPresenterImpl(userInfoView, bus);
     }
 }

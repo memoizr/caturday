@@ -22,7 +22,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(userEntity -> {
-                            loginInteractor.saveUser(userEntity);
+//                            loginInteractor.saveUser(userEntity);
                             loginView.successAnimation();
                         },
                         e -> {
@@ -37,7 +37,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(userEntity -> {
-                            loginInteractor.saveUser(userEntity);
+//                            loginInteractor.saveUser(userEntity);
                             loginView.successAnimation();
                         },
                         e -> {

@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.common.Events;
+package com.lovecats.catlover.capsules.common.events;
 
 import com.squareup.otto.Bus;
 
@@ -11,7 +11,7 @@ import dagger.Provides;
         complete = false,
         library = true
 )
-public class EventsModule {
+public class BusModule {
 
     @Provides @Singleton Bus provideEventBus() {
         return new Bus();
