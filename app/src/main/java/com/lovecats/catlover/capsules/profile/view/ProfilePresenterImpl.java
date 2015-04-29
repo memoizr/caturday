@@ -17,9 +17,6 @@ import com.lovecats.catlover.models.user.UserEntity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -55,6 +52,8 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
         Toolbar toolbar = profileView.getToolbar();
 
         String id = ((Activity) context).getIntent().getExtras().getString(ProfileActivity.EXTRA_ID);
+        System.out.println("thisi is the id: " + id);
+        System.out.println(savedInstanceState);
 
         if (savedInstanceState == null) {
             profileInteractor.getUserForId(id)
@@ -125,6 +124,11 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
     @Override
     public void bindView(ProfileView view) {
         this.profileView = view;
+    }
+
+    @Override
+    public void onResume() {
+//        bus.post(new UserAvailableEvent(user));
     }
 
     private void initMenuClickListener(Toolbar toolbar) {

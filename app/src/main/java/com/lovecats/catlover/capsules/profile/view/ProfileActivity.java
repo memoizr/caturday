@@ -50,6 +50,13 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
     }
 
     @Override
+    protected void onRestart() {
+        super.onResume();
+        System.out.println("foo");
+        profilePresenter.onResume();
+    }
+
+    @Override
     public List<Object> getModules() {
         return Arrays.asList(ProfileModule.getInstance(this));
     }

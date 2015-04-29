@@ -55,8 +55,9 @@ public class ProfileModule {
             ProfileView profileView,
             ProfileInteractor profileInteractor,
             Bus bus) {
-        if (profilePresenterImpl == null)
-            this.profilePresenterImpl = new ProfilePresenterImpl(profileView, profileInteractor, bus);
-        return profilePresenterImpl;
+//        if (profilePresenterImpl == null)
+//            this.profilePresenterImpl = new ProfilePresenterImpl(profileView, profileInteractor, bus);
+//        return profilePresenterImpl;
+        return new ProfilePresenterImpl(profileView, profileInteractor, bus);
     }
 }

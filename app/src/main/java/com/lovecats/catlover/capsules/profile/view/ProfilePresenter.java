@@ -19,4 +19,6 @@ public interface ProfilePresenter<T> {
     void onDestroy();
 
     void bindView(T view);
+
+    void onResume();
 }

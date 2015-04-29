@@ -1,6 +1,8 @@
 package com.lovecats.catlover.capsules.profile.following.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.capsules.common.view.HeaderAdapter;
+import com.lovecats.catlover.capsules.profile.view.ProfileActivity;
 import com.lovecats.catlover.models.user.UserEntity;
 
 import java.util.ArrayList;
@@ -68,6 +71,14 @@ public class FollowingAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
                 ((UsersViewHolder) holder).tvName.setText(userEntity.getUsername());
                 String url = userEntity.getImageUrl();
                 Glide.with(context).load(url).into(((UsersViewHolder)holder).profileImage);
+
+            ((UsersViewHolder) holder).containerV.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, ProfileActivity.class);
+                        intent.putExtra(ProfileActivity.EXTRA_ID, userEntity.getServerId());
+                        ((Activity) context).startActivity(intent);
+                    }
+            );
+
         }
     }
 
@@ -88,6 +99,7 @@ public class FollowingAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     }
 
     class UsersViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.container_V) View containerV;
         @InjectView(R.id.username_TV) TextView tvName;
         @InjectView(R.id.user_image_IV) ImageView profileImage;
 
