@@ -2,48 +2,69 @@ package com.lovecats.catlover.capsules.profile.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.common.eventbus.Subscribe;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.common.events.UserAvailableEvent;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class ProfilePresenterImpl implements ProfilePresenter {
+public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
 
     private final Bus bus;
+    private boolean registered = false;
     private ProfileView profileView;
     private ProfileInteractor profileInteractor;
-    private Context context;
     private UserEntity user;
+    private Context context;
 
-    public ProfilePresenterImpl(ProfileView profileView,
-                                ProfileInteractor profileInteractor,
-                                Bus bus) {
+    public ProfilePresenterImpl(
+            ProfileView profileView,
+            ProfileInteractor profileInteractor,
+            Bus bus) {
         this.profileView = profileView;
         this.profileInteractor = profileInteractor;
         this.bus = bus;
+        System.out.println("prof pres created!!!!!!!");
+    }
+
+    private void registerBus(){
+        if (!registered) {
+            bus.register(this);
+            registered = true;
+        }
     }
 
     @Override
-    public void onCreate(Context context) {
+    public void onCreate(Context context, Bundle savedInstanceState) {
         this.context = context;
         Toolbar toolbar = profileView.getToolbar();
-        String id = ((Activity) context).getIntent().getExtras().getString(ProfileActivity.EXTRA_ID);
-        profileInteractor.getUserForId(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setUser, Throwable::printStackTrace);
 
-        profileView.showButton(userLoggedIn());
+        String id = ((Activity) context).getIntent().getExtras().getString(ProfileActivity.EXTRA_ID);
+
+        if (savedInstanceState == null) {
+            profileInteractor.getUserForId(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::setUser, Throwable::printStackTrace);
+        } else {
+            userAvailable(user);
+        }
+
         profileView.setupCollapsibleToolbar(toolbar);
         initMenuClickListener(toolbar);
         initViewPager();
@@ -51,16 +72,26 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     private void setUser(UserEntity userEntity) {
         this.user = userEntity;
-        profileView.setUsername(userEntity.getUsername());
-        profileView.setProfileImage(userEntity.getImageUrl());
-        profileView.setCoverImage(userEntity.getCoverImageUrl());
         bus.post(new UserAvailableEvent(userEntity));
+        userAvailable(user);
+        registerBus();
+    }
+
+    public void userAvailable(UserEntity user) {
+        profileView.setUsername(user.getUsername());
+        profileView.setProfileImage(user.getImageUrl());
+        profileView.setCoverImage(user.getCoverImageUrl());
+    }
+
+    @Produce
+    public UserAvailableEvent produceUser() {
+        return new UserAvailableEvent(user);
     }
 
     private void initViewPager() {
 
         ProfilePageAdapter adapter =
-                new ProfilePageAdapter(((BaseActionBarActivity)context).getSupportFragmentManager());
+                new ProfilePageAdapter(((BaseActionBarActivity) context).getSupportFragmentManager());
         PagerSlidingTabStrip pager = ((SlidingTabActivity) context).getSlidingTabStrip();
         profileView.initializePager(adapter, pager);
     }
@@ -68,7 +99,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void logout() {
         profileInteractor.logout();
-        profileView.showButton(false);
     }
 
     @Override
@@ -84,6 +114,17 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void prepareOptionsMenu(Menu menu) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+
+        bus.unregister(this);
+    }
+
+    @Override
+    public void bindView(ProfileView view) {
+        this.profileView = view;
     }
 
     private void initMenuClickListener(Toolbar toolbar) {

@@ -15,10 +15,14 @@ public class UserInfoPresenterImpl implements UserInfoPresenter{
         this.bus = bus;
     }
 
-
     @Override
     public void createView() {
         bus.register(this);
+    }
+
+    @Override
+    public void destroyView() {
+        bus.unregister(this);
     }
 
     @Subscribe

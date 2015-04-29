@@ -7,5 +7,5 @@ import android.content.Context;
  */
 public interface FollowingPresenter {
 
-    void viewCreated(Context context);
+    void viewCreated(Context context, int type);
 }

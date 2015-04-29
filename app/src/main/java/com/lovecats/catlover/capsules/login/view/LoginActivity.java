@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.login.LoginModule;
 import com.lovecats.catlover.util.helper.AnimationHelper;
 

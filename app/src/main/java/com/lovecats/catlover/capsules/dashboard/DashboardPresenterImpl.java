@@ -7,7 +7,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 import com.lovecats.catlover.capsules.newpost.view.NewPostActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;

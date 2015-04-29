@@ -3,7 +3,6 @@ package com.lovecats.catlover.capsules.newpost.view;
 import android.animation.Animator;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,7 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.newpost.NewPostModule;
 import com.lovecats.catlover.util.interpolators.HyperTanAccelerateInterpolator;
 import com.lovecats.catlover.util.interpolators.HyperTanDecelerateInterpolator;
@@ -32,7 +31,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import hugo.weaving.DebugLog;
 
 
 public class NewPostActivity extends BaseActionBarActivity implements NewPostView {

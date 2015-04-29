@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 import com.lovecats.catlover.capsules.favorites.FavoritesModule;
 import com.lovecats.catlover.capsules.favorites.presenter.FavoritesPresenter;
 import com.lovecats.catlover.models.catpost.CatPostEntity;

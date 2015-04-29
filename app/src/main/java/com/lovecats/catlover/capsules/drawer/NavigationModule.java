@@ -6,7 +6,6 @@ import com.lovecats.catlover.capsules.drawer.interactor.NavigationInteractorImpl
 import com.lovecats.catlover.capsules.drawer.view.NavigationFragment;
 import com.lovecats.catlover.capsules.drawer.view.NavigationPresenter;
 import com.lovecats.catlover.capsules.drawer.view.NavigationPresenterImpl;
-import com.lovecats.catlover.capsules.drawer.view.NavigationView;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 
@@ -23,9 +22,9 @@ import dagger.Provides;
         addsTo = AppModule.class
 )
 public class NavigationModule {
-    private NavigationView navigationView;
+    private NavigationPresenter.NavigationView navigationView;
 
-    public NavigationModule(NavigationView navigationView) {
+    public NavigationModule(NavigationPresenter.NavigationView navigationView) {
         this.navigationView = navigationView;
     }
 
@@ -34,12 +33,12 @@ public class NavigationModule {
     }
 
     @Provides
-    @Singleton public NavigationView provideNavigationView(NavigationInteractor navigationInteractor) {
+    @Singleton public NavigationPresenter.NavigationView provideNavigationView(NavigationInteractor navigationInteractor) {
         return navigationView;
     }
 
     @Provides @Singleton
-    public NavigationPresenter provideNavigationPresenter(NavigationView navigationView,
+    public NavigationPresenter provideNavigationPresenter(NavigationPresenter.NavigationView navigationView,
                                                           NavigationInteractor navigationInteractor) {
         return new NavigationPresenterImpl(navigationView, navigationInteractor);
     }

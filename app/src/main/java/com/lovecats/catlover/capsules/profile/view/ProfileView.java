@@ -7,8 +7,6 @@ import com.astuetz.PagerSlidingTabStrip;
 
 public interface ProfileView {
 
-    void showButton(Boolean visible);
-
     void initializePager(FragmentPagerAdapter adapter, PagerSlidingTabStrip slidingTabs_PSTS);
 
     void setProfileImage(String imageUrl);

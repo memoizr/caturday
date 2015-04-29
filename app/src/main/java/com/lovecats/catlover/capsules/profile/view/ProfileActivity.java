@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.common.view.views.CollapsibleView;
 import com.lovecats.catlover.capsules.dashboard.SlidingTabActivity;
 import com.lovecats.catlover.capsules.profile.ProfileModule;
@@ -35,7 +35,6 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
     private int titleMaxHeight;
     private int titleMinHeight;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,23 +45,13 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        System.out.println(getIntent().getExtras().get(EXTRA_ID));
-
-        profilePresenter.onCreate(this);
+        profilePresenter.bindView(this);
+        profilePresenter.onCreate(this, savedInstanceState);
     }
 
     @Override
     public List<Object> getModules() {
-        return Arrays.asList(new ProfileModule(this));
-    }
-
-    @Override
-    public void showButton(Boolean visible) {
-        if (visible) {
-//            logout.setVisibility(View.VISIBLE);
-        } else {
-//            logout.setVisibility(View.GONE);
-        }
+        return Arrays.asList(ProfileModule.getInstance(this));
     }
 
     @Override
@@ -115,11 +104,16 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
         return sliding_PSTS;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_profile, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        profilePresenter.onDestroy();
     }
 
     @Override

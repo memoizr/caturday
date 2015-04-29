@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +30,7 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -45,6 +46,11 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        userInfoPresenter.destroyView();
+        super.onDestroyView();
+    }
 
     @Override
     protected List<Object> getModules() {

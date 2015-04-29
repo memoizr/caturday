@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.detail.presenter;
+package com.lovecats.catlover.capsules.detail.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import com.google.gson.JsonArray;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.models.comment.CommentEntity;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractor;
-import com.lovecats.catlover.capsules.detail.view.CatDetailView;
 import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.util.helper.ShareHelper;
 import com.lovecats.catlover.util.data.GsonConverter;
@@ -35,16 +34,17 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     private String catPostServerId;
     private Context context;
 
-    public CatDetailPresenterImpl(CatDetailView catDetailView,
+    public CatDetailPresenterImpl(Context context,
+                                  CatDetailView catDetailView,
                                   CatDetailInteractor catDetailInteractor) {
 
+        this.context = context;
         this.catDetailView = catDetailView;
         this.catDetailInteractor = catDetailInteractor;
     }
 
     @Override
-    public void create(Context context, Bundle extras) {
-        this.context = context;
+    public void create(Bundle extras) {
         url = extras.getString("url");
         catPostServerId = extras.getString("serverId");
 

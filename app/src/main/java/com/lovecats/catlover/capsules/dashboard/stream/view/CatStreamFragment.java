@@ -17,7 +17,7 @@ import com.lovecats.catlover.models.catpost.CatPostEntity;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.dashboard.stream.CatStreamModule;
 import com.lovecats.catlover.capsules.dashboard.stream.presenter.CatStreamPresenter;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

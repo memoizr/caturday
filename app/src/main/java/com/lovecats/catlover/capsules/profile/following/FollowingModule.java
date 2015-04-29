@@ -30,7 +30,7 @@ public class FollowingModule {
         return followingView;
     }
 
-    @Provides @Singleton public FollowingPresenter provideFollowingPresenter(
+    @Provides public FollowingPresenter provideFollowingPresenter(
             FollowingView followingView,
             Bus bus) {
 

@@ -1,6 +1,6 @@
 package com.lovecats.catlover.capsules.drawer.view;
 
-import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
 
 /**
  * Created by user on 28/03/15.

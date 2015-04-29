@@ -1,14 +1,15 @@
 package com.lovecats.catlover.capsules.detail;
 
+import android.content.Context;
+
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.models.comment.api.CommentApi;
 import com.lovecats.catlover.models.vote.api.VoteApi;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractor;
 import com.lovecats.catlover.capsules.detail.interactor.CatDetailInteractorImpl;
-import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
-import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenterImpl;
+import com.lovecats.catlover.capsules.detail.view.CatDetailPresenter;
+import com.lovecats.catlover.capsules.detail.view.CatDetailPresenterImpl;
 import com.lovecats.catlover.capsules.detail.view.CatDetailActivity;
-import com.lovecats.catlover.capsules.detail.view.CatDetailView;
 import com.lovecats.catlover.models.catpost.repository.CatPostRepository;
 import com.lovecats.catlover.models.comment.CommentCloudDataStore;
 import com.lovecats.catlover.models.comment.repository.CommentRepository;
@@ -33,15 +34,15 @@ import retrofit.RestAdapter;
         addsTo = AppModule.class
 )
 public class CatDetailModule {
-    private CatDetailView catDetailView;
+    private CatDetailPresenter.CatDetailView catDetailView;
 
-    public CatDetailModule(CatDetailView catDetailView) {
+    public CatDetailModule(CatDetailPresenter.CatDetailView catDetailView) {
         this.catDetailView = catDetailView;
     }
 
     @Provides
     @Singleton
-    public CatDetailView provideCatDetailView() {
+    public CatDetailPresenter.CatDetailView provideCatDetailView() {
         return catDetailView;
     }
 
@@ -99,8 +100,8 @@ public class CatDetailModule {
 
     @Provides
     @Singleton
-    public CatDetailPresenter provideCatDetailPresenter(CatDetailView catDetailView,
+    public CatDetailPresenter provideCatDetailPresenter(Context context, CatDetailPresenter.CatDetailView catDetailView,
                                                         CatDetailInteractor catDetailInteractor) {
-        return new CatDetailPresenterImpl(catDetailView, catDetailInteractor);
+        return new CatDetailPresenterImpl(context, catDetailView, catDetailInteractor);
     }
 }

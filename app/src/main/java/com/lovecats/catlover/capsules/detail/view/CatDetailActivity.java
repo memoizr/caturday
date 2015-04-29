@@ -34,10 +34,9 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.util.helper.FullScreenActivitySoftInputHelper;
-import com.lovecats.catlover.capsules.common.BaseActionBarActivity;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
 import com.lovecats.catlover.capsules.detail.CatDetailModule;
 import com.lovecats.catlover.models.comment.CommentEntity;
-import com.lovecats.catlover.capsules.detail.presenter.CatDetailPresenter;
 import com.lovecats.catlover.capsules.common.view.views.ExpandingView;
 import com.lovecats.catlover.util.interpolators.HyperAccelerateDecelerateInterpolator;
 
@@ -49,11 +48,10 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import hugo.weaving.DebugLog;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
-public class CatDetailActivity extends BaseActionBarActivity implements CatDetailView {
+public class CatDetailActivity extends BaseActionBarActivity implements CatDetailPresenter.CatDetailView {
     @InjectView(R.id.cat_detail_IV) ImageView cat_detail_IV;
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
     @InjectView(R.id.toolbar) Toolbar toolbar;
@@ -82,7 +80,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        catDetailPresenter.create(this, getIntent().getExtras());
+        catDetailPresenter.create(getIntent().getExtras());
     }
 
     @Override

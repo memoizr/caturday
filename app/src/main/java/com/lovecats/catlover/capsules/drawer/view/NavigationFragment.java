@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 import com.lovecats.catlover.capsules.drawer.NavigationModule;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
 /**
  * Created by user on 01/03/15.
  */
-public class NavigationFragment extends BaseFragment implements NavigationView, AdapterView.OnItemClickListener{
+public class NavigationFragment extends BaseFragment implements NavigationPresenter.NavigationView, AdapterView.OnItemClickListener{
 
     @Inject NavigationPresenter navigationPresenter;
     @InjectView(R.id.navigation_LV) ListView navigationListView;

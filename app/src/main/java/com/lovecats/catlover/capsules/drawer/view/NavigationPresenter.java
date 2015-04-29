@@ -9,4 +9,14 @@ public interface NavigationPresenter {
     void onNavigationInteraction(Activity activity, int position);
 
     void onProfileClicked(Activity activity);
+
+    interface NavigationView {
+
+        void initializeListView(String[] values);
+
+        void setUserEmail(String userEmail);
+
+        void setUsername(String username);
+
+    }
 }

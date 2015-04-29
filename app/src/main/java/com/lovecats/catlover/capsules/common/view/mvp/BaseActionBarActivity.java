@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.common;
+package com.lovecats.catlover.capsules.common.view.mvp;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,9 +9,6 @@ import java.util.List;
 
 import dagger.ObjectGraph;
 
-/**
- * Created by user on 24/03/15.
- */
 public abstract class BaseActionBarActivity extends ActionBarActivity {
     private ObjectGraph activityGraph;
 
@@ -20,7 +17,6 @@ public abstract class BaseActionBarActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         activityGraph = ((App) getApplication()).createScopedGraph(getModules().toArray());
         activityGraph.inject(this);
-
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.lovecats.catlover.capsules.common;
+package com.lovecats.catlover.capsules.common.view.mvp;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;

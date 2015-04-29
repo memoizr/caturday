@@ -1,6 +1,7 @@
 package com.lovecats.catlover;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.lovecats.catlover.models.ApiModule;
 import com.lovecats.catlover.capsules.common.ConfigModule;
@@ -15,6 +16,8 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(
+        complete = false,
+        library = true,
         injects = {
                 App.class
         },
@@ -38,5 +41,10 @@ public class AppModule {
     @Provides @Singleton
     public Application provideApplication() {
         return app;
+    }
+
+    @Provides @Singleton
+    public Context provideContext() {
+        return app.getBaseContext();
     }
 }

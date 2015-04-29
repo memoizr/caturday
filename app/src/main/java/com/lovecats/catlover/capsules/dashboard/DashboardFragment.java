@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 
 import java.util.Arrays;
 import java.util.List;

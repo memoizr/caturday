@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lovecats.catlover.R;
-import com.lovecats.catlover.capsules.common.BaseFragment;
+import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 import com.lovecats.catlover.capsules.profile.following.FollowingModule;
 
 import java.util.Arrays;
@@ -21,17 +21,24 @@ import butterknife.InjectView;
 
 public class FollowingFragment extends BaseFragment implements FollowingView {
 
+    public static final String EXTRA_FOLLOWING_TYPE = "following_type";
+
     @InjectView(R.id.following_RV) RecyclerView following_RV;
 
     @Inject FollowingPresenter followingPresenter;
+    private int type;
 
     public FollowingFragment() {
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        type = getArguments().getInt(EXTRA_FOLLOWING_TYPE);
     }
 
     @Override
@@ -42,7 +49,7 @@ public class FollowingFragment extends BaseFragment implements FollowingView {
 
         ButterKnife.inject(this, rootView);
 
-        followingPresenter.viewCreated(getActivity());
+        followingPresenter.viewCreated(getActivity(), type);
 
         return rootView;
     }
@@ -52,7 +59,7 @@ public class FollowingFragment extends BaseFragment implements FollowingView {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         following_RV.setLayoutManager(layoutManager);
-        following_RV.setAdapter(new FollowingAdapter(45));
+        following_RV.setAdapter(new FollowingAdapter(512));
     }
 
     @Override

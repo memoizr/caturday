@@ -2,7 +2,9 @@ package com.lovecats.catlover.capsules.profile.following.view;
 
 import android.content.Context;
 
+import com.google.gson.JsonArray;
 import com.lovecats.catlover.capsules.common.events.UserAvailableEvent;
+import com.lovecats.catlover.capsules.profile.view.ProfileSections;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.util.data.GsonConverter;
 import com.squareup.otto.Bus;
@@ -14,25 +16,44 @@ public class FollowingPresenterImpl implements FollowingPresenter {
 
     private final FollowingView followingView;
     private final Bus bus;
+    private int type;
+    private boolean registered;
 
     public FollowingPresenterImpl(FollowingView followingView, Bus bus) {
         this.followingView = followingView;
         this.bus = bus;
+    }
 
-        bus.register(this);
+    private void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 
     @Subscribe
     public void onUserAvailable(UserAvailableEvent userAvailableEvent) {
-        System.out.println("available now!!!!!!!!!1111");
         UserEntity userEntity = userAvailableEvent.getUserEntity();
         List<UserEntity> userEntities = GsonConverter.fromJsonArrayToTypeArray(
-                userEntity.getFollowing(), UserEntity.class);
+                getUserEntities(userEntity), UserEntity.class);
+
         followingView.getAdapter().setUserEntities(userEntities);
     }
 
+    private JsonArray getUserEntities(UserEntity userEntity) {
+        JsonArray json = new JsonArray();
+        if (type == ProfileSections.SECTION_FOLLOWERS.ordinal()) {
+            json = userEntity.getFollowers();
+        } else if (type == ProfileSections.SECTION_FOLLOWING.ordinal()) {
+            json = userEntity.getFollowing();
+        }
+        return json;
+    }
+
     @Override
-    public void viewCreated(Context context) {
+    public void viewCreated(Context context, int type) {
         followingView.initRecyclerView();
+        this.type = type;
+        if (!registered) {
+            bus.register(this);
+            setRegistered(true);
+        }
     }
 }

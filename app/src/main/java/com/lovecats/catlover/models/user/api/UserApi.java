@@ -22,6 +22,7 @@ public interface UserApi {
     @FormUrlEncoded
     @POST("/follow")
     Observable<UserEntity> followUser(@Field("followable_id") String serverId);
+
     @FormUrlEncoded
     @DELETE("/follow")
     Observable<UserEntity> unfollowUser(@Field("followable_id") String serverId);

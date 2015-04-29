@@ -1,5 +1,7 @@
 package com.lovecats.catlover.capsules.profile;
 
+import android.content.Context;
+
 import com.lovecats.catlover.AppModule;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractor;
 import com.lovecats.catlover.capsules.profile.interactor.ProfileInteractorImpl;
@@ -27,8 +29,18 @@ public class ProfileModule {
 
     private ProfileView profileView;
 
-    public ProfileModule(ProfileView profileView) {
+    private static ProfileModule profileModule;
+    private ProfilePresenterImpl profilePresenterImpl;
+
+    private ProfileModule(ProfileView profileView) {
+        System.out.println("prof module being created....");
         this.profileView = profileView;
+    }
+
+    public static ProfileModule getInstance(ProfileView profileView) {
+        if (profileModule == null)
+            profileModule = new ProfileModule(profileView);
+        return profileModule;
     }
 
     @Provides @Singleton public ProfileInteractor provideProfileInteractor(UserRepository userRepository) {
@@ -43,6 +55,8 @@ public class ProfileModule {
             ProfileView profileView,
             ProfileInteractor profileInteractor,
             Bus bus) {
-        return new ProfilePresenterImpl(profileView, profileInteractor, bus);
+        if (profilePresenterImpl == null)
+            this.profilePresenterImpl = new ProfilePresenterImpl(profileView, profileInteractor, bus);
+        return profilePresenterImpl;
     }
 }
