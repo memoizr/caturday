@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.gson.JsonArray;
 import com.lovecats.catlover.capsules.common.events.UserAvailableEvent;
-import com.lovecats.catlover.capsules.profile.view.ProfileSections;
+import com.lovecats.catlover.capsules.profile.view.ProfilePageAdapter;
 import com.lovecats.catlover.models.user.UserEntity;
 import com.lovecats.catlover.util.data.GsonConverter;
 import com.squareup.otto.Bus;
@@ -28,22 +28,24 @@ public class FollowingPresenterImpl implements FollowingPresenter {
         this.registered = registered;
     }
 
+    // TODO show followers
+
     @Subscribe
     public void onUserAvailable(UserAvailableEvent userAvailableEvent) {
-        UserEntity userEntity = userAvailableEvent.getUserEntity();
-        List<UserEntity> userEntities = GsonConverter.fromJsonArrayToTypeArray(
-                getUserEntities(userEntity), UserEntity.class);
-
-        followingView.getAdapter().setUserEntities(userEntities);
+//        UserEntity userEntity = userAvailableEvent.getUserEntity();
+//        List<UserEntity> userEntities = GsonConverter.fromJsonArrayToTypeArray(
+//                getUserEntities(userEntity), UserEntity.class);
+//
+//        followingView.getAdapter().setUserEntities(userEntities);
     }
 
     private JsonArray getUserEntities(UserEntity userEntity) {
         JsonArray json = new JsonArray();
-        if (type == ProfileSections.SECTION_FOLLOWERS.ordinal()) {
-            json = userEntity.getFollowers();
-        } else if (type == ProfileSections.SECTION_FOLLOWING.ordinal()) {
-            json = userEntity.getFollowing();
-        }
+//        if (type == ProfilePageAdapter.ProfileSections.SECTION_FOLLOWERS.ordinal()) {
+//            json = userEntity.getFollowers();
+//        } else if (type == ProfilePageAdapter.ProfileSections.SECTION_FOLLOWING.ordinal()) {
+//            json = userEntity.getFollowing();
+//        }
         return json;
     }
 

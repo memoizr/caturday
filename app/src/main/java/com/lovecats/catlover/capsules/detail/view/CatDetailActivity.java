@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -32,6 +33,8 @@ import com.bumptech.glide.request.target.Target;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.lovecats.catlover.R;
 import com.lovecats.catlover.util.helper.FullScreenActivitySoftInputHelper;
 import com.lovecats.catlover.capsules.common.view.mvp.BaseActionBarActivity;
@@ -59,6 +62,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     @InjectView(R.id.caption_V) ExpandingView caption_V;
     @InjectView(R.id.new_comment_V) View new_comment_V;
     @InjectView(R.id.comment_TE) EditText comment_ET;
+    @InjectView(R)
     @Inject CatDetailPresenter catDetailPresenter;
     int headerBottom;
     private String url;
@@ -192,6 +196,31 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
                 });
     }
 
+    private int interpolateColor(int fromColor, int toColor, float fraction) {
+        int[] fromArgb = getArgbFromColor(fromColor);
+        int[] toArgb = getArgbFromColor(toColor);
+        int[] returnArgb = new int[4];
+
+        for (int i = 0; i < 4; i++) {
+            returnArgb[i] = (int) interpolate(fromArgb[i], toArgb[i], fraction);
+        }
+
+        return Color.argb(returnArgb[0], returnArgb[1], returnArgb[2], returnArgb[3]);
+    }
+
+    private float interpolate(float from, float to, float fraction) {
+        return ((from - to) * fraction) + to;
+    }
+
+    private int[] getArgbFromColor(int color) {
+        int red = (color >> 16) & 0xFF;
+        int green = (color >> 8) & 0xFF;
+        int blue = (color >> 0) & 0xFF;
+        int alpha = (color >> 24) & 0xFF;
+
+        return new int[]{alpha, red, green, blue};
+    }
+
     @Override
     public void initToolbar() {
         toolbar.setTitle("");
@@ -254,32 +283,35 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
 
         final int maxScroll = headerHeight - caption_V.getMaxHeight();
         final int offset = maxScroll - caption_V.getMinHeight();
-
+        int fromColorBG = getResources().getColor(R.color.white_translucent);
+        int toColorBG = getResources().getColor(R.color.accent);
 
         comments_RV.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
             @Override
             public void onScrollChanged(int i, boolean b, boolean b2) {
                 headerBottom = headerHeight - i;
                 int newCommentHeight = new_comment_V.getHeight();
+
                 if (i <= maxScroll) {
+
                     caption_V.setTranslationY((float) -i);
+
                     if (i >= offset) {
-                        favorite_B.setTranslationY((float) -offset);
-//                        caption_V.animateBackgroundAccent(vibrant);
                         float fraction = (float) (i - offset) / caption_V.getMinHeight();
-                        caption_V.getBackground().setAlpha((int) ((255 - 210) * fraction) + 210);
+
+                        favorite_B.setTranslationY((float) -offset);
+                        caption_V.setBackgroundColor(interpolateColor(fromColorBG, toColorBG, 1-fraction));
                         caption_V.setElevation(10 * fraction);
                         caption_V.setExpandedLevel(fraction);
                     } else {
                         favorite_B.setTranslationY((float) -i);
-//                        caption_V.animateBackgroundNeutral(vibrant);
-                        caption_V.getBackground().setAlpha(210);
+                        caption_V.setBackgroundColor(fromColorBG);
                         caption_V.setElevation(0);
                         caption_V.setExpandedLevel(0);
                     }
 
                 } else {
-                    caption_V.getBackground().setAlpha(255);
+                    caption_V.setBackgroundColor(toColorBG);
                     caption_V.setTranslationY((float) -maxScroll - 2);
                     caption_V.setExpandedLevel(1f);
                 }
