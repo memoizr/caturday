@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.lovecats.catlover.capsules.common.events.OnPageScrolledEvent;
+import com.lovecats.catlover.capsules.common.events.OnPreparePageScroll;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.common.listener.ScrollEventListener;
@@ -35,6 +37,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     private static final String WARN_NO_LISTENER = "No Listeners attached";
     private Context context;
     private String streamType;
+    private int streamPosition;
 
     public CatStreamPresenterImpl(CatStreamView catStreamView,
                                   CatStreamInteractor catStreamInteractor,
@@ -44,6 +47,22 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         this.eventBus = eventBus;
 
         eventBus.register(this);
+    }
+
+    @Subscribe
+    public void pageScrolled(OnPageScrolledEvent event) {
+        if (event.getPosition() == streamPosition && event.getOffset() < 0) {
+            int scrollOffset = catStreamView.getScrollPosition();
+            eventBus.post(new OnPageScrolledEvent(streamPosition, scrollOffset));
+        }
+    }
+
+    @Subscribe
+    public void prepareScroll(OnPreparePageScroll event) {
+        int sourcePagePosition = event.getSourcePagePosition();
+        if (streamPosition == sourcePagePosition + 1 || streamPosition == sourcePagePosition -1) {
+            catStreamView.setScrollPosition(event.getTargetScroll());
+        }
     }
 
     @Subscribe
@@ -79,7 +98,9 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Override
-    public void onViewCreated() {
+    public void onViewCreated(String streamType, int streamPosition) {
+        this.streamType = streamType;
+        this.streamPosition = streamPosition;
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         catStreamView.initializeRecyclerView(this, layoutManager);

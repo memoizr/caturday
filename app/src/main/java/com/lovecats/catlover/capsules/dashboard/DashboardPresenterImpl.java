@@ -2,8 +2,10 @@ package com.lovecats.catlover.capsules.dashboard;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.lovecats.catlover.capsules.common.events.OnPageScrolledEvent;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshedEvent;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
@@ -12,11 +14,16 @@ import com.lovecats.catlover.capsules.newpost.view.NewPostActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import hugo.weaving.DebugLog;
+
 public class DashboardPresenterImpl extends DashboardPresenter {
 
     private final Bus eventBus;
     private DashboardView dashboardView;
     private FragmentActivity activity;
+    private DashboardPageAdapter adapter;
+    private boolean scrolling;
+    private PagerSlidingTabStrip pager;
 
     public DashboardPresenterImpl(DashboardView dashboardView, Bus eventBus){
         this.dashboardView = dashboardView;
@@ -35,8 +42,8 @@ public class DashboardPresenterImpl extends DashboardPresenter {
         activity = fragment.getActivity();
         if (activity instanceof SlidingTabActivity) {
 
-            DashboardPageAdapter adapter = new DashboardPageAdapter(fragment.getFragmentManager());
-            PagerSlidingTabStrip pager = ((SlidingTabActivity) activity).getSlidingTabStrip();
+            adapter = new DashboardPageAdapter(fragment.getFragmentManager());
+            pager = ((SlidingTabActivity) activity).getSlidingTabStrip();
             dashboardView.initializePager(adapter, pager);
         } else {
             throw new RuntimeException("Parent activity must implement SlidingTabActivity");
@@ -51,6 +58,7 @@ public class DashboardPresenterImpl extends DashboardPresenter {
         activity.startActivity(intent);
     }
 
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         dashboardView.enableSwipeToRefresh(false);
@@ -63,44 +71,10 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        // TODO reduce amount of WTF
-
-//        float targetShiftY = 0;
-//        int oldScrollY = ((MainActivity) getActivity()).getOldScrollY();
-
-//        if (state == 1) {
-//            if (selectedPage == 0) {
-//                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-//                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-//                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-//                    currentScrollPosition = catStreamFragment.getScrollPosition();
-//                }
-//                if (currentScrollPosition > 224) {
-//                    currentScrollPosition = 224;
-//                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
-//
-//                } else {
-//                    ((MainActivity)getActivity())
-//                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-//                }
-//
-//            } else {
-//                catStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(1));
-//                otherCatStreamFragment = ((CatStreamFragment) pagerAdapter.getItem(0));
-//                if (catStreamFragment.getScrollPosition() != 0 || oldScrollY == 0) {
-//                    currentScrollPosition = catStreamFragment.getScrollPosition();
-//                }
-//                if (currentScrollPosition > 224) {
-//                    currentScrollPosition = 224;
-//
-//                    ((MainActivity)getActivity()).animateTitleContainer(targetShiftY);
-//                } else {
-//                    ((MainActivity)getActivity())
-//                            .onScroll(otherCatStreamFragment, currentScrollPosition, false, false);
-//                }
-//            }
-//            otherCatStreamFragment.setScrollPosition(currentScrollPosition);
-//        }
+        if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+            int itemPosition = dashboardView.getViewPager().getCurrentItem();
+            eventBus.post(new OnPageScrolledEvent(itemPosition, -1));
+        }
     }
 
     @Override

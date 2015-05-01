@@ -4,9 +4,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 
-/**
- * Created by user on 29/03/15.
- */
 public interface CatStreamView {
 
     void initializeRecyclerView(ObservableScrollViewCallbacks listener,
@@ -15,6 +12,12 @@ public interface CatStreamView {
     void notifyAdapter();
 
     void setAdapter(RecyclerView.Adapter adapter);
+
+    void setScrollPosition(int offset);
+
+    int getScrollPosition();
+
+    RecyclerView getRecyclerView();
 
     RecyclerView.Adapter getAdapter();
 }

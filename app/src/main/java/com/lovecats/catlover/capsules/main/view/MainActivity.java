@@ -87,6 +87,11 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     }
 
     @Override
+    public int getCollapsedThreshold(){
+        return titleCollapsed;
+    }
+
+    @Override
     protected List<Object> getModules() {
         return Arrays.asList(new MainModule(this));
     }
@@ -282,14 +287,16 @@ public class MainActivity extends DrawerActivity implements ScrollEventListener,
     private void adjustToolbarOnEndOfScroll() {
         float shiftY = -title_container_RL.getTranslationY();
 
-        float targetShiftY = 0;
-        if (shiftY > titleMinHeight &&
-                oldScrollY >= titleMaxHeight) {
+        boolean shouldHide = shiftY > titleMinHeight && oldScrollY >= titleMaxHeight;
 
-            targetShiftY = titleCollapsed;
-        }
+        hideToolBarContainer(shouldHide);
+    }
 
-        if (transparent && shiftY > 0) {
+    @Override
+    public void hideToolBarContainer(boolean shouldHide) {
+        int targetShiftY = shouldHide? titleCollapsed : 0;
+
+        if (transparent && oldScrollY > titleMinHeight) {
             AnimationHelper.animateColor(title_container_RL,
                     getResources().getColor(R.color.primary_transparent),
                     getResources().getColor(R.color.primary));

@@ -3,6 +3,7 @@ package com.lovecats.catlover.capsules.dashboard.stream.view;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -66,14 +67,15 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        catStreamPresenter.onViewCreated();
-
-        catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
 
         Bundle bundle = getArguments();
 
         String streamType = bundle.getString(DashboardPageAdapter.STREAM_CATEGORY);
+        int streamPosition = bundle.getInt(DashboardPageAdapter.STREAM_POSITION);
 
+        catStreamPresenter.onViewCreated(streamType, streamPosition);
+
+        catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
         catStreamPresenter.setAdapterByType(streamType);
     }
 
@@ -82,17 +84,24 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
         cats_stream_RV.getAdapter().notifyDataSetChanged();
     }
 
+    @Override
     public int getScrollPosition() {
         return cats_stream_RV.getCurrentScrollY();
     }
 
+    @Override
     public void setScrollPosition(int position) {
-        ((StaggeredGridLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
+        ((LinearLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
     }
 
     @Override
     public void setAdapter(final RecyclerView.Adapter adapter) {
         cats_stream_RV.setAdapter(adapter);
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return cats_stream_RV;
     }
 
     @Override

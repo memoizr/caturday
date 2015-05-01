@@ -21,4 +21,8 @@ public interface MainView {
     void setUpFragments(Bundle savedInstanceState);
 
     void onRefreshCompleted();
+
+    int getCollapsedThreshold();
+
+    void hideToolBarContainer(boolean shouldHide);
 }

@@ -33,7 +33,6 @@ public class CatStreamModule {
     }
 
     @Provides
-    @Singleton
     public CatStreamPresenter provideCatStreamPresenter(CatStreamView catStreamView,
                                                         CatStreamInteractor catStreamInteractor,
                                                         Bus eventBus) {

@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.capsules.common.events.OnPageScrolledEvent;
+import com.lovecats.catlover.capsules.common.events.OnPreparePageScroll;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.view.views.MovingImageSliderView;
 import com.lovecats.catlover.capsules.login.view.LoginActivity;
@@ -42,6 +44,22 @@ public class MainPresenterImpl implements MainPresenter {
         this.mainInteractor = mainInteractor;
         this.bus = bus;
         bus.register(this);
+    }
+
+    @Subscribe
+    public void onPagerScrolled(OnPageScrolledEvent event) {
+        int offset = event.getOffset();
+        int position = event.getPosition();
+        int collapsedThreshold = mainView.getCollapsedThreshold();
+
+        if (offset >= 0) {
+            if (offset > collapsedThreshold) {
+                mainView.hideToolBarContainer(false);
+                bus.post(new OnPreparePageScroll(collapsedThreshold, position));
+            } else {
+                bus.post(new OnPreparePageScroll(offset, position));
+            }
+        }
     }
 
     @Subscribe

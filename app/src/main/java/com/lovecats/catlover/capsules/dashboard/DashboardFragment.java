@@ -51,6 +51,11 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     }
 
     @Override
+    public ViewPager getViewPager() {
+        return dashboard_VP;
+    }
+
+    @Override
     public void setRefreshing(boolean refreshing) {
         swipe_container.setRefreshing(refreshing);
     }
