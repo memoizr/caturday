@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lovecats.catlover.R;
+import com.lovecats.catlover.util.helper.ColorHelper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,7 +22,7 @@ import lombok.Getter;
 public class ExpandingView extends RelativeLayout{
     @InjectView(R.id.caption_container_V) ViewGroup caption_container_V;
     @InjectView(R.id.user_image_IV) View user_image;
-    @InjectView(R.id.user_name_TV) TextView user_name;
+    @InjectView(R.id.user_name_TV) TextView username;
     @InjectView(R.id.date_TV) View date;
 
     // From 0 to 1, how much should it be open, 1 = fully open
@@ -34,7 +35,8 @@ public class ExpandingView extends RelativeLayout{
     private float collapseScale;
     @Getter private int minHeight;
     @Getter private int maxHeight;
-
+    private int activeColor;
+    private int neutralColor;
 
     public ExpandingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,12 +56,25 @@ public class ExpandingView extends RelativeLayout{
 
         maxHeight = resources.getDimensionPixelSize(R.dimen.max_caption_height);
         minHeight = resources.getDimensionPixelSize(R.dimen.caption_height);
+
+        neutralColor = resources.getColor(R.color.black);
+        activeColor = resources.getColor(R.color.white);
+    }
+
+    public void setTextcolors(int neutralColor, int activeColor) {
+        this.neutralColor = neutralColor;
+        this.activeColor = activeColor;
+    }
+
+    public void setUsername(String username) {
+        this.username.setText(username);
     }
 
     public void setExpandedLevel(float level){
         if (level != expandedLevel) {
             expandedLevel = level;
             collapseScale = (float) (0.5*Math.tanh( 6 * expandedLevel - 3) + 0.5);
+            username.setTextColor(ColorHelper.interpolateColor(neutralColor, activeColor, 1 - collapseScale));
             updateLayoutParams();
             updateUserImageMargins();
         }
