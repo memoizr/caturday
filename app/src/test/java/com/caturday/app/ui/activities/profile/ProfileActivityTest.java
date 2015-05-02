@@ -6,8 +6,8 @@ import com.caturday.app.CustomRoboelectricRunner;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 
-@RunWith(CustomRoboelectricRunner.class)
-@Config(emulateSdk = 21, reportSdk = 21, constants = BuildConfig.class)
+//@RunWith(CustomRoboelectricRunner.class)
+//@Config(emulateSdk = 21, reportSdk = 21, constants = BuildConfig.class)
 public class ProfileActivityTest {
 //    @Inject UserModel userModel;
 //

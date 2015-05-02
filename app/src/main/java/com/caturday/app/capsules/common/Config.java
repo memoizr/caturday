@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-/**
- * Created by user on 10/03/15.
- */
 public class Config {
     private static final String API_VERSION = "/api/v1";
     private static Context mContext;
     private static Application app;
+    private static String DEFAULT_ENDPOINT = "http://protected-lake-7372.herokuapp.com";
     public static final int PAGINATION_LIMIT = 25;
 
     public Config(Application app) {
@@ -29,7 +27,7 @@ public class Config {
 
         if (rootUrl == null) {
             SharedPreferences.Editor editor = prefs.edit();
-            String address = "http://196.18.44.82:3000";
+            String address = DEFAULT_ENDPOINT;
             editor.putString("example_text", address);
             rootUrl = address;
         }

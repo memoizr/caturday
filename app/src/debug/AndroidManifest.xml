@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.caturday.app" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:name="com.caturday.app.App"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.caturday.app.capsules.main.view.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.caturday.app.capsules.detail.view.CatDetailActivity"
+            android:label="@string/title_activity_detail_cat"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:parentActivityName="com.caturday.app.capsules.main.view.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.caturday.app.capsules.main.view.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.caturday.app.capsules.settings.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.caturday.app.capsules.login.view.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName="com.caturday.app.capsules.main.view.MainActivity"
+            android:theme="@style/Theme.Transparent" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.caturday.app.capsules.main.view.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.caturday.app.capsules.profile.view.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
+        <activity
+            android:theme="@style/Theme.Transparent"
+            android:name="com.caturday.app.capsules.newpost.view.NewPostActivity"
+            android:label="@string/title_activity_new_post" >
+        </activity>
+    </application>
+
+</manifest>
