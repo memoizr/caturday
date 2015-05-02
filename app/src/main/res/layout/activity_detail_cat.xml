@@ -49,7 +49,7 @@
         android:paddingBottom="56dp"
         android:layout_width="match_parent"/>
 
-    <com.lovecats.catlover.capsules.common.view.views.ExpandingView
+    <com.caturday.app.capsules.common.view.views.ExpandingView
         android:id="@+id/caption_V"
         android:clipToPadding="false"
         android:clipChildren="false"

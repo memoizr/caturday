@@ -4,7 +4,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="@dimen/dashboard_image_height"
-            tools:context="com.lovecats.catlover.capsules.profile.info.UserInfoFragment">
+            tools:context="com.caturday.app.capsules.profile.info.UserInfoFragment">
 
     <android.support.v7.widget.CardView
         android:layout_margin="8dp"

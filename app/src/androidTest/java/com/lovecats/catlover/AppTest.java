@@ -1,4 +1,4 @@
-package com.lovecats.catlover;
+package com.caturday.app;
 
 import android.test.ApplicationTestCase;
 

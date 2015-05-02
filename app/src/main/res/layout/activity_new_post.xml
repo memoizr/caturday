@@ -6,7 +6,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:visibility="invisible"
-             tools:context="com.lovecats.catlover.capsules.newpost.view.NewPostActivity">
+             tools:context="com.caturday.app.capsules.newpost.view.NewPostActivity">
 
     <ScrollView
         android:layout_width="match_parent"
