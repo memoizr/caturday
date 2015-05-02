@@ -7,6 +7,7 @@ import com.caturday.app.models.catpost.datastore.CatPostCloudDataStore;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import rx.Observable;
 
@@ -28,30 +29,42 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     }
 
     @Override
-    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
+    public Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
 
-        Collection<CatPostEntity> catPostEntities = retrieveCatPosts(page, category, fromNetwork);
+//        Collection<CatPostEntity> catPostEntities = retrieveCatPosts(page, category, fromNetwork);
+//
+//        if (catPostEntities.size() == 0) {
+//            catPostEntities = retrieveCatPosts(page, category, true);
+//        }
+//
+//        if (fromNetwork)
+//            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
 
-        if (catPostEntities.size() == 0) {
-            catPostEntities = retrieveCatPosts(page, category, true);
-        }
-
-        if (fromNetwork)
-            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+        Observable<List<CatPostEntity>> catPostEntities =
+                catPostLocalDataStore.getCatPostsForPageAndCategory(page, category)
+                .flatMap(collection -> {
+            if (collection.size() > 0) {
+                return Observable.just(collection);
+            } else {
+                return catPostCloudDataStore.getCatPostsForPageAndCategory(page, category).doOnNext(
+                        catPostLocalDataStore::createMultipleCatPost
+                );
+            }
+        });
 
         return catPostEntities;
     }
 
-    private Collection<CatPostEntity> retrieveCatPosts(int page, String category, boolean fromNetwork) {
-
-        CatPostDataStore catPostDataStore = catPostFactory(fromNetwork);
-        Collection<CatPostEntity> catPostEntities = catPostDataStore.getCatPostsForPageAndCategory(page, category);
-
-        if (fromNetwork)
-            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
-
-        return catPostEntities;
-    }
+//    private Collection<CatPostEntity> retrieveCatPosts(int page, String category, boolean fromNetwork) {
+//
+//        CatPostDataStore catPostDataStore = catPostFactory(fromNetwork);
+//        Collection<CatPostEntity> catPostEntities = catPostDataStore.getCatPostsForPageAndCategory(page, category);
+//
+//        if (fromNetwork)
+//            catPostLocalDataStore.createMultipleCatPost(catPostEntities);
+//
+//        return catPostEntities;
+//    }
 
     @Override
     public Observable<Collection<CatPostEntity>> getCatPostsForIds(HashSet<String> ids) {

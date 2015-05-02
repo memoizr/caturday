@@ -14,7 +14,7 @@ import rx.Observable;
 
 public interface CatPostApi {
     @GET("/cat_post")
-    List<CatPostEntity> getPosts(@Query("page") int page,
+    Observable<List<CatPostEntity>> getPosts(@Query("page") int page,
                          @Query("category") String category);
 
 //    @Multipart

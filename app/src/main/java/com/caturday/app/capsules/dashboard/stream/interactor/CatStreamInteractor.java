@@ -3,17 +3,15 @@ package com.caturday.app.capsules.dashboard.stream.interactor;
 import com.caturday.app.models.catpost.CatPostEntity;
 
 import java.util.Collection;
+import java.util.List;
 
 import retrofit.Callback;
+import rx.Observable;
 
-/**
- * Created by user on 02/04/15.
- */
 public interface CatStreamInteractor {
-    void getCatPostPageAndType(int page,
+    Observable<List<CatPostEntity>> getCatPostPageAndType(int page,
                                String streamType,
-                               boolean fromNetwork,
-                               Callback<Collection<CatPostEntity>> callback);
+                               boolean fromNetwork);
 
     void eraseCache();
 }

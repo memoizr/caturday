@@ -3,8 +3,10 @@ package com.caturday.app.models.catpost.datastore;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.catpost.db.CatPostDb;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import rx.Observable;
 
@@ -17,8 +19,8 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     }
 
     @Override
-    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
-        return catPostDb.getPostsForPageAndCategory(page, category);
+    public Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category) {
+        return Observable.just(new ArrayList(catPostDb.getPostsForPageAndCategory(page, category)));
     }
 
     @Override

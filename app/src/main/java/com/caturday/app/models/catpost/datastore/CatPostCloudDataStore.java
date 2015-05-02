@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import retrofit.RestAdapter;
 import retrofit.mime.TypedFile;
@@ -22,7 +23,7 @@ public class CatPostCloudDataStore implements CatPostDataStore {
     }
 
     @Override
-    public Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category) {
+    public Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category) {
         String endpoint = Config.getEndpoint();
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -30,12 +31,8 @@ public class CatPostCloudDataStore implements CatPostDataStore {
                 .build();
 
         final CatPostApi api = adapter.create(CatPostApi.class);
-        Collection<CatPostEntity> catPostEntities = new ArrayList<>();
-        try {
-            catPostEntities = api.getPosts(page, category);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Observable<List<CatPostEntity>> catPostEntities;
+        catPostEntities = api.getPosts(page, category);
 
         return catPostEntities;
     }

@@ -6,8 +6,10 @@ import com.caturday.app.util.concurrent.PostExecutionThread;
 import com.caturday.app.util.concurrent.ThreadExecutor;
 
 import java.util.Collection;
+import java.util.List;
 
 import retrofit.Callback;
+import rx.Observable;
 
 public class CatStreamInteractorImpl implements CatStreamInteractor {
 
@@ -26,21 +28,11 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     }
 
     @Override
-    public void getCatPostPageAndType(final int page,
+    public Observable<List<CatPostEntity>> getCatPostPageAndType(final int page,
                                       final String streamType,
-                                      boolean fromNetwork,
-                                      final Callback<Collection<CatPostEntity>> callback) {
+                                      boolean fromNetwork) {
 
-        threadExecutor.execute(() -> {
-            try {
-                final Collection<CatPostEntity> catPostCollection =
-                        catPostRepository.getCatPostsForPageAndCategory(page, streamType, fromNetwork);
-
-            postExecutionThread.post(() -> callback.success(catPostCollection, null));
-            } catch (Error e) {
-                e.printStackTrace();
-            }
-        });
+        return catPostRepository.getCatPostsForPageAndCategory(page, streamType, fromNetwork);
     }
 
     @Override

@@ -4,12 +4,13 @@ import com.caturday.app.models.catpost.CatPostEntity;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import rx.Observable;
 
 public interface CatPostDataStore {
 
-    Collection<CatPostEntity> getCatPostsForPageAndCategory(int page, String category);
+    Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category);
 
     Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> ids);
 
