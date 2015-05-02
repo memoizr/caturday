@@ -119,7 +119,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                     catStreamInteractor.eraseCache();
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(s -> onRefreshComplete());
+                .subscribe(s -> onRefreshComplete(), Throwable::printStackTrace);
     }
 
     private void onRefreshComplete() {
@@ -132,38 +132,26 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         this.streamType = streamType;
         catStreamInteractor.getCatPostPageAndType(0,
                 streamType,
-                false,
-                new Callback<Collection<CatPostEntity>>() {
-            @Override
-            public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-                CatPostAdapter adapter = new CatPostAdapter(context, new ArrayList(catPostCollection));
-                catStreamView.setAdapter(adapter);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
+                false).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((catPostCollection) -> {
+                    CatPostAdapter adapter = new CatPostAdapter(context, catPostCollection);
+                    catStreamView.setAdapter(adapter);
+                },
+                        Throwable::printStackTrace);
     }
 
     @Override
     public void loadMore(int page, int totalItems) {
-        // TODO switch to RX
+//        // TODO switch to RX
         catStreamInteractor.getCatPostPageAndType(page,
                 streamType,
-                false,
-                new Callback<Collection<CatPostEntity>>() {
-            @Override
-            public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-                CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
-                adapter.addItems(catPostCollection);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
+                false).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((catPostCollection) -> {
+                            CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
+                            adapter.addItems(catPostCollection);
+                        },
+                        Throwable::printStackTrace);
     }
 }

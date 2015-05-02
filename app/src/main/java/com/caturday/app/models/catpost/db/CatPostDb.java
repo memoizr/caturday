@@ -26,4 +26,6 @@ public interface CatPostDb {
     void createMultiplePost(Collection<CatPostEntity> catPostEntity);
 
     void eraseCache();
+
+    CatPostEntity updateCatPost(CatPostEntity catPostEntity);
 }
