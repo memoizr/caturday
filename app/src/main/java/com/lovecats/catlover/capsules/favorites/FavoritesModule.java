@@ -12,6 +12,7 @@ import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.db.UserORM;
 import com.lovecats.catlover.models.user.repository.UserRepository;
 import com.lovecats.catlover.models.user.repository.UserRepositoryImpl;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -45,8 +46,11 @@ public class FavoritesModule {
         return new FavoritesInteractorImpl(userRepository, catPostRepository);
     }
 
-    @Provides @Singleton FavoritesPresenter provideFavoritesPresenter(FavoritesInteractor favoritesInteractor) {
-        return new FavoritesPresenterImpl(favoritesView, favoritesInteractor);
+    @Provides @Singleton FavoritesPresenter provideFavoritesPresenter(
+            FavoritesInteractor favoritesInteractor,
+            Bus bus) {
+
+        return new FavoritesPresenterImpl(favoritesView, favoritesInteractor, bus);
     }
 
 }

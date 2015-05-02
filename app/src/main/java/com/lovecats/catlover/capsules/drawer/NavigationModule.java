@@ -8,6 +8,7 @@ import com.lovecats.catlover.capsules.drawer.view.NavigationPresenter;
 import com.lovecats.catlover.capsules.drawer.view.NavigationPresenterImpl;
 import com.lovecats.catlover.models.user.UserModule;
 import com.lovecats.catlover.models.user.repository.UserRepository;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -39,7 +40,8 @@ public class NavigationModule {
 
     @Provides @Singleton
     public NavigationPresenter provideNavigationPresenter(NavigationPresenter.NavigationView navigationView,
-                                                          NavigationInteractor navigationInteractor) {
-        return new NavigationPresenterImpl(navigationView, navigationInteractor);
+                                                          NavigationInteractor navigationInteractor,
+                                                          Bus bus) {
+        return new NavigationPresenterImpl(navigationView, navigationInteractor, bus);
     }
 }

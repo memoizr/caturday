@@ -8,13 +8,13 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lovecats.catlover.capsules.common.events.OnPageScrolledEvent;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshCompletedEvent;
 import com.lovecats.catlover.capsules.common.events.StreamRefreshedEvent;
+import com.lovecats.catlover.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.lovecats.catlover.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.lovecats.catlover.capsules.common.view.mvp.BaseFragment;
 import com.lovecats.catlover.capsules.newpost.view.NewPostActivity;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
-
-import hugo.weaving.DebugLog;
 
 public class DashboardPresenterImpl extends DashboardPresenter {
 
@@ -49,13 +49,18 @@ public class DashboardPresenterImpl extends DashboardPresenter {
             throw new RuntimeException("Parent activity must implement SlidingTabActivity");
         }
         dashboardView.initializeSwipeContainer(this);
-
     }
+
 
     @Override
     public void createNewPost() {
         Intent intent = new Intent(activity, NewPostActivity.class);
         activity.startActivity(intent);
+    }
+
+    @Override
+    public void onViewCreated() {
+        eventBus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_DASHBOARD));
     }
 
 

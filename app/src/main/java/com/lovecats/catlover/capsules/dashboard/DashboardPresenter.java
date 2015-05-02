@@ -11,4 +11,6 @@ public abstract class DashboardPresenter implements ViewPager.OnPageChangeListen
     public abstract void onCreateView(BaseFragment fragment);
 
     public abstract void createNewPost();
+
+    public abstract void onViewCreated();
 }

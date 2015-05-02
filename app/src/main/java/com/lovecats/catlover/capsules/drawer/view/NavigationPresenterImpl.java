@@ -3,24 +3,33 @@ package com.lovecats.catlover.capsules.drawer.view;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.lovecats.catlover.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.lovecats.catlover.capsules.drawer.interactor.NavigationInteractor;
 import com.lovecats.catlover.capsules.profile.view.ProfileActivity;
 import com.lovecats.catlover.models.user.UserEntity;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
 
 public class NavigationPresenterImpl implements NavigationPresenter {
 
+    private final Bus bus;
     private NavigationView navigationView;
     private NavigationInteractor navigationInteractor;
     private UserEntity userEntity;
+    private int currentItem;
 
     public NavigationPresenterImpl(NavigationView navigationView,
-                                   NavigationInteractor navigationInteractor) {
+                                   NavigationInteractor navigationInteractor,
+                                   Bus bus) {
         this.navigationView = navigationView;
         this.navigationInteractor = navigationInteractor;
+        this.bus = bus;
     }
 
     @Override
     public void onCreate() {
+
         String[] values = navigationInteractor.provideNavigationItems();
         navigationView.initializeListView(values);
 
@@ -34,6 +43,17 @@ public class NavigationPresenterImpl implements NavigationPresenter {
     }
 
     @Override
+    public void onViewCreated() {
+        bus.register(this);
+    }
+
+    @Produce
+    public OnNavigationItemShownEvent onItemShownEvent() {
+
+        return new OnNavigationItemShownEvent(currentItem);
+    }
+
+    @Override
     public void onNavigationInteraction(Activity activity, int position) {
         if (activity instanceof DrawerActivity) {
             ((DrawerActivity)activity).onNavigationItemSelected(position);
@@ -42,11 +62,41 @@ public class NavigationPresenterImpl implements NavigationPresenter {
         }
     }
 
+    @Subscribe
+    public void onNavItemShown(OnNavigationItemShownEvent event) {
+
+        currentItem = event.getCurrentItem();
+
+        switch (event.getCurrentItem()){
+            case OnNavigationItemShownEvent.ITEM_DASHBOARD: {
+
+                navigationView.setSelected(0);
+                break;
+            }
+            case OnNavigationItemShownEvent.ITEM_FAVORITES: {
+
+                navigationView.setSelected(1);
+                break;
+            }
+        }
+    }
+
+//    @Subscribe
+//    public void onFavoritesShown(OnFavoritesShownEvent event) {
+//
+//        System.out.println("favs shown");
+//        navigationView.setSelected(1);
+//    }
+
     @Override
     public void onProfileClicked(Activity activity) {
         Intent profileIntent = new Intent(activity, ProfileActivity.class);
-        System.out.println(userEntity);
         profileIntent.putExtra(ProfileActivity.EXTRA_ID, userEntity.getServerId());
         activity.startActivity(profileIntent);
+    }
+
+    @Override
+    public void onDestroy() {
+        bus.unregister(this);
     }
 }

@@ -6,9 +6,13 @@ public interface NavigationPresenter {
 
     void onCreate();
 
+    void onViewCreated();
+
     void onNavigationInteraction(Activity activity, int position);
 
     void onProfileClicked(Activity activity);
+
+    void onDestroy();
 
     interface NavigationView {
 
@@ -18,5 +22,6 @@ public interface NavigationPresenter {
 
         void setUsername(String username);
 
+        void setSelected(int position);
     }
 }
