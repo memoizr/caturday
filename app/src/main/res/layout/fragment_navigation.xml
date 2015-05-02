@@ -14,7 +14,7 @@
         android:layout_height="192dp">
         <ImageView
             android:id="@+id/cover_image_IV"
-            android:src="@drawable/default_profile_cover"
+            android:src="@drawable/default_user_profile_cover"
             android:tint="@color/dark_transparent"
             android:scaleType="centerCrop"
             android:background="?android:attr/selectableItemBackground"

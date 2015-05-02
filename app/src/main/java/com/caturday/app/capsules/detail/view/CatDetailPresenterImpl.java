@@ -59,22 +59,27 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         catDetailView.initToolbar();
         catDetailView.initIMEListener();
 
-        catDetailInteractor.isFavorite(catPostServerId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(catDetailView::updateButton);
+        // TODO automatically log in user.
+        if (catDetailInteractor.isUserLoggedIn()) {
+            catDetailInteractor.isFavorite(catPostServerId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(catDetailView::updateButton, Throwable::printStackTrace);
+
+        }
+
     }
 
     private void getCatPostFromId(String serverId) {
-        catDetailInteractor.getPostFromId(serverId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        CatPostEntity -> {
-                            setCatPostEntity(CatPostEntity);
-                        },
-                        Throwable::printStackTrace
-                );
+            catDetailInteractor.getPostFromId(serverId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            CatPostEntity -> {
+                                setCatPostEntity(CatPostEntity);
+                            },
+                            Throwable::printStackTrace
+                    );
     }
 
     public void setCatPostEntity(CatPostEntity entity) {

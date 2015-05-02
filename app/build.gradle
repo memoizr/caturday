@@ -28,8 +28,7 @@ android {
         }
         debug {
             applicationIdSuffix ".debug"
-            debuggable true
-            jniDebuggable true
+            versionNameSuffix '-debug'
         }
     }
     sourceSets {

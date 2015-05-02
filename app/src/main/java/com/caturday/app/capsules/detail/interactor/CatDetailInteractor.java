@@ -14,4 +14,6 @@ public interface CatDetailInteractor {
     Observable<VoteEntity> sendVote(String serverId, boolean positive);
 
     Observable<Boolean> isFavorite(String serverId);
+
+    boolean isUserLoggedIn();
 }

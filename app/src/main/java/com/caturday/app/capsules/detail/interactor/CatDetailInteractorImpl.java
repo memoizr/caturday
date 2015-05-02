@@ -38,6 +38,11 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     }
 
     @Override
+    public boolean isUserLoggedIn() {
+        return userRepository.userLoggedIn();
+    }
+
+    @Override
     public Observable<CatPostEntity> sendComment(String comment, String catPostServerId) {
         UserEntity user = userRepository.getCurrentUser();
 
