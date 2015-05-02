@@ -153,20 +153,5 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                             adapter.addItems(catPostCollection);
                         },
                         Throwable::printStackTrace);
-//        catStreamInteractor.getCatPostPageAndType(page,
-//                streamType,
-//                false,
-//                new Callback<Collection<CatPostEntity>>() {
-//            @Override
-//            public void success(Collection<CatPostEntity> catPostCollection, Response response) {
-//                CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
-//                adapter.addItems(catPostCollection);
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                error.printStackTrace();
-//            }
-//        });
     }
 }

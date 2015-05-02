@@ -45,4 +45,8 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     public void eraseCache() {
         catPostDb.eraseCache();
     }
+
+    public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
+        return Observable.just(catPostDb.updateCatPost(catPostEntity));
+    }
 }
