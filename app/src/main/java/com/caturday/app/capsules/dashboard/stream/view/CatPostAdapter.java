@@ -1,12 +1,6 @@
 package com.caturday.app.capsules.dashboard.stream.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
@@ -21,7 +15,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.caturday.app.capsules.common.view.HeaderAdapter;
-import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.main.view.MainActivity;
 import com.caturday.app.R;
 import com.caturday.app.models.catpost.CatPostEntity;
@@ -78,25 +71,26 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
-        int i = position - 1;
+        int index = position - 1;
         if (viewHolder instanceof CatsCardViewHolder) {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
 
-            final CatPostEntity catPostEntity = mCatPosts.get(i);
-
-            final String transitionName = "catTransition" + i;
-            ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
+            final CatPostEntity catPostEntity = mCatPosts.get(index);
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(catPostEntity.getCaption());
 
             String commentsNumber = Integer.toString(catPostEntity.getComments().size());
             ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
+            ((CatsCardViewHolder) viewHolder).total_comments_count.setOnClickListener(view ->
+                presenter.openDetails(index, myViewHolder.cat_IV, catPostEntity, true)
+            );
+
 
             int votesCount = catPostEntity.getVotesCount();
             String votesNumber = votesCount > 0 ? Integer.toString(votesCount) : "";
             myViewHolder.vote_B.setText(votesNumber);
             myViewHolder.vote_B.setOnClickListener(view ->
-                    presenter.plusOneClicked(catPostEntity.getServerId(), i)
+                            presenter.plusOneClicked(catPostEntity.getServerId(), index)
             );
 
             Glide.with(context)
@@ -107,27 +101,18 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             UserEntity user = catPostEntity.getUser();
             myViewHolder.username_TV.setText(user.getUsername());
             Glide.with(context).load(user.getImageUrl()).into(myViewHolder.user_image_IV);
+
             myViewHolder.options_B.setOnClickListener(this::showPopup);
 
             myViewHolder.share_B.setOnClickListener(view -> {
                 ShareHelper.shareLinkAction("Check out this cat!",
-                        mCatPosts.get(i).getImageUrl(),
+                        mCatPosts.get(index).getImageUrl(),
                         context);
             });
 
             myViewHolder.catContainer.setOnClickListener(view -> {
                 ((MainActivity) context).toggleArrow(true);
-                Intent intent = new Intent(context, CatDetailActivity.class);
-                ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                (Activity) context,
-                                Pair.create((View) myViewHolder.cat_IV, transitionName)
-                        );
-
-                intent.putExtra("transition", transitionName);
-                intent.putExtra("url", catPostEntity.getImageUrl());
-                intent.putExtra("serverId", catPostEntity.getServerId());
-                ActivityCompat.startActivity((Activity) context, intent, options.toBundle());
+                presenter.openDetails(index, myViewHolder.cat_IV, catPostEntity, false);
             });
         }
     }
@@ -150,6 +135,7 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     public int getItemCount() {
         return mCatPosts.size() + 1;
     }
+
 
     @Override
     public int getItemViewType(int position) {

@@ -83,13 +83,6 @@ public class NavigationPresenterImpl implements NavigationPresenter {
         }
     }
 
-//    @Subscribe
-//    public void onFavoritesShown(OnFavoritesShownEvent event) {
-//
-//        System.out.println("favs shown");
-//        navigationView.setSelected(1);
-//    }
-
     @Override
     public void onProfileClicked(Activity activity) {
         boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();

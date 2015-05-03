@@ -205,7 +205,8 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         toolbar.setOnMenuItemClickListener(catDetailPresenter);
     }
 
-    private void showComment() {
+    @Override
+    public void showComment() {
 
         int currentScroll = comments_RV.getCurrentScrollY();
         int targetScroll = 2 * caption_V.getHeight();

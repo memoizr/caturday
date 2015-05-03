@@ -9,6 +9,12 @@ import java.util.List;
 
 public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
 
+    String EXTRA_TRANSITION_NAME = "catCardTransition";
+    String EXTRA_TRANSITION = "transition";
+    String EXTRA_URL = "url";
+    String EXTRA_SERVER_ID = "serverId";
+    String EXTRA_SHOW_COMMENTS = "showComments";
+
     void create(Bundle extras);
 
     void sendComment(String comment);
@@ -18,6 +24,8 @@ public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
     interface CatDetailView {
 
         void initRecyclerView();
+
+        void showComment();
 
         void initImageView(String imageUrl);
 

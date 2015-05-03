@@ -2,9 +2,19 @@ package com.caturday.app.capsules.dashboard.stream.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 
+import com.caturday.app.capsules.detail.view.CatDetailActivity;
+import com.caturday.app.capsules.detail.view.CatDetailPresenter;
+import com.caturday.app.capsules.detail.view.CatDetailPresenterImpl;
+import com.caturday.app.models.catpost.CatPostEntity;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.capsules.common.events.OnPageScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPreparePageScroll;
@@ -146,5 +156,24 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(s -> catStreamView.getAdapter().updateItem(position, s),
                        Throwable::printStackTrace);
+    }
+
+    @Override
+    public void openDetails(int i, View view, CatPostEntity catPostEntity, boolean showComments) {
+
+        final String transitionName = CatDetailPresenter.EXTRA_TRANSITION_NAME + i;
+        ViewCompat.setTransitionName(view, transitionName);
+        Intent intent = new Intent(context, CatDetailActivity.class);
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (Activity) context,
+                        Pair.create(view, transitionName)
+                );
+
+        intent.putExtra(CatDetailPresenter.EXTRA_TRANSITION, transitionName);
+        intent.putExtra(CatDetailPresenter.EXTRA_URL, catPostEntity.getImageUrl());
+        intent.putExtra(CatDetailPresenter.EXTRA_SERVER_ID, catPostEntity.getServerId());
+        intent.putExtra(CatDetailPresenter.EXTRA_SHOW_COMMENTS, showComments);
+        ActivityCompat.startActivity((Activity) context, intent, options.toBundle());
     }
 }

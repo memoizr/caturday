@@ -33,6 +33,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     private String url;
     private String catPostServerId;
     private Context context;
+    private boolean showComment;
 
     public CatDetailPresenterImpl(Context context,
                                   CatDetailView catDetailView,
@@ -45,8 +46,9 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
     @Override
     public void create(Bundle extras) {
-        url = extras.getString("url");
-        catPostServerId = extras.getString("serverId");
+        url = extras.getString(EXTRA_URL);
+        catPostServerId = extras.getString(EXTRA_SERVER_ID);
+        showComment = extras.getBoolean(EXTRA_SHOW_COMMENTS);
 
         getCatPostFromId(catPostServerId);
 
@@ -77,6 +79,9 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                     .subscribe(
                             CatPostEntity -> {
                                 setCatPostEntity(CatPostEntity);
+                                if (showComment) {
+                                    catDetailView.showComment();
+                                }
                             },
                             Throwable::printStackTrace
                     );
