@@ -29,8 +29,22 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
     @InjectView(R.id.navigation_LV) ListView navigationListView;
     @InjectView(R.id.username_TV) TextView username_TV;
     @InjectView(R.id.email_TV) TextView email_TV;
+    @InjectView(R.id.user_info) View userInfo;
+    @InjectView(R.id.login_view) View loginInfo;
 
     public NavigationFragment() {
+    }
+
+    @Override
+    public void userLoggedIn(boolean loggedIn) {
+        if (loggedIn) {
+            userInfo.setVisibility(View.VISIBLE);
+            loginInfo.setVisibility(View.GONE);
+        } else {
+            userInfo.setVisibility(View.GONE);
+            loginInfo.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

@@ -137,21 +137,6 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-//    public void showPopupWindow(View v) {
-//        PopupWindow popupWindow = new PopupWindow(context);
-//
-//        LayoutInflater inflater = (LayoutInflater)   context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//
-//        View view = inflater.inflate(R.layout.menu_card, null);
-//
-//
-//        popupWindow.setFocusable(true);
-//        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-//        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-//        popupWindow.setContentView(view);
-//        popupWindow.showAsDropDown(v);
-//    }
-
     public void showPopup(View v) {
         Context wrapper = new ContextThemeWrapper(context, R.style.PopupMenuStyle);
         PopupMenu popupMenu = new PopupMenu(wrapper, v);

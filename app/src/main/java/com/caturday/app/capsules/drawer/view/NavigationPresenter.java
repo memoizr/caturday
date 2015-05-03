@@ -16,6 +16,8 @@ public interface NavigationPresenter {
 
     interface NavigationView {
 
+        void userLoggedIn(boolean loggedIn);
+
         void initializeListView(String[] values);
 
         void setUserEmail(String userEmail);

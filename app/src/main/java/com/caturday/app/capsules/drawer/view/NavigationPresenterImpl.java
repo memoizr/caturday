@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.drawer.interactor.NavigationInteractor;
+import com.caturday.app.capsules.login.view.LoginActivity;
 import com.caturday.app.capsules.profile.view.ProfileActivity;
 import com.caturday.app.models.user.UserEntity;
 import com.squareup.otto.Bus;
@@ -40,6 +41,7 @@ public class NavigationPresenterImpl implements NavigationPresenter {
             navigationView.setUserEmail(userEntity.getEmail());
             navigationView.setUsername(userEntity.getUsername());
         }
+        navigationView.userLoggedIn(isUserLoggedIn);
     }
 
     @Override
@@ -90,9 +92,15 @@ public class NavigationPresenterImpl implements NavigationPresenter {
 
     @Override
     public void onProfileClicked(Activity activity) {
-        Intent profileIntent = new Intent(activity, ProfileActivity.class);
-        profileIntent.putExtra(ProfileActivity.EXTRA_ID, userEntity.getServerId());
-        activity.startActivity(profileIntent);
+        boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();
+        if (isUserLoggedIn) {
+            Intent profileIntent = new Intent(activity, ProfileActivity.class);
+            profileIntent.putExtra(ProfileActivity.EXTRA_ID, userEntity.getServerId());
+            activity.startActivity(profileIntent);
+        } else {
+            Intent loginIntent = new Intent(activity, LoginActivity.class);
+            activity.startActivity(loginIntent);
+        }
     }
 
     @Override
