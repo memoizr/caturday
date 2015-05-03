@@ -2,8 +2,8 @@ package com.caturday.app.capsules.dashboard.stream;
 
 import com.caturday.app.AppModule;
 import com.caturday.app.capsules.dashboard.stream.interactor.CatStreamInteractor;
-import com.caturday.app.capsules.dashboard.stream.presenter.CatStreamPresenter;
-import com.caturday.app.capsules.dashboard.stream.presenter.CatStreamPresenterImpl;
+import com.caturday.app.capsules.dashboard.stream.view.CatStreamPresenter;
+import com.caturday.app.capsules.dashboard.stream.view.CatStreamPresenterImpl;
 import com.caturday.app.capsules.dashboard.stream.view.CatStreamFragment;
 import com.caturday.app.capsules.dashboard.stream.view.CatStreamView;
 import com.squareup.otto.Bus;

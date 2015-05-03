@@ -1,7 +1,6 @@
 package com.caturday.app.models.catpost.repository;
 
 import com.caturday.app.models.catpost.CatPostEntity;
-import com.caturday.app.models.catpost.datastore.CatPostDataStore;
 import com.caturday.app.models.catpost.datastore.CatPostLocalDataStore;
 import com.caturday.app.models.catpost.datastore.CatPostCloudDataStore;
 
@@ -24,19 +23,15 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     @Override
     public Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork) {
 
-        Observable<List<CatPostEntity>> catPostEntities =
-                catPostLocalDataStore.getCatPostsForPageAndCategory(page, category)
+        return catPostLocalDataStore.getCatPostsForPageAndCategory(page, category)
                 .flatMap(collection -> {
             if (collection.size() > 0) {
                 return Observable.just(collection);
             } else {
-                return catPostCloudDataStore.getCatPostsForPageAndCategory(page, category).doOnNext(
-                        catPostLocalDataStore::createMultipleCatPost
-                );
+                return catPostCloudDataStore.getCatPostsForPageAndCategory(page, category)
+                        .doOnNext( catPostLocalDataStore::createMultipleCatPost );
             }
         });
-
-        return catPostEntities;
     }
 
     @Override
@@ -46,8 +41,11 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     }
 
     @Override
-    public Observable<CatPostEntity> getCatPost(String serverId) {
-        return catPostLocalDataStore.getCatPost(serverId);
+    public Observable<CatPostEntity> getCatPost(String serverId, boolean fromNetwork) {
+        if (fromNetwork)
+            return catPostCloudDataStore.getCatPost(serverId);
+        else
+            return catPostLocalDataStore.getCatPost(serverId);
     }
 
     @Override

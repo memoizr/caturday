@@ -7,7 +7,7 @@ import rx.Observable;
 
 public interface CatDetailInteractor {
 
-    Observable<CatPostEntity> getPostFromId(String serverId);
+    Observable<CatPostEntity> getPostFromId(String serverId, boolean fromNetwork);
 
     Observable<CatPostEntity> sendComment(String comment, String serverId);
 

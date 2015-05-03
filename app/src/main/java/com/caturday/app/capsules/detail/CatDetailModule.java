@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.caturday.app.AppModule;
 import com.caturday.app.models.comment.api.CommentApi;
-import com.caturday.app.models.vote.api.VoteApi;
 import com.caturday.app.capsules.detail.interactor.CatDetailInteractor;
 import com.caturday.app.capsules.detail.interactor.CatDetailInteractorImpl;
 import com.caturday.app.capsules.detail.view.CatDetailPresenter;
@@ -16,9 +15,8 @@ import com.caturday.app.models.comment.repository.CommentRepository;
 import com.caturday.app.models.comment.repository.CommentRepositoryImpl;
 import com.caturday.app.models.user.UserModule;
 import com.caturday.app.models.user.repository.UserRepository;
-import com.caturday.app.models.vote.datastore.VoteCloudDataStore;
+import com.caturday.app.models.vote.VoteModule;
 import com.caturday.app.models.vote.repository.VoteRepository;
-import com.caturday.app.models.vote.repository.VoteRepositoryImpl;
 
 import javax.inject.Singleton;
 
@@ -30,7 +28,10 @@ import retrofit.RestAdapter;
         injects = {
                 CatDetailActivity.class
         },
-        includes = UserModule.class,
+        includes = {
+                UserModule.class,
+                VoteModule.class
+        },
         addsTo = AppModule.class
 )
 public class CatDetailModule {
@@ -53,24 +54,6 @@ public class CatDetailModule {
         return restAdapter.create(CommentApi.class);
     }
 
-    @Provides
-    @Singleton
-    public VoteApi provideVoteApi(RestAdapter adapter) {
-
-        return adapter.create(VoteApi.class);
-    }
-
-    @Provides
-    @Singleton
-    public VoteCloudDataStore provideVoteCloudDataStore(VoteApi voteApi) {
-        return new VoteCloudDataStore(voteApi);
-    }
-
-    @Provides
-    @Singleton
-    public VoteRepository provideVoteRepository(VoteCloudDataStore voteCloudDataStore) {
-        return new VoteRepositoryImpl(voteCloudDataStore);
-    }
 
     @Provides
     @Singleton

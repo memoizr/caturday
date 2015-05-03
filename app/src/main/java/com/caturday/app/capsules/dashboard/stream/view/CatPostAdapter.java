@@ -3,7 +3,6 @@ package com.caturday.app.capsules.dashboard.stream.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -15,14 +14,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.caturday.app.capsules.common.view.HeaderAdapter;
 import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.main.view.MainActivity;
 import com.caturday.app.R;
@@ -37,19 +35,22 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
+public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
+    private final CatStreamPresenter presenter;
+    private Context context;
     private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    public CatPostAdapter(Context context, @NonNull List<CatPostEntity> catPosts) {
-        mContext = context;
-        mCatPosts.add(new CatPostEntity());
-        mCatPosts.addAll(catPosts);
+    public CatPostAdapter(Context context, CatStreamPresenter presenter) {
+        this.context = context;
+        this.presenter = presenter;
     }
 
-    //TODO optimize this class. Shame on you!
+    public void setItems(List<CatPostEntity> catPostEntities) {
+        this.mCatPosts = catPostEntities;
+        notifyDataSetChanged();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -70,67 +71,63 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 " + make sure your using types correctly");
     }
 
+    void updateItem(int position, CatPostEntity catPostEntity) {
+        mCatPosts.set(position, catPostEntity);
+        notifyDataSetChanged();
+    }
+
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int i) {
-        if (viewHolder instanceof EmptyHeader) {
-        } else {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
+        int i = position - 1;
+        if (viewHolder instanceof CatsCardViewHolder) {
             final CatsCardViewHolder myViewHolder = (CatsCardViewHolder) viewHolder;
 
             final CatPostEntity catPostEntity = mCatPosts.get(i);
 
             final String transitionName = "catTransition" + i;
-
             ViewCompat.setTransitionName(myViewHolder.cat_IV, transitionName);
 
             ((CatsCardViewHolder) viewHolder).caption_TV.setText(catPostEntity.getCaption());
 
             String commentsNumber = Integer.toString(catPostEntity.getComments().size());
             ((CatsCardViewHolder) viewHolder).total_comments_count.setText(commentsNumber);
+
             int votesCount = catPostEntity.getVotesCount();
-
-            String votesNumber = "";
-
-            if (votesCount != 0) {
-                votesNumber = Integer.toString(votesCount);
-            }
-
+            String votesNumber = votesCount > 0 ? Integer.toString(votesCount) : "";
             myViewHolder.vote_B.setText(votesNumber);
+            myViewHolder.vote_B.setOnClickListener(view ->
+                    presenter.plusOneClicked(catPostEntity.getServerId(), i)
+            );
 
-            Glide.with(mContext)
+            Glide.with(context)
                     .load(catPostEntity.getImageUrl())
                     .centerCrop()
                     .into(myViewHolder.cat_IV);
 
-
             UserEntity user = catPostEntity.getUser();
-
             myViewHolder.username_TV.setText(user.getUsername());
-
-            Glide.with(mContext).load(user.getImageUrl()).into(myViewHolder.user_image_IV);
-
+            Glide.with(context).load(user.getImageUrl()).into(myViewHolder.user_image_IV);
             myViewHolder.options_B.setOnClickListener(this::showPopup);
 
             myViewHolder.share_B.setOnClickListener(view -> {
                 ShareHelper.shareLinkAction("Check out this cat!",
                         mCatPosts.get(i).getImageUrl(),
-                        mContext);
-            });
-
-            myViewHolder.vote_B.setOnClickListener(view -> {
+                        context);
             });
 
             myViewHolder.catContainer.setOnClickListener(view -> {
-                ((MainActivity) mContext).toggleArrow(true);
-                Intent intent = new Intent(mContext, CatDetailActivity.class);
+                ((MainActivity) context).toggleArrow(true);
+                Intent intent = new Intent(context, CatDetailActivity.class);
                 ActivityOptionsCompat options =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                (Activity) mContext,
+                                (Activity) context,
                                 Pair.create((View) myViewHolder.cat_IV, transitionName)
                         );
+
                 intent.putExtra("transition", transitionName);
                 intent.putExtra("url", catPostEntity.getImageUrl());
                 intent.putExtra("serverId", catPostEntity.getServerId());
-                ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                ActivityCompat.startActivity((Activity) context, intent, options.toBundle());
             });
         }
     }
@@ -139,23 +136,24 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mCatPosts.addAll(catPostCollection);
         notifyDataSetChanged();
     }
-    public void showPopupWindow(View v) {
-        PopupWindow popupWindow = new PopupWindow(mContext);
 
-        LayoutInflater inflater = (LayoutInflater)   mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View view = inflater.inflate(R.layout.menu_card, null);
-
-
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setContentView(view);
-        popupWindow.showAsDropDown(v);
-    }
+//    public void showPopupWindow(View v) {
+//        PopupWindow popupWindow = new PopupWindow(context);
+//
+//        LayoutInflater inflater = (LayoutInflater)   context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//
+//        View view = inflater.inflate(R.layout.menu_card, null);
+//
+//
+//        popupWindow.setFocusable(true);
+//        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setContentView(view);
+//        popupWindow.showAsDropDown(v);
+//    }
 
     public void showPopup(View v) {
-        Context wrapper = new ContextThemeWrapper(mContext, R.style.PopupMenuStyle);
+        Context wrapper = new ContextThemeWrapper(context, R.style.PopupMenuStyle);
         PopupMenu popupMenu = new PopupMenu(wrapper, v);
         popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Report abuse");
         popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "Copy image URL");
@@ -165,27 +163,14 @@ public class CatPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mCatPosts.size();
+        return mCatPosts.size() + 1;
     }
-
-    // TODO extend header abstract class
 
     @Override
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
         return TYPE_ITEM;
-    }
-
-    private boolean isPositionHeader(int position) {
-        return position == 0;
-    }
-
-    class EmptyHeader extends RecyclerView.ViewHolder {
-
-        public EmptyHeader(View itemView) {
-            super(itemView);
-        }
     }
 
     class CatsCardViewHolder extends RecyclerView.ViewHolder {

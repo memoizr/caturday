@@ -11,13 +11,11 @@ public interface CatStreamView {
 
     void notifyAdapter();
 
-    void setAdapter(RecyclerView.Adapter adapter);
-
     void setScrollPosition(int offset);
 
     int getScrollPosition();
 
     RecyclerView getRecyclerView();
 
-    RecyclerView.Adapter getAdapter();
+    CatPostAdapter getAdapter();
 }

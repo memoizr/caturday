@@ -13,13 +13,10 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.listener.EndlessScrollListener;
-import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.caturday.app.capsules.dashboard.stream.CatStreamModule;
-import com.caturday.app.capsules.dashboard.stream.presenter.CatStreamPresenter;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +30,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
 
-    private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private CatPostAdapter catPostAdapter;
 
     public CatStreamFragment() {
@@ -74,7 +70,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
         catStreamPresenter.onViewCreated(streamType, streamPosition);
 
-        catPostAdapter = new CatPostAdapter(getActivity(), mCatPosts);
         catStreamPresenter.setAdapterByType(streamType);
     }
 
@@ -94,23 +89,21 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     }
 
     @Override
-    public void setAdapter(final RecyclerView.Adapter adapter) {
-        cats_stream_RV.setAdapter(adapter);
-    }
-
-    @Override
     public RecyclerView getRecyclerView() {
         return cats_stream_RV;
     }
 
     @Override
-    public RecyclerView.Adapter getAdapter() {
-        return cats_stream_RV.getAdapter();
+    public CatPostAdapter getAdapter() {
+        return (CatPostAdapter) cats_stream_RV.getAdapter();
     }
 
     @Override
     public void initializeRecyclerView(ObservableScrollViewCallbacks listener, RecyclerView.LayoutManager layoutManager) {
         cats_stream_RV.setLayoutManager(layoutManager);
+
+        catPostAdapter = new CatPostAdapter(getActivity(), catStreamPresenter);
+        cats_stream_RV.setAdapter(catPostAdapter);
 
         cats_stream_RV.setScrollViewCallbacks(listener);
         cats_stream_RV.setOnScrollListener(new EndlessScrollListener() {

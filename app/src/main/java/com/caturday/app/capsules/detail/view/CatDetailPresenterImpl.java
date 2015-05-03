@@ -71,7 +71,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     private void getCatPostFromId(String serverId) {
-            catDetailInteractor.getPostFromId(serverId)
+            catDetailInteractor.getPostFromId(serverId, false)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(

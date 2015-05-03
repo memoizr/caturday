@@ -1,4 +1,4 @@
-package com.caturday.app.capsules.dashboard.stream.presenter;
+package com.caturday.app.capsules.dashboard.stream.view;
 
 import android.app.Activity;
 
@@ -15,6 +15,8 @@ public abstract class CatStreamPresenter implements ObservableScrollViewCallback
     abstract public void onScrollStateChanged(int scrollState);
 
     abstract public void loadMore(int page, int totalItems);
+
+    public abstract void plusOneClicked(String serverId, int position);
 
 //    abstract public void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
 

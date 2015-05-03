@@ -33,8 +33,8 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     }
 
     @Override
-    public Observable<CatPostEntity> getPostFromId(final String serverId) {
-            return catPostRepository.getCatPost(serverId);
+    public Observable<CatPostEntity> getPostFromId(final String serverId, boolean fromNetwork) {
+            return catPostRepository.getCatPost(serverId, fromNetwork);
     }
 
     @Override

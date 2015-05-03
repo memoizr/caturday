@@ -1,4 +1,4 @@
-package com.caturday.app.capsules.dashboard.stream.presenter;
+package com.caturday.app.capsules.dashboard.stream.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,19 +11,10 @@ import com.caturday.app.capsules.common.events.OnPreparePageScroll;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
 import com.caturday.app.capsules.common.listener.ScrollEventListener;
-import com.caturday.app.models.catpost.CatPostEntity;
-import com.caturday.app.capsules.dashboard.stream.view.CatPostAdapter;
 import com.caturday.app.capsules.dashboard.stream.interactor.CatStreamInteractor;
-import com.caturday.app.capsules.dashboard.stream.view.CatStreamView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -134,24 +125,26 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 streamType,
                 false).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((catPostCollection) -> {
-                    CatPostAdapter adapter = new CatPostAdapter(context, catPostCollection);
-                    catStreamView.setAdapter(adapter);
-                },
+                .subscribe((catPostCollection) -> catStreamView.getAdapter().setItems(catPostCollection),
                         Throwable::printStackTrace);
     }
 
     @Override
     public void loadMore(int page, int totalItems) {
-//        // TODO switch to RX
         catStreamInteractor.getCatPostPageAndType(page,
                 streamType,
                 false).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((catPostCollection) -> {
-                            CatPostAdapter adapter = (CatPostAdapter) catStreamView.getAdapter();
-                            adapter.addItems(catPostCollection);
-                        },
+                .subscribe((catPostCollection) -> catStreamView.getAdapter().addItems(catPostCollection),
                         Throwable::printStackTrace);
+    }
+
+    @Override
+    public void plusOneClicked(String serverId, int position) {
+       catStreamInteractor.catPostVoted(serverId)
+               .subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(s -> catStreamView.getAdapter().updateItem(position, s),
+                       Throwable::printStackTrace);
     }
 }

@@ -8,6 +8,7 @@ import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 import rx.Observable;
@@ -16,6 +17,9 @@ public interface CatPostApi {
     @GET("/cat_post")
     Observable<List<CatPostEntity>> getPosts(@Query("page") int page,
                          @Query("category") String category);
+
+    @GET("/cat_post/{id}")
+    Observable<CatPostEntity> getPostForId(@Path("id") String serverId);
 
 //    @Multipart
 //    @POST("/cat_post")

@@ -2,29 +2,23 @@ package com.caturday.app.capsules.dashboard.stream.interactor;
 
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.catpost.repository.CatPostRepository;
-import com.caturday.app.util.concurrent.PostExecutionThread;
-import com.caturday.app.util.concurrent.ThreadExecutor;
+import com.caturday.app.models.vote.VoteEntity;
+import com.caturday.app.models.vote.repository.VoteRepository;
 
-import java.util.Collection;
 import java.util.List;
 
-import retrofit.Callback;
 import rx.Observable;
 
 public class CatStreamInteractorImpl implements CatStreamInteractor {
 
-    private final PostExecutionThread postExecutionThread;
-    private final ThreadExecutor threadExecutor;
-
+    private final VoteRepository voteRepository;
     CatPostRepository catPostRepository;
 
     public CatStreamInteractorImpl(CatPostRepository catPostRepository,
-                                   ThreadExecutor threadExecutor,
-                                   PostExecutionThread postExecutionThread) {
+                                   VoteRepository voteRepository) {
 
         this.catPostRepository = catPostRepository;
-        this.threadExecutor = threadExecutor;
-        this.postExecutionThread = postExecutionThread;
+        this.voteRepository = voteRepository;
     }
 
     @Override
@@ -38,5 +32,16 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     @Override
     public void eraseCache() {
         catPostRepository.eraseCache();
+    }
+
+    @Override
+    public Observable<CatPostEntity> catPostVoted(String serverId) {
+        VoteEntity voteEntity = new VoteEntity();
+        voteEntity.setPositive(true);
+        voteEntity.setVoteableType("CatPost");
+        voteEntity.setVoteableId(serverId);
+        return voteRepository.sendVote(voteEntity)
+                .flatMap(vote -> catPostRepository.getCatPost(serverId, true))
+                .doOnNext(catPostRepository::updateCatPost);
     }
 }
