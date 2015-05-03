@@ -3,6 +3,7 @@ package com.caturday.app.capsules.detail.view;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import com.caturday.app.capsules.common.view.views.ExpandingView;
 import com.caturday.app.models.comment.CommentEntity;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
     interface CatDetailView {
 
         void initRecyclerView();
+
+        ExpandingView getExpandingView();
 
         void showComment();
 

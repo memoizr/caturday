@@ -52,7 +52,8 @@ import butterknife.OnClick;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
-public class CatDetailActivity extends BaseActionBarActivity implements CatDetailPresenter.CatDetailView {
+public class CatDetailActivity extends BaseActionBarActivity
+        implements CatDetailPresenter.CatDetailView {
     @InjectView(R.id.cat_detail_IV) ImageView cat_detail_IV;
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
     @InjectView(R.id.toolbar) Toolbar toolbar;
@@ -61,7 +62,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
     @InjectView(R.id.new_comment_V) View new_comment_V;
     @InjectView(R.id.comment_TE) EditText comment_ET;
     @Inject CatDetailPresenter catDetailPresenter;
-    int headerBottom;
+    private int headerBottom;
     private String url;
     private ViewGroup header;
     private int captionHeight;
@@ -86,7 +87,7 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.<Object>asList(new CatDetailModule(this));
+        return Arrays.asList(new CatDetailModule(this));
     }
 
     private void setupPalette(BitmapDrawable bitmapDrawable) {
@@ -128,6 +129,11 @@ public class CatDetailActivity extends BaseActionBarActivity implements CatDetai
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         comments_RV.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public ExpandingView getExpandingView() {
+        return caption_V;
     }
 
     @Override

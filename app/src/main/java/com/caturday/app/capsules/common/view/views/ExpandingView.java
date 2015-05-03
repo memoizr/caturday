@@ -6,9 +6,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.caturday.app.R;
 import com.caturday.app.util.helper.ColorHelper;
 
@@ -16,13 +18,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-/**
- * Created by user on 14/03/15.
- */
 public class ExpandingView extends RelativeLayout{
     @InjectView(R.id.caption_container_V) ViewGroup caption_container_V;
-    @InjectView(R.id.user_image_IV) View user_image;
-    @InjectView(R.id.user_name_TV) TextView username;
+    @InjectView(R.id.user_image_IV) ImageView user_image;
+    @InjectView(value = R.id.user_name_TV) TextView username;
     @InjectView(R.id.date_TV) View date;
 
     // From 0 to 1, how much should it be open, 1 = fully open
@@ -68,6 +67,10 @@ public class ExpandingView extends RelativeLayout{
 
     public void setUsername(String username) {
         this.username.setText(username);
+    }
+
+    public void setUserImage(String imageUrl) {
+        Glide.with(getContext()).load(imageUrl).into(user_image);
     }
 
     public void setExpandedLevel(float level){

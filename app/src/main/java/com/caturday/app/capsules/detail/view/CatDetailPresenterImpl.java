@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 
+import com.caturday.app.capsules.common.view.views.ExpandingView;
 import com.google.gson.JsonArray;
 import com.caturday.app.R;
 import com.caturday.app.models.comment.CommentEntity;
@@ -69,7 +70,6 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                     .subscribe(catDetailView::updateButton, Throwable::printStackTrace);
 
         }
-
     }
 
     private void getCatPostFromId(String serverId) {
@@ -77,8 +77,11 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            CatPostEntity -> {
-                                setCatPostEntity(CatPostEntity);
+                            catPostEntity -> {
+                                setCatPostEntity(catPostEntity);
+                                ExpandingView view = catDetailView.getExpandingView();
+                                view.setUsername( catPostEntity.getUser().getUsername());
+                                view.setUserImage( catPostEntity.getUser().getImageUrl());
                                 if (showComment) {
                                     catDetailView.showComment();
                                 }
