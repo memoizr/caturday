@@ -1,7 +1,6 @@
 package com.caturday.app.capsules.favorites.view;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 import com.caturday.app.capsules.favorites.FavoritesModule;
 import com.caturday.app.capsules.favorites.presenter.FavoritesPresenter;
 import com.caturday.app.models.catpost.CatPostEntity;
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import butterknife.InjectView;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesView {
 
-    @InjectView(R.id.favorites_RV) RecyclerView recyclerView;
+    @InjectView(R.id.favorites_RV) ObservableRecyclerView recyclerView;
     @Inject FavoritesPresenter favoritesPresenter;
     private FavoritesAdapter favoritesAdapter;
 
@@ -56,17 +56,19 @@ public class FavoritesFragment extends BaseFragment implements FavoritesView {
 
     @Override
     public void initRecyclerView() {
+        int headerHeight = getResources().getDimensionPixelSize(R.dimen.dashboard_image_height);
 
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
+                2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        favoritesAdapter = new FavoritesAdapter(400);
+
+        recyclerView.setScrollViewCallbacks(favoritesPresenter);
+        favoritesAdapter = new FavoritesAdapter(headerHeight);
         recyclerView.setAdapter(favoritesAdapter);
     }
 
     @Override
     public void setRecyclerViewAdapter(Collection<CatPostEntity> catPostList) {
-
-        favoritesAdapter.setCatPostEntities(new ArrayList(catPostList));
-        favoritesAdapter.notifyDataSetChanged();
+        ((FavoritesAdapter)recyclerView.getAdapter()).setCatPostEntities(new ArrayList(catPostList));
     }
 }

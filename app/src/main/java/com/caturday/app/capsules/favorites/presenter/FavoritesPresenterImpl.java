@@ -3,8 +3,11 @@ package com.caturday.app.capsules.favorites.presenter;
 import android.content.Context;
 
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
+import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
+import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
 import com.caturday.app.capsules.favorites.interactor.FavoritesInteractor;
 import com.caturday.app.capsules.favorites.view.FavoritesView;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.squareup.otto.Bus;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -32,9 +35,27 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
         favoritesInteractor.getFavoriteCatPosts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(favoritesView::setRecyclerViewAdapter);
+                .subscribe( s -> {
+                            favoritesView.setRecyclerViewAdapter(s);
+                        },
+                                    Throwable::printStackTrace
+                        );
 
         bus.register(this);
         bus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_FAVORITES));
+    }
+
+    // TODO do not use an eventbus for this sort of stuff!
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        bus.post(new OnScrollChangedEvent(scrollY, firstScroll, dragging));
+    }
+
+    @Override public void onDownMotionEvent() { }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        bus.post(new OnUpOrCancelMotionEvent(scrollState));
     }
 }

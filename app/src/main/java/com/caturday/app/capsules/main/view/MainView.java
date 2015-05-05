@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 
+import com.caturday.app.capsules.common.listener.ScrollEventListener;
 import com.daimajia.slider.library.SliderLayout;
 
-public interface MainView {
+public interface MainView extends ScrollEventListener {
     Toolbar getToolbar();
 
     SliderLayout getSliderLayout();

@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
+import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.caturday.app.R;
@@ -44,6 +46,16 @@ public class MainPresenterImpl implements MainPresenter {
         this.mainInteractor = mainInteractor;
         this.bus = bus;
         bus.register(this);
+    }
+
+    @Subscribe
+    public void onScrollChangedEvent(OnScrollChangedEvent e) {
+        mainView.onScrollChanged(e.getScrollY(), e.isDragging());
+    }
+
+    @Subscribe
+    public void onUpOrCancelMotionEvent(OnUpOrCancelMotionEvent e) {
+        mainView.onUpOrCancelMotionEvent(e.getScrollState());
     }
 
     @Subscribe

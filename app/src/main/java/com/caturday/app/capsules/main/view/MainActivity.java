@@ -16,7 +16,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.daimajia.slider.library.SliderLayout;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.R;
-import com.caturday.app.capsules.common.listener.ScrollEventListener;
 import com.caturday.app.capsules.common.view.views.CollapsibleView;
 import com.caturday.app.capsules.dashboard.DashboardFragment;
 import com.caturday.app.capsules.dashboard.SlidingTabActivity;
@@ -40,7 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
 
-public class MainActivity extends DrawerActivity implements ScrollEventListener,
+public class MainActivity extends DrawerActivity implements
         SlidingTabActivity, MainView {
 
     public PagerSlidingTabStrip slidingTabs;

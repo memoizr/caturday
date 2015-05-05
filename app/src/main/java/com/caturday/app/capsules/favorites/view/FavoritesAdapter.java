@@ -34,13 +34,13 @@ public class FavoritesAdapter extends HeaderAdapter {
         context = parent.getContext();
 
         if (viewType == TYPE_ITEM) {
-            View comment = LayoutInflater.from(context)
+            View view = LayoutInflater.from(context)
                     .inflate(R.layout.v_favorite_card, parent, false);
 
-            return new FavoritesViewHolder(comment);
+            return new FavoritesViewHolder(view);
 
         } else if (viewType == TYPE_HEADER) {
-            View header = LayoutInflater.from(parent.getContext())
+            View header = LayoutInflater.from(context)
                     .inflate(R.layout.v_header, parent, false);
 
             header.getLayoutParams().height = headerHeight;
@@ -59,9 +59,11 @@ public class FavoritesAdapter extends HeaderAdapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int index) {
+        int position = index -1;
 
         if (holder instanceof FavoritesViewHolder) {
+
             CatPostEntity catPostEntity = catPostEntities.get(position);
             String url = catPostEntity.getImageUrl();
 
@@ -70,27 +72,18 @@ public class FavoritesAdapter extends HeaderAdapter {
             StaggeredGridLayoutManager.LayoutParams layoutParams =
                     (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
             layoutParams.setFullSpan(true);
-
         }
     }
 
     @Override
     public int getItemCount() {
-        return catPostEntities.size();
+        return catPostEntities.size() + 1;
     }
 
     public void setCatPostEntities(List<CatPostEntity> catPostEntities) {
-        this.catPostEntities = new ArrayList<>();
-        catPostEntities.add(new CatPostEntity());
-        this.catPostEntities.addAll(catPostEntities);
+        this.catPostEntities = catPostEntities;
         notifyDataSetChanged();
     }
-//
-//
-//    public void addCommentEntity(CommentEntity commentEntity) {
-//        this.commentEntities.add(commentEntity);
-//        notifyDataSetChanged();
-//    }
 
     class FavoritesViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.favorite_IV) ImageView favoriteImage;

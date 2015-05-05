@@ -2,10 +2,9 @@ package com.caturday.app.capsules.favorites.presenter;
 
 import android.content.Context;
 
-/**
- * Created by Cat#2 on 07/04/15.
- */
-public interface FavoritesPresenter {
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+
+public interface FavoritesPresenter extends ObservableScrollViewCallbacks {
 
     void create(Context context);
 }
