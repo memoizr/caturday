@@ -12,6 +12,8 @@ public interface CatPostRepository {
 
     Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category, boolean fromNetwork);
 
+    Observable<List<CatPostEntity>> getCatPostsForPageAndUserId(int page, String userId, boolean fromNetwork);
+
     Observable<Collection<CatPostEntity>> getCatPostsForIds(HashSet<String> ids);
 
     Observable<CatPostEntity> getCatPost(String serverId, boolean fromNetwork);

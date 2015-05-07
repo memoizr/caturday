@@ -115,6 +115,15 @@ public class MainPresenterImpl implements MainPresenter {
             backgroundImageAnimation.resumeAnimation();
     }
 
+    @Override
+    public String getCurrentUserId() {
+        String userId = "";
+        if (mainInteractor.userLoggedIn()) {
+            userId = mainInteractor.getCurrentUser().getServerId();
+        }
+        return userId;
+    }
+
     private void initSliderLayout(SliderLayout sliderLayout) {
 
         getRandomPosts(10)

@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 
+import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.detail.view.CatDetailPresenter;
 import com.caturday.app.capsules.detail.view.CatDetailPresenterImpl;
@@ -39,6 +40,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     private Context context;
     private String streamType;
     private int streamPosition;
+    private String userId;
 
     public CatStreamPresenterImpl(CatStreamView catStreamView,
                                   CatStreamInteractor catStreamInteractor,
@@ -99,12 +101,15 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Override
-    public void onViewCreated(String streamType, int streamPosition) {
+    public void onViewCreated(String streamType, String userId, int streamPosition) {
         this.streamType = streamType;
         this.streamPosition = streamPosition;
+        this.userId = userId;
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         catStreamView.initializeRecyclerView(this, layoutManager);
+
+        eventBus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_MY_OWN));
     }
 
     @Override
@@ -124,16 +129,17 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     private void onRefreshComplete() {
-        setAdapterByType(streamType);
+        setAdapter();
         eventBus.post(new StreamRefreshCompletedEvent());
     }
 
     @Override
-    public void setAdapterByType(String streamType) {
-        this.streamType = streamType;
+    public void setAdapter() {
+
         catStreamInteractor.getCatPostPageAndType(0,
-                streamType,
-                false).subscribeOn(Schedulers.io())
+                userId != null ? userId : streamType,
+                userId != null)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((catPostCollection) -> catStreamView.getAdapter().setItems(catPostCollection),
                         Throwable::printStackTrace);
@@ -141,9 +147,11 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public void loadMore(int page, int totalItems) {
+
         catStreamInteractor.getCatPostPageAndType(page,
-                streamType,
-                false).subscribeOn(Schedulers.io())
+                userId != null ? userId : streamType,
+                userId != null)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((catPostCollection) -> catStreamView.getAdapter().addItems(catPostCollection),
                         Throwable::printStackTrace);

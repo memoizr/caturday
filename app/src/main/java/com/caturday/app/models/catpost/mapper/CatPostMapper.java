@@ -19,6 +19,7 @@ public class CatPostMapper {
         catPost.setCategory(catPostEntity.getCategory());
         catPost.setTotalVotesCount(catPostEntity.getVotesCount());
         catPost.setUser(GsonConverter.fromEntityToJsonString(catPostEntity.getUser()));
+        catPost.setUserId(GsonConverter.fromEntityToJsonString(catPostEntity.getUserId()));
         catPost.setComments(catPostEntity.getComments().toString());
         catPost.setImageUrl(catPostEntity.getImageUrl());
         catPost.setTotalVotesCount(catPostEntity.getVotesCount());
@@ -45,6 +46,7 @@ public class CatPostMapper {
         catPostEntity.setCategory(catPost.getCategory());
         catPostEntity.setVotesCount(catPost.getTotalVotesCount());
         catPostEntity.setUser(GsonConverter.fromJsonStringToEntity(catPost.getUser(), UserEntity.class));
+        catPostEntity.setUserId(catPost.getUserId());
         catPostEntity.setComments(GsonMapper.toJsonArray(catPost.getComments()));
         catPostEntity.setImageUrl(catPost.getImageUrl());
         catPostEntity.setVotesCount(catPostEntity.getVotesCount());

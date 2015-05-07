@@ -5,7 +5,6 @@ import com.caturday.app.models.catpost.api.CatPostApi;
 import com.caturday.app.models.catpost.CatPostEntity;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +31,22 @@ public class CatPostCloudDataStore implements CatPostDataStore {
 
         final CatPostApi api = adapter.create(CatPostApi.class);
         Observable<List<CatPostEntity>> catPostEntities;
-        catPostEntities = api.getPosts(page, category);
+        catPostEntities = api.getPostsForPageAndCategory(page, category, null);
+
+        return catPostEntities;
+    }
+
+    @Override
+    public Observable<List<CatPostEntity>> getCatPostsForPageAndUserId(int page, String userId) {
+        String endpoint = Config.getEndpoint();
+
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(endpoint)
+                .build();
+
+        final CatPostApi api = adapter.create(CatPostApi.class);
+        Observable<List<CatPostEntity>> catPostEntities;
+        catPostEntities = api.getPostsForPageAndCategory(page, null, userId);
 
         return catPostEntities;
     }

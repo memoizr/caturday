@@ -13,6 +13,8 @@ public interface CatPostDb {
 
     Collection<CatPostEntity> getPostsForPageAndCategory(int page, String category);
 
+    Collection<CatPostEntity> getPostsForPageAndUserId(int page, String userId);
+
     Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> catPostServerIds);
 
     CatPostEntity getRandomCatPost();
@@ -28,4 +30,5 @@ public interface CatPostDb {
     void eraseCache();
 
     CatPostEntity updateCatPost(CatPostEntity catPostEntity);
+
 }

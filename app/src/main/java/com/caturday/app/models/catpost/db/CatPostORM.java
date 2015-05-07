@@ -51,6 +51,21 @@ public class CatPostORM implements CatPostDb {
     }
 
     @Override
+    public Collection<CatPostEntity> getPostsForPageAndUserId(int page, String userId) {
+        int limit = Config.PAGINATION_LIMIT;
+        int offset = page * limit;
+        Collection<CatPost> catPostCollection = getCatPostDao()
+                .queryBuilder()
+                .where(CatPostDao.Properties.UserId.eq(userId))
+                .offset(offset)
+                .limit(25)
+                .list();
+
+        return CatPostMapper.toEntity(catPostCollection);
+    }
+
+
+    @Override
     public Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> catPostServerIds) {
         Collection<CatPost> catPostCollection = getCatPostDao()
                 .queryBuilder()

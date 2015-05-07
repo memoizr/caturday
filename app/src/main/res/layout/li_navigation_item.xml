@@ -4,7 +4,7 @@
               android:background="@drawable/selector_navigation"
               android:layout_height="match_parent">
     <ImageView
-        android:src="@drawable/ic_whatshot_black_48dp"
+        android:id="@+id/icon"
         android:layout_marginLeft="16dp"
         android:layout_gravity="center_vertical"
         android:layout_width="24dp"

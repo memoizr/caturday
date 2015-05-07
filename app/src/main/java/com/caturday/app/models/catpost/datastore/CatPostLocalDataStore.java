@@ -24,6 +24,11 @@ public class CatPostLocalDataStore implements CatPostDataStore {
     }
 
     @Override
+    public Observable<List<CatPostEntity>> getCatPostsForPageAndUserId(int page, String userId) {
+        return Observable.just(new ArrayList(catPostDb.getPostsForPageAndUserId(page, userId)));
+    }
+
+    @Override
     public Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> ids) {
         return catPostDb.getCatPostsForServerIds(ids);
     }

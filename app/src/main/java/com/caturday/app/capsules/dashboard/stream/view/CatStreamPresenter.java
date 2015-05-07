@@ -10,9 +10,9 @@ public abstract class CatStreamPresenter implements ObservableScrollViewCallback
 
     abstract public void onAttach(Activity activity);
 
-    abstract public void onViewCreated(String streamType, int position);
+    abstract public void onViewCreated(String streamType, String userId, int position);
 
-    abstract public void setAdapterByType(String streamType);
+    abstract public void setAdapter();
 
     abstract public void onScrollStateChanged(int scrollState);
 

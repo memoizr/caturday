@@ -42,7 +42,7 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
                         );
 
         bus.register(this);
-        bus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_FAVORITES));
+        bus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_MY_OWN));
     }
 
     // TODO do not use an eventbus for this sort of stuff!

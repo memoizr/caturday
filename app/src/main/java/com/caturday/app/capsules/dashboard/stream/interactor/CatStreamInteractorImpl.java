@@ -23,10 +23,13 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
 
     @Override
     public Observable<List<CatPostEntity>> getCatPostPageAndType(final int page,
-                                      final String streamType,
-                                      boolean fromNetwork) {
+                                                                 final String id,
+                                                                 boolean byUser) {
 
-        return catPostRepository.getCatPostsForPageAndCategory(page, streamType, fromNetwork);
+        if (byUser)
+            return catPostRepository.getCatPostsForPageAndUserId(page, id, false);
+        else
+            return catPostRepository.getCatPostsForPageAndCategory(page, id, false);
     }
 
     @Override

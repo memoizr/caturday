@@ -86,6 +86,14 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
         navigationListView.setAdapter(adapter);
         navigationListView.setOnItemClickListener(this);
+        navigationListView.postDelayed(() -> {
+            int[] icons = {R.drawable.ic_whatshot_black_48dp, R.drawable.ic_favorite_black_48dp};
+            for (int i = 0; i < 2; i++) {
+                View view = navigationListView.getChildAt(i);
+                ImageView iv = (ImageView) view.findViewById(R.id.icon);
+                iv.setImageResource(icons[i]);
+            }
+        }, 100);
     }
 
     @Override
@@ -102,8 +110,8 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        navigationListView.postDelayed(() ->{
-        navigationPresenter.onViewCreated();
+        navigationListView.postDelayed(() -> {
+            navigationPresenter.onViewCreated();
         }, 100);
     }
 
@@ -114,6 +122,9 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
         TextView tv = (TextView) v.findViewById(R.id.text1);
         tv.setTextColor(getResources().getColor(R.color.accent));
         tv.setTypeface(null, Typeface.BOLD);
+
+        ImageView iv = (ImageView) v.findViewById(R.id.icon);
+        iv.setColorFilter(R.color.accent);
     }
 
     @OnClick(R.id.profile_container_V)
@@ -133,6 +144,9 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
         TextView txtview = (TextView) v.findViewById(R.id.text1);
         txtview.setTypeface(null, Typeface.NORMAL);
         txtview.setTextColor(getResources().getColor(R.color.black));
+
+        ImageView iv = (ImageView) v.findViewById(R.id.icon);
+        iv.setColorFilter(R.color.black);
     }
 }
     @Override

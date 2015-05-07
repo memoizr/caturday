@@ -17,6 +17,7 @@ public class CatPost {
     private String user;
     private String comments;
     private String category;
+    private String userId;
     private Integer downloadCount;
     private Integer totalVotesCount;
 
@@ -35,7 +36,7 @@ public class CatPost {
         this.id = id;
     }
 
-    public CatPost(Long id, String serverId, String caption, String imageUrl, String user, String comments, String category, Integer downloadCount, Integer totalVotesCount) {
+    public CatPost(Long id, String serverId, String caption, String imageUrl, String user, String comments, String category, String userId, Integer downloadCount, Integer totalVotesCount) {
         this.id = id;
         this.serverId = serverId;
         this.caption = caption;
@@ -43,6 +44,7 @@ public class CatPost {
         this.user = user;
         this.comments = comments;
         this.category = category;
+        this.userId = userId;
         this.downloadCount = downloadCount;
         this.totalVotesCount = totalVotesCount;
     }
@@ -107,6 +109,14 @@ public class CatPost {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Integer getDownloadCount() {

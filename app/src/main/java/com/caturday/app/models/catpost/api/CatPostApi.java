@@ -15,8 +15,9 @@ import rx.Observable;
 
 public interface CatPostApi {
     @GET("/cat_post")
-    Observable<List<CatPostEntity>> getPosts(@Query("page") int page,
-                         @Query("category") String category);
+    Observable<List<CatPostEntity>> getPostsForPageAndCategory(@Query("page") int page,
+                                                               @Query("category") String category,
+                                                               @Query("user_id") String userId);
 
     @GET("/cat_post/{id}")
     Observable<CatPostEntity> getPostForId(@Path("id") String serverId);

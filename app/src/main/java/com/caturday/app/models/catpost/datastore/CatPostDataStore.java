@@ -12,6 +12,8 @@ public interface CatPostDataStore {
 
     Observable<List<CatPostEntity>> getCatPostsForPageAndCategory(int page, String category);
 
+    Observable<List<CatPostEntity>> getCatPostsForPageAndUserId(int page, String userId);
+
     Collection<CatPostEntity> getCatPostsForServerIds(HashSet<String> ids);
 
     Observable<CatPostEntity> getCatPost(String serverId);

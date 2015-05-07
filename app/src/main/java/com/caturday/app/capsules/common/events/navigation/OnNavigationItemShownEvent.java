@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public class OnNavigationItemShownEvent {
     public static final int ITEM_DASHBOARD  = 0;
-    public static final int ITEM_FAVORITES  = 1;
+    public static final int ITEM_MY_OWN = 1;
 
     @Getter private int currentItem;
 

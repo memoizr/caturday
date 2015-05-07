@@ -35,6 +35,19 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     }
 
     @Override
+    public Observable<List<CatPostEntity>> getCatPostsForPageAndUserId(int page, String userId, boolean fromNetwork) {
+        return catPostLocalDataStore.getCatPostsForPageAndUserId(page, userId)
+                .flatMap(collection -> {
+                    if (collection.size() > 0) {
+                        return Observable.just(collection);
+                    } else {
+                        return catPostCloudDataStore.getCatPostsForPageAndUserId(page, userId)
+                                .doOnNext( catPostLocalDataStore::createMultipleCatPost );
+                    }
+                });
+    }
+
+    @Override
     public Observable<Collection<CatPostEntity>> getCatPostsForIds(HashSet<String> ids) {
         Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForServerIds(ids);
         return Observable.just(catPostEntities);

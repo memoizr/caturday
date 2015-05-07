@@ -13,7 +13,6 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.listener.EndlessScrollListener;
-import com.caturday.app.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.caturday.app.capsules.dashboard.stream.CatStreamModule;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 
@@ -26,6 +25,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class CatStreamFragment extends BaseFragment implements CatStreamView {
+
+    public static final String STREAM_CATEGORY = "streamCategory";
+    public static final String STREAM_POSITION = "streamPosition";
+    public static final String STREAM_USER_ID = "streamUserId";
 
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
@@ -65,12 +68,13 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
         Bundle bundle = getArguments();
 
-        String streamType = bundle.getString(DashboardPageAdapter.STREAM_CATEGORY);
-        int streamPosition = bundle.getInt(DashboardPageAdapter.STREAM_POSITION);
+        String streamType = bundle.getString(STREAM_CATEGORY);
+        String userId = bundle.getString(STREAM_USER_ID);
+        int streamPosition = bundle.getInt(STREAM_POSITION);
 
-        catStreamPresenter.onViewCreated(streamType, streamPosition);
+        catStreamPresenter.onViewCreated(streamType, userId, streamPosition);
 
-        catStreamPresenter.setAdapterByType(streamType);
+        catStreamPresenter.setAdapter();
     }
 
     @Override

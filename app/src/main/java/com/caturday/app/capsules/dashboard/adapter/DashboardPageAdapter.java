@@ -9,8 +9,6 @@ import com.caturday.app.capsules.dashboard.stream.view.CatStreamFragment;
 
 public class DashboardPageAdapter extends FragmentStatePagerAdapter{
 
-    public static final String STREAM_CATEGORY = "streamCategory";
-    public static final String STREAM_POSITION = "streamPosition";
     private static int NUM_ITEMS = Categories.values().length;
 
     public DashboardPageAdapter(FragmentManager fragmentManager) {
@@ -20,8 +18,9 @@ public class DashboardPageAdapter extends FragmentStatePagerAdapter{
     private Fragment fragmentFactory(String streamCategory, int position){
         Fragment fragment = new CatStreamFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(STREAM_CATEGORY, streamCategory);
-        bundle.putInt(STREAM_POSITION, position);
+        bundle.putString(CatStreamFragment.STREAM_CATEGORY, streamCategory);
+        bundle.putInt(CatStreamFragment.STREAM_POSITION, position);
+        bundle.putString(CatStreamFragment.STREAM_USER_ID, null);
         fragment.setArguments(bundle);
         return fragment;
     }

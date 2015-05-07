@@ -3,6 +3,7 @@ package com.caturday.app.capsules.drawer.view;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.caturday.app.R;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.drawer.interactor.NavigationInteractor;
 import com.caturday.app.capsules.login.view.LoginActivity;
@@ -77,7 +78,7 @@ public class NavigationPresenterImpl implements NavigationPresenter {
                 navigationView.setSelected(0);
                 break;
             }
-            case OnNavigationItemShownEvent.ITEM_FAVORITES: {
+            case OnNavigationItemShownEvent.ITEM_MY_OWN: {
 
                 navigationView.setSelected(1);
                 break;

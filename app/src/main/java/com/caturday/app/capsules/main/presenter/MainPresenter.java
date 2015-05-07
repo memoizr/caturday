@@ -12,4 +12,6 @@ public interface MainPresenter {
     void pauseSliderAnimation();
 
     void resumeSliderAnimation();
+
+    String getCurrentUserId();
 }

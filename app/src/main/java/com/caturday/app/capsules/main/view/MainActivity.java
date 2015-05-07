@@ -3,6 +3,7 @@ package com.caturday.app.capsules.main.view;
 import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.caturday.app.capsules.dashboard.stream.view.CatStreamFragment;
 import com.daimajia.slider.library.SliderLayout;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.R;
@@ -312,7 +314,6 @@ public class MainActivity extends DrawerActivity implements
         }
     }
 
-
     @Override
     public void onRestart() {
         super.onRestart();
@@ -343,8 +344,12 @@ public class MainActivity extends DrawerActivity implements
                         .commit();
                 break;
             case 1:
+                Fragment fragment = new CatStreamFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(CatStreamFragment.STREAM_USER_ID, mainPresenter.getCurrentUserId());
+                fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new FavoritesFragment())
+                        .replace(R.id.container, fragment)
                         .commit();
                 break;
             default:
