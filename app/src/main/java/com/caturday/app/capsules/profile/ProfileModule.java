@@ -28,10 +28,8 @@ public class ProfileModule {
     private ProfileView profileView;
 
     private static ProfileModule profileModule;
-    private ProfilePresenterImpl profilePresenterImpl;
 
     private ProfileModule(ProfileView profileView) {
-        System.out.println("prof module being created....");
         this.profileView = profileView;
     }
 
@@ -49,13 +47,11 @@ public class ProfileModule {
         return profileView;
     }
 
-    @Provides @Singleton public ProfilePresenter provideProfilePresenter(
+    @Provides public ProfilePresenter provideProfilePresenter(
             ProfileView profileView,
             ProfileInteractor profileInteractor,
             Bus bus) {
-//        if (profilePresenterImpl == null)
-//            this.profilePresenterImpl = new ProfilePresenterImpl(profileView, profileInteractor, bus);
-//        return profilePresenterImpl;
+
         return new ProfilePresenterImpl(profileView, profileInteractor, bus);
     }
 }

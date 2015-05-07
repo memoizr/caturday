@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 import com.caturday.app.capsules.drawer.NavigationModule;
@@ -31,6 +33,8 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
     @InjectView(R.id.email_TV) TextView email_TV;
     @InjectView(R.id.user_info) View userInfo;
     @InjectView(R.id.login_view) View loginInfo;
+    @InjectView(R.id.profile_image_IV) ImageView profileImageIV;
+    @InjectView(R.id.cover_image_IV) ImageView coverImageIV;
 
     public NavigationFragment() {
     }
@@ -45,6 +49,19 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
             loginInfo.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    @Override
+    public void setUserProfileImage(String imageUrl) {
+        Glide.with(this).load(imageUrl).into(profileImageIV);
+    }
+
+    @Override
+    public void setUserCoverImage(String imageUrl) {
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.default_user_profile_cover)
+                .into(coverImageIV);
     }
 
     @Override

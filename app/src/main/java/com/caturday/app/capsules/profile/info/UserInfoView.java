@@ -7,4 +7,8 @@ public interface UserInfoView {
     void setUsername(String username);
 
     void setDescription(String description);
+
+    void showCoverImageSettings(boolean b);
+
+    void showProfileImageSettings(boolean b);
 }

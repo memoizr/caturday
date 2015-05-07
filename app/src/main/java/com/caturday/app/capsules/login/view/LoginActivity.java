@@ -154,9 +154,9 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
     private void setUpToolbar(){
         toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_larger_24dp);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
+        setSupportActionBar(toolbar);
     }
 
     @Override

@@ -8,6 +8,7 @@
     <dimen name="fab_size">56dp</dimen>
     <dimen name="title_height">168dp</dimen>
     <dimen name="dashboard_image_height">288dp</dimen>
+    <dimen name="dashboard_scroll_padding">248dp</dimen>
 
     <dimen name="caption_height">80dp</dimen>
     <dimen name="max_caption_height">136dp</dimen>

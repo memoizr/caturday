@@ -204,9 +204,8 @@ public class CatDetailActivity extends BaseActionBarActivity
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_larger_24dp);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
 
         toolbar.setOnMenuItemClickListener(catDetailPresenter);
     }

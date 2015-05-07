@@ -24,6 +24,11 @@ public class ProfileInteractorImpl implements ProfileInteractor{
     }
 
     @Override
+    public UserEntity getCurrentUser() {
+        return userRepository.getCurrentUser();
+    }
+
+    @Override
     public void updateUserName(String userName) {
 //        userRepository.updateUserName(userName);
     }

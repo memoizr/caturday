@@ -6,29 +6,44 @@
                 android:layout_height="match_parent"
                 tools:context="com.caturday.app.capsules.profile.view.ProfileActivity">
 
-    <!--<com.makeramen.roundedimageview.RoundedImageView-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--app:riv_corner_radius="48dp"-->
-        <!--android:background="@drawable/profile_background"-->
-        <!--android:id="@+id/profile_image_IV"-->
-        <!--android:src="@drawable/donkey"-->
-        <!--android:padding="4dp"-->
-        <!--android:elevation="5dp"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:layout_width="96dp"-->
-        <!--android:layout_height="96dp"-->
-        <!--android:layout_alignBottom="@+id/cover_image_IV"-->
-        <!--android:layout_marginBottom="-48dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:layout_alignParentRight="true"/>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dashboard_image_height">
 
     <ImageView
         android:id="@+id/cover_image_IV"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:tint="@color/dark_transparent"
-        android:layout_height="@dimen/dashboard_image_height"/>
+        />
 
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/profile_image_IV"
+        app:riv_corner_radius="48dp"
+        android:background="@drawable/profile_background"
+        android:padding="4dp"
+        android:layout_above="@+id/username_TV"
+        android:elevation="5dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="16dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_centerHorizontal="true"
+        />
+
+        <TextView
+            android:id="@+id/username_TV"
+            android:text="Username"
+            android:layout_marginLeft="16dp"
+            android:textSize="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/profile_VP"
@@ -52,6 +67,7 @@
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/sliding_PSTS"
             android:layout_below="@id/toolbar"
+            android:visibility="gone"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             app:pstsTabPaddingLeftRight="24dp"

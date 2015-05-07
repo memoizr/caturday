@@ -2,12 +2,14 @@ package com.caturday.app.capsules.profile.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.R;
+import com.caturday.app.capsules.common.events.navigation.OnActivityResultEvent;
 import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
 import com.caturday.app.capsules.common.events.UserAvailableEvent;
 import com.caturday.app.capsules.dashboard.SlidingTabActivity;
@@ -15,6 +17,8 @@ import com.caturday.app.capsules.profile.interactor.ProfileInteractor;
 import com.caturday.app.models.user.UserEntity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
+
+import java.util.Objects;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -27,6 +31,7 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
     private ProfileInteractor profileInteractor;
     private UserEntity user;
     private Context context;
+    private boolean isCurrentUser;
 
     public ProfilePresenterImpl(
             ProfileView profileView,
@@ -35,7 +40,6 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
         this.profileView = profileView;
         this.profileInteractor = profileInteractor;
         this.bus = bus;
-        System.out.println("prof pres created!!!!!!!");
     }
 
     private void registerBus(){
@@ -51,14 +55,16 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
         Toolbar toolbar = profileView.getToolbar();
 
         String id = ((Activity) context).getIntent().getExtras().getString(ProfileActivity.EXTRA_ID);
-        System.out.println("thisi is the id: " + id);
-        System.out.println(savedInstanceState);
 
         if (savedInstanceState == null) {
-            profileInteractor.getUserForId(id)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::setUser, Throwable::printStackTrace);
+            UserEntity currentUser = profileInteractor.getCurrentUser();
+            isCurrentUser = Objects.equals(currentUser.getServerId(), id);
+            if (profileInteractor.userLoggedIn() && isCurrentUser) {
+                user = currentUser;
+                setUser(profileInteractor.getCurrentUser(), true);
+            } else {
+                getUser(id);
+            }
         } else {
             userAvailable(user);
         }
@@ -68,9 +74,16 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
         initViewPager();
     }
 
-    private void setUser(UserEntity userEntity) {
+    private void getUser(String id) {
+        profileInteractor.getUserForId(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(user -> setUser(user, false), Throwable::printStackTrace);
+    }
+
+    private void setUser(UserEntity userEntity, boolean isCurrentUser) {
         this.user = userEntity;
-        bus.post(new UserAvailableEvent(userEntity));
+        bus.post(new UserAvailableEvent(userEntity, isCurrentUser));
         userAvailable(user);
         registerBus();
     }
@@ -83,7 +96,7 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
 
     @Produce
     public UserAvailableEvent produceUser() {
-        return new UserAvailableEvent(user);
+        return new UserAvailableEvent(user, isCurrentUser);
     }
 
     private void initViewPager() {
@@ -116,7 +129,6 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
 
     @Override
     public void onDestroy() {
-
         bus.unregister(this);
     }
 
@@ -128,6 +140,11 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
     @Override
     public void onResume() {
 //        bus.post(new UserAvailableEvent(user));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        bus.post(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     private void initMenuClickListener(Toolbar toolbar) {

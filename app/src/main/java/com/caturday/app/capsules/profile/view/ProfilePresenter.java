@@ -1,6 +1,7 @@
 package com.caturday.app.capsules.profile.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -21,4 +22,6 @@ public interface ProfilePresenter<T> {
     void bindView(T view);
 
     void onResume();
+
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 }

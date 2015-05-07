@@ -10,6 +10,8 @@ public interface ProfileInteractor {
 
     boolean userLoggedIn();
 
+    UserEntity getCurrentUser();
+
     void updateUserName(String userName);
 
     Observable<UserEntity> getUserForId(String serverId);

@@ -1,6 +1,8 @@
 package com.caturday.app.capsules.profile.info;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,6 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Inject UserInfoPresenter userInfoPresenter;
     @InjectView(R.id.username_TV) TextView username_TV;
-    @InjectView(R.id.email_TV) TextView email_TV;
     @InjectView(R.id.tagline_TV) TextView tagline_TV;
 
     public UserInfoFragment() {
@@ -30,7 +31,6 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
@@ -41,7 +41,7 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
         ButterKnife.inject(this, view);
 
-        userInfoPresenter.createView();
+        userInfoPresenter.createView(getActivity());
 
         return view;
     }
@@ -59,7 +59,6 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Override
     public void setEmail(String email) {
-        email_TV.setText(email);
     }
 
     @Override
@@ -70,5 +69,13 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
     @Override
     public void setDescription(String description) {
         tagline_TV.setText(description);
+    }
+
+    @Override
+    public void showCoverImageSettings(boolean isVisible) {
+    }
+
+    @Override
+    public void showProfileImageSettings(boolean isVisible) {
     }
 }

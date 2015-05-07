@@ -40,6 +40,8 @@ public class NavigationPresenterImpl implements NavigationPresenter {
             userEntity = navigationInteractor.getLoggedInUser();
             navigationView.setUserEmail(userEntity.getEmail());
             navigationView.setUsername(userEntity.getUsername());
+            navigationView.setUserProfileImage(userEntity.getImageUrl());
+            navigationView.setUserCoverImage(userEntity.getCoverImageUrl());
         }
         navigationView.userLoggedIn(isUserLoggedIn);
     }

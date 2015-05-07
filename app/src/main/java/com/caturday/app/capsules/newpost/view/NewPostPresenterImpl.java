@@ -55,7 +55,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     @Override
     public void takeNewImage() {
         final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, doMagic());
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, writeToFile());
         ((Activity)mContext).startActivityForResult(intent, REQUEST_TAKE_PHOTO);
     }
 
@@ -132,7 +132,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
                         error -> error.printStackTrace());
     }
 
-    private Uri doMagic() {
+    private Uri writeToFile() {
 
         String timestamp = Long.toString(new Date().getTime());
         String imagePath =  "/sdcard/" + timestamp + ".jpg";

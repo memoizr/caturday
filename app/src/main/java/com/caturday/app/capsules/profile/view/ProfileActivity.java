@@ -1,5 +1,6 @@
 package com.caturday.app.capsules.profile.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -7,12 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
-import com.caturday.app.capsules.common.view.views.CollapsibleView;
 import com.caturday.app.capsules.dashboard.SlidingTabActivity;
 import com.caturday.app.capsules.profile.ProfileModule;
 
@@ -26,14 +27,15 @@ import butterknife.InjectView;
 
 public class ProfileActivity extends BaseActionBarActivity implements SlidingTabActivity, ProfileView {
     public static final String EXTRA_ID = "server_id";
+
     @InjectView(R.id.profile_VP) ViewPager profile_VP;
     @InjectView(R.id.sliding_PSTS) PagerSlidingTabStrip sliding_PSTS;
     @InjectView(R.id.cover_image_IV) ImageView coverImageIV;
+    @InjectView(R.id.profile_image_IV) ImageView profileImageIV;
+    @InjectView(R.id.username_TV) TextView usernameTV;
 
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @Inject ProfilePresenter profilePresenter;
-    private int titleMaxHeight;
-    private int titleMinHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,13 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
     @Override
     protected void onRestart() {
         super.onResume();
-        System.out.println("foo");
         profilePresenter.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        profilePresenter.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -71,29 +78,26 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
 
     @Override
     public void setProfileImage(String imageUrl) {
-
+        Glide.with(this)
+                .load(imageUrl)
+                .into(profileImageIV);
     }
 
     @Override
     public void setCoverImage(String coverImageUrl) {
-        Glide.with(this).load(coverImageUrl).into(coverImageIV);
+        Glide.with(this)
+                .load(coverImageUrl)
+                .placeholder(R.drawable.default_user_profile_cover)
+                .into(coverImageIV);
     }
 
     @Override
     public void setupCollapsibleToolbar(Toolbar toolbar) {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_larger_24dp);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        CollapsibleView collapsibleView = new CollapsibleView(this);
-
-        toolbar.addView(collapsibleView);
-
-        titleMaxHeight = collapsibleView.getMaxHeight();
-        titleMinHeight = collapsibleView.getMinHeight();
-
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_larger_24dp);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
 
     @Override
     public void setUsername(String string) {
-//        user_name_ET.setText(string);
+        usernameTV.setText(string);
     }
 
     @Override
@@ -113,20 +117,20 @@ public class ProfileActivity extends BaseActionBarActivity implements SlidingTab
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
-        return true;
+//       getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        profilePresenter.onDestroy();
+        profilePresenter.onDestroy();
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        profilePresenter.prepareOptionsMenu(menu);
-        return true;
+//        profilePresenter.prepareOptionsMenu(menu);
+        return false;
     }
 
 }

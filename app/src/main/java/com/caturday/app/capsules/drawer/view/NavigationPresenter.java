@@ -18,6 +18,10 @@ public interface NavigationPresenter {
 
         void userLoggedIn(boolean loggedIn);
 
+        void setUserProfileImage(String imageUrl);
+
+        void setUserCoverImage(String imageUrl);
+
         void initializeListView(String[] values);
 
         void setUserEmail(String userEmail);
