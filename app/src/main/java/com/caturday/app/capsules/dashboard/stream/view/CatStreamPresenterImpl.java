@@ -101,6 +101,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Override
+
     public void onViewCreated(String streamType, String userId, int streamPosition) {
         this.streamType = streamType;
         this.streamPosition = streamPosition;
@@ -109,7 +110,8 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         catStreamView.initializeRecyclerView(this, layoutManager);
 
-        eventBus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_MY_OWN));
+        if (userId != null)
+            eventBus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_MY_OWN));
     }
 
     @Override

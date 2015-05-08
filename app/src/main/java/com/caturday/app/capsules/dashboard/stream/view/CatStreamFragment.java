@@ -89,7 +89,8 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Override
     public void setScrollPosition(int position) {
-        ((LinearLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1, 488 - position);
+        ((LinearLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1,
+                R.dimen.scroll_tab_padding - position);
     }
 
     @Override

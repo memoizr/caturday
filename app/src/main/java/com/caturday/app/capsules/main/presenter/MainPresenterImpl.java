@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
 import com.daimajia.slider.library.SliderLayout;
@@ -147,6 +148,19 @@ public class MainPresenterImpl implements MainPresenter {
         sliderLayout.setCustomAnimation(backgroundImageAnimation);
         sliderLayout.setDuration(10000);
         sliderLayout.startAutoCycle();
+    }
+
+    @Subscribe
+    public void onNavItemShown(OnNavigationItemShownEvent event) {
+
+        switch (event.getCurrentItem()){
+            case OnNavigationItemShownEvent.ITEM_DASHBOARD:
+                mainView.showTabs(true);
+                break;
+            default:
+                mainView.showTabs(false);
+                break;
+        }
     }
 
 

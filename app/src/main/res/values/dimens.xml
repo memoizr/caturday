@@ -38,4 +38,5 @@
     <dimen name="size_xxlarge">72dp</dimen>
     <dimen name="status_bar_size">25dp</dimen>
     <dimen name="title_collapsed">104dp</dimen>
+    <dimen name="scroll_tab_padding">244dp</dimen>
 </resources>

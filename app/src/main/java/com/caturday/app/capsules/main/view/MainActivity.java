@@ -315,6 +315,14 @@ public class MainActivity extends DrawerActivity implements
     }
 
     @Override
+    public void showTabs(boolean showTabs) {
+        if (showTabs)
+            slidingTabs_PSTS.setVisibility(View.VISIBLE);
+        else
+            slidingTabs_PSTS.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void onRestart() {
         super.onRestart();
         resumeSliderAnimation();

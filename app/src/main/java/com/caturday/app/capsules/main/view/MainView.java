@@ -26,4 +26,6 @@ public interface MainView extends ScrollEventListener {
     int getCollapsedThreshold();
 
     void hideToolBarContainer(boolean shouldHide);
+
+    void showTabs(boolean b);
 }
