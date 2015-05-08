@@ -1,6 +1,6 @@
 # Caturday
 
-This is the open source project for the Caturday app. 
+This is the open source project for the Caturday Android app. 
 
 **Description**
 
