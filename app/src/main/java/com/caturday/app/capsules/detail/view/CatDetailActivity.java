@@ -200,6 +200,12 @@ public class CatDetailActivity extends BaseActionBarActivity
     }
 
     @Override
+    public void onBackPressed() {
+        activityClosed = true;
+        super.onBackPressed();
+    }
+
+    @Override
     public void initToolbar() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -296,7 +302,7 @@ public class CatDetailActivity extends BaseActionBarActivity
                 }
 
                 if (i < 2 * newCommentHeight) {
-                    new_comment_V.setTranslationY((float) -i/2 + newCommentHeight);
+                    new_comment_V.setTranslationY((float) -i / 2 + newCommentHeight);
                 } else {
 //                    new_comment_V.setTranslationY((float) 0);
                 }
