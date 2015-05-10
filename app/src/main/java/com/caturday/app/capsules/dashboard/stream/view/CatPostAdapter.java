@@ -130,18 +130,24 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         popupMenu.show();
     }
 
-
     @Override
     public int getItemCount() {
         return mCatPosts.size() + 1;
     }
-
 
     @Override
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
         return TYPE_ITEM;
+    }
+
+    public void addItem(CatPostEntity catPostEntity) {
+        List<CatPostEntity> list = new ArrayList<>();
+        list.add(catPostEntity);
+        list.addAll(mCatPosts);
+        mCatPosts = list;
+        notifyDataSetChanged();
     }
 
     class CatsCardViewHolder extends RecyclerView.ViewHolder {

@@ -19,5 +19,6 @@ public interface CatPostDataStore {
     Observable<CatPostEntity> getCatPost(String serverId);
 
     Collection<CatPostEntity> getRandomCatPosts(int howMany);
-    
+
+    Observable<CatPostEntity> createPost(CatPostEntity catPostEntity);
 }

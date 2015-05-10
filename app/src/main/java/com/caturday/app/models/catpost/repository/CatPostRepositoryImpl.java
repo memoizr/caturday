@@ -68,7 +68,8 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
     @Override
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
-        return catPostCloudDataStore.createPost(catPostEntity);
+        return catPostCloudDataStore.createPost(catPostEntity)
+                .flatMap(catPostLocalDataStore::createPost);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class DashboardPresenterImpl extends DashboardPresenter {
     @Override
     public void createNewPost() {
         Intent intent = new Intent(activity, NewPostActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
     }
 
     @Override

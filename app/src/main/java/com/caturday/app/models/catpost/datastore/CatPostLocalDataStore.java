@@ -43,6 +43,11 @@ public class CatPostLocalDataStore implements CatPostDataStore {
         return catPostDb.getRandomCatPosts(howMany);
     }
 
+    @Override
+    public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
+        return Observable.just(catPostDb.createPost(catPostEntity));
+    }
+
     public void createMultipleCatPost(Collection<CatPostEntity> catPostEntityCollection) {
         catPostDb.createMultiplePost(catPostEntityCollection);
     }

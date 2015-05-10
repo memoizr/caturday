@@ -2,6 +2,7 @@ package com.caturday.app.capsules.main.view;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -320,6 +321,12 @@ public class MainActivity extends DrawerActivity implements
             slidingTabs_PSTS.setVisibility(View.VISIBLE);
         else
             slidingTabs_PSTS.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mainPresenter.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

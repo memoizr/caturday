@@ -1,5 +1,6 @@
 package com.caturday.app.capsules.main.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -14,4 +15,6 @@ public interface MainPresenter {
     void resumeSliderAnimation();
 
     String getCurrentUserId();
+
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 }

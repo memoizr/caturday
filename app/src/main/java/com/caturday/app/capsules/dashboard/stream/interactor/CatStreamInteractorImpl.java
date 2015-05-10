@@ -38,6 +38,11 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     }
 
     @Override
+    public Observable<CatPostEntity> getCatPost(String serverId) {
+        return catPostRepository.getCatPost(serverId, false);
+    }
+
+    @Override
     public Observable<CatPostEntity> catPostVoted(String serverId) {
         VoteEntity voteEntity = new VoteEntity();
         voteEntity.setPositive(true);

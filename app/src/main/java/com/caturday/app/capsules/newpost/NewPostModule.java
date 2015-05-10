@@ -10,6 +10,7 @@ import com.caturday.app.capsules.newpost.view.NewPostView;
 import com.caturday.app.models.catpost.repository.CatPostRepository;
 import com.caturday.app.models.user.UserModule;
 import com.caturday.app.models.user.repository.UserRepository;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -42,7 +43,10 @@ public class NewPostModule {
         return newPostView;
     }
 
-    @Provides @Singleton public NewPostPresenter provideNewPostPresenter(NewPostView newPostView, NewPostInteractor newPostInteractor) {
-        return new NewPostPresenterImpl(newPostView, newPostInteractor);
+    @Provides @Singleton public NewPostPresenter provideNewPostPresenter(
+            NewPostView newPostView,
+            NewPostInteractor newPostInteractor,
+            Bus bus) {
+        return new NewPostPresenterImpl(newPostView, newPostInteractor, bus);
     }
 }

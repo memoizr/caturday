@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 
+import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.detail.view.CatDetailPresenter;
@@ -25,6 +26,8 @@ import com.caturday.app.capsules.common.listener.ScrollEventListener;
 import com.caturday.app.capsules.dashboard.stream.interactor.CatStreamInteractor;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import java.util.Objects;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,7 +52,21 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         this.catStreamInteractor = catStreamInteractor;
         this.eventBus = eventBus;
 
-        eventBus.register(this);
+    }
+
+    @Subscribe
+    public void onNewPostCreated(OnPostCreatedEvent event) {
+        System.out.println("New post created yo");
+        catStreamInteractor.getCatPost(event.getServerId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe( catPostEntity -> {
+                    System.out.println(catPostEntity.getCategory() + " " + streamType);
+                    if (Objects.equals(catPostEntity.getCategory(), streamType)) {
+                        System.out.println("they're equal, yo");
+                        catStreamView.getAdapter().addItem(catPostEntity);
+                    }
+                });
     }
 
     @Subscribe
@@ -112,6 +129,8 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
         if (userId != null)
             eventBus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_MY_OWN));
+
+        eventBus.register(this);
     }
 
     @Override

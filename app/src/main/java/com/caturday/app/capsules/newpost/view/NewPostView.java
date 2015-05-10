@@ -2,6 +2,8 @@ package com.caturday.app.capsules.newpost.view;
 
 import android.net.Uri;
 
+import com.caturday.app.models.catpost.CatPostEntity;
+
 public interface NewPostView {
 
     void initToolbar();
@@ -15,4 +17,6 @@ public interface NewPostView {
     void setPreview(Uri uri);
 
     void setPreview(String url);
+
+    void success(CatPostEntity catPostEntity);
 }

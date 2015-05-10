@@ -102,11 +102,13 @@ public class CatPostORM implements CatPostDb {
     }
 
     @Override
-    public void createPost(CatPostEntity catPostEntity) {
+    public CatPostEntity createPost(CatPostEntity catPostEntity) {
 
         CatPost catPost = mapToCatPost(catPostEntity);
 
         insertOrUpdate(catPost);
+
+        return catPostEntity;
     }
 
     @Override

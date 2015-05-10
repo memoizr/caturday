@@ -3,6 +3,8 @@ package com.caturday.app.capsules.common.view;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.caturday.app.models.catpost.CatPostEntity;
+
 public abstract class HeaderAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
 
@@ -17,6 +19,7 @@ public abstract class HeaderAdapter<VH extends RecyclerView.ViewHolder>
     protected boolean isPositionFooter(int position) {
         return position == getItemCount() - 1;
     }
+
 
     protected class EmptyHeader extends RecyclerView.ViewHolder {
         public EmptyHeader(View itemView) {
