@@ -14,7 +14,7 @@ public class CatPostEntity {
     @SerializedName("server_id") private String serverId;
     @SerializedName("user_id") private String userId;
     @SerializedName("vote_count") private int votesCount;
-//    @SerializedName("created_at") private int createdAt;
+    @SerializedName("created_at") private String createdAt;
 
     private String imagePath;
     private JsonArray comments;
