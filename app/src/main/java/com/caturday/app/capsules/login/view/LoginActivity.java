@@ -40,8 +40,14 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     @InjectView(R.id.progress_bar) ProgressBar progress_bar;
     @InjectView(R.id.done_V) View done;
     @InjectView(R.id.reveal_done_V) View reveal_done;
+    @InjectView(R.id.error_TV) TextView errorTV;
 
     @Inject LoginPresenter loginPresenter;
+
+    public final static String RIPPLE_ORIGIN_X = "RIPPLE_ORIGIN_X";
+    public final static String RIPPLE_ORIGIN_Y = "RIPPLE_ORIGIN_Y";
+    private int rippleOriginX;
+    private int rippleOriginY;
 
 
     @Override
@@ -56,6 +62,9 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        rippleOriginX = getIntent().getExtras().getInt(RIPPLE_ORIGIN_X);
+        rippleOriginY = getIntent().getExtras().getInt(RIPPLE_ORIGIN_Y);
 
         AnimationHelper.glideUp(glide_container);
         showKeyboard();
@@ -126,15 +135,22 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     }
 
     public void circularReveal() {
-        int cx = login_reveal.getRight() - 48;
-        int cy = login_reveal.getTop() + 96;
+        int cx = rippleOriginX;
+//                ? getResources().getDimensionPixelSize(R.dimen.overflow_offset_x)
+//                : rippleOriginX;
+        int cy = rippleOriginY;
+
+//        int cx = login_reveal.getRight() - 48;
+//        int cy = login_reveal.getTop() + 96;
 
         AnimationHelper.circularReveal(login_reveal, cx, cy, null);
     }
 
     public void circularHide() {
-        int cx = login_reveal.getRight() - 48;
-        int cy = login_reveal.getTop() + 96;
+        int cx = rippleOriginX;
+        int cy = rippleOriginY;
+//        int cx = login_reveal.getRight() - 48;
+//        int cy = login_reveal.getTop() + 96;
 
         Animator.AnimatorListener listener = new Animator.AnimatorListener() {
 
@@ -178,6 +194,16 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
                         reveal_done, done.getLeft() + done.getWidth() / 2,
                         done.getTop() + done.getWidth() / 2, null), 1400);
         progress_bar.postDelayed(() -> backPressed(), 2200);
+    }
+
+    @Override
+    public void toggleError(boolean showError, String errorMessage) {
+        if (showError) {
+            errorTV.setVisibility(View.VISIBLE);
+            errorTV.setText(errorMessage);
+        } else {
+            errorTV.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
 import com.caturday.app.capsules.newpost.NewPostModule;
+import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.util.interpolators.HyperTanAccelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
@@ -34,6 +35,8 @@ import butterknife.OnClick;
 
 
 public class NewPostActivity extends BaseActionBarActivity implements NewPostView {
+    public static final String NEW_POST_ID = "NEW_POST_ID";
+    public static final int NEW_POST_REQUEST_CODE = 2;
     @Inject NewPostPresenter newPostPresenter;
     @InjectView(R.id.reveal_V) View reveal;
     @InjectView(R.id.linear_container) LinearLayout linear_container;
@@ -44,6 +47,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.link_ET) EditText link;
     @InjectView(R.id.clear_B) ImageButton clear_B;
     @InjectView(R.id.clear_link_B) ImageButton clear_link_B;
+    private int result = RESULT_CANCELED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +174,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         }
     }
 
+
     @Override
     public void choiceMade() {
         preview.setVisibility(View.VISIBLE);
@@ -194,5 +199,19 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     public void setPreview(String url) {
         if (url.length() > 0)
             Picasso.with(this).load(url).fit().centerInside().into(preview);
+    }
+
+    @Override
+    public void success(CatPostEntity catPostEntity) {
+        result = RESULT_OK;
+        Intent intent = new Intent();
+        intent.putExtra(NEW_POST_ID, catPostEntity.getServerId());
+        setResult(result, intent);
+        onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 }

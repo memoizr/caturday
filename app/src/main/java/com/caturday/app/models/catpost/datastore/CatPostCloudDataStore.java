@@ -66,6 +66,7 @@ public class CatPostCloudDataStore implements CatPostDataStore {
         return null;
     }
 
+    @Override
     public Observable<CatPostEntity> createPost(CatPostEntity catPostEntity) {
 
         String path = catPostEntity.getImagePath();

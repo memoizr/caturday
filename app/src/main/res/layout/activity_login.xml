@@ -38,51 +38,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/error_TV"
+                android:visibility="gone"
+                android:background="@color/yellow"
+                android:textAlignment="center"
+                android:padding="8dp"
+                android:textColor="@color/primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/username_TV"
                 android:hint="username"
+                style="@style/LoginEditTextStyle"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_person_white_24dp"
-                android:drawablePadding="16dp"
                 android:layout_width="match_parent"
+                android:drawableLeft="@drawable/ic_person_white_24dp"
                 android:imeOptions="actionNext"
                 android:visibility="gone"
-                android:textColor="@color/white"
-                app:floatingLabel="highlight"
-                app:baseColor="@android:color/white"
-                app:primaryColor="@color/white"
-                app:singleLineEllipsis="true" />
+                />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/email_TV"
                 android:hint="email"
+                style="@style/LoginEditTextStyle"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionNext"
                 android:drawableLeft="@drawable/ic_email_white_24dp"
-                android:textColor="@color/white"
-                android:drawablePadding="16dp"
-                app:floatingLabel="highlight"
-                app:baseColor="@android:color/white"
-                app:primaryColor="@color/white"
-                app:singleLineEllipsis="true" />
+                />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/password_TV"
                 android:hint="password"
-                android:textColor="@color/white"
+                style="@style/LoginEditTextStyle"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:drawablePadding="16dp"
-                android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
-                android:inputType="textPassword"
                 android:imeOptions="actionDone"
-                app:floatingLabel="highlight"
-                app:baseColor="@android:color/white"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
                 app:minCharacters="8"
-                app:primaryColor="@color/white"
-                app:singleLineEllipsis="true" />
+                />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -117,18 +117,20 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Create Account"
                 android:id="@+id/create_account_B"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:text="Create Account"
+                style="@style/CallToActionButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="56dp" />
+                android:layout_height="wrap_content"
+                />
 
             <Button
-                android:text="Login"
                 android:id="@+id/login_submit_B"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:text="Login"
+                style="@style/CallToActionButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="56dp" />
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
 
     </LinearLayout>

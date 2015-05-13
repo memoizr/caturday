@@ -43,6 +43,8 @@ public class NavigationPresenterImpl implements NavigationPresenter {
             navigationView.setUsername(userEntity.getUsername());
             navigationView.setUserProfileImage(userEntity.getImageUrl());
             navigationView.setUserCoverImage(userEntity.getCoverImageUrl());
+        } else {
+
         }
         navigationView.userLoggedIn(isUserLoggedIn);
     }
@@ -87,7 +89,7 @@ public class NavigationPresenterImpl implements NavigationPresenter {
     }
 
     @Override
-    public void onProfileClicked(Activity activity) {
+    public void onProfileClicked(Activity activity, int x, int y) {
         boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();
         if (isUserLoggedIn) {
             Intent profileIntent = new Intent(activity, ProfileActivity.class);
@@ -95,6 +97,8 @@ public class NavigationPresenterImpl implements NavigationPresenter {
             activity.startActivity(profileIntent);
         } else {
             Intent loginIntent = new Intent(activity, LoginActivity.class);
+            loginIntent.putExtra(LoginActivity.RIPPLE_ORIGIN_X, x);
+            loginIntent.putExtra(LoginActivity.RIPPLE_ORIGIN_Y, y);
             activity.startActivity(loginIntent);
         }
     }

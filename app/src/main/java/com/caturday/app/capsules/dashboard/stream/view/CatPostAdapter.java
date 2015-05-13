@@ -21,8 +21,13 @@ import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.user.UserEntity;
 import com.caturday.app.util.helper.ShareHelper;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -84,6 +89,17 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             ((CatsCardViewHolder) viewHolder).total_comments_count.setOnClickListener(view ->
                 presenter.openDetails(index, myViewHolder.cat_IV, catPostEntity, true)
             );
+            String dtStart = catPostEntity.getCreatedAt();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            try {
+                Date date = format.parse(dtStart);
+                String longAgo = new PrettyTime().format(date);
+
+                ((CatsCardViewHolder) viewHolder).date_TV.setText(longAgo);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
 
             int votesCount = catPostEntity.getVotesCount();
@@ -130,18 +146,24 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         popupMenu.show();
     }
 
-
     @Override
     public int getItemCount() {
         return mCatPosts.size() + 1;
     }
-
 
     @Override
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
         return TYPE_ITEM;
+    }
+
+    public void addItem(CatPostEntity catPostEntity) {
+        List<CatPostEntity> list = new ArrayList<>();
+        list.add(catPostEntity);
+        list.addAll(mCatPosts);
+        mCatPosts = list;
+        notifyDataSetChanged();
     }
 
     class CatsCardViewHolder extends RecyclerView.ViewHolder {
@@ -153,6 +175,7 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         @InjectView(R.id.share_B) View share_B;
         @InjectView(R.id.options_B) ImageButton options_B;
         @InjectView(R.id.username_TV) TextView username_TV;
+        @InjectView(R.id.date_TV) TextView date_TV;
         @InjectView(R.id.user_image_IV) ImageView user_image_IV;
 
         public CatsCardViewHolder(View v) {

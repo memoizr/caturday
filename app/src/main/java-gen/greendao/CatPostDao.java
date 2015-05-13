@@ -31,8 +31,9 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         public final static Property Comments = new Property(5, String.class, "comments", false, "COMMENTS");
         public final static Property Category = new Property(6, String.class, "category", false, "CATEGORY");
         public final static Property UserId = new Property(7, String.class, "userId", false, "USER_ID");
-        public final static Property DownloadCount = new Property(8, Integer.class, "downloadCount", false, "DOWNLOAD_COUNT");
-        public final static Property TotalVotesCount = new Property(9, Integer.class, "totalVotesCount", false, "TOTAL_VOTES_COUNT");
+        public final static Property CreatedAt = new Property(8, String.class, "createdAt", false, "CREATED_AT");
+        public final static Property DownloadCount = new Property(9, Integer.class, "downloadCount", false, "DOWNLOAD_COUNT");
+        public final static Property TotalVotesCount = new Property(10, Integer.class, "totalVotesCount", false, "TOTAL_VOTES_COUNT");
     };
 
     private DaoSession daoSession;
@@ -59,8 +60,9 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
                 "'COMMENTS' TEXT," + // 5: comments
                 "'CATEGORY' TEXT," + // 6: category
                 "'USER_ID' TEXT," + // 7: userId
-                "'DOWNLOAD_COUNT' INTEGER," + // 8: downloadCount
-                "'TOTAL_VOTES_COUNT' INTEGER);"); // 9: totalVotesCount
+                "'CREATED_AT' TEXT," + // 8: createdAt
+                "'DOWNLOAD_COUNT' INTEGER," + // 9: downloadCount
+                "'TOTAL_VOTES_COUNT' INTEGER);"); // 10: totalVotesCount
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CAT_POST_SERVER_ID ON CAT_POST" +
                 " (SERVER_ID);");
@@ -117,14 +119,19 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
             stmt.bindString(8, userId);
         }
  
+        String createdAt = entity.getCreatedAt();
+        if (createdAt != null) {
+            stmt.bindString(9, createdAt);
+        }
+ 
         Integer downloadCount = entity.getDownloadCount();
         if (downloadCount != null) {
-            stmt.bindLong(9, downloadCount);
+            stmt.bindLong(10, downloadCount);
         }
  
         Integer totalVotesCount = entity.getTotalVotesCount();
         if (totalVotesCount != null) {
-            stmt.bindLong(10, totalVotesCount);
+            stmt.bindLong(11, totalVotesCount);
         }
     }
 
@@ -152,8 +159,9 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // comments
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // category
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // userId
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // downloadCount
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // totalVotesCount
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // createdAt
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // downloadCount
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10) // totalVotesCount
         );
         return entity;
     }
@@ -169,8 +177,9 @@ public class CatPostDao extends AbstractDao<CatPost, Long> {
         entity.setComments(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCategory(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setUserId(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setDownloadCount(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
-        entity.setTotalVotesCount(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setCreatedAt(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setDownloadCount(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setTotalVotesCount(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
      }
     
     /** @inheritdoc */

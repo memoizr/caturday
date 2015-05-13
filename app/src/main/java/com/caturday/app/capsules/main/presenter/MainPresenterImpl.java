@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
+import com.caturday.app.capsules.newpost.view.NewPostActivity;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.caturday.app.R;
@@ -125,6 +128,14 @@ public class MainPresenterImpl implements MainPresenter {
         return userId;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NewPostActivity.NEW_POST_REQUEST_CODE &&
+                resultCode == Activity.RESULT_OK) {
+            bus.post(new OnPostCreatedEvent(data.getExtras().getString(NewPostActivity.NEW_POST_ID)));
+        }
+    }
+
     private void initSliderLayout(SliderLayout sliderLayout) {
 
         getRandomPosts(10)
@@ -167,12 +178,16 @@ public class MainPresenterImpl implements MainPresenter {
     private void initMenuClickListener(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(
                 item -> {
-
                     mainView.toggleArrow(true);
                     pauseSliderAnimation();
 
                     if (item.getItemId() == R.id.action_login) {
                         Intent intent = new Intent(mainViewActivity, LoginActivity.class);
+                        int x = toolbar.getWidth() -
+                                mainViewActivity.getResources().getDimensionPixelSize(R.dimen.overflow_x);
+                        int y = mainViewActivity.getResources().getDimensionPixelSize(R.dimen.overflow_y);
+                        intent.putExtra(LoginActivity.RIPPLE_ORIGIN_X, x);
+                        intent.putExtra(LoginActivity.RIPPLE_ORIGIN_Y, y);
                         mainViewActivity.startActivity(intent);
                     } else if (item.getItemId() == R.id.action_logout) {
                         mainInteractor.performLogout();

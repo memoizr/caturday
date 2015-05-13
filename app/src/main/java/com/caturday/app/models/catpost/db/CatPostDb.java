@@ -23,7 +23,7 @@ public interface CatPostDb {
 
     long getCount();
 
-    void createPost(CatPostEntity catPostEntity);
+    CatPostEntity createPost(CatPostEntity catPostEntity);
 
     void createMultiplePost(Collection<CatPostEntity> catPostEntity);
 

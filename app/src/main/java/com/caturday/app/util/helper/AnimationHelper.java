@@ -25,7 +25,7 @@ public class AnimationHelper {
                     .translationYBy(-GLIDE_DISTANCE)
                     .alpha(1f)
                     .setDuration(300)
-                    .setInterpolator(new HyperTanDecelerateInterpolator())
+                    .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
                     .setStartDelay(i * 64 + 600)
                     .start();
         }
@@ -37,7 +37,7 @@ public class AnimationHelper {
                 .scaleX(0f)
                 .scaleY(0f)
                 .setDuration(300)
-                .setInterpolator(new HyperTanAccelerateInterpolator())
+                .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
                 .start();
     }
 
@@ -49,7 +49,7 @@ public class AnimationHelper {
                 .scaleX(1f)
                 .scaleY(1f)
                 .setDuration(300)
-                .setInterpolator(new HyperTanDecelerateInterpolator())
+                .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
                 .start();
     }
 
@@ -61,7 +61,7 @@ public class AnimationHelper {
                     .translationYBy(GLIDE_DISTANCE)
                     .alpha(0f)
                     .setDuration(200)
-                    .setInterpolator(new HyperTanAccelerateInterpolator())
+                    .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
                     .setStartDelay((count - i) * 64)
                     .start();
         }
@@ -75,7 +75,7 @@ public class AnimationHelper {
                     .translationYBy(-MEDIUM_GLIDE_DISTANCE)
                     .alpha(0f)
                     .setDuration(200)
-                    .setInterpolator(new HyperTanAccelerateInterpolator())
+                    .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
                     .setStartDelay(i * 16)
                     .start();
         }
@@ -89,7 +89,7 @@ public class AnimationHelper {
                     .translationYBy(MEDIUM_GLIDE_DISTANCE)
                     .alpha(1f)
                     .setDuration(200)
-                    .setInterpolator(new HyperTanDecelerateInterpolator())
+                    .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
                     .setStartDelay((count - i) * 16)
                     .start();
         }
@@ -100,7 +100,7 @@ public class AnimationHelper {
                 .translationYBy(-MEDIUM_GLIDE_DISTANCE)
                 .alpha(0f)
                 .setDuration(200)
-                .setInterpolator(new HyperTanAccelerateInterpolator())
+                .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
                 .start();
     }
 
@@ -112,7 +112,7 @@ public class AnimationHelper {
                 .translationYBy(-MEDIUM_GLIDE_DISTANCE)
                 .alpha(1f)
                 .setDuration(300)
-                .setInterpolator(new HyperTanDecelerateInterpolator())
+                .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
                 .start();
     }
 
@@ -123,7 +123,7 @@ public class AnimationHelper {
                 .translationYBy(MEDIUM_GLIDE_DISTANCE)
                 .alpha(0f)
                 .setDuration(300)
-                .setInterpolator(new HyperTanAccelerateInterpolator())
+                .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
                 .start();
     }
 
@@ -132,7 +132,7 @@ public class AnimationHelper {
 
         Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
         anim.setDuration(400);
-        anim.setInterpolator(new HyperTanAccelerateInterpolator());
+        anim.setInterpolator(HyperTanAccelerateInterpolator.getInterpolator());
         if (listener != null) {
             anim.addListener(listener);
         }
@@ -147,7 +147,7 @@ public class AnimationHelper {
                 ViewAnimationUtils.createCircularReveal(view, cx, cy, finalRadius, 0);
         anim.setDuration(300);
         anim.setStartDelay(500);
-        anim.setInterpolator(new HyperTanDecelerateInterpolator());
+        anim.setInterpolator(HyperTanDecelerateInterpolator.getInterpolator());
         if (listener != null) {
             anim.addListener(listener);
         }

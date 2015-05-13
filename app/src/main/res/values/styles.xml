@@ -79,4 +79,15 @@
         <item name="android:textSize">15sp</item>
         <item name="android:padding">16dp</item>
     </style>
+
+    <style name="LoginEditTextStyle">
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:inputType">textPassword</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="baseColor">@android:color/white</item>
+        <item name="errorColor">@color/yellow</item>
+        <item name="floatingLabel">highlight</item>
+        <item name="primaryColor">@color/white</item>
+        <item name="singleLineEllipsis">true</item>
+    </style>
 </resources>

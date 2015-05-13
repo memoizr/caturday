@@ -31,9 +31,4 @@ public class LoginInteractorImpl implements LoginInteractor {
         sessionEntity.setUsername(username);
         return sessionRepository.signup(sessionEntity);
     }
-
-//    @Override
-//    public Observable<UserEntity> saveUser(UserEntity userEntity) {
-//        return sessionRepository.saveUser(userEntity);
-//    }
 }

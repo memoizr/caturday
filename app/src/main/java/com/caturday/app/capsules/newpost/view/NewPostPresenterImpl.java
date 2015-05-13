@@ -11,8 +11,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.EditText;
 
+import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.newpost.interactor.NewPostInteractor;
 import com.caturday.app.models.catpost.CatPostEntity;
+import com.squareup.otto.Bus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,12 +32,16 @@ public class NewPostPresenterImpl implements NewPostPresenter {
 
     private final NewPostInteractor newPostInteractor;
     private final NewPostView newPostView;
+    private final Bus bus;
     private Context mContext;
     private Uri imageUri;
 
-    public NewPostPresenterImpl(NewPostView newPostView, NewPostInteractor newPostInteractor) {
+    public NewPostPresenterImpl(NewPostView newPostView,
+                                NewPostInteractor newPostInteractor,
+                                Bus bus) {
         this.newPostView = newPostView;
         this.newPostInteractor = newPostInteractor;
+        this.bus = bus;
     }
 
     @Override
@@ -43,6 +49,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         this.mContext = context;
         newPostView.initToolbar();
         newPostView.animateIn();
+        bus.register(this);
     }
 
     @Override
@@ -114,7 +121,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
 
     private void sendPostForUri(CatPostEntity catPostEntity, Uri uri) {
 
-        Observable<CatPostEntity> uriObservable = Observable.<CatPostEntity>create((observer)-> {
+        Observable<CatPostEntity> uriObservable = Observable.create((observer)-> {
             String path = "";
             if (uri != null) {
                 path = getRealPathFromURI(uri);
@@ -128,8 +135,16 @@ public class NewPostPresenterImpl implements NewPostPresenter {
                 .flatMap(newPostInteractor::createPost)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        success -> System.out.println(success.getImageUrl()),
-                        error -> error.printStackTrace());
+                        this::onSendingSuccess,
+                        this::onSendingFailure);
+    }
+
+    private void onSendingSuccess(CatPostEntity catPostEntity) {
+        newPostView.success(catPostEntity);
+    }
+
+    private void onSendingFailure(Throwable throwable) {
+        throwable.printStackTrace();
     }
 
     private Uri writeToFile() {

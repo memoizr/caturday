@@ -10,7 +10,7 @@ import de.greenrobot.daogenerator.ToMany;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(8, "greendao");
+        Schema schema = new Schema(9, "greendao");
 
         Entity user = schema.addEntity("User");
         user.addIdProperty();
@@ -35,6 +35,7 @@ public class MyDaoGenerator {
         catPost.addStringProperty("comments");
         catPost.addStringProperty("category");
         catPost.addStringProperty("userId");
+        catPost.addStringProperty("createdAt");
         catPost.addIntProperty("downloadCount");
         catPost.addIntProperty("totalVotesCount");
 

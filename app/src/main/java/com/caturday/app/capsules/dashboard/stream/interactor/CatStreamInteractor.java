@@ -14,5 +14,7 @@ public interface CatStreamInteractor {
 
     void eraseCache();
 
+    Observable<CatPostEntity> getCatPost(String serverId);
+
     Observable<CatPostEntity> catPostVoted(String serverId);
 }
