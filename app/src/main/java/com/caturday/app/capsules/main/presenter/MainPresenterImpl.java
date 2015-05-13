@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
@@ -177,12 +178,16 @@ public class MainPresenterImpl implements MainPresenter {
     private void initMenuClickListener(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(
                 item -> {
-
                     mainView.toggleArrow(true);
                     pauseSliderAnimation();
 
                     if (item.getItemId() == R.id.action_login) {
                         Intent intent = new Intent(mainViewActivity, LoginActivity.class);
+                        int x = toolbar.getWidth() -
+                                mainViewActivity.getResources().getDimensionPixelSize(R.dimen.overflow_x);
+                        int y = mainViewActivity.getResources().getDimensionPixelSize(R.dimen.overflow_y);
+                        intent.putExtra(LoginActivity.RIPPLE_ORIGIN_X, x);
+                        intent.putExtra(LoginActivity.RIPPLE_ORIGIN_Y, y);
                         mainViewActivity.startActivity(intent);
                     } else if (item.getItemId() == R.id.action_logout) {
                         mainInteractor.performLogout();

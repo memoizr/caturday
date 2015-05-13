@@ -44,6 +44,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
     @Inject LoginPresenter loginPresenter;
 
+    public final static String RIPPLE_ORIGIN_X = "RIPPLE_ORIGIN_X";
+    public final static String RIPPLE_ORIGIN_Y = "RIPPLE_ORIGIN_Y";
+    private int rippleOriginX;
+    private int rippleOriginY;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,9 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        rippleOriginX = getIntent().getExtras().getInt(RIPPLE_ORIGIN_X);
+        rippleOriginY = getIntent().getExtras().getInt(RIPPLE_ORIGIN_Y);
 
         AnimationHelper.glideUp(glide_container);
         showKeyboard();
@@ -127,15 +135,22 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     }
 
     public void circularReveal() {
-        int cx = login_reveal.getRight() - 48;
-        int cy = login_reveal.getTop() + 96;
+        int cx = rippleOriginX;
+//                ? getResources().getDimensionPixelSize(R.dimen.overflow_offset_x)
+//                : rippleOriginX;
+        int cy = rippleOriginY;
+
+//        int cx = login_reveal.getRight() - 48;
+//        int cy = login_reveal.getTop() + 96;
 
         AnimationHelper.circularReveal(login_reveal, cx, cy, null);
     }
 
     public void circularHide() {
-        int cx = login_reveal.getRight() - 48;
-        int cy = login_reveal.getTop() + 96;
+        int cx = rippleOriginX;
+        int cy = rippleOriginY;
+//        int cx = login_reveal.getRight() - 48;
+//        int cy = login_reveal.getTop() + 96;
 
         Animator.AnimatorListener listener = new Animator.AnimatorListener() {
 

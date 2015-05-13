@@ -3,6 +3,7 @@ package com.caturday.app.capsules.drawer.view;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +36,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
     @InjectView(R.id.login_view) View loginInfo;
     @InjectView(R.id.profile_image_IV) ImageView profileImageIV;
     @InjectView(R.id.cover_image_IV) ImageView coverImageIV;
+    @InjectView(R.id.profile_container_V) View profileContainerV;
 
     public NavigationFragment() {
     }
@@ -47,8 +49,9 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
         } else {
             userInfo.setVisibility(View.GONE);
             loginInfo.setVisibility(View.VISIBLE);
+            coverImageIV.setImageDrawable(getResources()
+                    .getDrawable(R.drawable.default_user_profile_cover));
         }
-
     }
 
     @Override
@@ -78,6 +81,15 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
 
         navigationPresenter.onCreate();
 
+        profileContainerV.setOnTouchListener((v, event) -> {
+
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+                navigationPresenter.onProfileClicked(getActivity(), x, y);
+            }
+            return true;
+        });
         return rootView;
     }
 
@@ -127,10 +139,12 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
         iv.setColorFilter(R.color.accent);
     }
 
-    @OnClick(R.id.profile_container_V)
-    public void clickProfile() {
-        navigationPresenter.onProfileClicked(getActivity());
-    }
+//    @OnClick(R.id.profile_container_V)
+//    public void clickProfile(View v) {
+//        int x = (v.getHeight() / 2) + v.getTop();
+//        int y = (v.getWidth() / 2) + v.getLeft();
+//        navigationPresenter.onProfileClicked(getActivity(), x, y);
+//    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position , long id) {

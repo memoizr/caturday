@@ -2,6 +2,7 @@
 <RelativeLayout
     android:id="@+id/detail_container_RL"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/black"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,6 @@
 
     <FrameLayout
         android:id="@+id/detail_reveal"
-        android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

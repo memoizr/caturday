@@ -10,7 +10,7 @@ public interface NavigationPresenter {
 
     void onNavigationInteraction(Activity activity, int position);
 
-    void onProfileClicked(Activity activity);
+    void onProfileClicked(Activity activity, int x, int y);
 
     void onDestroy();
 
