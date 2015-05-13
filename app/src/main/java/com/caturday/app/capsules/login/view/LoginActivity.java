@@ -40,6 +40,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     @InjectView(R.id.progress_bar) ProgressBar progress_bar;
     @InjectView(R.id.done_V) View done;
     @InjectView(R.id.reveal_done_V) View reveal_done;
+    @InjectView(R.id.error_TV) TextView errorTV;
 
     @Inject LoginPresenter loginPresenter;
 
@@ -178,6 +179,16 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
                         reveal_done, done.getLeft() + done.getWidth() / 2,
                         done.getTop() + done.getWidth() / 2, null), 1400);
         progress_bar.postDelayed(() -> backPressed(), 2200);
+    }
+
+    @Override
+    public void toggleError(boolean showError, String errorMessage) {
+        if (showError) {
+            errorTV.setVisibility(View.VISIBLE);
+            errorTV.setText(errorMessage);
+        } else {
+            errorTV.setVisibility(View.GONE);
+        }
     }
 
     @Override

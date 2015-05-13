@@ -38,6 +38,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/error_TV"
+                android:visibility="gone"
+                android:background="@color/yellow"
+                android:textAlignment="center"
+                android:padding="8dp"
+                android:textColor="@color/primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/username_TV"
                 android:hint="username"
