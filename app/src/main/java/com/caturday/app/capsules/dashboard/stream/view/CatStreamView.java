@@ -18,4 +18,6 @@ public interface CatStreamView {
     RecyclerView getRecyclerView();
 
     CatPostAdapter getAdapter();
+
+    void showEmptyView(boolean showIt);
 }

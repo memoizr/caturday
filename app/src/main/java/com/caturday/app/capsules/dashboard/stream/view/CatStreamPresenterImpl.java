@@ -15,7 +15,6 @@ import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.detail.view.CatDetailPresenter;
-import com.caturday.app.capsules.detail.view.CatDetailPresenterImpl;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.capsules.common.events.OnPageScrolledEvent;
@@ -29,6 +28,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.Objects;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -56,14 +56,11 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Subscribe
     public void onNewPostCreated(OnPostCreatedEvent event) {
-        System.out.println("New post created yo");
         catStreamInteractor.getCatPost(event.getServerId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe( catPostEntity -> {
-                    System.out.println(catPostEntity.getCategory() + " " + streamType);
                     if (Objects.equals(catPostEntity.getCategory(), streamType)) {
-                        System.out.println("they're equal, yo");
                         catStreamView.getAdapter().addItem(catPostEntity);
                     }
                 });
@@ -154,6 +151,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         eventBus.post(new StreamRefreshCompletedEvent());
     }
 
+    @DebugLog
     @Override
     public void setAdapter() {
 
@@ -162,8 +160,24 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 userId != null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((catPostCollection) -> catStreamView.getAdapter().setItems(catPostCollection),
-                        Throwable::printStackTrace);
+                .subscribe((catPostCollection) -> {
+                            if (catPostCollection.size() == 0) {
+                                setEmptyView(true);
+                            } else {
+                                setEmptyView(false);
+                                catStreamView.getAdapter().setItems(catPostCollection);
+                            }
+                        },
+                        this::onLoadFailure);
+    }
+
+    private void setEmptyView(boolean showIt) {
+       catStreamView.showEmptyView(showIt);
+    }
+
+    private void onLoadFailure(Throwable e) {
+        setEmptyView(true);
+        e.printStackTrace();
     }
 
     @Override

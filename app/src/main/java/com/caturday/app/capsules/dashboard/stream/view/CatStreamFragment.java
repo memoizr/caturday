@@ -32,6 +32,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
+    @InjectView(R.id.logged_out_empty_V) View emptyV;
 
     private CatPostAdapter catPostAdapter;
 
@@ -40,7 +41,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.<Object>asList(new CatStreamModule(this));
+        return Arrays.asList(new CatStreamModule(this));
     }
 
     @Override
@@ -101,6 +102,17 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     @Override
     public CatPostAdapter getAdapter() {
         return (CatPostAdapter) cats_stream_RV.getAdapter();
+    }
+
+    @Override
+    public void showEmptyView(boolean showIt) {
+        if (showIt) {
+            emptyV.setVisibility(View.VISIBLE);
+            cats_stream_RV.setVisibility(View.GONE);
+        } else {
+            emptyV.setVisibility(View.GONE);
+            cats_stream_RV.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
