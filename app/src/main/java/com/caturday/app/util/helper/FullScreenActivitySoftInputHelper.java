@@ -7,19 +7,18 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 public class FullScreenActivitySoftInputHelper {
+    private View mChildOfContent;
+    private int usableHeightPrevious;
+    private VisibleSizeChangeListener mVisibleSizeChangeListener;
 
     public interface VisibleSizeChangeListener {
         void onVisibleSizeChanged(int heightDifference);
     }
 
-    private VisibleSizeChangeListener mVisibleSizeChangeListener;
 
     public static void assistActivity (Activity activity, VisibleSizeChangeListener visibleSizeChangeListener) {
         new FullScreenActivitySoftInputHelper(activity, visibleSizeChangeListener);
     }
-
-    private View mChildOfContent;
-    private int usableHeightPrevious;
 
     private FullScreenActivitySoftInputHelper(Activity activity, VisibleSizeChangeListener visibleSizeChangeListener) {
         mVisibleSizeChangeListener = visibleSizeChangeListener;

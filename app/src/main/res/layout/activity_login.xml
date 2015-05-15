@@ -1,162 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:background="@color/primary"
-    android:id="@+id/login_reveal_V"
-    android:animateLayoutChanges="false"
-    android:visibility="invisible"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/login_reveal_V"
+            android:layout_width="match_parent"
+            android:background="@color/primary"
+            android:animateLayoutChanges="false"
+            android:visibility="invisible"
+            android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/reveal_done_V"
-        android:visibility="invisible"
-        android:background="@color/teal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/glide_container_V"
-        android:layout_width="match_parent"
-        android:paddingTop="72dp"
-        android:clipToPadding="false"
-        android:paddingLeft="72dp"
-        android:animateLayoutChanges="true"
-        android:paddingRight="72dp"
-        android:layout_height="match_parent">
+        <View
+            android:id="@+id/reveal_done_V"
+            android:visibility="invisible"
+            android:background="@color/teal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-            <TextView
-                android:text="Login"
-                android:textSize="32dp"
-                android:id="@+id/title_TV"
-                android:textColor="@color/white"
-                android:layout_marginBottom="16dp"
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/glide_container_V"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:paddingTop="72dp"
+                android:clipToPadding="false"
+                android:paddingLeft="72dp"
+                android:animateLayoutChanges="true"
+                android:paddingRight="72dp"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/error_TV"
-                android:visibility="gone"
-                android:background="@color/yellow"
-                android:textAlignment="center"
-                android:padding="8dp"
-                android:textColor="@color/primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                <TextView
+                    android:text="Login"
+                    android:textSize="32dp"
+                    android:id="@+id/title_TV"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/username_TV"
-                android:hint="username"
-                style="@style/LoginEditTextStyle"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:drawableLeft="@drawable/ic_person_white_24dp"
-                android:imeOptions="actionNext"
-                android:visibility="gone"
-                />
+                <TextView
+                    android:id="@+id/error_TV"
+                    android:visibility="gone"
+                    android:textAlignment="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/yellow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/email_TV"
-                android:hint="email"
-                style="@style/LoginEditTextStyle"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:inputType="textEmailAddress"
-                android:imeOptions="actionNext"
-                android:drawableLeft="@drawable/ic_email_white_24dp"
-                />
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/username_TV"
+                    android:hint="username"
+                    style="@style/LoginEditTextStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:drawableLeft="@drawable/ic_person_white_24dp"
+                    android:imeOptions="actionNext"
+                    android:visibility="gone"
+                    />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/password_TV"
-                android:hint="password"
-                style="@style/LoginEditTextStyle"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
-                app:minCharacters="8"
-                />
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/email_TV"
+                    android:hint="email"
+                    style="@style/LoginEditTextStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
+                    android:drawableLeft="@drawable/ic_email_white_24dp"
+                    />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_gravity="right"
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/password_TV"
+                    android:hint="password"
+                    style="@style/LoginEditTextStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
+                    app:minCharacters="8"
+                    />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="right"
+                    android:visibility="gone"
+                    android:id="@+id/signup_buttons_V"
+                    android:layout_marginRight="-24dp"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:text="I have an account"
+                        android:id="@+id/existing_account_B"
+                        android:background="@drawable/tab_selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp" />
+
+                    <Button
+                        android:text="Signup"
+                        android:id="@+id/signup_B"
+                        android:background="@drawable/tab_selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/login_buttons_V"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="-24dp"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/create_account_B"
+                        android:text="Create Account"
+                        style="@style/CallToActionButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <Button
+                        android:id="@+id/login_submit_B"
+                        android:text="Login"
+                        style="@style/CallToActionButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+        <ProgressBar
+            android:layout_marginTop="192dp"
+            android:id="@+id/progress_bar"
             android:visibility="gone"
-            android:id="@+id/signup_buttons_V"
-            android:layout_marginRight="-24dp"
-            android:layout_height="wrap_content">
+            android:layout_gravity="center_horizontal"
+            android:layout_width="72dp"
+            android:layout_height="72dp" />
+        <ImageView
+            android:layout_marginTop="104dp"
+            android:id="@+id/done_V"
+            android:background="@drawable/done_round"
+            android:padding="16dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_done_white_48dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"/>
 
-            <Button
-                android:text="I have an account"
-                android:id="@+id/existing_account_B"
-                android:background="@drawable/tab_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="56dp" />
-
-            <Button
-                android:text="Signup"
-                android:id="@+id/signup_B"
-                android:background="@drawable/tab_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="56dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:id="@+id/login_buttons_V"
-            android:layout_gravity="right"
-            android:layout_marginRight="-24dp"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/create_account_B"
-                android:text="Create Account"
-                style="@style/CallToActionButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <Button
-                android:id="@+id/login_submit_B"
-                android:text="Login"
-                style="@style/CallToActionButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
-    </ScrollView>
-    <ProgressBar
-        android:layout_marginTop="192dp"
-        android:id="@+id/progress_bar"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="72dp"
-        android:layout_height="72dp" />
-    <ImageView
-        android:layout_marginTop="104dp"
-        android:id="@+id/done_V"
-        android:background="@drawable/done_round"
-        android:padding="16dp"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_done_white_48dp"
-        android:layout_width="72dp"
-        android:layout_height="72dp"/>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:paddingTop="24dp"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</FrameLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:paddingTop="@dimen/status_bar_size"
+            android:minHeight="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+</ScrollView>

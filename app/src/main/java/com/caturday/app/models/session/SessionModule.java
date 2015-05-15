@@ -29,6 +29,7 @@ public class SessionModule {
 
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         return adapter.create(SessionApi.class);

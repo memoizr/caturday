@@ -1,7 +1,10 @@
 package com.caturday.app.capsules.login.view;
 
 
+import android.os.Handler;
+
 import com.caturday.app.capsules.login.interactor.LoginInteractor;
+import com.caturday.app.util.helper.RetrofitErrorHelper;
 
 import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,13 +32,16 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     private void handleError(Throwable error) {
-        String message = error.getMessage();
-        if (message.contains("401")) {
-            loginView.toggleError(true, "Invalid email or password");
-        } else {
-            loginView.toggleError(false, "");
+        if (error instanceof RetrofitError) {
+
+            loginView.failureAnimation();
+            new Handler().postDelayed(() -> {
+
+                RetrofitErrorHelper.formatErrorMessageRx((RetrofitError) error)
+                        .subscribe(s ->
+                                loginView.toggleError(true, s));
+            }, 1200);
         }
-        loginView.failureAnimation();
         error.printStackTrace();
     }
 
@@ -49,7 +55,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                         },
                         e -> {
                             loginView.failureAnimation();
-                            e.printStackTrace();
+                            handleError(e);
                         });
     }
 }

@@ -17,6 +17,7 @@ import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
 import com.caturday.app.capsules.login.LoginModule;
 import com.caturday.app.util.helper.AnimationHelper;
+import com.caturday.app.util.helper.FullScreenActivitySoftInputHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +66,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
         rippleOriginX = getIntent().getExtras().getInt(RIPPLE_ORIGIN_X);
         rippleOriginY = getIntent().getExtras().getInt(RIPPLE_ORIGIN_Y);
+
+        FullScreenActivitySoftInputHelper.assistActivity(this, heightDifference -> {
+            login_reveal.getLayoutParams().height += heightDifference;
+            login_reveal.requestLayout();
+        });
 
         AnimationHelper.glideUp(glide_container);
         showKeyboard();
