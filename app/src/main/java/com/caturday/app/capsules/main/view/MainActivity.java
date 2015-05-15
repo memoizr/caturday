@@ -88,7 +88,7 @@ public class MainActivity extends DrawerActivity implements
 
     @Override
     public int getCollapsedThreshold(){
-        return titleCollapsed;
+        return titleCollapsed + getResources().getDimensionPixelSize(R.dimen.size_xsmall);
     }
 
     @Override

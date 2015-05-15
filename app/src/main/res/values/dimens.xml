@@ -31,6 +31,7 @@
     <dimen name="display_name_min_margin">30dp</dimen>
     <dimen name="display_name_max_margin">10dp</dimen>
 
+    <dimen name="size_xsmall">8dp</dimen>
     <dimen name="size_small">16dp</dimen>
     <dimen name="size_medium">32dp</dimen>
     <dimen name="size_large">48dp</dimen>
