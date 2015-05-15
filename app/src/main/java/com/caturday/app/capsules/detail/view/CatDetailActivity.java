@@ -165,6 +165,8 @@ public class CatDetailActivity extends BaseActionBarActivity
     public void initIMEListener() {
         FullScreenActivitySoftInputHelper.assistActivity(this,
                 heightDifference -> {
+
+                    System.out.println("height difference: " + heightDifference);
                     if (heightDifference != 0) {
                         new_comment_V.animate()
                                 .setInterpolator(new HyperAccelerateDecelerateInterpolator())

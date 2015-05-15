@@ -17,4 +17,6 @@ public interface MainPresenter {
     String getCurrentUserId();
 
     void onActivityResult(int requestCode, int resultCode, Intent data);
+
+    void onPause();
 }

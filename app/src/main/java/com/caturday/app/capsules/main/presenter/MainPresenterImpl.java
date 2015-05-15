@@ -43,6 +43,7 @@ public class MainPresenterImpl implements MainPresenter {
     private final MainInteractor mainInteractor;
     private final Bus bus;
     private ImageAnimation backgroundImageAnimation;
+    private SliderLayout sliderLayout;
 
     public MainPresenterImpl(MainView mainView, MainInteractor mainInteractor, Bus bus) {
         this.mainView = mainView;
@@ -112,12 +113,15 @@ public class MainPresenterImpl implements MainPresenter {
     public void pauseSliderAnimation() {
         if (backgroundImageAnimation != null)
             backgroundImageAnimation.pauseAnimation();
+        sliderLayout.stopAutoCycle();
+
     }
 
     @Override
     public void resumeSliderAnimation() {
         if (backgroundImageAnimation != null)
             backgroundImageAnimation.resumeAnimation();
+        sliderLayout.startAutoCycle();
     }
 
     @Override
@@ -137,8 +141,14 @@ public class MainPresenterImpl implements MainPresenter {
         }
     }
 
+    @Override
+    public void onPause() {
+        pauseSliderAnimation();
+    }
+
     private void initSliderLayout(SliderLayout sliderLayout) {
 
+        this.sliderLayout = sliderLayout;
         getRandomPosts(10)
                 .subscribeOn(Schedulers.io())
                 .flatMap(Observable::from)
@@ -180,7 +190,6 @@ public class MainPresenterImpl implements MainPresenter {
         toolbar.setOnMenuItemClickListener(
                 item -> {
                     mainView.toggleArrow(true);
-                    pauseSliderAnimation();
 
                     if (item.getItemId() == R.id.action_login) {
                         Intent intent = new Intent(mainViewActivity, LoginActivity.class);

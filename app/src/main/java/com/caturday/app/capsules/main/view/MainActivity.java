@@ -15,16 +15,13 @@ import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.caturday.app.capsules.dashboard.stream.view.CatStreamFragment;
-import com.daimajia.slider.library.SliderLayout;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.views.CollapsibleView;
 import com.caturday.app.capsules.dashboard.DashboardFragment;
 import com.caturday.app.capsules.dashboard.SlidingTabActivity;
+import com.caturday.app.capsules.dashboard.stream.view.CatStreamFragment;
 import com.caturday.app.capsules.drawer.view.DrawerActivity;
 import com.caturday.app.capsules.drawer.view.NavigationFragment;
-import com.caturday.app.capsules.favorites.view.FavoritesFragment;
 import com.caturday.app.capsules.main.MainModule;
 import com.caturday.app.capsules.main.presenter.MainPresenter;
 import com.caturday.app.util.helper.AnimationHelper;
@@ -32,6 +29,8 @@ import com.caturday.app.util.helper.DrawerArrowHelper;
 import com.caturday.app.util.interpolators.HyperAccelerateDecelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanAccelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanDecelerateInterpolator;
+import com.daimajia.slider.library.SliderLayout;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,13 +45,10 @@ public class MainActivity extends DrawerActivity implements
         SlidingTabActivity, MainView {
 
     public PagerSlidingTabStrip slidingTabs;
-    @Getter private int oldScrollY;
-
     @Inject CollapsibleView collapsibleView;
     @Inject DashboardFragment dashboardFragment;
     @Inject MainPresenter mainPresenter;
     @Inject NavigationFragment navigationFragment;
-
     @Getter @InjectView(R.id.slider) SliderLayout sliderLayout;
     @Getter @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.main_container_V) DrawerLayout mDrawerLayout;
@@ -60,6 +56,7 @@ public class MainActivity extends DrawerActivity implements
     @InjectView(R.id.status_bar_scrim) View status_bar_scrim;
     @InjectView(R.id.title_container_RL) RelativeLayout title_container_RL;
     @InjectView(R.id.reveal_V) View reveal;
+    @Getter private int oldScrollY;
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean statusTransparent = true;
     private boolean transparent = true;
@@ -87,27 +84,8 @@ public class MainActivity extends DrawerActivity implements
     }
 
     @Override
-    public int getCollapsedThreshold(){
-        return titleCollapsed + getResources().getDimensionPixelSize(R.dimen.size_xsmall);
-    }
-
-    @Override
     protected List<Object> getModules() {
         return Arrays.asList(new MainModule(this));
-    }
-
-    @Override
-    public void setUpFragments(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, dashboardFragment)
-                    .commit();
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.left_drawer_V, navigationFragment)
-                    .commit();
-        }
     }
 
     @Override
@@ -137,12 +115,24 @@ public class MainActivity extends DrawerActivity implements
     }
 
     @Override
+    public void setUpFragments(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, dashboardFragment)
+                    .commit();
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.left_drawer_V, navigationFragment)
+                    .commit();
+        }
+    }
+
+    @Override
     public void onRefreshCompleted() {
         reveal().addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
+            public void onAnimationStart(Animator animation) { }
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -150,24 +140,47 @@ public class MainActivity extends DrawerActivity implements
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
+            public void onAnimationCancel(Animator animation) {  }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {  }
         });
     }
 
-    public void pauseSliderAnimation() {
-        mainPresenter.pauseSliderAnimation();
+    @Override
+    public int getCollapsedThreshold() {
+        return titleCollapsed + getResources().getDimensionPixelSize(R.dimen.size_xsmall);
     }
 
-    public void resumeSliderAnimation() {
+    @Override
+    public void hideToolBarContainer(boolean shouldHide) {
+        int targetShiftY = shouldHide ? titleCollapsed : 0;
 
-        mainPresenter.resumeSliderAnimation();
+        if (transparent && oldScrollY > titleMinHeight) {
+            AnimationHelper.animateColor(title_container_RL,
+                    getResources().getColor(R.color.primary_transparent),
+                    getResources().getColor(R.color.primary));
+            pauseSliderAnimation();
+            transparent = false;
+        }
+
+        if (title_container_RL.getTranslationY() != -targetShiftY) {
+            title_container_RL.animate().cancel();
+            title_container_RL
+                    .animate()
+                    .translationY(-targetShiftY)
+                    .setDuration(300)
+                    .setInterpolator(new HyperAccelerateDecelerateInterpolator())
+                    .start();
+        }
+    }
+
+    @Override
+    public void showTabs(boolean showTabs) {
+        if (showTabs)
+            slidingTabs_PSTS.setVisibility(View.VISIBLE);
+        else
+            slidingTabs_PSTS.setVisibility(View.INVISIBLE);
     }
 
     private Animator reveal() {
@@ -270,6 +283,15 @@ public class MainActivity extends DrawerActivity implements
         }
     }
 
+    public void resumeSliderAnimation() {
+
+        mainPresenter.resumeSliderAnimation();
+    }
+
+    public void pauseSliderAnimation() {
+        mainPresenter.pauseSliderAnimation();
+    }
+
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
         if (scrollState == ScrollState.STOP) {
@@ -293,47 +315,23 @@ public class MainActivity extends DrawerActivity implements
     }
 
     @Override
-    public void hideToolBarContainer(boolean shouldHide) {
-        int targetShiftY = shouldHide? titleCollapsed : 0;
-
-        if (transparent && oldScrollY > titleMinHeight) {
-            AnimationHelper.animateColor(title_container_RL,
-                    getResources().getColor(R.color.primary_transparent),
-                    getResources().getColor(R.color.primary));
-            pauseSliderAnimation();
-            transparent = false;
-        }
-
-        if (title_container_RL.getTranslationY() != -targetShiftY) {
-            title_container_RL.animate().cancel();
-            title_container_RL
-                    .animate()
-                    .translationY(-targetShiftY)
-                    .setDuration(300)
-                    .setInterpolator(new HyperAccelerateDecelerateInterpolator())
-                    .start();
-        }
-    }
-
-    @Override
-    public void showTabs(boolean showTabs) {
-        if (showTabs)
-            slidingTabs_PSTS.setVisibility(View.VISIBLE);
-        else
-            slidingTabs_PSTS.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mainPresenter.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
+    protected void onPause() {
+        System.out.println("on pause");
+        mainPresenter.onPause();
+        super.onPause();
+    }
+
+    @Override
     public void onRestart() {
         super.onRestart();
         resumeSliderAnimation();
-        toolbar.postDelayed(()-> {
+        toolbar.postDelayed(() -> {
             toggleArrow(false);
         }, 200);
     }

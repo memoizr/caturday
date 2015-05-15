@@ -2,8 +2,11 @@ package com.caturday.app.capsules.login.view;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -50,7 +53,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     private int rippleOriginX;
     private int rippleOriginY;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,19 +63,35 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
         setUpToolbar();
 
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        setActivityToFullscreen(true);
+        new Handler().postDelayed(() -> {
+            setActivityToFullscreen(false);
+        }, 1000);
 
         rippleOriginX = getIntent().getExtras().getInt(RIPPLE_ORIGIN_X);
         rippleOriginY = getIntent().getExtras().getInt(RIPPLE_ORIGIN_Y);
 
-        FullScreenActivitySoftInputHelper.assistActivity(this, heightDifference -> {
-            login_reveal.getLayoutParams().height += heightDifference;
-            login_reveal.requestLayout();
-        });
-
         AnimationHelper.glideUp(glide_container);
         showKeyboard();
+    }
+
+    private void setActivityToFullscreen(boolean isFullscreen) {
+        if (isFullscreen) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            login_reveal.setPadding(
+                    0,
+                    getResources().getDimensionPixelSize(R.dimen.status_bar_size),
+                    0,
+                    0);
+        } else {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            login_reveal.setPadding(0, 0, 0, 0);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.primary));
+        }
     }
 
     @Override
@@ -142,12 +160,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
     public void circularReveal() {
         int cx = rippleOriginX;
-//                ? getResources().getDimensionPixelSize(R.dimen.overflow_offset_x)
-//                : rippleOriginX;
         int cy = rippleOriginY;
-
-//        int cx = login_reveal.getRight() - 48;
-//        int cy = login_reveal.getTop() + 96;
 
         AnimationHelper.circularReveal(login_reveal, cx, cy, null);
     }
@@ -155,8 +168,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     public void circularHide() {
         int cx = rippleOriginX;
         int cy = rippleOriginY;
-//        int cx = login_reveal.getRight() - 48;
-//        int cy = login_reveal.getTop() + 96;
 
         Animator.AnimatorListener listener = new Animator.AnimatorListener() {
 
@@ -183,6 +194,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
     @Override
     public void onBackPressed() {
+        setActivityToFullscreen(true);
         AnimationHelper.glideDown(glide_container);
         circularHide();
     }

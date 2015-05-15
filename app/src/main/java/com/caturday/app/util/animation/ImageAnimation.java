@@ -54,6 +54,7 @@ public class ImageAnimation implements BaseAnimationInterface {
     }
 
     public void pauseAnimation() {
+        System.out.println("pausing the image animation");
         if (mScale != null) {
             mScale.pause();
         }
