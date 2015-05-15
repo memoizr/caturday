@@ -3,8 +3,10 @@ package com.caturday.app.capsules.login.view;
 
 import android.os.Handler;
 
+import com.caturday.app.capsules.common.events.OnLoginSuccessful;
 import com.caturday.app.capsules.login.interactor.LoginInteractor;
 import com.caturday.app.util.helper.RetrofitErrorHelper;
+import com.squareup.otto.Bus;
 
 import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
@@ -14,10 +16,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private final LoginView loginView;
     private final LoginInteractor loginInteractor;
+    private final Bus bus;
 
-    public LoginPresenterImpl(LoginView loginView, LoginInteractor loginInteractor) {
+    public LoginPresenterImpl(LoginView loginView, LoginInteractor loginInteractor, Bus bus) {
         this.loginView = loginView;
         this.loginInteractor = loginInteractor;
+        this.bus = bus;
     }
 
     @Override
@@ -27,6 +31,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(userEntity -> {
                             loginView.successAnimation();
+                            bus.post(new OnLoginSuccessful());
                         },
                         this::handleError);
     }
@@ -52,6 +57,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(userEntity -> {
                             loginView.successAnimation();
+                            bus.post(new OnLoginSuccessful());
                         },
                         e -> {
                             loginView.failureAnimation();

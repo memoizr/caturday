@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.caturday.app.capsules.common.events.OnLogoutSuccessful;
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.OnPostPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
@@ -201,6 +202,7 @@ public class MainPresenterImpl implements MainPresenter {
                         mainViewActivity.startActivity(intent);
                     } else if (item.getItemId() == R.id.action_logout) {
                         mainInteractor.performLogout();
+                        bus.post(new OnLogoutSuccessful());
                     } else {
                         Intent intent = new Intent(mainViewActivity, SettingsActivity.class);
                         mainViewActivity.startActivity(intent);

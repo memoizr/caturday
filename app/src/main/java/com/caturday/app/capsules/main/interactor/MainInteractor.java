@@ -5,9 +5,6 @@ import com.caturday.app.models.user.UserEntity;
 
 import java.util.Collection;
 
-/**
- * Created by Cat#2 on 09/04/15.
- */
 public interface MainInteractor {
 
     boolean userLoggedIn();

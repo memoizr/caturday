@@ -2,12 +2,11 @@ package com.caturday.app.capsules.login.view;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +19,6 @@ import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
 import com.caturday.app.capsules.login.LoginModule;
 import com.caturday.app.util.helper.AnimationHelper;
-import com.caturday.app.util.helper.FullScreenActivitySoftInputHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,7 +60,6 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
         ButterKnife.inject(this);
 
         setUpToolbar();
-
 
         setActivityToFullscreen(true);
         new Handler().postDelayed(() -> {
@@ -187,13 +184,17 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
     private void setUpToolbar(){
         toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_larger_24dp);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        setSupportActionBar(toolbar);
     }
 
     @Override
     public void onBackPressed() {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(toolbar.getWindowToken(), InputMethodManager.SHOW_IMPLICIT);
         setActivityToFullscreen(true);
         AnimationHelper.glideDown(glide_container);
         circularHide();

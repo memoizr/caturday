@@ -9,6 +9,7 @@ import com.caturday.app.capsules.login.view.LoginPresenterImpl;
 import com.caturday.app.capsules.login.view.LoginView;
 import com.caturday.app.models.session.SessionModule;
 import com.caturday.app.models.session.repository.SessionRepository;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -31,10 +32,11 @@ public class LoginModule {
         }
 
         @Provides @Singleton LoginInteractor provideLoginInteractor(SessionRepository sessionRepository) {
-               return new LoginInteractorImpl(sessionRepository);
+                return new LoginInteractorImpl(sessionRepository);
         }
 
-        @Provides @Singleton LoginPresenter provideLoginPresenter(LoginInteractor loginInteractor) {
-                return new LoginPresenterImpl(loginView, loginInteractor);
+        @Provides @Singleton
+        LoginPresenter provideLoginPresenter(LoginInteractor loginInteractor, Bus bus) {
+                return new LoginPresenterImpl(loginView, loginInteractor, bus);
         }
 }

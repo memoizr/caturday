@@ -142,7 +142,6 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         Context wrapper = new ContextThemeWrapper(context, R.style.PopupMenuStyle);
         PopupMenu popupMenu = new PopupMenu(wrapper, v);
         popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Report abuse");
-        popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "Copy image URL");
         popupMenu.show();
     }
 

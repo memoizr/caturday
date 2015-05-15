@@ -177,21 +177,20 @@ public class MainActivity extends DrawerActivity implements
 
     @Override
     public void showTabs(boolean showTabs) {
-        if (showTabs)
-            slidingTabs_PSTS.setVisibility(View.VISIBLE);
-        else
-            slidingTabs_PSTS.setVisibility(View.INVISIBLE);
+        if (slidingTabs_PSTS != null) {
+            if (showTabs)
+                slidingTabs_PSTS.setVisibility(View.VISIBLE);
+            else
+                slidingTabs_PSTS.setVisibility(View.INVISIBLE);
+        }
     }
 
     private Animator reveal() {
-        // get the center for the clipping circle
         int cx = reveal.getWidth() / 2;
         int cy = reveal.getTop() + 96;
 
-        // get the final radius for the clipping circle
         int finalRadius = (int) Math.sqrt(Math.pow(reveal.getWidth(), 2) + Math.pow(reveal.getHeight(), 2));
 
-        // create the animator for this view (the start radius is zero)
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
 

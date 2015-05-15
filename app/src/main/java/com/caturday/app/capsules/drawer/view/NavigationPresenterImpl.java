@@ -3,7 +3,8 @@ package com.caturday.app.capsules.drawer.view;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.caturday.app.R;
+import com.caturday.app.capsules.common.events.OnLoginSuccessful;
+import com.caturday.app.capsules.common.events.OnLogoutSuccessful;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.drawer.interactor.NavigationInteractor;
 import com.caturday.app.capsules.login.view.LoginActivity;
@@ -35,16 +36,27 @@ public class NavigationPresenterImpl implements NavigationPresenter {
         String[] values = navigationInteractor.provideNavigationItems();
         navigationView.initializeListView(values);
 
-        boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();
+        displayUserInfo();
+    }
 
+    @Subscribe
+    public void onLoginSuccessful(OnLoginSuccessful event) {
+        displayUserInfo();
+    }
+
+    @Subscribe
+    public void onLogoutSuccessful(OnLogoutSuccessful event) {
+        displayUserInfo();
+    }
+
+    private void displayUserInfo() {
+        boolean isUserLoggedIn = navigationInteractor.isUserLoggedIn();
         if (isUserLoggedIn) {
             userEntity = navigationInteractor.getLoggedInUser();
             navigationView.setUserEmail(userEntity.getEmail());
             navigationView.setUsername(userEntity.getUsername());
             navigationView.setUserProfileImage(userEntity.getImageUrl());
             navigationView.setUserCoverImage(userEntity.getCoverImageUrl());
-        } else {
-
         }
         navigationView.userLoggedIn(isUserLoggedIn);
     }
