@@ -5,7 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.caturday.app.capsules.common.events.OnPageScrolledEvent;
+import com.caturday.app.capsules.common.events.OnPageSelectedEvent;
+import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
@@ -71,13 +72,15 @@ public class DashboardPresenterImpl extends DashboardPresenter {
     @Override
     public void onPageSelected(int position) {
         dashboardView.enableSwipeToRefresh(true);
+        eventBus.post(new OnPageSelectedEvent(position));
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         if (state == ViewPager.SCROLL_STATE_DRAGGING) {
             int itemPosition = dashboardView.getViewPager().getCurrentItem();
-            eventBus.post(new OnPageScrolledEvent(itemPosition, -1));
+            System.out.println("Dashboard: position: " + itemPosition);
+            eventBus.post(new OnPagerScrolledEvent(itemPosition));
         }
     }
 

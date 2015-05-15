@@ -22,7 +22,5 @@ public abstract class CatStreamPresenter implements ObservableScrollViewCallback
 
     public abstract void openDetails(int i, View view, CatPostEntity catPostEntity, boolean showComments);
 
-//    abstract public void onScroll(Fragment fragment, int scrollY, boolean firstScroll, boolean dragging);
-
-//    abstract public void onUpOrCancelMotionEvent(Fragment fragment, ScrollState scrollState);
+    public abstract void onDestroyView();
 }

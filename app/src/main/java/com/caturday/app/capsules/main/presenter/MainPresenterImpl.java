@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
+import com.caturday.app.capsules.common.events.OnPostPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
@@ -16,7 +16,7 @@ import com.caturday.app.capsules.newpost.view.NewPostActivity;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.caturday.app.R;
-import com.caturday.app.capsules.common.events.OnPageScrolledEvent;
+import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPreparePageScroll;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.view.views.MovingImageSliderView;
@@ -63,11 +63,12 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Subscribe
-    public void onPagerScrolled(OnPageScrolledEvent event) {
+    public void onPagerScrolled(OnPostPagerScrolledEvent event) {
         int offset = event.getOffset();
         int position = event.getPosition();
         int collapsedThreshold = mainView.getCollapsedThreshold();
 
+        System.out.println("main: " + collapsedThreshold + " " + offset);
         if (offset >= 0) {
             if (offset > collapsedThreshold) {
                 mainView.hideToolBarContainer(false);

@@ -2,13 +2,11 @@ package com.caturday.app.capsules.common.events;
 
 import lombok.Getter;
 
-public class OnPageScrolledEvent {
+public class OnPagerScrolledEvent {
 
         @Getter private final int position;
-        @Getter private int offset;
 
-        public OnPageScrolledEvent(int position, int offset) {
+        public OnPagerScrolledEvent(int position) {
             this.position = position;
-            this.offset = offset;
         }
 }

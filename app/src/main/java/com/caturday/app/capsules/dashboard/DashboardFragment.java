@@ -73,6 +73,7 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     public void initializePager(FragmentStatePagerAdapter adapter, PagerSlidingTabStrip slidingTabs_PSTS) {
 
         dashboard_VP.setAdapter(adapter);
+        dashboard_VP.setOffscreenPageLimit(5);
         slidingTabs_PSTS.setViewPager(dashboard_VP);
         slidingTabs_PSTS.setTextColor(getResources().getColor(R.color.white));
         slidingTabs_PSTS.setOnPageChangeListener(dashboardPresenter);

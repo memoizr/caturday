@@ -11,13 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 
+import com.caturday.app.capsules.common.events.OnPageSelectedEvent;
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
+import com.caturday.app.capsules.common.events.OnPostPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.detail.view.CatDetailPresenter;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.caturday.app.capsules.common.events.OnPageScrolledEvent;
+import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPreparePageScroll;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
@@ -51,7 +53,6 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         this.catStreamView = catStreamView;
         this.catStreamInteractor = catStreamInteractor;
         this.eventBus = eventBus;
-
     }
 
     @Subscribe
@@ -67,11 +68,19 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Subscribe
-    public void pageScrolled(OnPageScrolledEvent event) {
-        if (event.getPosition() == streamPosition && event.getOffset() < 0) {
+    public void pageScrolled(OnPagerScrolledEvent event) {
+        if (event.getPosition() == streamPosition) {
             int scrollOffset = catStreamView.getScrollPosition();
-            eventBus.post(new OnPageScrolledEvent(streamPosition, scrollOffset));
+            eventBus.post(new OnPostPagerScrolledEvent(streamPosition, scrollOffset));
         }
+    }
+
+    @Subscribe
+    public void onPageSelected(OnPageSelectedEvent event) {
+        if (event.getPosition() == streamPosition) {
+            catStreamView.onPageSelected();
+        }
+
     }
 
     @Subscribe
@@ -93,9 +102,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Override
-    public void onDownMotionEvent() {
-
-    }
+    public void onDownMotionEvent() {}
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
@@ -218,5 +225,10 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         intent.putExtra(CatDetailPresenter.EXTRA_SERVER_ID, catPostEntity.getServerId());
         intent.putExtra(CatDetailPresenter.EXTRA_SHOW_COMMENTS, showComments);
         ActivityCompat.startActivity((Activity) context, intent, options.toBundle());
+    }
+
+    @Override
+    public void onDestroyView() {
+        eventBus.unregister(this);
     }
 }

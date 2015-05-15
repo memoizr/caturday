@@ -90,8 +90,10 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Override
     public void setScrollPosition(int position) {
+        System.out.println("scroll to: " + position);
         ((LinearLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1,
-                R.dimen.scroll_tab_padding - position);
+                getResources().getDimensionPixelSize(R.dimen.scroll_tab_padding) - position);
+
     }
 
     @Override
@@ -116,6 +118,12 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     }
 
     @Override
+    public void onPageSelected() {
+        cats_stream_RV.scrollBy(0,1);
+        cats_stream_RV.scrollBy(0,-1);
+    }
+
+    @Override
     public void initializeRecyclerView(ObservableScrollViewCallbacks listener, RecyclerView.LayoutManager layoutManager) {
         cats_stream_RV.setLayoutManager(layoutManager);
 
@@ -135,5 +143,11 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
                 catStreamPresenter.onScrollStateChanged(newState);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        catStreamPresenter.onDestroyView();
     }
 }
