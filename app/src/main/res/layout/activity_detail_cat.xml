@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/new_comment_V"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
@@ -70,23 +70,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/comment_TE"
-            android:hint="Write a comment"
-            android:maxLines="5"
-            android:layout_marginTop="4dp"
-            android:layout_height="wrap_content"
+        <FrameLayout
+            android:id="@+id/comment_controls"
             android:layout_width="match_parent"
-            android:layout_marginRight="56dp"
-            android:inputType="textMultiLine|textCapSentences"
-            android:textColor="@color/black"/>k
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/send_message_B"
-            android:layout_gravity="right"
-            style="@style/CallToActionButtonStyle"
-            android:src="@drawable/ic_send_grey600_24dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp"/>
-    </FrameLayout>
+            <EditText
+                android:id="@+id/comment_TE"
+                android:hint="Write a comment"
+                android:maxLines="5"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginRight="56dp"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textColor="@color/black"/>
+
+            <ImageButton
+                android:id="@+id/send_message_B"
+                android:layout_gravity="right"
+                style="@style/CallToActionButtonStyle"
+                android:src="@drawable/ic_send_grey600_24dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"/>
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:layout_width="32dp"
+            android:layout_height="32dp"/>
+    </RelativeLayout>
 </RelativeLayout>

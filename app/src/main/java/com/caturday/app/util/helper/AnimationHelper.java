@@ -81,7 +81,7 @@ public class AnimationHelper {
         }
     }
 
-    public static void glideInAndShow(final ViewGroup viewGroup) {
+    public static void glideInAndShowOld(final ViewGroup viewGroup) {
         int count = viewGroup.getChildCount();
         for (int i = 0; i < count; i++) {
             View view = viewGroup.getChildAt(i);
@@ -104,7 +104,7 @@ public class AnimationHelper {
                 .start();
     }
 
-    public static void glideInAndShow(final View view) {
+    public static void glideInAndShowOld(final View view) {
 
         view.setAlpha(0f);
         view.setVisibility(View.VISIBLE);
@@ -112,6 +112,74 @@ public class AnimationHelper {
                 .translationYBy(-MEDIUM_GLIDE_DISTANCE)
                 .alpha(1f)
                 .setDuration(300)
+                .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
+                .start();
+    }
+
+    /**
+     * Make a view disappear, with an upwards animation.
+     *
+     * @param view
+     * @param glideDistance
+     */
+    public static void glideUpAndHide(View view, int glideDistance) {
+        view.animate()
+                .translationYBy(-MEDIUM_GLIDE_DISTANCE)
+                .alpha(0f)
+                .setDuration(300)
+                .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
+                .start();
+    }
+
+    /**
+     * Make an hidden view appear from the bottom, with an upwards animation.
+     *
+     * @param view
+     * @param glideDistance
+     */
+    public static void glideUpAndShow(final View view, int glideDistance) {
+
+        view.setAlpha(0f);
+        view.setVisibility(View.VISIBLE);
+        view.setTranslationY(glideDistance);
+        view.animate()
+                .translationYBy(-glideDistance)
+                .alpha(1f)
+                .setDuration(400)
+                .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
+                .start();
+    }
+
+    /**
+     * Make a view disappear, with a downwards animation.
+     *
+     * @param view
+     * @param glideDistance
+     */
+    public static void glideDownAndHide(View view, int glideDistance) {
+        view.animate()
+                .translationYBy(-MEDIUM_GLIDE_DISTANCE)
+                .alpha(0f)
+                .setDuration(300)
+                .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
+                .start();
+    }
+
+    /**
+     * Make an hidden view appear from the bottom, with a downwards animation.
+     *
+     * @param view
+     * @param glideDistance
+     */
+    public static void glideDownAndShow(final View view, int glideDistance) {
+
+        view.setAlpha(0f);
+        view.setVisibility(View.VISIBLE);
+        view.setTranslationY(glideDistance);
+        view.animate()
+                .translationYBy(-glideDistance)
+                .alpha(1f)
+                .setDuration(400)
                 .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
                 .start();
     }
@@ -164,19 +232,5 @@ public class AnimationHelper {
                         mView.setBackgroundColor((Integer) animation.getAnimatedValue())
         );
         va.start();
-    }
-
-    public static void animateTextColor(TextView view, int colorFrom, int colorTo) {
-        if (view.getCurrentTextColor() == colorFrom) {
-            final TextView mView = view;
-            final ValueAnimator va = ObjectAnimator.ofArgb(
-                    colorFrom,
-                    colorTo);
-            va.setDuration(300);
-            va.addUpdateListener(animation ->
-                            mView.setTextColor((Integer) animation.getAnimatedValue())
-            );
-            va.start();
-        }
     }
 }

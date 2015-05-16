@@ -22,6 +22,7 @@ public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
 
     void favoritePost();
 
+
     interface CatDetailView {
 
         void initRecyclerView();
@@ -49,5 +50,13 @@ public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
         void clearCommentET();
 
         CommentsAdapter getCommentsAdapter();
+
+        void animateCommentETProcessing();
+
+        void animateCommentETSuccess();
+
+        void animateCommentETFailure();
+
+        void shakeCommentBox();
     }
 }

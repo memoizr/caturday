@@ -19,16 +19,20 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.caturday.app.util.helper.AnimationHelper;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -61,7 +65,11 @@ public class CatDetailActivity extends BaseActionBarActivity
     @InjectView(R.id.caption_V) ExpandingView caption_V;
     @InjectView(R.id.new_comment_V) View new_comment_V;
     @InjectView(R.id.comment_TE) EditText comment_ET;
+    @InjectView(R.id.comment_controls) View commentControlsV;
+    @InjectView(R.id.progress_bar) ProgressBar progressBarPB;
+
     @Inject CatDetailPresenter catDetailPresenter;
+
     private int headerBottom;
     private String url;
     private ViewGroup header;
@@ -359,5 +367,41 @@ public class CatDetailActivity extends BaseActionBarActivity
         getWindow().setEnterTransition(fade);
 
         ViewCompat.setTransitionName(cat_detail_IV, getIntent().getStringExtra("transition"));
+    }
+
+    @Override
+    public void animateCommentETProcessing() {
+        int height = new_comment_V.getHeight();
+        AnimationHelper.glideUpAndHide(commentControlsV, height);
+        progressBarPB.postDelayed(() -> {
+            AnimationHelper.glideUpAndShow(progressBarPB, height);
+        }, 400);
+    }
+
+    @Override
+    public void animateCommentETSuccess() {
+        int height = new_comment_V.getHeight();
+        AnimationHelper.glideUpAndHide(progressBarPB, height);
+        progressBarPB.postDelayed(() -> {
+            AnimationHelper.glideUpAndShow(commentControlsV, height);
+        }, 400);
+    }
+
+    @Override
+    public void animateCommentETFailure() {
+        int height = new_comment_V.getHeight();
+        AnimationHelper.glideDownAndHide(progressBarPB, height);
+        progressBarPB.postDelayed(() -> {
+            AnimationHelper.glideDownAndShow(commentControlsV, height);
+        }, 400);
+        progressBarPB.postDelayed(() -> {
+            shakeCommentBox();
+        }, 800);
+    }
+
+    @Override
+    public void shakeCommentBox() {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
+        commentControlsV.startAnimation(animation);
     }
 }

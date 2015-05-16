@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -122,7 +121,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
                 password_TV.getText().toString());
 
         AnimationHelper.glideAwayAndHide(glide_container);
-        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(progress_bar), 400);
+        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShowOld(progress_bar), 400);
     }
 
     @OnClick(R.id.create_account_B)
@@ -152,7 +151,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
                 password_TV.getText().toString());
 
         AnimationHelper.glideAwayAndHide(glide_container);
-        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(progress_bar), 400);
+        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShowOld(progress_bar), 400);
     }
 
 
@@ -234,7 +233,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     @Override
     public void failureAnimation() {
         progress_bar.postDelayed(() -> AnimationHelper.glideOutAndHide(progress_bar), 500);
-        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(glide_container), 900);
+        progress_bar.postDelayed(() -> AnimationHelper.glideInAndShowOld(glide_container), 900);
         progress_bar.postDelayed(() -> {
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
             password_TV.startAnimation(animation);

@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 
@@ -104,6 +105,11 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     @Override
     public void sendComment(String comment) {
 
+        if (comment.length() == 0) {
+            catDetailView.shakeCommentBox();
+            return;
+        }
+        catDetailView.animateCommentETProcessing();
         catDetailInteractor.sendComment(comment, catPostServerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -113,9 +119,17 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                                     getCommentEntities(catPostEntity));
                             catDetailView.clearCommentET();
                             catDetailView.scrollToBottom();
+                            new Handler().postDelayed(() -> {
+                                catDetailView.animateCommentETSuccess();
+                            }, 600);
                         },
 
-                        Throwable::printStackTrace
+                        e -> {
+                            new Handler().postDelayed(() -> {
+                                catDetailView.animateCommentETFailure();
+                            }, 600);
+                            e.printStackTrace();
+                        }
                 );
     }
 
