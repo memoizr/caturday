@@ -1,9 +1,11 @@
 package com.caturday.app.capsules.main.view;
 
 import android.animation.Animator;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -98,6 +100,11 @@ public class MainActivity extends DrawerActivity implements
 
         titleMaxHeight = collapsibleView.getMaxHeight();
         titleMinHeight = collapsibleView.getMinHeight();
+    }
+
+    @Override
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawers();
     }
 
     @Override
@@ -324,6 +331,12 @@ public class MainActivity extends DrawerActivity implements
         System.out.println("on pause");
         mainPresenter.onPause();
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        closeDrawer();
     }
 
     @Override

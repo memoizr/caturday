@@ -2,6 +2,7 @@ package com.caturday.app.capsules.drawer.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 
 import com.caturday.app.capsules.common.events.OnLoginSuccessful;
 import com.caturday.app.capsules.common.events.OnLogoutSuccessful;

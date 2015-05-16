@@ -75,9 +75,10 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @Override
     public void initToolbar(){
         toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_larger_24dp);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        setSupportActionBar(toolbar);
     }
 
     public void reveal() {

@@ -23,7 +23,7 @@
                 android:orientation="vertical"
                 android:id="@+id/glide_container_V"
                 android:layout_width="match_parent"
-                android:paddingTop="72dp"
+                android:paddingTop="56dp"
                 android:clipToPadding="false"
                 android:paddingLeft="72dp"
                 android:animateLayoutChanges="true"

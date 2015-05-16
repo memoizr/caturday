@@ -28,4 +28,6 @@ public interface MainView extends ScrollEventListener {
     void hideToolBarContainer(boolean shouldHide);
 
     void showTabs(boolean b);
+
+    void closeDrawer();
 }
