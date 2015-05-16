@@ -10,10 +10,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.caturday.app.R;
@@ -41,12 +43,12 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.reveal_V) View reveal;
     @InjectView(R.id.linear_container) LinearLayout linear_container;
     @InjectView(R.id.toolbar) Toolbar toolbar;
-    @InjectView(R.id.choices_HSV) View choices;
     @InjectView(R.id.preview_IV) ImageView preview;
     @InjectView(R.id.caption_ET) EditText caption;
     @InjectView(R.id.link_ET) EditText link;
     @InjectView(R.id.clear_B) ImageButton clear_B;
     @InjectView(R.id.clear_link_B) ImageButton clear_link_B;
+    @InjectView(R.id.category_spinner) Spinner spinner;
     private int result = RESULT_CANCELED;
 
     @Override
@@ -56,15 +58,14 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
         ButterKnife.inject(this);
 
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
 
         if (savedInstanceState == null) {
             newPostPresenter.onCreate(this);
             reveal.postDelayed(() -> reveal(), 32);
         } else
             reveal.setVisibility(View.VISIBLE);
+
+        setUpSpinner();
     }
 
     @Override
@@ -123,13 +124,13 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     private void showLinkET() {
         link.setVisibility(View.VISIBLE);
         clear_link_B.setVisibility(View.VISIBLE);
-        choices.setVisibility(View.GONE);
+//        choices.setVisibility(View.GONE);
     }
 
     private void hideLinkET() {
         link.setVisibility(View.GONE);
         clear_link_B.setVisibility(View.GONE);
-        choices.setVisibility(View.VISIBLE);
+//        choices.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.clear_link_B)
@@ -180,14 +181,14 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     public void choiceMade() {
         preview.setVisibility(View.VISIBLE);
         clear_B.setVisibility(View.VISIBLE);
-        choices.setVisibility(View.GONE);
+//        choices.setVisibility(View.GONE);
     }
 
     @Override
     public void choiceUnmade() {
         preview.setVisibility(View.GONE);
         clear_B.setVisibility(View.INVISIBLE);
-        choices.setVisibility(View.VISIBLE);
+//        choices.setVisibility(View.VISIBLE);
         hideLinkET();
     }
 
@@ -214,5 +215,14 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @Override
     public void finish() {
         super.finish();
+    }
+
+    public void setUpSpinner() {
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
     }
 }

@@ -1,19 +1,33 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/reveal_V"
-             android:background="@color/accent"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:visibility="invisible"
              tools:context="com.caturday.app.capsules.newpost.view.NewPostActivity">
 
-    <ScrollView
+    <android.support.v7.widget.CardView
+        android:id="@+id/reveal_V"
+        android:layout_margin="16dp"
+        android:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        app:cardCornerRadius="4dp"
+        app:cardElevation="10dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        tools:context="com.caturday.app.capsules.newpost.view.NewPostActivity">
+
+        <Button
+            android:id="@+id/submit_B"
+            android:drawableRight="@drawable/ic_send_grey600_24dp"
+            style="@style/CallToActionButtonStyle"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            />
 
         <LinearLayout
             android:id="@+id/linear_container"
+            android:background="@color/accent"
             android:layout_width="match_parent"
             android:animateLayoutChanges="true"
             android:layout_height="wrap_content"
@@ -23,34 +37,57 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:paddingTop="72dp"
+                android:layout_marginLeft="56dp"
+                android:paddingTop="56dp"
                 android:text="Create New Post"
                 android:textColor="@color/white"
-                android:textSize="32dp" />
+                android:textSize="24dp" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/caption_ET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="72dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
                 android:hint="Enter Caption"
                 app:baseColor="@android:color/white"
                 app:floatingLabel="highlight"
-                app:maxCharacters="20"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLines="7"
                 app:primaryColor="@color/white"
-                app:singleLineEllipsis="true" />
+                />
+            
+            <TextView
+                android:layout_marginLeft="56dp"
 
+                android:layout_marginTop="16dp"
+                android:text="Category"
+                android:textSize="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <TextView
+                android:layout_marginLeft="56dp"
+
+                android:layout_marginTop="16dp"
+                android:text="Select image"
+                android:textSize="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
                 android:animateLayoutChanges="true"
-                android:background="@color/accent_dark">
+                >
 
                 <ImageView
                     android:id="@+id/preview_IV"
@@ -99,77 +136,46 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"/>
 
-                <HorizontalScrollView
-                    android:id="@+id/choices_HSV"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none">
+                    android:orientation="vertical"
+                    >
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="40dp"
-                        android:paddingRight="40dp"
-                        android:paddingTop="8dp">
+                    <Button
+                        android:id="@+id/take_photo_B"
+                        style="@style/NewPostButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:drawableLeft="@drawable/ic_camera_alt_white_24dp"
+                        android:text="New photo"/>
 
-                        <Button
-                            android:id="@+id/take_photo_B"
-                            style="@style/NewPostButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableTop="@drawable/ic_camera_alt_white_48dp"
-                            android:text="New photo"/>
+                    <Button
+                        android:id="@+id/upload_image_B"
+                        style="@style/NewPostButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:drawableLeft="@drawable/ic_crop_original_white_24dp"
+                        android:text="From gallery"/>
 
-                        <Button
-                            android:id="@+id/upload_image_B"
-                            style="@style/NewPostButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableTop="@drawable/ic_collections_white_48dp"
-                            android:text="From gallery"/>
+                    <Button
+                        android:id="@+id/link_image_B"
+                        style="@style/NewPostButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:drawableLeft="@drawable/ic_insert_link_white_24dp"
+                        android:text="From link"/>
 
-                        <Button
-                            android:id="@+id/link_image_B"
-                            style="@style/NewPostButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableTop="@drawable/ic_link_white_48dp"
-                            android:text="From link"/>
-
-                    </LinearLayout>
-                </HorizontalScrollView>
+                </LinearLayout>
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="56dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/cancel_B"
-                    style="@style/CallToActionButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:text="Cancel" />
-
-                <Button
-                    android:id="@+id/submit_B"
-                    style="@style/CallToActionButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:text="Publish" />
-            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:paddingTop="@dimen/status_bar_size"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            />
+    </android.support.v7.widget.CardView>
 </FrameLayout>
