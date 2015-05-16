@@ -23,7 +23,6 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Inject UserInfoPresenter userInfoPresenter;
     @InjectView(R.id.username_TV) TextView username_TV;
-    @InjectView(R.id.tagline_TV) TextView tagline_TV;
 
     public UserInfoFragment() {
 
@@ -68,7 +67,6 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Override
     public void setDescription(String description) {
-        tagline_TV.setText(description);
     }
 
     @Override

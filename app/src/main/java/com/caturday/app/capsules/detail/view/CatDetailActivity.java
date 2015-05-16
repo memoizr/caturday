@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -253,18 +254,12 @@ public class CatDetailActivity extends BaseActionBarActivity
 
         comments_RV.setAdapter(adapter);
 
-        caption_V.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                comments_RV.dispatchTouchEvent(event);
-                return true;
-            } else {
-                showComment();
-            }
-            return false;
-        });
-
         comments_RV.setOnTouchListener((v, event) -> {
             if (event.getY() > headerBottom - captionHeight) {
+                long duration = android.os.SystemClock.uptimeMillis() - event.getDownTime();
+                if (event.getAction() == MotionEvent.ACTION_UP && duration < 150) {
+                    showComment();
+                }
                 return false;
             } else {
                 if (!activityClosed) {

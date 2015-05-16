@@ -114,7 +114,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         if (link.getText().length() > 0)
             catPostEntity.setImageUrl(link.getText().toString());
 
-        catPostEntity.setCategory("space");
+        catPostEntity.setCategory("caturday");
 
         sendPostForUri(catPostEntity, imageUri);
     }
