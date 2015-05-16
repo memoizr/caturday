@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
@@ -71,6 +72,11 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
 
         AnimationHelper.glideUp(glide_container);
         showKeyboard();
+
+        if (savedInstanceState == null)
+            login_reveal.postDelayed(() -> circularReveal(), 32);
+        else
+            login_reveal.setVisibility(View.VISIBLE);
     }
 
     private void setActivityToFullscreen(boolean isFullscreen) {
@@ -149,10 +155,10 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
         progress_bar.postDelayed(() -> AnimationHelper.glideInAndShow(progress_bar), 400);
     }
 
+
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        login_reveal.postDelayed(() -> circularReveal(), 32);
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
     }
 
     public void circularReveal() {

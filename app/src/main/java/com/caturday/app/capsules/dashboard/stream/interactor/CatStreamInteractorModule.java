@@ -22,10 +22,4 @@ import dagger.Provides;
 )
 public class CatStreamInteractorModule {
 
-    @Provides @Singleton public CatStreamInteractor provideCatStreamInteractor(
-            CatPostRepository catPostRepository,
-            VoteRepository voteRepository) {
-
-        return new CatStreamInteractorImpl(catPostRepository, voteRepository);
-    }
 }

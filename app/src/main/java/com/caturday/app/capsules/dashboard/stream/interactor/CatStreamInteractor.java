@@ -17,4 +17,6 @@ public interface CatStreamInteractor {
     Observable<CatPostEntity> getCatPost(String serverId);
 
     Observable<CatPostEntity> catPostVoted(String serverId);
+
+    boolean userLoggedIn();
 }

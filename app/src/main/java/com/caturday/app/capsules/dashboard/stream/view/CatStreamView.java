@@ -19,7 +19,7 @@ public interface CatStreamView {
 
     CatPostAdapter getAdapter();
 
-    void showEmptyView(boolean showIt);
+    void showEmptyView(boolean showIt, boolean loggedIn);
 
     void onPageSelected();
 }

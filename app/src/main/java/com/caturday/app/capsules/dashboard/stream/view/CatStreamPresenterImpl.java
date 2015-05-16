@@ -179,7 +179,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     private void setEmptyView(boolean showIt) {
-       catStreamView.showEmptyView(showIt);
+        catStreamView.showEmptyView(showIt, catStreamInteractor.userLoggedIn());
     }
 
     private void onLoadFailure(Throwable e) {

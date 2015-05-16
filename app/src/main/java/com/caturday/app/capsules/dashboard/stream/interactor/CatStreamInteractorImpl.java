@@ -2,6 +2,7 @@ package com.caturday.app.capsules.dashboard.stream.interactor;
 
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.catpost.repository.CatPostRepository;
+import com.caturday.app.models.user.repository.UserRepository;
 import com.caturday.app.models.vote.VoteEntity;
 import com.caturday.app.models.vote.repository.VoteRepository;
 
@@ -12,12 +13,15 @@ import rx.Observable;
 public class CatStreamInteractorImpl implements CatStreamInteractor {
 
     private final VoteRepository voteRepository;
+    private final UserRepository userRepository;
     CatPostRepository catPostRepository;
 
     public CatStreamInteractorImpl(CatPostRepository catPostRepository,
-                                   VoteRepository voteRepository) {
+                                   VoteRepository voteRepository,
+                                   UserRepository userRepository) {
 
         this.catPostRepository = catPostRepository;
+        this.userRepository = userRepository;
         this.voteRepository = voteRepository;
     }
 
@@ -51,5 +55,10 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
         return voteRepository.sendVote(voteEntity)
                 .flatMap(vote -> catPostRepository.getCatPost(serverId, true))
                 .doOnNext(catPostRepository::updateCatPost);
+    }
+
+    @Override
+    public boolean userLoggedIn() {
+        return userRepository.userLoggedIn();
     }
 }
