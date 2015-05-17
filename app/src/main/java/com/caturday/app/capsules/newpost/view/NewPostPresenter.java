@@ -3,6 +3,7 @@ package com.caturday.app.capsules.newpost.view;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public interface NewPostPresenter {
 
@@ -14,6 +15,6 @@ public interface NewPostPresenter {
 
     void onActivityResult(int requestCode, int resultCode, Intent data);
 
-    void sendPost(EditText caption, EditText link);
+    void sendPost(EditText caption, EditText link, Spinner spinner);
 }
 

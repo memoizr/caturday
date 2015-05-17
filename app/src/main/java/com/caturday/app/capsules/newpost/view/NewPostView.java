@@ -23,4 +23,6 @@ public interface NewPostView {
     void onSendPostProcessing();
 
     void onSendPostFailure();
+
+    void shakeOptionButtons();
 }

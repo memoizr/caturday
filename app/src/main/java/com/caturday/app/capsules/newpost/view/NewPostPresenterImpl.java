@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.caturday.app.capsules.newpost.interactor.NewPostInteractor;
 import com.caturday.app.models.catpost.CatPostEntity;
@@ -108,15 +109,20 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     }
 
     @Override
-    public void sendPost(EditText caption, EditText link) {
+    public void sendPost(EditText caption, EditText link, Spinner spinner) {
 
         CatPostEntity catPostEntity = new CatPostEntity();
         catPostEntity.setCaption(caption.getText().toString());
 
         if (link.getText().length() > 0)
             catPostEntity.setImageUrl(link.getText().toString());
+        else if (imageUri == null) {
+            newPostView.shakeOptionButtons();
+            return;
+        }
 
-        catPostEntity.setCategory("caturday");
+        // Todo use enum class or some other more robust, I18n friendly way of doing this
+        catPostEntity.setCategory(spinner.getSelectedItem().toString().toLowerCase());
 
         sendPostForUri(catPostEntity, imageUri);
     }

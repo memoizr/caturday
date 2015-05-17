@@ -14,7 +14,10 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -57,7 +60,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.upload_buttons_LL) ViewGroup uploadButtonsVG;
     @InjectView(R.id.progress_bar) ProgressBar progressBar;
     @InjectView(R.id.done_V) View doneV;
-    @InjectView(R.id.submit_B) View submitB;
+    @InjectView(R.id.submit_B) Button submitB;
     private int result = RESULT_CANCELED;
     private int containerHeight;
     private boolean isClosing;
@@ -315,6 +318,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @Override
     public void onSendPostProcessing() {
 
+        submitB.setEnabled(false);
         AnimationHelper.glideUpAndHide(linear_container, linear_container.getHeight() / 2);
         linear_container.postDelayed(() -> {
             AnimationHelper.glideUpAndShow(progressBar, linear_container.getHeight() / 2);
@@ -326,7 +330,14 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         AnimationHelper.glideDownAndHide(progressBar, linear_container.getHeight() / 2);
         linear_container.postDelayed(() -> {
             AnimationHelper.glideDownAndShow(linear_container, linear_container.getHeight() / 2);
+            submitB.setEnabled(true);
         }, 500);
+    }
+
+    @Override
+    public void shakeOptionButtons() {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
+        uploadButtonsVG.startAnimation(animation);
     }
 
     @OnClick(R.id.upload_image_B)
@@ -374,7 +385,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
     @OnClick(R.id.submit_B)
     public void submit() {
-        newPostPresenter.sendPost(caption, link);
+        newPostPresenter.sendPost(caption, link, spinner);
     }
 
     @OnClick(R.id.clear_B)
