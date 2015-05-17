@@ -5,11 +5,11 @@
     android:id="@+id/reveal_V"
     android:layout_margin="16dp"
     android:elevation="10dp"
-    android:layout_width="match_parent"
-    app:cardCornerRadius="4dp"
+    app:cardCornerRadius="28dp"
     android:visibility="invisible"
     android:layout_gravity="bottom|right"
     app:cardElevation="10dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.caturday.app.capsules.newpost.view.NewPostActivity">
 
@@ -35,13 +35,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="56dp"
-            android:paddingTop="56dp"
+            android:paddingTop="16dp"
             android:text="Create New Post"
             android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:textSize="18dp" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/caption_ET"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="56dp"
@@ -58,6 +59,7 @@
             android:layout_marginLeft="56dp"
 
             android:layout_marginTop="16dp"
+            android:textColor="@color/white"
             android:text="Category"
             android:textSize="12dp"
             android:layout_width="wrap_content"
@@ -65,6 +67,7 @@
 
         <Spinner
             android:id="@+id/category_spinner"
+
             android:layout_marginLeft="48dp"
             android:layout_marginRight="48dp"
             android:layout_width="match_parent"
@@ -93,8 +96,8 @@
                 android:layout_below="@id/preview_IV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="72dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
                 android:hint="Enter URL"
                 android:visibility="gone"
                 app:baseColor="@android:color/white"

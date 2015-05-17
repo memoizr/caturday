@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,12 +14,14 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +68,8 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.upload_buttons_LL) ViewGroup uploadButtonsVG;
     @InjectView(R.id.progress_bar) ProgressBar progressBar;
     @InjectView(R.id.done_V) View doneV;
+    @InjectView(R.id.submit_B) View submitB;
+    private int containerHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,8 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         } else
             reveal.setVisibility(View.VISIBLE);
 
+        containerHeight = linear_container.getHeight();
+
         setUpSpinner();
     }
 
@@ -94,7 +101,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_larger_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
@@ -105,22 +112,64 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
             hide();
         }, 400);
         new Handler().postDelayed(() -> {
-            hide();
             super.onBackPressed();
         }, 1000);
     }
 
-    public void reveal() {
+    private void assistReveal() {
+
         reveal.setVisibility(View.VISIBLE);
-        int targetSize1 = reveal.getWidth();
-        final int origSize = getResources().getDimensionPixelSize(R.dimen.original_size);
+        View navIcon = toolbar.getChildAt(0);
+        navIcon.setRotation(45);
+        navIcon.setScaleX(1.2f);
+        navIcon.setScaleY(1.2f);
+
+        submitB.setAlpha(0f);
+        submitB.animate()
+                .alpha(1f)
+                .setStartDelay(200)
+                .setDuration(700)
+                .start();
+
+        navIcon.animate()
+                .setDuration(1000)
+                .rotation(90)
+                .scaleY(1f)
+                .scaleX(1f)
+                .setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator())
+                .start();
+    }
+
+    private void assistHide() {
+        View navIcon = toolbar.getChildAt(0);
+
+        submitB.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .start();
+
+        navIcon.animate()
+                .setDuration(500)
+                .rotation(45)
+                .scaleY(1.2f)
+                .scaleX(1.2f)
+                .setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator())
+                .start();
+    }
+
+    public void reveal() {
+
+        assistReveal();
+        int targetX = reveal.getWidth();
+        int targetY = reveal.getHeight();
+        int origSize = getResources().getDimensionPixelSize(R.dimen.original_size);
         final int origRadius = origSize/2;
-        final int targetRadius1 = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
+        final int targetRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
         final int targetTop = reveal.getTop();
 
         ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
         revealAnim.addUpdateListener(animation ->
-                transformMaterial(origSize, targetSize1, origRadius, targetRadius1, animation));
+                transformMaterial(origSize, origSize, targetX, targetY, origRadius, targetRadius, animation));
 
         ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) -targetTop);
         AnimatorSet aset = new AnimatorSet();
@@ -128,29 +177,42 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
         aset.setDuration(700);
         aset.start();
+
+        reveal.postDelayed(()-> {
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.RIGHT | Gravity.BOTTOM);
+            reveal.setLayoutParams(layoutParams);
+                }
+        ,1200);
     }
 
     public void hide() {
-        int origSize = reveal.getWidth();
-        final int targetSize1 = getResources().getDimensionPixelSize(R.dimen.original_size);
-        final int targetRadius1 = targetSize1/2;
+        assistHide();
+        int origX = reveal.getWidth();
+        int origY = reveal.getHeight();
+        final int targetSize = getResources().getDimensionPixelSize(R.dimen.original_size);
+        final int targetRadius = targetSize/2;
         final int origRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
         final int targetTop = 0;
 
         ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
         revealAnim.addUpdateListener(animation ->
-                transformMaterial(origSize, targetSize1, origRadius, targetRadius1, animation));
+                transformMaterial(origX, origY, targetSize, targetSize, origRadius, targetRadius, animation));
 
         ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) targetTop);
         AnimatorSet aset = new AnimatorSet();
         aset.playTogether(revealAnim, translateY);
         aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
-        aset.setDuration(700);
+        aset.setDuration(500);
         aset.start();
     }
 
-    private void transformMaterial(int origSize,
-                                   int targetSize,
+    private void transformMaterial(int origX,
+                                   int origY,
+                                   int targetX,
+                                   int targetY,
                                    int origRadius,
                                    int targetRadius,
                                    ValueAnimator animation) {
@@ -158,8 +220,11 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         float fraction = (float) animation.getAnimatedValue();
         reveal.setRadius(interpolate(origRadius, targetRadius, fraction));
 
-        reveal.getLayoutParams().width = reveal.getLayoutParams().height
-                = (int) ((targetSize - origSize) * (1 - fraction) + origSize);
+        reveal.getLayoutParams().width =
+                (int) ((targetX - origX) * (1 - fraction) + origX);
+        reveal.getLayoutParams().height =
+                (int) ((targetY - origY) * (1 - fraction) + origY);
+
         reveal.requestLayout();
     }
 
@@ -235,7 +300,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @Override
     public void animateIn() {
         linear_container.postDelayed(() ->
-                AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight()/2)
+                AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight())
         , 300);
     }
 
@@ -304,6 +369,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     public void finish() {
 
         super.finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     public void setUpSpinner() {
