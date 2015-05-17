@@ -27,6 +27,7 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
 
     @InjectView(R.id.dashboard_VP) ViewPager dashboard_VP;
     @InjectView(R.id.swipe_container) SwipeRefreshLayout swipe_container;
+    @InjectView(R.id.new_post_B) View newPostFab;
 
     private PagerSlidingTabStrip slidingTabs_PSTS;
 
@@ -62,6 +63,18 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     @Override
     public ViewPager getViewPager() {
         return dashboard_VP;
+    }
+
+    @Override
+    public void hideFAB() {
+        newPostFab.postDelayed(() ->
+                newPostFab.setAlpha(0f)
+                , 400);
+    }
+
+    @Override
+    public void showFAB() {
+        newPostFab.setAlpha(1f);
     }
 
     @Override

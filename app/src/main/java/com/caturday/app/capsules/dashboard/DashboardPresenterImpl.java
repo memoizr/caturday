@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.capsules.common.events.OnPageSelectedEvent;
 import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
+import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
+import com.caturday.app.capsules.common.events.OnPostResult;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
@@ -37,6 +39,11 @@ public class DashboardPresenterImpl extends DashboardPresenter {
         dashboardView.setRefreshing(false);
     }
 
+    @Subscribe
+    public void onPostResult(OnPostResult event) {
+        dashboardView.showFAB();
+    }
+
     @Override
     public void onCreateView(BaseFragment fragment) {
         activity = fragment.getActivity();
@@ -56,6 +63,7 @@ public class DashboardPresenterImpl extends DashboardPresenter {
     public void createNewPost() {
         Intent intent = new Intent(activity, NewPostActivity.class);
         activity.startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
+        dashboardView.hideFAB();
     }
 
     @Override

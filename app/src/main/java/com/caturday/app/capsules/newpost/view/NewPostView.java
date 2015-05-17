@@ -18,5 +18,9 @@ public interface NewPostView {
 
     void setPreview(String url);
 
-    void success(CatPostEntity catPostEntity);
+    void onSendPostSuccess(CatPostEntity catPostEntity);
+
+    void onSendPostProcessing();
+
+    void onSendPostFailure();
 }

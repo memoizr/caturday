@@ -10,6 +10,6 @@ public class HyperAccelerateDecelerateInterpolator implements TimeInterpolator {
     }
 
     public static TimeInterpolator getInterpolator() {
-        return new PathInterpolator(0.75f, 0.1f, 0.25f, 0.9f);
+        return new PathInterpolator(0.7f, 0f, 0.3f, 1f);
     }
 }

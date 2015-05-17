@@ -43,4 +43,6 @@
     <dimen name="overflow_offset_x">24dp</dimen>
     <dimen name="overflow_x">24dp</dimen>
     <dimen name="overflow_y">48dp</dimen>
+    <dimen name="original_size">56dp</dimen>
+    <dimen name="target_radius_1">4dp</dimen>
 </resources>

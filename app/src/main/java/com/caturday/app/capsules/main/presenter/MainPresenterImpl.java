@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.caturday.app.capsules.common.events.OnLogoutSuccessful;
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.OnPostPagerScrolledEvent;
+import com.caturday.app.capsules.common.events.OnPostResult;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
@@ -136,6 +137,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        bus.post(new OnPostResult());
         if (requestCode == NewPostActivity.NEW_POST_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK) {
             bus.post(new OnPostCreatedEvent(data.getExtras().getString(NewPostActivity.NEW_POST_ID)));

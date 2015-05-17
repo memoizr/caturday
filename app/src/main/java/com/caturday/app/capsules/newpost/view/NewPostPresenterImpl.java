@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.widget.EditText;
 
-import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.newpost.interactor.NewPostInteractor;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.squareup.otto.Bus;
@@ -131,6 +131,8 @@ public class NewPostPresenterImpl implements NewPostPresenter {
             observer.onCompleted();
         });
 
+        newPostView.onSendPostProcessing();
+
         uriObservable.subscribeOn(Schedulers.io())
                 .flatMap(newPostInteractor::createPost)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -140,10 +142,15 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     }
 
     private void onSendingSuccess(CatPostEntity catPostEntity) {
-        newPostView.success(catPostEntity);
+        new Handler().postDelayed(() -> {
+            newPostView.onSendPostSuccess(catPostEntity);
+        }, 700);
     }
 
     private void onSendingFailure(Throwable throwable) {
+        new Handler().postDelayed(() -> {
+            newPostView.onSendPostFailure();
+        }, 700);
         throwable.printStackTrace();
     }
 

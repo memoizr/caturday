@@ -17,4 +17,8 @@ public interface DashboardView {
     void initializeSwipeContainer(SwipeRefreshLayout.OnRefreshListener listener);
 
     ViewPager getViewPager();
+
+    void hideFAB();
+
+    void showFAB();
 }

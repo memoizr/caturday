@@ -212,7 +212,7 @@ public class LoginActivity extends BaseActionBarActivity implements LoginView {
     @Override
     public void successAnimation() {
         progress_bar.postDelayed(() -> AnimationHelper.zoomOut(progress_bar), 600);
-        progress_bar.postDelayed(() -> AnimationHelper.zoomIn(done), 1000);
+        progress_bar.postDelayed(() -> AnimationHelper.zoomInAndShow(done), 1000);
         progress_bar.postDelayed(() ->
                 AnimationHelper.circularReveal(
                         reveal_done, done.getLeft() + done.getWidth() / 2,

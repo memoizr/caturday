@@ -2,19 +2,27 @@ package com.caturday.app.capsules.newpost.view;
 
 import android.animation.Animator;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +30,8 @@ import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
 import com.caturday.app.capsules.newpost.NewPostModule;
 import com.caturday.app.models.catpost.CatPostEntity;
+import com.caturday.app.util.helper.AnimationHelper;
+import com.caturday.app.util.interpolators.HyperAccelerateDecelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanAccelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanDecelerateInterpolator;
 import com.squareup.picasso.Picasso;
@@ -39,8 +49,11 @@ import butterknife.OnClick;
 public class NewPostActivity extends BaseActionBarActivity implements NewPostView {
     public static final String NEW_POST_ID = "NEW_POST_ID";
     public static final int NEW_POST_REQUEST_CODE = 2;
+
+    private int result = RESULT_CANCELED;
+
     @Inject NewPostPresenter newPostPresenter;
-    @InjectView(R.id.reveal_V) View reveal;
+    @InjectView(R.id.reveal_V) CardView reveal;
     @InjectView(R.id.linear_container) LinearLayout linear_container;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.preview_IV) ImageView preview;
@@ -49,11 +62,14 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.clear_B) ImageButton clear_B;
     @InjectView(R.id.clear_link_B) ImageButton clear_link_B;
     @InjectView(R.id.category_spinner) Spinner spinner;
-    private int result = RESULT_CANCELED;
+    @InjectView(R.id.upload_buttons_LL) ViewGroup uploadButtonsVG;
+    @InjectView(R.id.progress_bar) ProgressBar progressBar;
+    @InjectView(R.id.done_V) View doneV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         setContentView(R.layout.activity_new_post);
 
         ButterKnife.inject(this);
@@ -61,7 +77,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
         if (savedInstanceState == null) {
             newPostPresenter.onCreate(this);
-            reveal.postDelayed(() -> reveal(), 32);
+            reveal.postDelayed(() -> reveal(), 200);
         } else
             reveal.setVisibility(View.VISIBLE);
 
@@ -82,16 +98,73 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
+    @Override
+    public void onBackPressed() {
+        AnimationHelper.glideDownAndHide(linear_container, linear_container.getHeight() / 2);
+        new Handler().postDelayed(() -> {
+            hide();
+        }, 400);
+        new Handler().postDelayed(() -> {
+            hide();
+            super.onBackPressed();
+        }, 1000);
+    }
+
     public void reveal() {
-        int cx = reveal.getRight() - 96;
-        int cy = reveal.getBottom() - 96;
-        int finalRadius = (int) Math.sqrt(Math.pow(reveal.getWidth(),2) + Math.pow(reveal.getHeight(), 2));
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
-        anim.setDuration(400);
-        anim.setInterpolator(new HyperTanAccelerateInterpolator());
         reveal.setVisibility(View.VISIBLE);
-        anim.start();
+        int targetSize1 = reveal.getWidth();
+        final int origSize = getResources().getDimensionPixelSize(R.dimen.original_size);
+        final int origRadius = origSize/2;
+        final int targetRadius1 = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
+        final int targetTop = reveal.getTop();
+
+        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
+        revealAnim.addUpdateListener(animation ->
+                transformMaterial(origSize, targetSize1, origRadius, targetRadius1, animation));
+
+        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) -targetTop);
+        AnimatorSet aset = new AnimatorSet();
+        aset.playTogether(revealAnim, translateY);
+        aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
+        aset.setDuration(700);
+        aset.start();
+    }
+
+    public void hide() {
+        int origSize = reveal.getWidth();
+        final int targetSize1 = getResources().getDimensionPixelSize(R.dimen.original_size);
+        final int targetRadius1 = targetSize1/2;
+        final int origRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
+        final int targetTop = 0;
+
+        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
+        revealAnim.addUpdateListener(animation ->
+                transformMaterial(origSize, targetSize1, origRadius, targetRadius1, animation));
+
+        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) targetTop);
+        AnimatorSet aset = new AnimatorSet();
+        aset.playTogether(revealAnim, translateY);
+        aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
+        aset.setDuration(700);
+        aset.start();
+    }
+
+    private void transformMaterial(int origSize,
+                                   int targetSize,
+                                   int origRadius,
+                                   int targetRadius,
+                                   ValueAnimator animation) {
+
+        float fraction = (float) animation.getAnimatedValue();
+        reveal.setRadius(interpolate(origRadius, targetRadius, fraction));
+
+        reveal.getLayoutParams().width = reveal.getLayoutParams().height
+                = (int) ((targetSize - origSize) * (1 - fraction) + origSize);
+        reveal.requestLayout();
+    }
+
+    private float interpolate(int from, int to, float fraction) {
+        return ((from - to) * fraction) + to;
     }
 
     @OnClick(R.id.upload_image_B)
@@ -124,13 +197,13 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     private void showLinkET() {
         link.setVisibility(View.VISIBLE);
         clear_link_B.setVisibility(View.VISIBLE);
-//        choices.setVisibility(View.GONE);
+        uploadButtonsVG.setVisibility(View.GONE);
     }
 
     private void hideLinkET() {
         link.setVisibility(View.GONE);
         clear_link_B.setVisibility(View.GONE);
-//        choices.setVisibility(View.VISIBLE);
+        uploadButtonsVG.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.clear_link_B)
@@ -161,59 +234,75 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
     @Override
     public void animateIn() {
-        int count = linear_container.getChildCount();
-        for (int i = 0; i < count; i++) {
-            View view = linear_container.getChildAt(i);
-            view.setTranslationY(400);
-            view.setAlpha(0f);
-            view.animate()
-                    .translationYBy(-400)
-                    .alpha(1f)
-                    .setDuration(400)
-                    .setInterpolator(new HyperTanDecelerateInterpolator())
-                    .setStartDelay(i * 100 + 600)
-                    .start();
-        }
+        linear_container.postDelayed(() ->
+                AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight()/2)
+        , 300);
     }
-
 
     @Override
     public void choiceMade() {
         preview.setVisibility(View.VISIBLE);
         clear_B.setVisibility(View.VISIBLE);
-//        choices.setVisibility(View.GONE);
+        uploadButtonsVG.setVisibility(View.GONE);
     }
 
     @Override
     public void choiceUnmade() {
         preview.setVisibility(View.GONE);
         clear_B.setVisibility(View.INVISIBLE);
-//        choices.setVisibility(View.VISIBLE);
+        uploadButtonsVG.setVisibility(View.VISIBLE);
         hideLinkET();
     }
 
     @Override
     public void setPreview(Uri uri) {
+
         Glide.with(this).load(uri).into(preview);
     }
 
     @Override
     public void setPreview(String url) {
+
         if (url.length() > 0)
-            Picasso.with(this).load(url).fit().centerInside().into(preview);
+            Glide.with(this).load(url).into(preview);
     }
 
     @Override
-    public void success(CatPostEntity catPostEntity) {
+    public void onSendPostSuccess(CatPostEntity catPostEntity) {
+
         result = RESULT_OK;
         Intent intent = new Intent();
         intent.putExtra(NEW_POST_ID, catPostEntity.getServerId());
         setResult(result, intent);
-        onBackPressed();
+        AnimationHelper.zoomOut(progressBar);
+        linear_container.postDelayed(() -> {
+            AnimationHelper.zoomInAndShow(doneV);
+        }, 300);
+        linear_container.postDelayed(() -> {
+            onBackPressed();
+        }, 600);
+    }
+
+    @Override
+    public void onSendPostProcessing() {
+
+        AnimationHelper.glideUpAndHide(linear_container, linear_container.getHeight() / 2);
+        linear_container.postDelayed(() -> {
+            AnimationHelper.glideUpAndShow(progressBar, linear_container.getHeight() / 2);
+        }, 700);
+    }
+
+    @Override
+    public void onSendPostFailure() {
+        AnimationHelper.glideDownAndHide(progressBar, linear_container.getHeight() / 2);
+        linear_container.postDelayed(() -> {
+            AnimationHelper.glideDownAndShow(linear_container, linear_container.getHeight() / 2);
+        }, 500);
     }
 
     @Override
     public void finish() {
+
         super.finish();
     }
 
@@ -223,6 +312,5 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
                 R.array.categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
     }
 }

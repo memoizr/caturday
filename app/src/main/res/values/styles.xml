@@ -38,7 +38,7 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <style name="Theme.Transparent" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

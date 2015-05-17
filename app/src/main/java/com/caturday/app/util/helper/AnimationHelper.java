@@ -15,6 +15,7 @@ public class AnimationHelper {
     private static final int GLIDE_DISTANCE = 400;
     private static final int MEDIUM_GLIDE_DISTANCE = 200;
 
+    @Deprecated
     public static void glideUp(ViewGroup viewGroup) {
         int count = viewGroup.getChildCount();
         for (int i = 0; i < count; i++) {
@@ -41,7 +42,7 @@ public class AnimationHelper {
                 .start();
     }
 
-    public static void zoomIn(View view) {
+    public static void zoomInAndShow(View view) {
         view.setVisibility(View.VISIBLE);
         view.setScaleY(0f);
         view.setScaleX(0f);
@@ -53,6 +54,7 @@ public class AnimationHelper {
                 .start();
     }
 
+    @Deprecated
     public static void glideDown(ViewGroup viewGroup) {
         int count = viewGroup.getChildCount();
         for (int i = 0; i < count; i++) {
@@ -67,6 +69,7 @@ public class AnimationHelper {
         }
     }
 
+    @Deprecated
     public static void glideAwayAndHide(final ViewGroup viewGroup) {
         int count = viewGroup.getChildCount();
         for (int i = 0; i < count; i++) {
@@ -81,6 +84,7 @@ public class AnimationHelper {
         }
     }
 
+    @Deprecated
     public static void glideInAndShowOld(final ViewGroup viewGroup) {
         int count = viewGroup.getChildCount();
         for (int i = 0; i < count; i++) {
@@ -95,6 +99,7 @@ public class AnimationHelper {
         }
     }
 
+    @Deprecated
     public static void glideAwayAndHide(final View view) {
         view.animate()
                 .translationYBy(-MEDIUM_GLIDE_DISTANCE)
@@ -104,6 +109,7 @@ public class AnimationHelper {
                 .start();
     }
 
+    @Deprecated
     public static void glideInAndShowOld(final View view) {
 
         view.setAlpha(0f);
@@ -117,6 +123,90 @@ public class AnimationHelper {
     }
 
     /**
+     * Make a visible ViewGroup disappear, with an upwards animation.
+     *
+     * @param viewGroup
+     * @param glideDistance
+     */
+    public static void glideUpAndHide(ViewGroup viewGroup, int glideDistance) {
+        int count = viewGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.animate()
+                    .translationYBy(-glideDistance)
+                    .alpha(0f)
+                    .setDuration(300)
+                    .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
+                    .setStartDelay(i * 64)
+                    .start();
+        }
+    }
+
+    /**
+     * Make a visible ViewGroup disappear, with an upwards animation.
+     *
+     * @param viewGroup
+     * @param glideDistance
+     */
+    public static void glideDownAndHide(ViewGroup viewGroup, int glideDistance) {
+        int count = viewGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.animate()
+                    .translationYBy(glideDistance)
+                    .alpha(0f)
+                    .setDuration(300)
+                    .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
+                    .setStartDelay((count - i) * 64)
+                    .start();
+        }
+    }
+
+    /**
+     * Make an hidden ViewGroup appear from the bottom, with an upwards animation.
+     *
+     * @param viewGroup
+     * @param glideDistance
+     */
+    public static void glideDownAndShow(ViewGroup viewGroup, int glideDistance) {
+        int count = viewGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.setTranslationY(-glideDistance);
+            view.setAlpha(0f);
+            view.animate()
+                    .translationYBy(glideDistance)
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
+                    .setStartDelay((count - i) * 64)
+                    .start();
+        }
+    }
+
+    /**
+     * Make an hidden ViewGroup appear from the bottom, with an upwards animation.
+     *
+     * @param viewGroup
+     * @param glideDistance
+     */
+    public static void glideUpAndShow(ViewGroup viewGroup, int glideDistance) {
+        int count = viewGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.setTranslationY(glideDistance);
+            view.setAlpha(0f);
+            view.animate()
+                    .translationYBy(-glideDistance)
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
+                    .setStartDelay(i * 64 + 600)
+                    .start();
+        }
+    }
+
+    /**
      * Make a view disappear, with an upwards animation.
      *
      * @param view
@@ -124,7 +214,7 @@ public class AnimationHelper {
      */
     public static void glideUpAndHide(View view, int glideDistance) {
         view.animate()
-                .translationYBy(-MEDIUM_GLIDE_DISTANCE)
+                .translationYBy(-glideDistance)
                 .alpha(0f)
                 .setDuration(300)
                 .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
@@ -158,7 +248,7 @@ public class AnimationHelper {
      */
     public static void glideDownAndHide(View view, int glideDistance) {
         view.animate()
-                .translationYBy(-MEDIUM_GLIDE_DISTANCE)
+                .translationYBy(glideDistance)
                 .alpha(0f)
                 .setDuration(300)
                 .setInterpolator(HyperTanAccelerateInterpolator.getInterpolator())
