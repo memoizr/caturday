@@ -41,13 +41,13 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                                   CatDetailView catDetailView,
                                   CatDetailInteractor catDetailInteractor) {
 
-        this.context = context;
         this.catDetailView = catDetailView;
         this.catDetailInteractor = catDetailInteractor;
     }
 
     @Override
-    public void create(Bundle extras) {
+    public void create(Bundle extras, Context context) {
+        this.context = context;
         url = extras.getString(EXTRA_URL);
         catPostServerId = extras.getString(EXTRA_SERVER_ID);
         showComment = extras.getBoolean(EXTRA_SHOW_COMMENTS);
@@ -156,9 +156,10 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
             case R.id.action_share:
                 shareTextUrl();
                 break;
-            case R.id.action_download:
-                downloadImage();
-                break;
+            // Todo allow users to download images
+//            case R.id.action_download:
+//                downloadImage();
+//                break;
         }
         return true;
     }

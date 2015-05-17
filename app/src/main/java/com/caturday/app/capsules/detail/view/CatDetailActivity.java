@@ -91,7 +91,7 @@ public class CatDetailActivity extends BaseActionBarActivity
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        catDetailPresenter.create(getIntent().getExtras());
+        catDetailPresenter.create(getIntent().getExtras(), this);
     }
 
     @Override

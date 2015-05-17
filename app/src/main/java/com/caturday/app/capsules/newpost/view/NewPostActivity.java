@@ -60,7 +60,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.upload_buttons_LL) ViewGroup uploadButtonsVG;
     @InjectView(R.id.progress_bar) ProgressBar progressBar;
     @InjectView(R.id.done_V) View doneV;
-    @InjectView(R.id.submit_B) Button submitB;
+    @InjectView(R.id.submit_B) View submitB;
     @InjectView(R.id.image_container_V) View imageContainerV;
     private int result = RESULT_CANCELED;
     private int containerHeight;
@@ -376,7 +376,10 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
 
     @OnClick(R.id.clear_link_B)
     public void clearET() {
-        link.setText("");
+        if (link.getText().toString().length() == 0)
+            choiceUnmade();
+        else
+            link.setText("");
     }
 
     @OnClick(R.id.take_photo_B)

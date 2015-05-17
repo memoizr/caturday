@@ -1,5 +1,6 @@
 package com.caturday.app.capsules.detail.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
@@ -16,7 +17,7 @@ public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
     String EXTRA_SERVER_ID = "serverId";
     String EXTRA_SHOW_COMMENTS = "showComments";
 
-    void create(Bundle extras);
+    void create(Bundle extras, Context context);
 
     void sendComment(String comment);
 
