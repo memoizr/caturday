@@ -67,42 +67,44 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     }
 
     @Override
-    public void onActivityResult(Intent data) {
-        if (data != null)
-            this.imageUri = data.getData();
-        try {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Activity.RESULT_OK) {
+            if (data != null)
+                this.imageUri = data.getData();
+            try {
 
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageUri);
 
-            final int maxSize = 768;
-            int outWidth;
-            int outHeight;
-            int inWidth = bitmap.getWidth();
-            int inHeight = bitmap.getHeight();
-            if(inWidth > inHeight){
-                outWidth = maxSize;
-                outHeight = (inHeight * maxSize) / inWidth;
-            } else {
-                outHeight = maxSize;
-                outWidth = (inWidth * maxSize) / inHeight;
+                final int maxSize = 768;
+                int outWidth;
+                int outHeight;
+                int inWidth = bitmap.getWidth();
+                int inHeight = bitmap.getHeight();
+                if (inWidth > inHeight) {
+                    outWidth = maxSize;
+                    outHeight = (inHeight * maxSize) / inWidth;
+                } else {
+                    outHeight = maxSize;
+                    outWidth = (inWidth * maxSize) / inHeight;
+                }
+
+                bitmap = Bitmap.createScaledBitmap(bitmap, outWidth, outHeight, false);
+
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+                File f = new File(getRealPathFromURI(imageUri));
+                f.createNewFile();
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+                fo.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, outWidth, outHeight, false);
-
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-
-            File f = new File(getRealPathFromURI(imageUri));
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            newPostView.choiceMade();
+            newPostView.setPreview(imageUri);
         }
-
-        newPostView.choiceMade();
-        newPostView.setPreview(imageUri);
     }
 
     @Override
@@ -157,6 +159,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     private Uri writeToFile() {
 
         String timestamp = Long.toString(new Date().getTime());
+        //Todo do not pollute /sdcard!
         String imagePath =  "/sdcard/" + timestamp + ".jpg";
 
         ContentValues v = new ContentValues();

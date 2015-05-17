@@ -1,11 +1,8 @@
 package com.caturday.app.capsules.newpost.view;
 
-import android.animation.Animator;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,9 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -35,9 +30,6 @@ import com.caturday.app.capsules.newpost.NewPostModule;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.util.helper.AnimationHelper;
 import com.caturday.app.util.interpolators.HyperAccelerateDecelerateInterpolator;
-import com.caturday.app.util.interpolators.HyperTanAccelerateInterpolator;
-import com.caturday.app.util.interpolators.HyperTanDecelerateInterpolator;
-import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,9 +44,6 @@ import butterknife.OnClick;
 public class NewPostActivity extends BaseActionBarActivity implements NewPostView {
     public static final String NEW_POST_ID = "NEW_POST_ID";
     public static final int NEW_POST_REQUEST_CODE = 2;
-
-    private int result = RESULT_CANCELED;
-
     @Inject NewPostPresenter newPostPresenter;
     @InjectView(R.id.reveal_V) CardView reveal;
     @InjectView(R.id.linear_container) LinearLayout linear_container;
@@ -69,7 +58,9 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.progress_bar) ProgressBar progressBar;
     @InjectView(R.id.done_V) View doneV;
     @InjectView(R.id.submit_B) View submitB;
+    private int result = RESULT_CANCELED;
     private int containerHeight;
+    private boolean isClosing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,24 +87,41 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         return Arrays.asList(new NewPostModule(this));
     }
 
-    @Override
-    public void initToolbar(){
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+    public void reveal() {
 
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        assistReveal();
+        int targetX = reveal.getWidth();
+        int targetY = reveal.getHeight();
+        int origSize = getResources().getDimensionPixelSize(R.dimen.original_size);
+        final int origRadius = origSize / 2;
+        final int targetRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
+        final int targetTop = reveal.getTop() -
+                ((FrameLayout.MarginLayoutParams) reveal.getLayoutParams()).topMargin;
+
+        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
+        revealAnim.addUpdateListener(animation ->
+                transformMaterial(origSize, origSize, targetX, targetY, origRadius, targetRadius, animation));
+
+        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) -targetTop);
+        AnimatorSet aset = new AnimatorSet();
+        aset.playTogether(revealAnim, translateY);
+        aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
+        aset.setDuration(700);
+        aset.start();
+
+        reveal.postDelayed(() -> {
+            if (!isClosing)
+                setTopParams();
+        }
+                , 1200);
     }
 
-    @Override
-    public void onBackPressed() {
-        AnimationHelper.glideDownAndHide(linear_container, linear_container.getHeight() / 2);
-        new Handler().postDelayed(() -> {
-            hide();
-        }, 400);
-        new Handler().postDelayed(() -> {
-            super.onBackPressed();
-        }, 1000);
+    public void setUpSpinner() {
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     private void assistReveal() {
@@ -140,75 +148,6 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
                 .start();
     }
 
-    private void assistHide() {
-        View navIcon = toolbar.getChildAt(0);
-
-        submitB.animate()
-                .alpha(0f)
-                .setDuration(300)
-                .start();
-
-        navIcon.animate()
-                .setDuration(500)
-                .rotation(45)
-                .scaleY(1.2f)
-                .scaleX(1.2f)
-                .setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator())
-                .start();
-    }
-
-    public void reveal() {
-
-        assistReveal();
-        int targetX = reveal.getWidth();
-        int targetY = reveal.getHeight();
-        int origSize = getResources().getDimensionPixelSize(R.dimen.original_size);
-        final int origRadius = origSize/2;
-        final int targetRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
-        final int targetTop = reveal.getTop();
-
-        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
-        revealAnim.addUpdateListener(animation ->
-                transformMaterial(origSize, origSize, targetX, targetY, origRadius, targetRadius, animation));
-
-        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) -targetTop);
-        AnimatorSet aset = new AnimatorSet();
-        aset.playTogether(revealAnim, translateY);
-        aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
-        aset.setDuration(700);
-        aset.start();
-
-        reveal.postDelayed(()-> {
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.RIGHT | Gravity.BOTTOM);
-            reveal.setLayoutParams(layoutParams);
-                }
-        ,1200);
-    }
-
-    public void hide() {
-        assistHide();
-        int origX = reveal.getWidth();
-        int origY = reveal.getHeight();
-        final int targetSize = getResources().getDimensionPixelSize(R.dimen.original_size);
-        final int targetRadius = targetSize/2;
-        final int origRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
-        final int targetTop = 0;
-
-        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
-        revealAnim.addUpdateListener(animation ->
-                transformMaterial(origX, origY, targetSize, targetSize, origRadius, targetRadius, animation));
-
-        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) targetTop);
-        AnimatorSet aset = new AnimatorSet();
-        aset.playTogether(revealAnim, translateY);
-        aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
-        aset.setDuration(500);
-        aset.start();
-    }
-
     private void transformMaterial(int origX,
                                    int origY,
                                    int targetX,
@@ -228,80 +167,105 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         reveal.requestLayout();
     }
 
+    private void setTopParams() {
+        reveal.setTranslationY(0);
+        FrameLayout.MarginLayoutParams oldLayout =
+                (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.RIGHT | Gravity.TOP);
+
+        layoutParams.setMargins(
+                oldLayout.leftMargin,
+                oldLayout.topMargin,
+                oldLayout.rightMargin,
+                oldLayout.bottomMargin
+        );
+
+        reveal.setLayoutParams(layoutParams);
+    }
+
     private float interpolate(int from, int to, float fraction) {
         return ((from - to) * fraction) + to;
     }
 
-    @OnClick(R.id.upload_image_B)
-    public void uploadImage(){
-        newPostPresenter.chooseImage();
-    }
-
-    @OnClick(R.id.link_image_B)
-    public void attachLink() {
-        showLinkET();
-        link.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setPreview(s.toString());
-                choiceMade();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
-    private void showLinkET() {
-        link.setVisibility(View.VISIBLE);
-        clear_link_B.setVisibility(View.VISIBLE);
-        uploadButtonsVG.setVisibility(View.GONE);
-    }
-
-    private void hideLinkET() {
-        link.setVisibility(View.GONE);
-        clear_link_B.setVisibility(View.GONE);
-        uploadButtonsVG.setVisibility(View.VISIBLE);
-    }
-
-    @OnClick(R.id.clear_link_B)
-    public void clearET() {
-        link.setText("");
-    }
-
-    @OnClick(R.id.take_photo_B)
-    public void takePhoto() {
-        newPostPresenter.takeNewImage();
-    }
-
-    @OnClick(R.id.submit_B)
-    public void submit() {
-        newPostPresenter.sendPost(caption, link);
-    }
-
-    @OnClick(R.id.clear_B)
-    public void clear() {
-        choiceUnmade();
-    }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        newPostPresenter.onActivityResult(data);
+    public void initToolbar() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    public void hide() {
+        setBottomParams();
+
+        assistHide();
+        int origX = reveal.getWidth();
+        int origY = reveal.getHeight();
+        final int targetSize = getResources().getDimensionPixelSize(R.dimen.original_size);
+        final int targetRadius = targetSize / 2;
+        final int origRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
+        final int targetTop = 0;
+
+        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
+        reveal.setTranslationY(reveal.getHeight() - findViewById(android.R.id.content).getHeight() +
+                getResources().getDimensionPixelSize(R.dimen.size_medium));
+        revealAnim.addUpdateListener(animation ->
+                transformMaterial(origX, origY, targetSize, targetSize, origRadius, targetRadius, animation));
+
+        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) targetTop);
+        AnimatorSet aset = new AnimatorSet();
+        aset.playTogether(revealAnim, translateY);
+        aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
+        aset.setDuration(500);
+        aset.start();
+    }
+
+    private void setBottomParams() {
+        FrameLayout.MarginLayoutParams oldLayout =
+                (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.RIGHT | Gravity.BOTTOM);
+
+        layoutParams.setMargins(
+                oldLayout.leftMargin,
+                oldLayout.topMargin,
+                oldLayout.rightMargin,
+                oldLayout.bottomMargin
+        );
+
+        reveal.setLayoutParams(layoutParams);
+    }
+
+    private void assistHide() {
+        View navIcon = toolbar.getChildAt(0);
+
+        submitB.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .start();
+
+        navIcon.animate()
+                .setDuration(500)
+                .rotation(45)
+                .scaleY(1.2f)
+                .scaleX(1.2f)
+                .setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator())
+                .start();
     }
 
     @Override
     public void animateIn() {
         linear_container.postDelayed(() ->
                 AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight())
-        , 300);
+                , 300);
     }
 
     @Override
@@ -365,18 +329,87 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
         }, 500);
     }
 
+    @OnClick(R.id.upload_image_B)
+    public void uploadImage() {
+        newPostPresenter.chooseImage();
+    }
+
+    @OnClick(R.id.link_image_B)
+    public void attachLink() {
+        showLinkET();
+        link.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setPreview(s.toString());
+                choiceMade();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void showLinkET() {
+        link.setVisibility(View.VISIBLE);
+        clear_link_B.setVisibility(View.VISIBLE);
+        uploadButtonsVG.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.clear_link_B)
+    public void clearET() {
+        link.setText("");
+    }
+
+    @OnClick(R.id.take_photo_B)
+    public void takePhoto() {
+        newPostPresenter.takeNewImage();
+    }
+
+    @OnClick(R.id.submit_B)
+    public void submit() {
+        newPostPresenter.sendPost(caption, link);
+    }
+
+    @OnClick(R.id.clear_B)
+    public void clear() {
+        choiceUnmade();
+    }
+
+    private void hideLinkET() {
+        link.setVisibility(View.GONE);
+        clear_link_B.setVisibility(View.GONE);
+        uploadButtonsVG.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        newPostPresenter.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        isClosing = true;
+        AnimationHelper.glideDownAndHide(linear_container, linear_container.getHeight() / 2);
+        new Handler().postDelayed(() -> {
+            hide();
+        }, 400);
+        new Handler().postDelayed(() -> {
+            super.onBackPressed();
+        }, 1000);
+    }
+
     @Override
     public void finish() {
 
         super.finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
-    public void setUpSpinner() {
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.categories_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
     }
 }

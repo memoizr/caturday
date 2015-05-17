@@ -15,7 +15,7 @@
 
     <Button
         android:id="@+id/submit_B"
-        android:drawableRight="@drawable/ic_send_grey600_24dp"
+        android:drawableRight="@drawable/ic_send_white_24dp"
         style="@style/CallToActionButtonStyle"
         android:layout_gravity="right"
         android:layout_width="wrap_content"
@@ -67,7 +67,6 @@
 
         <Spinner
             android:id="@+id/category_spinner"
-
             android:layout_marginLeft="48dp"
             android:layout_marginRight="48dp"
             android:layout_width="match_parent"

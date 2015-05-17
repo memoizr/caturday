@@ -37,6 +37,7 @@
     <dimen name="size_large">48dp</dimen>
     <dimen name="size_xlarge">56dp</dimen>
     <dimen name="size_xxlarge">72dp</dimen>
+    <dimen name="size_xxxlarge">96dp</dimen>
     <dimen name="status_bar_size">25dp</dimen>
     <dimen name="title_collapsed">104dp</dimen>
     <dimen name="scroll_tab_padding">240dp</dimen>

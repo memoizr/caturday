@@ -12,7 +12,7 @@ public interface NewPostPresenter {
 
     void takeNewImage();
 
-    void onActivityResult(Intent data);
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 
     void sendPost(EditText caption, EditText link);
 }
