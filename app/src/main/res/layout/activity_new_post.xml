@@ -73,6 +73,7 @@
             android:layout_height="48dp" />
 
         <RelativeLayout
+            android:id="@+id/image_container_V"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

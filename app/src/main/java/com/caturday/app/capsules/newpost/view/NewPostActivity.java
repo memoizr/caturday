@@ -61,6 +61,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @InjectView(R.id.progress_bar) ProgressBar progressBar;
     @InjectView(R.id.done_V) View doneV;
     @InjectView(R.id.submit_B) Button submitB;
+    @InjectView(R.id.image_container_V) View imageContainerV;
     private int result = RESULT_CANCELED;
     private int containerHeight;
     private boolean isClosing;
@@ -337,7 +338,7 @@ public class NewPostActivity extends BaseActionBarActivity implements NewPostVie
     @Override
     public void shakeOptionButtons() {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
-        uploadButtonsVG.startAnimation(animation);
+        imageContainerV.startAnimation(animation);
     }
 
     @OnClick(R.id.upload_image_B)
