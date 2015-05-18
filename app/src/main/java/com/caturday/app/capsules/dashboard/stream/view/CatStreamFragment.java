@@ -1,7 +1,6 @@
 package com.caturday.app.capsules.dashboard.stream.view;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.caturday.app.capsules.login.view.LoginActivity;
+import com.caturday.app.capsules.common.view.views.EmptyView;
+import com.caturday.app.capsules.common.view.views.LoggedOutEmptyView;
+import com.caturday.app.capsules.common.view.views.NoPostsEmptyView;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.caturday.app.R;
@@ -34,7 +35,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Inject CatStreamPresenter catStreamPresenter;
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
-    @InjectView(R.id.logged_out_empty_V) View emptyV;
+    @InjectView(R.id.container) ViewGroup container;
 
     private CatPostAdapter catPostAdapter;
 
@@ -95,7 +96,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
         System.out.println("scroll to: " + position);
         ((LinearLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1,
                 getResources().getDimensionPixelSize(R.dimen.scroll_tab_padding) - position);
-
     }
 
     @Override
@@ -112,20 +112,16 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     public void showEmptyView(boolean showIt, boolean loggedIn) {
         if (showIt) {
             System.out.println(loggedIn);
-            emptyV.setVisibility(View.VISIBLE);
-            emptyV.setOnClickListener(v -> {
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        System.out.println(v.getHeight() + " " + v.getTop());
-                        int y = v.getHeight() / 2 + v.getTop();
-                        int x = v.getWidth() / 2 + v.getLeft();
-                        intent.putExtra(LoginActivity.RIPPLE_ORIGIN_X, x);
-                        intent.putExtra(LoginActivity.RIPPLE_ORIGIN_Y, y);
-                        startActivity(intent);
-                    }
-            );
+            EmptyView emptyView;
+
+            if (!loggedIn) {
+                 emptyView = new LoggedOutEmptyView(getActivity());
+            } else {
+                emptyView = new NoPostsEmptyView(getActivity());
+            }
+            container.addView(emptyView);
             cats_stream_RV.setVisibility(View.GONE);
         } else {
-            emptyV.setVisibility(View.GONE);
             cats_stream_RV.setVisibility(View.VISIBLE);
         }
     }
