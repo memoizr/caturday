@@ -30,12 +30,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     private final CatStreamPresenter presenter;
+    private final Locale locale;
     private Context context;
     private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
@@ -44,6 +46,8 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     public CatPostAdapter(Context context, CatStreamPresenter presenter) {
         this.context = context;
         this.presenter = presenter;
+
+        locale = context.getResources().getConfiguration().locale;
     }
 
     public void setItems(List<CatPostEntity> catPostEntities) {
@@ -93,7 +97,7 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
 
             String dtStart = catPostEntity.getCreatedAt();
 
-            String longAgo = DateTimeHelper.formatDate(dtStart);
+            String longAgo = DateTimeHelper.formatDate(dtStart, locale);
             ((CatsCardViewHolder) viewHolder).date_TV.setText(longAgo);
 
 

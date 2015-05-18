@@ -71,7 +71,9 @@ public class ExpandingView extends RelativeLayout{
     }
 
     public void setDate(String date) {
-        String longAgo = DateTimeHelper.formatDate(date);
+        String longAgo = DateTimeHelper.formatDate(
+                date,
+                getContext().getResources().getConfiguration().locale);
         this.date.setText(longAgo);
     }
 

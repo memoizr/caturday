@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.caturday.app.R;
-import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
+import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.login.LoginModule;
 import com.caturday.app.util.helper.AnimationHelper;
 
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class LoginActivity extends BaseActionBarActivity implements LoginView {
+public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     @InjectView(R.id.username_TV) EditText username_TV;
     @InjectView(R.id.email_TV) EditText email_TV;
     @InjectView(R.id.password_TV) EditText password_TV;

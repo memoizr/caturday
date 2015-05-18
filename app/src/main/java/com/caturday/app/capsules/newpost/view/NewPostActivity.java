@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -28,7 +27,7 @@ import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.caturday.app.R;
-import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
+import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.newpost.NewPostModule;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.util.helper.AnimationHelper;
@@ -44,7 +43,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class NewPostActivity extends BaseActionBarActivity implements NewPostView {
+public class NewPostActivity extends BaseAppCompatActivity implements NewPostView {
     public static final String NEW_POST_ID = "NEW_POST_ID";
     public static final int NEW_POST_REQUEST_CODE = 2;
     @Inject NewPostPresenter newPostPresenter;

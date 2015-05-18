@@ -10,7 +10,7 @@ import android.view.Menu;
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.events.navigation.OnActivityResultEvent;
-import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
+import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.common.events.UserAvailableEvent;
 import com.caturday.app.capsules.dashboard.SlidingTabActivity;
 import com.caturday.app.capsules.profile.interactor.ProfileInteractor;
@@ -102,7 +102,7 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
     private void initViewPager() {
 
         ProfilePageAdapter adapter =
-                new ProfilePageAdapter(((BaseActionBarActivity) context).getSupportFragmentManager());
+                new ProfilePageAdapter(((BaseAppCompatActivity) context).getSupportFragmentManager());
         PagerSlidingTabStrip pager = ((SlidingTabActivity) context).getSlidingTabStrip();
         profileView.initializePager(adapter, pager);
     }

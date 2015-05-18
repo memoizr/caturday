@@ -65,11 +65,13 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
         // TODO automatically log in user.
         if (catDetailInteractor.isUserLoggedIn()) {
+            catDetailView.showStuffForLoggedInUser(true);
             catDetailInteractor.isFavorite(catPostServerId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(catDetailView::updateButton, Throwable::printStackTrace);
-
+        } else {
+            catDetailView.showStuffForLoggedInUser(false);
         }
     }
 
@@ -81,7 +83,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                             catPostEntity -> {
                                 setCatPostEntity(catPostEntity);
                                 ExpandingView view = catDetailView.getExpandingView();
-                                view.setUsername( catPostEntity.getUser().getUsername());
+                                view.setUsername(catPostEntity.getUser().getUsername());
                                 view.setDate( catPostEntity.getCreatedAt());
                                 view.setUserImage( catPostEntity.getUser().getImageUrl());
                                 if (showComment) {

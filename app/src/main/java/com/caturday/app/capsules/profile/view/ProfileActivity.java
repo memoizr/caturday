@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.caturday.app.R;
-import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
+import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.dashboard.SlidingTabActivity;
 import com.caturday.app.capsules.profile.ProfileModule;
 
@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ProfileActivity extends BaseActionBarActivity implements SlidingTabActivity, ProfileView {
+public class ProfileActivity extends BaseAppCompatActivity implements SlidingTabActivity, ProfileView {
     public static final String EXTRA_ID = "server_id";
 
     @InjectView(R.id.profile_VP) ViewPager profile_VP;

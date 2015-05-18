@@ -59,5 +59,7 @@ public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
         void animateCommentETFailure();
 
         void shakeCommentBox();
+
+        void showStuffForLoggedInUser(boolean isVisible);
     }
 }

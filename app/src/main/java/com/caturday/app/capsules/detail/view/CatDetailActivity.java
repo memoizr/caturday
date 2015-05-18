@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +39,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.R;
 import com.caturday.app.util.helper.ColorHelper;
 import com.caturday.app.util.helper.FullScreenActivitySoftInputHelper;
-import com.caturday.app.capsules.common.view.mvp.BaseActionBarActivity;
+import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.detail.CatDetailModule;
 import com.caturday.app.models.comment.CommentEntity;
 import com.caturday.app.capsules.common.view.views.ExpandingView;
@@ -57,7 +56,7 @@ import butterknife.OnClick;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
-public class CatDetailActivity extends BaseActionBarActivity
+public class CatDetailActivity extends BaseAppCompatActivity
         implements CatDetailPresenter.CatDetailView {
     @InjectView(R.id.cat_detail_IV) ImageView cat_detail_IV;
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
@@ -398,5 +397,16 @@ public class CatDetailActivity extends BaseActionBarActivity
     public void shakeCommentBox() {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
         commentControlsV.startAnimation(animation);
+    }
+
+    @Override
+    public void showStuffForLoggedInUser(boolean isVisible) {
+        if (isVisible) {
+            favorite_B.setVisibility(View.VISIBLE);
+            new_comment_V.setVisibility(View.VISIBLE);
+        } else {
+            favorite_B.setVisibility(View.GONE);
+            new_comment_V.setVisibility(View.GONE);
+        }
     }
 }
