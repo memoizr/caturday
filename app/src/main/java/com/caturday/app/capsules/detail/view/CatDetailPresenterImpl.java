@@ -82,6 +82,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                                 setCatPostEntity(catPostEntity);
                                 ExpandingView view = catDetailView.getExpandingView();
                                 view.setUsername( catPostEntity.getUser().getUsername());
+                                view.setDate( catPostEntity.getCreatedAt());
                                 view.setUserImage( catPostEntity.getUser().getImageUrl());
                                 if (showComment) {
                                     catDetailView.showComment();

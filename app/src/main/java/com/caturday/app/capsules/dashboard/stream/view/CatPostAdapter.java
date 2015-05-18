@@ -19,6 +19,7 @@ import com.caturday.app.capsules.main.view.MainActivity;
 import com.caturday.app.R;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.user.UserEntity;
+import com.caturday.app.util.helper.DateTimeHelper;
 import com.caturday.app.util.helper.ShareHelper;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -89,17 +90,11 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             ((CatsCardViewHolder) viewHolder).total_comments_count.setOnClickListener(view ->
                 presenter.openDetails(index, myViewHolder.cat_IV, catPostEntity, true)
             );
+
             String dtStart = catPostEntity.getCreatedAt();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            try {
-                Date date = format.parse(dtStart);
-                String longAgo = new PrettyTime().format(date);
 
-                ((CatsCardViewHolder) viewHolder).date_TV.setText(longAgo);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String longAgo = DateTimeHelper.formatDate(dtStart);
+            ((CatsCardViewHolder) viewHolder).date_TV.setText(longAgo);
 
 
             int votesCount = catPostEntity.getVotesCount();
