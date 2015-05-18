@@ -71,7 +71,6 @@ public class MainPresenterImpl implements MainPresenter {
         int position = event.getPosition();
         int collapsedThreshold = mainView.getCollapsedThreshold();
 
-        System.out.println("main: " + collapsedThreshold + " " + offset);
         if (offset >= 0) {
             if (offset > collapsedThreshold) {
                 mainView.hideToolBarContainer(false);

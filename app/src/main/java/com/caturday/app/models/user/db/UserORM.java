@@ -41,6 +41,9 @@ public class UserORM {
 
     public void performLogout() {
 
+        for (User user : getUserDao().loadAll()) {
+            user.setLoggedIn(false);
+        }
         getUserDao().deleteAll();
     }
 
@@ -87,7 +90,7 @@ public class UserORM {
 
     private User currentUser() {
 
-        return getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).unique();
+        return getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).uniqueOrThrow();
     }
 
     private User setFavorites(String string) {

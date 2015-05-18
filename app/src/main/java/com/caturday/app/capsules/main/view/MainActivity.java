@@ -328,7 +328,6 @@ public class MainActivity extends DrawerActivity implements
 
     @Override
     protected void onPause() {
-        System.out.println("on pause");
         mainPresenter.onPause();
         super.onPause();
     }

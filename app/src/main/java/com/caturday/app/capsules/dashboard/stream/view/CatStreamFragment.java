@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.caturday.app.capsules.common.view.views.EmptyView;
 import com.caturday.app.capsules.common.view.views.LoggedOutEmptyView;
+import com.caturday.app.capsules.common.view.views.NoNetworkEmptyView;
 import com.caturday.app.capsules.common.view.views.NoPostsEmptyView;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -93,7 +94,6 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Override
     public void setScrollPosition(int position) {
-        System.out.println("scroll to: " + position);
         ((LinearLayoutManager) cats_stream_RV.getLayoutManager()).scrollToPositionWithOffset(1,
                 getResources().getDimensionPixelSize(R.dimen.scroll_tab_padding) - position);
     }
@@ -109,9 +109,14 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     }
 
     @Override
-    public void showEmptyView(boolean showIt, boolean loggedIn) {
+    public void showEmptyView(boolean showIt, boolean loggedIn, boolean networkError) {
+        if (networkError) {
+            EmptyView emptyView = new NoNetworkEmptyView(getActivity());
+            container.addView(emptyView);
+            return;
+        }
+
         if (showIt) {
-            System.out.println(loggedIn);
             EmptyView emptyView;
 
             if (!loggedIn) {

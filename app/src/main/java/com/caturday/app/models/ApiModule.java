@@ -19,34 +19,33 @@ import retrofit.RestAdapter;
 )
 public class ApiModule {
 
-        @Provides @Singleton RequestInterceptor provideRequestInterceptor(
-                SessionRepository sessionRepository){
+    @Provides RequestInterceptor provideRequestInterceptor(
+            SessionRepository sessionRepository){
 
-                String tryAuthToken = sessionRepository.currentSession().getAuthToken();
+        String tryAuthToken = sessionRepository.currentSession().getAuthToken();
 
-                RequestInterceptor interceptor = requestFacade ->
-                        requestFacade.addHeader("Auth-Token", tryAuthToken);
+        RequestInterceptor interceptor = requestFacade ->
+                requestFacade.addHeader("Auth-Token", tryAuthToken);
 
-                return interceptor;
-        }
+        return interceptor;
+    }
 
-        @Provides @Singleton RestAdapter provideRestAdapter(RequestInterceptor requestInterceptor) {
+    @Provides RestAdapter provideRestAdapter(RequestInterceptor requestInterceptor) {
 
-                String endpoint = Config.getEndpoint();
+        String endpoint = Config.getEndpoint();
 
-                RestAdapter adapter = new RestAdapter.Builder()
-                        .setEndpoint(endpoint)
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setRequestInterceptor(requestInterceptor)
-                        .build();
-                return adapter;
-        }
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(endpoint)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setRequestInterceptor(requestInterceptor)
+                .build();
+        return adapter;
+    }
 
-        @Provides
-        @Singleton
-        public CatPostApi provideCatPostApi(RestAdapter restAdapter) {
+    @Provides @Singleton
+    public CatPostApi provideCatPostApi(RestAdapter restAdapter) {
 
-                final CatPostApi api = restAdapter.create(CatPostApi.class);
-                return api;
-        }
+        final CatPostApi api = restAdapter.create(CatPostApi.class);
+        return api;
+    }
 }

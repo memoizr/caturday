@@ -1,19 +1,21 @@
 package com.caturday.app.capsules.dashboard;
 
 import android.content.Intent;
+
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.capsules.common.events.OnPageSelectedEvent;
 import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
-import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.OnPostResult;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.dashboard.adapter.DashboardPageAdapter;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
+import com.caturday.app.capsules.dashboard.interactor.DashboardInteractor;
 import com.caturday.app.capsules.newpost.view.NewPostActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -21,14 +23,16 @@ import com.squareup.otto.Subscribe;
 public class DashboardPresenterImpl extends DashboardPresenter {
 
     private final Bus eventBus;
+    private final DashboardInteractor interactor;
     private DashboardView dashboardView;
     private FragmentActivity activity;
     private DashboardPageAdapter adapter;
-    private boolean scrolling;
     private PagerSlidingTabStrip pager;
 
-    public DashboardPresenterImpl(DashboardView dashboardView, Bus eventBus){
+    public DashboardPresenterImpl(DashboardView dashboardView,
+                                  DashboardInteractor interactor, Bus eventBus){
         this.dashboardView = dashboardView;
+        this.interactor = interactor;
         this.eventBus = eventBus;
 
         eventBus.register(this);
@@ -61,9 +65,13 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
     @Override
     public void createNewPost() {
-        Intent intent = new Intent(activity, NewPostActivity.class);
-        activity.startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
-        dashboardView.hideFAB();
+        if (interactor.isUserLoggedIn()) {
+            Intent intent = new Intent(activity, NewPostActivity.class);
+            activity.startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
+            dashboardView.hideFAB();
+        } else {
+            Toast.makeText(activity, "Log in to create new posts", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -87,7 +95,6 @@ public class DashboardPresenterImpl extends DashboardPresenter {
     public void onPageScrollStateChanged(int state) {
         if (state == ViewPager.SCROLL_STATE_DRAGGING) {
             int itemPosition = dashboardView.getViewPager().getCurrentItem();
-            System.out.println("Dashboard: position: " + itemPosition);
             eventBus.post(new OnPagerScrolledEvent(itemPosition));
         }
     }

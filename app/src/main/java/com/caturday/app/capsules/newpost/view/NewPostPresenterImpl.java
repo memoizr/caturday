@@ -69,7 +69,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (data != null)
                 this.imageUri = data.getData();
             try {

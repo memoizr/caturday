@@ -81,7 +81,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
-                    app:minCharacters="8"
+                    app:minCharacters="6"
                     />
 
                 <LinearLayout
@@ -96,6 +96,7 @@
                     <Button
                         android:text="I have an account"
                         android:id="@+id/existing_account_B"
+                        android:textColor="@color/white"
                         android:background="@drawable/tab_selector"
                         android:layout_width="wrap_content"
                         android:layout_height="56dp" />
@@ -103,6 +104,7 @@
                     <Button
                         android:text="Signup"
                         android:id="@+id/signup_B"
+                        android:textColor="@color/white"
                         android:background="@drawable/tab_selector"
                         android:layout_width="wrap_content"
                         android:layout_height="56dp" />

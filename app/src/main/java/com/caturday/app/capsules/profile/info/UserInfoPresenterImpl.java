@@ -35,7 +35,6 @@ public class UserInfoPresenterImpl implements UserInfoPresenter{
 
     @Subscribe
     public void onActivityResultEvent(OnActivityResultEvent event) {
-        System.out.println("the result is: " + event.getData().getData());
         Intent data = event.getData();
         if (data != null) {
             this.imageUrl = data.getData();

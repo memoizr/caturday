@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.caturday.app.capsules.common.view.views.ExpandingView;
 import com.google.gson.JsonArray;
@@ -70,8 +71,6 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(catDetailView::updateButton, Throwable::printStackTrace);
-        } else {
-            catDetailView.showStuffForLoggedInUser(false);
         }
     }
 
@@ -107,6 +106,11 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
     @Override
     public void sendComment(String comment) {
+        if (!catDetailInteractor.isUserLoggedIn()) {
+            catDetailView.shakeCommentBox();
+            Toast.makeText(context, "Log in to comment on posts", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (comment.length() == 0) {
             catDetailView.shakeCommentBox();
@@ -138,18 +142,22 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
 
     @Override
     public void favoritePost() {
-        catDetailInteractor
-                .isFavorite(catPostServerId)
-                .subscribeOn(Schedulers.io())
-                .flatMap(positive -> catDetailInteractor.sendVote(catPostServerId, !positive))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        voteEntity -> {
-                            catDetailView.updateButton(voteEntity.getPositive());
-                        },
+        if (catDetailInteractor.isUserLoggedIn()) {
+            catDetailInteractor
+                    .isFavorite(catPostServerId)
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(positive -> catDetailInteractor.sendVote(catPostServerId, !positive))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            voteEntity -> {
+                                catDetailView.updateButton(voteEntity.getPositive());
+                            },
 
-                        Throwable::printStackTrace
-                );
+                            Throwable::printStackTrace
+                    );
+        } else {
+            Toast.makeText(context, "Log in to add a post to favorites", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

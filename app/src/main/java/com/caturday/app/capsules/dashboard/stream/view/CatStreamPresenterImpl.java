@@ -30,7 +30,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.Objects;
 
-import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -158,7 +157,6 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         eventBus.post(new StreamRefreshCompletedEvent());
     }
 
-    @DebugLog
     @Override
     public void setAdapter() {
 
@@ -169,21 +167,21 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((catPostCollection) -> {
                             if (catPostCollection.size() == 0) {
-                                setEmptyView(true);
+                                setEmptyView(true, false);
                             } else {
-                                setEmptyView(false);
+                                setEmptyView(false, false);
                                 catStreamView.getAdapter().setItems(catPostCollection);
                             }
                         },
                         this::onLoadFailure);
     }
 
-    private void setEmptyView(boolean showIt) {
-        catStreamView.showEmptyView(showIt, catStreamInteractor.userLoggedIn());
+    private void setEmptyView(boolean showIt, boolean networkError) {
+        catStreamView.showEmptyView(showIt, catStreamInteractor.userLoggedIn(), networkError);
     }
 
     private void onLoadFailure(Throwable e) {
-        setEmptyView(true);
+        setEmptyView(true, true);
         e.printStackTrace();
     }
 

@@ -44,14 +44,12 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
 
     @Override
     public Observable<CatPostEntity> sendComment(String comment, String catPostServerId) {
-        UserEntity user = userRepository.getCurrentUser();
 
         CommentEntity commentEntity = new CommentEntity();
 
         commentEntity.setCommentableId(catPostServerId);
         commentEntity.setCommentableType(CommentEntity.COMMENTABLE_TYPE_CAT_POST);
         commentEntity.setContent(comment);
-        commentEntity.setUserId(user.getServerId());
 
         return commentRepository.sendComment(commentEntity)
                 .doOnNext(catPostRepository::updateCatPost);
@@ -60,12 +58,9 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     @Override
     public Observable<VoteEntity> sendVote(String serverId, boolean positive) {
 
-        UserEntity user = userRepository.getCurrentUser();
-
         VoteEntity voteEntity = new VoteEntity();
         voteEntity.setVoteableId(serverId);
         voteEntity.setVoteableType(VoteEntity.VOTEABLE_TYPE_CAT_POST);
-        voteEntity.setUserId(user.getServerId());
         voteEntity.setPositive(positive);
 
         if (positive)

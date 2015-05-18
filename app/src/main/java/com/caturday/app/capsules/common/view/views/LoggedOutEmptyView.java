@@ -23,7 +23,6 @@ public class LoggedOutEmptyView extends EmptyView{
     protected void setAction() {
             container.setOnClickListener(v -> {
                         Intent intent = new Intent(context, LoginActivity.class);
-                        System.out.println(v.getHeight() + " " + v.getTop());
                         int y = v.getHeight() / 2 + v.getTop();
                         int x = v.getWidth() / 2 + v.getLeft();
                         intent.putExtra(LoginActivity.RIPPLE_ORIGIN_X, x);
