@@ -30,4 +30,6 @@ public interface MainView extends ScrollEventListener {
     void showTabs(boolean b);
 
     void closeDrawer();
+
+    void setSliderBackgroundTransparent(boolean b);
 }

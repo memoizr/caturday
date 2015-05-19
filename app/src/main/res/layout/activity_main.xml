@@ -18,6 +18,7 @@
 
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/slider"
+            android:background="@color/primary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />

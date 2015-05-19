@@ -15,6 +15,7 @@ import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownE
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
 import com.caturday.app.capsules.newpost.view.NewPostActivity;
+import com.caturday.app.util.Tuple;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -32,9 +33,9 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -160,16 +161,25 @@ public class MainPresenterImpl implements MainPresenter {
                 .subscribeOn(Schedulers.io())
                 .flatMap(Observable::from)
                 .observeOn(AndroidSchedulers.mainThread())
-                .retry()
+                .retryWhen(notification ->
+                                notification
+                                        .zipWith(Observable.range(0, 30), (x, y) ->
+                                                        new Tuple<>(x, y)
+                                        )
+                                        .flatMap(s -> s.y == 50 ?
+                                                        Observable.error(s.x) :
+                                                        Observable.timer(500, TimeUnit.MILLISECONDS)
+                                        )
+                )
                 .subscribe((s) -> {
-                    MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
-                    defaultSliderView
-                            .image(s.getImageUrl())
-                            .empty(R.drawable.solid_primary)
-                            .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+                            MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
+                            defaultSliderView
+                                    .image(s.getImageUrl())
+                                    .empty(R.drawable.solid_primary)
+                                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
-                    sliderLayout.addSlider(defaultSliderView);
-                },
+                            sliderLayout.addSlider(defaultSliderView);
+                        },
                         Throwable::printStackTrace
                 );
 
@@ -220,11 +230,15 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     private Observable<Collection<CatPostEntity>> getRandomPosts(int howMany) {
-        return Observable.defer(() -> Observable.create(new Observable.OnSubscribe<Collection<CatPostEntity>>() {
-            @Override
-            public void call(Subscriber<? super Collection<CatPostEntity>> subscriber) {
-                    subscriber.onNext(mainInteractor.getRandomCatPosts(howMany));
-                    subscriber.onCompleted();
+        return Observable.defer(() -> Observable.create(subscriber -> {
+
+            try {
+                Collection<CatPostEntity> catPosts = mainInteractor.getRandomCatPosts(howMany);
+                subscriber.onNext(catPosts);
+                subscriber.onCompleted();
+                mainView.setSliderBackgroundTransparent(true);
+            } catch (Exception e) {
+                subscriber.onError(new Exception("No posts found"));
             }
         }));
     }

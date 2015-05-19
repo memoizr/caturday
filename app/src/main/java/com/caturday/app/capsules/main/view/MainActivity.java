@@ -108,6 +108,11 @@ public class MainActivity extends DrawerActivity implements
     }
 
     @Override
+    public void setSliderBackgroundTransparent(boolean b) {
+        sliderLayout.setBackgroundColor(0x00000000);
+    }
+
+    @Override
     public void setDrawer(Activity activity, Toolbar toolbar, DrawerLayout drawerLayout) {
         mDrawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.drawer_open_desc, R.string.drawer_close_desc);
         mDrawerLayout.post(() -> mDrawerToggle.syncState());
