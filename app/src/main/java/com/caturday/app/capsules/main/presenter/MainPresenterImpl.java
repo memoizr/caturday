@@ -41,6 +41,7 @@ import rx.schedulers.Schedulers;
 
 public class MainPresenterImpl implements MainPresenter {
 
+    private static final int LOGIN_REQUEST = 534;
     private final MainView mainView;
     private final Activity mainViewActivity;
     private final MainInteractor mainInteractor;
@@ -141,6 +142,8 @@ public class MainPresenterImpl implements MainPresenter {
         if (requestCode == NewPostActivity.NEW_POST_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK) {
             bus.post(new OnPostCreatedEvent(data.getExtras().getString(NewPostActivity.NEW_POST_ID)));
+        } else if (requestCode == LOGIN_REQUEST) {
+            mainView.toggleArrow(false);
         }
     }
 
@@ -217,7 +220,7 @@ public class MainPresenterImpl implements MainPresenter {
                         int y = mainViewActivity.getResources().getDimensionPixelSize(R.dimen.overflow_y);
                         intent.putExtra(LoginActivity.RIPPLE_ORIGIN_X, x);
                         intent.putExtra(LoginActivity.RIPPLE_ORIGIN_Y, y);
-                        mainViewActivity.startActivity(intent);
+                        mainViewActivity.startActivityForResult(intent, LOGIN_REQUEST);
                     } else if (item.getItemId() == R.id.action_logout) {
                         mainInteractor.performLogout();
                         bus.post(new OnLogoutSuccessful());

@@ -39,7 +39,7 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName="com.caturday.app.capsules.main.view.MainActivity"
-            android:theme="@style/Theme.Transparent" >
+            android:theme="@style/Theme.Transparent.Dark" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.caturday.app.capsules.main.view.MainActivity" />
