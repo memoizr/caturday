@@ -5,9 +5,6 @@ import android.util.AttributeSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 
-/**
- * Created by Cat#2 on 08/04/15.
- */
 public class ResumableScaleAnimation extends ScaleAnimation {
     private boolean mPaused;
     private long mElapsedAtPause;

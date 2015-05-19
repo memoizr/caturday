@@ -19,124 +19,124 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:id="@+id/glide_container_V"
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/glide_container_V"
+            android:layout_width="match_parent"
+            android:paddingTop="56dp"
+            android:clipToPadding="false"
+            android:paddingLeft="72dp"
+            android:animateLayoutChanges="true"
+            android:paddingRight="72dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Login"
+                android:textSize="32dp"
+                android:id="@+id/title_TV"
+                android:textColor="@color/white"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
-                android:paddingTop="56dp"
-                android:clipToPadding="false"
-                android:paddingLeft="72dp"
-                android:animateLayoutChanges="true"
-                android:paddingRight="72dp"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:text="Login"
-                    android:textSize="32dp"
-                    android:id="@+id/title_TV"
+            <TextView
+                android:id="@+id/error_TV"
+                android:visibility="gone"
+                android:textAlignment="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/yellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/username_TV"
+                android:hint="username"
+                style="@style/LoginEditTextStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:drawableLeft="@drawable/ic_person_white_24dp"
+                android:imeOptions="actionNext"
+                android:visibility="gone"
+                />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/email_TV"
+                android:hint="email"
+                style="@style/LoginEditTextStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:drawableLeft="@drawable/ic_email_white_24dp"
+                />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/password_TV"
+                android:hint="password"
+                style="@style/LoginEditTextStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
+                app:minCharacters="6"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right"
+                android:visibility="gone"
+                android:id="@+id/signup_buttons_V"
+                android:layout_marginRight="-24dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:text="I have an account"
+                    android:id="@+id/existing_account_B"
                     android:textColor="@color/white"
-                    android:layout_marginBottom="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/error_TV"
-                    android:visibility="gone"
-                    android:textAlignment="center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/yellow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/username_TV"
-                    android:hint="username"
-                    style="@style/LoginEditTextStyle"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:imeOptions="actionNext"
-                    android:visibility="gone"
-                    />
-
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/email_TV"
-                    android:hint="email"
-                    style="@style/LoginEditTextStyle"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:inputType="textEmailAddress"
-                    android:imeOptions="actionNext"
-                    android:drawableLeft="@drawable/ic_email_white_24dp"
-                    />
-
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/password_TV"
-                    android:hint="password"
-                    style="@style/LoginEditTextStyle"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                    android:drawableLeft="@drawable/ic_vpn_key_white_24dp"
-                    app:minCharacters="6"
-                    />
-
-                <LinearLayout
-                    android:orientation="horizontal"
+                    android:background="@drawable/tab_selector"
                     android:layout_width="wrap_content"
-                    android:layout_gravity="right"
-                    android:visibility="gone"
-                    android:id="@+id/signup_buttons_V"
-                    android:layout_marginRight="-24dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="56dp" />
 
-                    <Button
-                        android:text="I have an account"
-                        android:id="@+id/existing_account_B"
-                        android:textColor="@color/white"
-                        android:background="@drawable/tab_selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="56dp" />
-
-                    <Button
-                        android:text="Signup"
-                        android:id="@+id/signup_B"
-                        android:textColor="@color/white"
-                        android:background="@drawable/tab_selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="56dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
+                <Button
+                    android:text="Signup"
+                    android:id="@+id/signup_B"
+                    android:textColor="@color/white"
+                    android:background="@drawable/tab_selector"
                     android:layout_width="wrap_content"
-                    android:id="@+id/login_buttons_V"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="-24dp"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/create_account_B"
-                        android:text="Create Account"
-                        style="@style/CallToActionButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-
-                    <Button
-                        android:id="@+id/login_submit_B"
-                        android:text="Login"
-                        style="@style/CallToActionButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
+                    android:layout_height="56dp" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:id="@+id/login_buttons_V"
+                android:layout_gravity="right"
+                android:layout_marginRight="-24dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/create_account_B"
+                    android:text="Create Account"
+                    style="@style/CallToActionButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <Button
+                    android:id="@+id/login_submit_B"
+                    android:text="Login"
+                    style="@style/CallToActionButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
         <ProgressBar
             android:layout_marginTop="192dp"
             android:id="@+id/progress_bar"
@@ -144,6 +144,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="72dp"
             android:layout_height="72dp" />
+
         <ImageView
             android:layout_marginTop="104dp"
             android:id="@+id/done_V"

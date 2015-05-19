@@ -28,14 +28,16 @@ import rx.schedulers.Schedulers;
 
 public class NewPostPresenterImpl implements NewPostPresenter {
 
-    private static final int SELECT_PHOTO = 100;
+    private static final int REQUEST_SELECT_PHOTO = 100;
     private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final String CACHE_FILENAME = "tempCache";
 
     private final NewPostInteractor newPostInteractor;
     private final NewPostView newPostView;
     private final Bus bus;
     private Context mContext;
     private Uri imageUri;
+    private String cachedRandomFilename;
 
     public NewPostPresenterImpl(NewPostView newPostView,
                                 NewPostInteractor newPostInteractor,
@@ -57,55 +59,115 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     public void chooseImage() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        ((Activity)mContext).startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        ((Activity)mContext).startActivityForResult(photoPickerIntent, REQUEST_SELECT_PHOTO);
     }
 
     @Override
     public void takeNewImage() {
         final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, writeToFile());
+
+        cachedRandomFilename = generateRandomFilename();
+        imageUri = prepareImageUri(cachedRandomFilename);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         ((Activity)mContext).startActivityForResult(intent, REQUEST_TAKE_PHOTO);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (data != null)
-                this.imageUri = data.getData();
-            try {
 
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageUri);
+            if (requestCode == REQUEST_SELECT_PHOTO && data != null) {
 
-                final int maxSize = 768;
-                int outWidth;
-                int outHeight;
-                int inWidth = bitmap.getWidth();
-                int inHeight = bitmap.getHeight();
-                if (inWidth > inHeight) {
-                    outWidth = maxSize;
-                    outHeight = (inHeight * maxSize) / inWidth;
-                } else {
-                    outHeight = maxSize;
-                    outWidth = (inWidth * maxSize) / inHeight;
-                }
+                Uri uri = data.getData();
+                String randomFilename = generateRandomFilename();
+                imageUri = prepareImageUri(randomFilename);
+                resizeImage(uri, randomFilename);
 
-                bitmap = Bitmap.createScaledBitmap(bitmap, outWidth, outHeight, false);
-
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-
-                File f = new File(getRealPathFromURI(imageUri));
-                f.createNewFile();
-                FileOutputStream fo = new FileOutputStream(f);
-                fo.write(bytes.toByteArray());
-                fo.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else if (requestCode == REQUEST_TAKE_PHOTO) {
+                resizeImage(imageUri, cachedRandomFilename);
             }
 
             newPostView.choiceMade();
             newPostView.setPreview(imageUri);
         }
+    }
+
+    private void resizeImage(Uri inputUri, String outputFilename) {
+
+        try {
+
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), inputUri);
+
+            final int maxSize = 768;
+            int outWidth;
+            int outHeight;
+            int inWidth = bitmap.getWidth();
+            int inHeight = bitmap.getHeight();
+            if (inWidth > inHeight) {
+                outWidth = maxSize;
+                outHeight = (inHeight * maxSize) / inWidth;
+            } else {
+                outHeight = maxSize;
+                outWidth = (inWidth * maxSize) / inHeight;
+            }
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, outWidth, outHeight, false);
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+            File f = new File(outputFilename);
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Uri prepareImageUri(String outFilename) {
+        ContentValues v = new ContentValues();
+
+        v.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+
+        File f = new File(outFilename);
+        File parent = f.getParentFile() ;
+
+        String path = parent.toString().toLowerCase() ;
+        v.put(MediaStore.Images.ImageColumns.BUCKET_ID, path.hashCode());
+
+        f = null;
+
+        v.put("_data", outFilename) ;
+
+        ContentResolver c = mContext.getContentResolver() ;
+
+        Uri uri = c.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, v);
+
+        return uri;
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+
+        String url = "";
+        try {
+            String[] projection = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
+
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+            cursor.moveToFirst();
+            url = cursor.getString(column_index);
+            cursor.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
     @Override
@@ -162,51 +224,18 @@ public class NewPostPresenterImpl implements NewPostPresenter {
         throwable.printStackTrace();
     }
 
-    private Uri writeToFile() {
-
-        String timestamp = Long.toString(new Date().getTime());
-        //Todo do not pollute /sdcard!
-        String imagePath =  "/sdcard/" + timestamp + ".jpg";
-
-        ContentValues v = new ContentValues();
-
-        v.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-
-        File f = new File(imagePath);
-        File parent = f.getParentFile() ;
-
-        String path = parent.toString().toLowerCase() ;
-        v.put(MediaStore.Images.ImageColumns.BUCKET_ID, path.hashCode());
-
-        f = null;
-
-        v.put("_data", imagePath) ;
-
-        ContentResolver c = mContext.getContentResolver() ;
-
-        imageUri = c.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, v);
-
-        return imageUri;
-    }
-
-    private String getRealPathFromURI(Uri uri) {
-
-        String url = "";
-        try {
-            String[] projection = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
-
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-            cursor.moveToFirst();
-            url = cursor.getString(column_index);
-            cursor.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private String getOrCreateDefaultFolder() {
+        String folderName = "/sdcard/caturday/";
+        File folder = new File(folderName);
+        if (!folder.exists()) {
+            folder.mkdir();
         }
-
-        return url;
+        return folderName;
     }
+
+    private String generateRandomFilename() {
+        String timestamp = Long.toString(new Date().getTime());
+        return getOrCreateDefaultFolder() + timestamp + ".jpg";
+    }
+
 }

@@ -15,6 +15,7 @@ import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownE
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
 import com.caturday.app.capsules.newpost.view.NewPostActivity;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.caturday.app.R;
@@ -158,7 +159,9 @@ public class MainPresenterImpl implements MainPresenter {
                 .retry()
                 .subscribe((s) -> {
                     MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
-                    defaultSliderView.image(s.getImageUrl())
+                    defaultSliderView
+                            .image(s.getImageUrl())
+                            .empty(R.drawable.default_user_profile_cover)
                             .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
                     sliderLayout.addSlider(defaultSliderView);
@@ -167,6 +170,7 @@ public class MainPresenterImpl implements MainPresenter {
                 );
 
 
+        sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
         backgroundImageAnimation = new ImageAnimation();
         sliderLayout.setCustomAnimation(backgroundImageAnimation);
