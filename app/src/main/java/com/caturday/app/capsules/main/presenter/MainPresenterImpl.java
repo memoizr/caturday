@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.caturday.app.capsules.common.events.OnLogoutSuccessful;
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
@@ -161,14 +163,13 @@ public class MainPresenterImpl implements MainPresenter {
                     MovingImageSliderView defaultSliderView = new MovingImageSliderView(mainViewActivity);
                     defaultSliderView
                             .image(s.getImageUrl())
-                            .empty(R.drawable.default_user_profile_cover)
+                            .empty(R.drawable.solid_primary)
                             .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
                     sliderLayout.addSlider(defaultSliderView);
                 },
                         Throwable::printStackTrace
                 );
-
 
         sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
         sliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
@@ -217,12 +218,12 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     private Observable<Collection<CatPostEntity>> getRandomPosts(int howMany) {
-        return Observable.create(new Observable.OnSubscribe<Collection<CatPostEntity>>() {
+        return Observable.defer(() -> Observable.create(new Observable.OnSubscribe<Collection<CatPostEntity>>() {
             @Override
             public void call(Subscriber<? super Collection<CatPostEntity>> subscriber) {
                     subscriber.onNext(mainInteractor.getRandomCatPosts(howMany));
                     subscriber.onCompleted();
             }
-        });
+        }));
     }
 }

@@ -10,14 +10,10 @@ public class ColorHelper {
         int[] returnArgb = new int[4];
 
         for (int i = 0; i < 4; i++) {
-            returnArgb[i] = (int) interpolate(fromArgb[i], toArgb[i], fraction);
+            returnArgb[i] = (int) MathHelper.interpolate(fromArgb[i], toArgb[i], fraction);
         }
 
         return Color.argb(returnArgb[0], returnArgb[1], returnArgb[2], returnArgb[3]);
-    }
-
-    private static float interpolate(float from, float to, float fraction) {
-        return ((from - to) * fraction) + to;
     }
 
     private static int[] getArgbFromColor(int color) {

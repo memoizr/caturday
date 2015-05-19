@@ -1,45 +1,78 @@
 package com.caturday.app.util.animation;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Transformation;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 
-public class ResumableScaleAnimation extends ScaleAnimation {
-    private boolean mPaused;
-    private long mElapsedAtPause;
+import com.caturday.app.util.helper.MathHelper;
 
-    public ResumableScaleAnimation(float fromX, float toX, float fromY, float toY, int pivotXType, float pivotXValue, int pivotYType, float pivotYValue) {
-        super(fromX, toX, fromY, toY, pivotXType, pivotXValue, pivotYType, pivotYValue);
+public class ResumableScaleAnimation {
+
+    private final float pivotY;
+    private final float pivotX;
+    private final float toYScale;
+    private final float fromYScale;
+    private final float fromXScale;
+    private final float toXScale;
+    private int bitmapHeight;
+    private int bitmapWidth;
+    private ValueAnimator valueAnimator;
+    private int buffer = 0;
+
+    public ResumableScaleAnimation(float fromXScale, float toXScale, float fromYScale, float toYScale, float pivotX, float pivotY) {
+        this.fromXScale = fromXScale;
+        this.toXScale = toXScale;
+        this.fromYScale = fromYScale;
+        this.toYScale = toYScale;
+        this.pivotX = pivotX;
+        this.pivotY = pivotY;
     }
 
-    public ResumableScaleAnimation(float fromX, float toX, float fromY, float toY, float pivotX, float pivotY) {
-        super(fromX, toX, fromY, toY, pivotX, pivotY);
+    public void animateImageView(ImageView imageView) {
+
+        imageView.setScaleType(ImageView.ScaleType.MATRIX);
+
+        valueAnimator = new ObjectAnimator().ofFloat(0, 1);
+        valueAnimator.setDuration(10000);
+        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        valueAnimator.addUpdateListener(animator -> {
+            if (buffer < 7) {
+                buffer++;
+            } else {
+                Matrix m = transformMatrix(animator.getAnimatedFraction());
+                imageView.setImageMatrix(m);
+                buffer = 0;
+            }
+        });
+        valueAnimator.start();
     }
 
-    public ResumableScaleAnimation(float fromX, float toX, float fromY, float toY) {
-        super(fromX, toX, fromY, toY);
-    }
+    private Matrix transformMatrix(float fraction) {
+        Matrix m = new Matrix();
+        m.reset();
 
-    public ResumableScaleAnimation(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-        @Override
-    public boolean getTransformation(long currentTime, Transformation outTransformation) {
-        if(mPaused && mElapsedAtPause==0) {
-            mElapsedAtPause = currentTime-getStartTime();
-        }
-        if(mPaused)
-            setStartTime(currentTime-mElapsedAtPause);
-        return super.getTransformation(currentTime, outTransformation);
+        float xScale = MathHelper.interpolate(fromXScale, toXScale, fraction);
+        float yScale = MathHelper.interpolate(fromYScale, toYScale, fraction);
+
+        m.postScale(
+                xScale,
+                yScale,
+                pivotX,
+                pivotY
+        );
+
+        return  m;
     }
 
     public void pause() {
-        mElapsedAtPause = 0;
-        mPaused=true;
+        valueAnimator.pause();
     }
 
     public void resume() {
-        mPaused=false;
+        valueAnimator.resume();
     }
 }

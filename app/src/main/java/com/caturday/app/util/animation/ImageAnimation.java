@@ -2,7 +2,6 @@ package com.caturday.app.util.animation;
 
 import android.view.View;
 import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
 import com.daimajia.slider.library.Animations.BaseAnimationInterface;
@@ -12,6 +11,7 @@ public class ImageAnimation implements BaseAnimationInterface {
 
     private AnimationSet zoomIn;
     private ResumableScaleAnimation mScale;
+    private ImageView cachedView;
 
     @Override
     public void onPrepareCurrentItemLeaveScreen(View view) {
@@ -31,25 +31,32 @@ public class ImageAnimation implements BaseAnimationInterface {
     }
 
     private void animateBackgroundImage(ImageView view) {
-        if (view != null) {
-            zoomIn = new AnimationSet(true);
-            float rand = (float) (Math.random() / 1.3) + 1;
-            float randAfter = (float) (Math.random() / 1.3) + 1;
+        cachedView = view;
+        if (cachedView != null) {
+
+            float randBefore;
+            float randAfter;
+
+            double random = Math.random();
+            float rand = (float) Math.min((random * 0.2) + 1, 1.1);
+
+            if (random < 0.5) {
+                randAfter = 1;
+                randBefore = rand;
+            } else {
+                randBefore = 1;
+                randAfter = rand;
+            }
 
             mScale = new ResumableScaleAnimation(
-                    rand,
+                    randBefore,
                     randAfter,
-                    rand,
+                    randBefore,
                     randAfter,
-                    ScaleAnimation.RELATIVE_TO_PARENT,
                     (float) Math.random(),
-                    ScaleAnimation.RELATIVE_TO_PARENT,
                     (float) Math.random());
-            mScale.setDuration(10000);
-            zoomIn.addAnimation(mScale);
-            zoomIn.setFillBefore(true);
-            zoomIn.setFillAfter(true);
-            view.startAnimation(zoomIn);
+
+            mScale.animateImageView(cachedView);
         }
     }
 
