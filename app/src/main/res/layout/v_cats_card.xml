@@ -30,8 +30,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
                 app:riv_corner_radius="36dp"/>
 
             <TextView
@@ -94,7 +94,7 @@
             <Button
                 android:id="@+id/votes_B"
                 android:drawableLeft="@drawable/ic_plus_one_grey600_24dp"
-                android:paddingLeft="8dp"
+                android:paddingLeft="16dp"
                 style="@style/CardButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
