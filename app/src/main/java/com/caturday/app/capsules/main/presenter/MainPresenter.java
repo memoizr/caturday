@@ -19,4 +19,6 @@ public interface MainPresenter {
     void onActivityResult(int requestCode, int resultCode, Intent data);
 
     void onPause();
+
+    void onResume();
 }

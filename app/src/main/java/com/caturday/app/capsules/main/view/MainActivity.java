@@ -335,6 +335,7 @@ public class MainActivity extends DrawerActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        mainPresenter.onResume();
         closeDrawer();
     }
 

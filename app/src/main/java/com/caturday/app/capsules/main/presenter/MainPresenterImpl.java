@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.caturday.app.capsules.common.events.OnLogoutSuccessful;
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
@@ -21,7 +19,6 @@ import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.caturday.app.R;
-import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPreparePageScroll;
 import com.caturday.app.capsules.common.events.StreamRefreshCompletedEvent;
 import com.caturday.app.capsules.common.view.views.MovingImageSliderView;
@@ -149,6 +146,11 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void onPause() {
         pauseSliderAnimation();
+    }
+
+    @Override
+    public void onResume() {
+        resumeSliderAnimation();
     }
 
     private void initSliderLayout(SliderLayout sliderLayout) {

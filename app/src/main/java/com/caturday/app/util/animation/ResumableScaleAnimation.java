@@ -2,9 +2,7 @@ package com.caturday.app.util.animation;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 
@@ -18,8 +16,6 @@ public class ResumableScaleAnimation {
     private final float fromYScale;
     private final float fromXScale;
     private final float toXScale;
-    private int bitmapHeight;
-    private int bitmapWidth;
     private ValueAnimator valueAnimator;
     private int buffer = 0;
 

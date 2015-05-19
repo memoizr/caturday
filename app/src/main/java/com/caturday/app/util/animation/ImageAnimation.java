@@ -38,7 +38,7 @@ public class ImageAnimation implements BaseAnimationInterface {
             float randAfter;
 
             double random = Math.random();
-            float rand = (float) Math.min((random * 0.2) + 1, 1.1);
+            float rand = (float) Math.max((random * 0.2) + 1, 1.1);
 
             if (random < 0.5) {
                 randAfter = 1;
