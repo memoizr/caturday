@@ -14,10 +14,13 @@ import com.bumptech.glide.Glide;
 import com.caturday.app.R;
 import com.caturday.app.util.helper.ColorHelper;
 import com.caturday.app.util.helper.DateTimeHelper;
+import com.caturday.app.util.helper.MathHelper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lombok.Getter;
+
+import static com.caturday.app.util.helper.MathHelper.interpolate;
 
 public class ExpandingView extends RelativeLayout{
     @InjectView(R.id.caption_container_V) ViewGroup caption_container_V;
@@ -85,7 +88,7 @@ public class ExpandingView extends RelativeLayout{
         if (level != expandedLevel) {
             expandedLevel = level;
             collapseScale = (float) (0.5*Math.tanh( 6 * expandedLevel - 3) + 0.5);
-            username.setTextColor(ColorHelper.interpolateColor(neutralColor, activeColor, 1 - collapseScale));
+            username.setTextColor(ColorHelper.interpolateColor(neutralColor, activeColor, collapseScale));
             updateLayoutParams();
             updateUserImageMargins();
         }
@@ -110,9 +113,5 @@ public class ExpandingView extends RelativeLayout{
         ViewGroup.LayoutParams params = caption_container_V.getLayoutParams();
         params.height = (int) interpolate(minHeight, maxHeight, collapseScale);
         caption_container_V.setLayoutParams(params);
-    }
-
-    private static float interpolate(float min, float max, float level) {
-        return (max - min) * level + min;
     }
 }

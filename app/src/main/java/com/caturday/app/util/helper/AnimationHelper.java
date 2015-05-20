@@ -201,7 +201,7 @@ public class AnimationHelper {
                     .alpha(1f)
                     .setDuration(300)
                     .setInterpolator(HyperTanDecelerateInterpolator.getInterpolator())
-                    .setStartDelay(i * 64 + 600)
+                    .setStartDelay(i * 64)
                     .start();
         }
     }

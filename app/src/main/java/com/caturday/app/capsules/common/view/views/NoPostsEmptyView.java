@@ -29,7 +29,7 @@ public class NoPostsEmptyView extends EmptyView {
             intent.putExtra(NewPostActivity.EXTRA_ORIGIN_TOP, container.getTop());
             intent.putExtra(NewPostActivity.EXTRA_ORIGIN_WIDTH, container.getWidth());
             intent.putExtra(NewPostActivity.EXTRA_ORIGIN_HEIGHT, container.getHeight());
-            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_RADIUS, container.getRadius());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_RADIUS, (int) container.getRadius());
             ((Activity) context).startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
         });
     }

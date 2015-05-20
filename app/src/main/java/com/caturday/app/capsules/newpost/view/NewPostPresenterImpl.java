@@ -51,7 +51,6 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     public void onCreate(Context context) {
         this.mContext = context;
         newPostView.initToolbar();
-        newPostView.animateIn();
         bus.register(this);
     }
 

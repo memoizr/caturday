@@ -5,10 +5,9 @@
     android:id="@+id/reveal_V"
     android:layout_margin="16dp"
     android:elevation="10dp"
-    app:cardCornerRadius="28dp"
     android:visibility="invisible"
-    android:layout_gravity="top|left"
     app:cardElevation="10dp"
+    app:cardBackgroundColor="@color/accent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.caturday.app.capsules.newpost.view.NewPostActivity">
@@ -24,7 +23,6 @@
 
     <LinearLayout
         android:id="@+id/linear_container"
-        android:background="@color/accent"
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
         android:visibility="invisible"

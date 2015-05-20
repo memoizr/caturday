@@ -90,9 +90,11 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         origHeight = getIntent().getExtras().getInt(EXTRA_ORIGIN_HEIGHT);
         origRadius = getIntent().getExtras().getInt(EXTRA_ORIGIN_RADIUS);
 
+
         if (savedInstanceState == null) {
             newPostPresenter.onCreate(this);
-            reveal.postDelayed(() -> reveal(), 200);
+
+            animateIn();
         } else
             reveal.setVisibility(View.VISIBLE);
 
@@ -120,9 +122,9 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
         final int targetLeft = originLeft - layoutParams.leftMargin;
 
-        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
+        ValueAnimator revealAnim = ObjectAnimator.ofFloat(0, 1);
         revealAnim.addUpdateListener(animation ->
-                transformMaterial(origWidth, origHeight, targetX, targetY, origRadius, targetRadius, animation));
+                transformMaterial(origWidth, origHeight, targetX, targetY, origRadius, targetRadius, (float) animation.getAnimatedFraction()));
 
         reveal.setTranslationX(targetLeft);
         reveal.setTranslationY(targetTop);
@@ -182,15 +184,16 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
                                    int targetY,
                                    int origRadius,
                                    int targetRadius,
-                                   ValueAnimator animation) {
+                                   float fraction) {
 
-        float fraction = (float) animation.getAnimatedValue();
+
         reveal.setRadius(MathHelper.interpolate(origRadius, targetRadius, fraction));
 
         reveal.getLayoutParams().width =
-                (int) ((targetX - origX) * (1 - fraction) + origX);
+                (int) MathHelper.interpolate(origX, targetX, fraction);
+
         reveal.getLayoutParams().height =
-                (int) ((targetY - origY) * (1 - fraction) + origY);
+                (int) MathHelper.interpolate(origY, targetY, fraction);
 
         reveal.requestLayout();
     }
@@ -217,10 +220,10 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         final int targetTop = originTop - getStatusBarHeight() - layoutParams.topMargin;
         final int targetLeft = originLeft - layoutParams.leftMargin;
 
-        ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
+        ValueAnimator revealAnim = ObjectAnimator.ofFloat(0, 1);
 
         revealAnim.addUpdateListener(animation ->
-                transformMaterial(origX, origY, origWidth, origHeight, origRadius, this.origRadius, animation));
+                transformMaterial(origX, origY, origWidth, origHeight, origRadius, this.origRadius, (float) animation.getAnimatedValue()));
 
         ObjectAnimator translateX = ObjectAnimator.ofFloat(this.reveal, "translationX", (float) targetLeft);
         ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) targetTop);
@@ -251,10 +254,17 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     @Override
     public void animateIn() {
+
+        int minSize = getResources().getDimensionPixelSize(R.dimen.size_xxxlarge);
+
+        int delay = (origHeight < minSize) ? 600 : 300;
+
+        reveal.postDelayed(() -> reveal(), 200);
+
         linear_container.postDelayed(() -> {
             linear_container.setVisibility(View.VISIBLE);
             AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight());
-        }, 300);
+        }, delay);
     }
 
     @Override

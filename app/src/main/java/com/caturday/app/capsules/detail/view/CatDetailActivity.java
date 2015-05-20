@@ -288,7 +288,7 @@ public class CatDetailActivity extends BaseAppCompatActivity
 
                         favorite_B.setTranslationY((float) -offset);
                         caption_V.setBackgroundColor(
-                                ColorHelper.interpolateColor(fromColorBG, toColorBG, 1 - fraction));
+                                ColorHelper.interpolateColor(fromColorBG, toColorBG, fraction));
                         caption_V.setElevation(10 * fraction);
                         caption_V.setExpandedLevel(fraction);
                     } else {

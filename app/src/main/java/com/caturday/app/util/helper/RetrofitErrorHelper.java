@@ -7,6 +7,10 @@ public class RetrofitErrorHelper {
 
     public static Observable<String> formatErrorMessageRx(RetrofitError e) {
 
+        if (e.getMessage().contains("connect")) {
+            return Observable.just("Can't reach the internet, make sure you are connected");
+        }
+
         NetworkError error = (NetworkError) e.getBodyAs(NetworkError.class);
         if (error.getMessage() != null) {
             return Observable.just(error.getMessage());
