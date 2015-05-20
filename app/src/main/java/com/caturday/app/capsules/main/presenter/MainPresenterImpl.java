@@ -11,6 +11,7 @@ import com.caturday.app.capsules.common.events.OnLogoutSuccessful;
 import com.caturday.app.capsules.common.events.OnPostCreatedEvent;
 import com.caturday.app.capsules.common.events.OnPostPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPostResult;
+import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
 import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnScrollChangedEvent;
 import com.caturday.app.capsules.common.events.observablescrollview.OnUpOrCancelMotionEvent;
@@ -211,8 +212,6 @@ public class MainPresenterImpl implements MainPresenter {
     private void initMenuClickListener(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(
                 item -> {
-                    mainView.toggleArrow(true);
-
                     if (item.getItemId() == R.id.action_login) {
                         Intent intent = new Intent(mainViewActivity, LoginActivity.class);
                         int x = toolbar.getWidth() -
@@ -224,6 +223,8 @@ public class MainPresenterImpl implements MainPresenter {
                     } else if (item.getItemId() == R.id.action_logout) {
                         mainInteractor.performLogout();
                         bus.post(new OnLogoutSuccessful());
+                    }else if (item.getItemId() == R.id.action_refresh) {
+                        bus.post(new StreamRefreshedEvent());
                     } else {
                         Intent intent = new Intent(mainViewActivity, SettingsActivity.class);
                         mainViewActivity.startActivity(intent);
