@@ -4,6 +4,7 @@ package com.caturday.app.capsules.login.view;
 import android.os.Handler;
 
 import com.caturday.app.capsules.common.events.OnLoginSuccessful;
+import com.caturday.app.capsules.common.events.StreamRefreshedEvent;
 import com.caturday.app.capsules.login.interactor.LoginInteractor;
 import com.caturday.app.util.helper.RetrofitErrorHelper;
 import com.squareup.otto.Bus;
@@ -32,6 +33,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .subscribe(userEntity -> {
                             loginView.successAnimation();
                             bus.post(new OnLoginSuccessful());
+                            bus.post(new StreamRefreshedEvent());
                         },
                         this::handleError);
     }

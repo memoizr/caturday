@@ -258,7 +258,6 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         int minSize = getResources().getDimensionPixelSize(R.dimen.size_xxxlarge);
 
         int delay = (origHeight < minSize) ? 600 : 300;
-
         reveal.postDelayed(() -> reveal(), 200);
 
         linear_container.postDelayed(() -> {

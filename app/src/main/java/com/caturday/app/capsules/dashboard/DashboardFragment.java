@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
+import com.caturday.app.capsules.dashboard.adapter.DashboardPageAdapter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -108,5 +109,11 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     public void newPost(){
 
         dashboardPresenter.createNewPost(newPostFab);
+    }
+
+    @Override
+    public void onDestroyView() {
+        ((DashboardPageAdapter)dashboard_VP.getAdapter()).destroyItems();
+        super.onDestroyView();
     }
 }

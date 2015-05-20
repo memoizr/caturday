@@ -133,8 +133,8 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
 
     @Override
     public void onPageSelected() {
-        cats_stream_RV.scrollBy(0,1);
-        cats_stream_RV.scrollBy(0,-1);
+        cats_stream_RV.scrollBy(0, 1);
+        cats_stream_RV.scrollBy(0, -1);
     }
 
     @Override
