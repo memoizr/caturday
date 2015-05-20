@@ -1,6 +1,7 @@
 package com.caturday.app.capsules.common.view.views;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ public abstract class EmptyView extends FrameLayout {
     @InjectView(R.id.image) ImageView imageIV;
     @InjectView(R.id.title) TextView titleTV;
     @InjectView(R.id.subtitle) TextView subTitleTV;
-    @InjectView(R.id.empty_CV) View container;
+    @InjectView(R.id.empty_CV) CardView container;
 
     public EmptyView(Context context, AttributeSet attrs) {
         super(context, attrs);

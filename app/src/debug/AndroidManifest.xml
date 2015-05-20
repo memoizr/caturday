@@ -38,7 +38,7 @@
             android:name="com.caturday.app.capsules.login.view.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName="com.caturday.app.capsules.main.view.MainActivity"
-            android:theme="@style/Theme.Transparent" >
+            android:theme="@style/Theme.Transparent.Dark" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.caturday.app.capsules.main.view.MainActivity" />

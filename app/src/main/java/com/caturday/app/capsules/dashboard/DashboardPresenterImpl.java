@@ -4,6 +4,8 @@ import android.content.Intent;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -64,9 +66,14 @@ public class DashboardPresenterImpl extends DashboardPresenter {
 
 
     @Override
-    public void createNewPost() {
+    public void createNewPost(View view) {
         if (interactor.isUserLoggedIn()) {
             Intent intent = new Intent(activity, NewPostActivity.class);
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_LEFT, view.getLeft());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_TOP, view.getTop());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_WIDTH, view.getWidth());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_HEIGHT, view.getHeight());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_RADIUS, view.getHeight() / 2);
             activity.startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
             dashboardView.hideFAB();
         } else {

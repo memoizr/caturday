@@ -11,7 +11,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -31,6 +30,7 @@ import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.newpost.NewPostModule;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.util.helper.AnimationHelper;
+import com.caturday.app.util.helper.MathHelper;
 import com.caturday.app.util.interpolators.HyperAccelerateDecelerateInterpolator;
 
 import java.util.Arrays;
@@ -46,6 +46,12 @@ import butterknife.OnClick;
 public class NewPostActivity extends BaseAppCompatActivity implements NewPostView {
     public static final String NEW_POST_ID = "NEW_POST_ID";
     public static final int NEW_POST_REQUEST_CODE = 2;
+    public static final String EXTRA_ORIGIN_LEFT = "ORIGIN_LEFT";
+    public static final String EXTRA_ORIGIN_TOP = "ORIGIN_TOP";
+    public static final String EXTRA_ORIGIN_HEIGHT = "ORIGIN_HEIGHT";
+    public static final String EXTRA_ORIGIN_WIDTH = "ORIGIN_WIDTH";
+    public static final String EXTRA_ORIGIN_RADIUS = "ORIGIN_RADIUS";
+
     @Inject NewPostPresenter newPostPresenter;
     @InjectView(R.id.reveal_V) CardView reveal;
     @InjectView(R.id.linear_container) LinearLayout linear_container;
@@ -64,6 +70,11 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
     private int result = RESULT_CANCELED;
     private int containerHeight;
     private boolean isClosing;
+    private int originTop;
+    private int originLeft;
+    private int origWidth;
+    private int origHeight;
+    private int origRadius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +84,11 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
         ButterKnife.inject(this);
 
+        originLeft = getIntent().getExtras().getInt(EXTRA_ORIGIN_LEFT);
+        originTop = getIntent().getExtras().getInt(EXTRA_ORIGIN_TOP);
+        origWidth = getIntent().getExtras().getInt(EXTRA_ORIGIN_WIDTH);
+        origHeight = getIntent().getExtras().getInt(EXTRA_ORIGIN_HEIGHT);
+        origRadius = getIntent().getExtras().getInt(EXTRA_ORIGIN_RADIUS);
 
         if (savedInstanceState == null) {
             newPostPresenter.onCreate(this);
@@ -95,29 +111,38 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         assistReveal();
         int targetX = reveal.getWidth();
         int targetY = reveal.getHeight();
-        int origSize = getResources().getDimensionPixelSize(R.dimen.original_size);
-        final int origRadius = origSize / 2;
         final int targetRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
-        final int targetTop = reveal.getTop() -
-                ((FrameLayout.MarginLayoutParams) reveal.getLayoutParams()).topMargin;
+
+        FrameLayout.MarginLayoutParams layoutParams =
+                (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
+
+        final int targetTop = originTop - getStatusBarHeight() - layoutParams.topMargin;
+
+        final int targetLeft = originLeft - layoutParams.leftMargin;
 
         ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
         revealAnim.addUpdateListener(animation ->
-                transformMaterial(origSize, origSize, targetX, targetY, origRadius, targetRadius, animation));
+                transformMaterial(origWidth, origHeight, targetX, targetY, origRadius, targetRadius, animation));
 
-        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) -targetTop);
+        reveal.setTranslationX(targetLeft);
+        reveal.setTranslationY(targetTop);
+        ObjectAnimator translateX = ObjectAnimator.ofFloat(this.reveal, "translationX", (float) 0);
+        ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) 0);
         AnimatorSet aset = new AnimatorSet();
-        aset.playTogether(revealAnim, translateY);
+        aset.playTogether(revealAnim, translateY, translateX);
         aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
         aset.setDuration(700);
         aset.start();
-
-        reveal.postDelayed(() -> {
-            if (!isClosing)
-                setTopParams();
-        }
-                , 1200);
     }
+
+    public int getStatusBarHeight() {
+      int result = 0;
+      int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+      if (resourceId > 0) {
+          result = getResources().getDimensionPixelSize(resourceId);
+      }
+      return result;
+}
 
     public void setUpSpinner() {
 
@@ -160,7 +185,7 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
                                    ValueAnimator animation) {
 
         float fraction = (float) animation.getAnimatedValue();
-        reveal.setRadius(interpolate(origRadius, targetRadius, fraction));
+        reveal.setRadius(MathHelper.interpolate(origRadius, targetRadius, fraction));
 
         reveal.getLayoutParams().width =
                 (int) ((targetX - origX) * (1 - fraction) + origX);
@@ -168,30 +193,6 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
                 (int) ((targetY - origY) * (1 - fraction) + origY);
 
         reveal.requestLayout();
-    }
-
-    private void setTopParams() {
-        reveal.setTranslationY(0);
-        FrameLayout.MarginLayoutParams oldLayout =
-                (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.RIGHT | Gravity.TOP);
-
-        layoutParams.setMargins(
-                oldLayout.leftMargin,
-                oldLayout.topMargin,
-                oldLayout.rightMargin,
-                oldLayout.bottomMargin
-        );
-
-        reveal.setLayoutParams(layoutParams);
-    }
-
-    private float interpolate(int from, int to, float fraction) {
-        return ((from - to) * fraction) + to;
     }
 
     @Override
@@ -204,47 +205,31 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
     }
 
     public void hide() {
-        setBottomParams();
 
         assistHide();
         int origX = reveal.getWidth();
         int origY = reveal.getHeight();
-        final int targetSize = getResources().getDimensionPixelSize(R.dimen.original_size);
-        final int targetRadius = targetSize / 2;
+
+        FrameLayout.MarginLayoutParams layoutParams =
+                (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
+
         final int origRadius = getResources().getDimensionPixelSize(R.dimen.target_radius_1);
-        final int targetTop = 0;
+        final int targetTop = originTop - getStatusBarHeight() - layoutParams.topMargin;
+        final int targetLeft = originLeft - layoutParams.leftMargin;
 
         ValueAnimator revealAnim = ObjectAnimator.ofFloat(1, 0);
-        reveal.setTranslationY(reveal.getHeight() - findViewById(android.R.id.content).getHeight() +
-                getResources().getDimensionPixelSize(R.dimen.size_medium));
-        revealAnim.addUpdateListener(animation ->
-                transformMaterial(origX, origY, targetSize, targetSize, origRadius, targetRadius, animation));
 
+        revealAnim.addUpdateListener(animation ->
+                transformMaterial(origX, origY, origWidth, origHeight, origRadius, this.origRadius, animation));
+
+        ObjectAnimator translateX = ObjectAnimator.ofFloat(this.reveal, "translationX", (float) targetLeft);
         ObjectAnimator translateY = ObjectAnimator.ofFloat(this.reveal, "translationY", (float) targetTop);
+
         AnimatorSet aset = new AnimatorSet();
-        aset.playTogether(revealAnim, translateY);
+        aset.playTogether(revealAnim, translateX, translateY);
         aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
         aset.setDuration(500);
         aset.start();
-    }
-
-    private void setBottomParams() {
-        FrameLayout.MarginLayoutParams oldLayout =
-                (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.RIGHT | Gravity.BOTTOM);
-
-        layoutParams.setMargins(
-                oldLayout.leftMargin,
-                oldLayout.topMargin,
-                oldLayout.rightMargin,
-                oldLayout.bottomMargin
-        );
-
-        reveal.setLayoutParams(layoutParams);
     }
 
     private void assistHide() {
@@ -266,9 +251,10 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     @Override
     public void animateIn() {
-        linear_container.postDelayed(() ->
-                AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight())
-                , 300);
+        linear_container.postDelayed(() -> {
+            linear_container.setVisibility(View.VISIBLE);
+            AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight());
+        }, 300);
     }
 
     @Override
@@ -410,14 +396,16 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     @Override
     public void onBackPressed() {
-        isClosing = true;
-        AnimationHelper.glideDownAndHide(linear_container, linear_container.getHeight() / 2);
-        new Handler().postDelayed(() -> {
-            hide();
-        }, 400);
-        new Handler().postDelayed(() -> {
-            super.onBackPressed();
-        }, 1000);
+        if (!isClosing) {
+            isClosing = true;
+            AnimationHelper.glideDownAndHide(linear_container, linear_container.getHeight() / 2);
+            new Handler().postDelayed(() -> {
+                hide();
+            }, 400);
+            new Handler().postDelayed(() -> {
+                super.onBackPressed();
+            }, 1000);
+        }
     }
 
     @Override

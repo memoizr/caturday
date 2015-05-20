@@ -1,8 +1,11 @@
 package com.caturday.app.capsules.common.view.views;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.caturday.app.R;
+import com.caturday.app.capsules.newpost.view.NewPostActivity;
 
 public class NoPostsEmptyView extends EmptyView {
 
@@ -20,6 +23,14 @@ public class NoPostsEmptyView extends EmptyView {
 
     @Override
     protected void setAction() {
-
+        container.setOnClickListener(v -> {
+            Intent intent = new Intent(context, NewPostActivity.class);
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_LEFT, container.getLeft());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_TOP, container.getTop());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_WIDTH, container.getWidth());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_HEIGHT, container.getHeight());
+            intent.putExtra(NewPostActivity.EXTRA_ORIGIN_RADIUS, container.getRadius());
+            ((Activity) context).startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
+        });
     }
 }

@@ -7,7 +7,7 @@
     android:elevation="10dp"
     app:cardCornerRadius="28dp"
     android:visibility="invisible"
-    android:layout_gravity="bottom|right"
+    android:layout_gravity="top|left"
     app:cardElevation="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,6 +27,7 @@
         android:background="@color/accent"
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
+        android:visibility="invisible"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >

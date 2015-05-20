@@ -107,6 +107,6 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     @OnClick(R.id.new_post_B)
     public void newPost(){
 
-        dashboardPresenter.createNewPost();
+        dashboardPresenter.createNewPost(newPostFab);
     }
 }
