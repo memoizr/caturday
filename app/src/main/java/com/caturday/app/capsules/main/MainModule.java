@@ -12,6 +12,8 @@ import com.caturday.app.capsules.main.presenter.MainPresenter;
 import com.caturday.app.capsules.main.presenter.MainPresenterImpl;
 import com.caturday.app.capsules.main.view.MainActivity;
 import com.caturday.app.models.catpost.repository.CatPostRepository;
+import com.caturday.app.models.gcm.GcmModule;
+import com.caturday.app.models.gcm.repository.GcmRepository;
 import com.caturday.app.models.user.UserModule;
 import com.caturday.app.models.user.repository.UserRepository;
 import com.squareup.otto.Bus;
@@ -23,7 +25,10 @@ import dagger.Provides;
 
 @Module(
         injects = MainActivity.class,
-        includes = UserModule.class,
+        includes = {
+                UserModule.class,
+                GcmModule.class
+        },
         addsTo = AppModule.class
 )
 public class MainModule {
@@ -36,8 +41,9 @@ public class MainModule {
 
     @Provides @Singleton public MainInteractor provideMainInteractor(
             UserRepository userRepository,
-            CatPostRepository catPostRepository) {
-        return new MainInteractorImpl(userRepository, catPostRepository);
+            CatPostRepository catPostRepository,
+            GcmRepository gcmRepository) {
+        return new MainInteractorImpl(userRepository, catPostRepository, gcmRepository);
     }
 
     @Provides @Singleton public MainPresenter provideMainPresenter(MainInteractor mainInteractor,
