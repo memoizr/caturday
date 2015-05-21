@@ -71,7 +71,6 @@ public class CatDetailActivity extends BaseAppCompatActivity
     @Inject CatDetailPresenter catDetailPresenter;
 
     private int headerBottom;
-    private String url;
     private ViewGroup header;
     private int captionHeight;
     private int vibrant;
