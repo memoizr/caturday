@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface CatDetailPresenter extends Toolbar.OnMenuItemClickListener {
 
+    String EXTRA_FROM_NETWORK = "fromNetwork";
     String EXTRA_TRANSITION_NAME = "catCardTransition";
     String EXTRA_TRANSITION = "transition";
     String EXTRA_URL = "url";

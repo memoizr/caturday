@@ -113,7 +113,8 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
 
     @Override
     public void onDestroyView() {
-        ((DashboardPageAdapter)dashboard_VP.getAdapter()).destroyItems();
+        if (!getActivity().isFinishing())
+            ((DashboardPageAdapter)dashboard_VP.getAdapter()).destroyItems();
         super.onDestroyView();
     }
 }

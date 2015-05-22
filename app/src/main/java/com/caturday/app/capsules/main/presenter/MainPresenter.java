@@ -21,4 +21,6 @@ public interface MainPresenter {
     void onPause();
 
     void onResume();
+
+    void performPlayServicesCheck();
 }

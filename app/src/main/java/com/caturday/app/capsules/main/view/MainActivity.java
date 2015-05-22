@@ -3,18 +3,24 @@ package com.caturday.app.capsules.main.view;
 import android.animation.Animator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.R;
@@ -33,9 +39,13 @@ import com.caturday.app.util.interpolators.HyperTanAccelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanDecelerateInterpolator;
 import com.daimajia.slider.library.SliderLayout;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -80,6 +90,7 @@ public class MainActivity extends DrawerActivity implements
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         mainPresenter.create(savedInstanceState);
+
         setDrawer(this, toolbar, mDrawerLayout);
 
         titleCollapsed = getResources().getDimensionPixelSize(R.dimen.title_collapsed);
@@ -340,6 +351,7 @@ public class MainActivity extends DrawerActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+
         mainPresenter.onResume();
         closeDrawer();
     }

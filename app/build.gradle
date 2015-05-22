@@ -17,8 +17,8 @@ android {
         applicationId "com.caturday.app"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 6
-        versionName "1.3.1"
+        versionCode 7
+        versionName "1.4.0"
     }
     buildTypes {
         release {
@@ -46,6 +46,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:cardview-v7:22.1.1'
     compile 'com.android.support:palette-v7:22.1.1'
+    compile "com.google.android.gms:play-services:3.1.+"
     compile 'com.android.support:recyclerview-v7:22.1.1'
     compile 'com.android.support:support-v4:22.1.1'
     compile 'com.github.chrisbanes.photoview:library:1.2.3'

@@ -30,13 +30,17 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class CatDetailPresenterImpl implements CatDetailPresenter {
+    
+    
 
     private final CatDetailInteractor catDetailInteractor;
     private final CatDetailView catDetailView;
-    private String url;
     private String catPostServerId;
     private Context context;
     private boolean showComment;
+    private CatPostEntity catPostEntity;
+    private boolean fromNetwork;
+
 
     public CatDetailPresenterImpl(Context context,
                                   CatDetailView catDetailView,
@@ -49,8 +53,8 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     @Override
     public void create(Bundle extras, Context context) {
         this.context = context;
-        url = extras.getString(EXTRA_URL);
         catPostServerId = extras.getString(EXTRA_SERVER_ID);
+        fromNetwork = extras.getBoolean(EXTRA_FROM_NETWORK);
         showComment = extras.getBoolean(EXTRA_SHOW_COMMENTS);
 
         getCatPostFromId(catPostServerId);
@@ -60,7 +64,6 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         }
 
         catDetailView.initRecyclerView();
-        catDetailView.initImageView(url);
         catDetailView.initToolbar();
         catDetailView.initIMEListener();
 
@@ -75,7 +78,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     private void getCatPostFromId(String serverId) {
-            catDetailInteractor.getPostFromId(serverId, false)
+            catDetailInteractor.getPostFromId(serverId, fromNetwork)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -83,8 +86,9 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
                                 setCatPostEntity(catPostEntity);
                                 ExpandingView view = catDetailView.getExpandingView();
                                 view.setUsername(catPostEntity.getUser().getUsername());
-                                view.setDate( catPostEntity.getCreatedAt());
-                                view.setUserImage( catPostEntity.getUser().getImageUrl());
+                                view.setDate(catPostEntity.getCreatedAt());
+                                view.setUserImage(catPostEntity.getUser().getImageUrl());
+                                catDetailView.initImageView(catPostEntity.getImageUrl());
                                 if (showComment) {
                                     catDetailView.showComment();
                                 }
@@ -94,6 +98,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     public void setCatPostEntity(CatPostEntity entity) {
+        this.catPostEntity = entity;
 
         catDetailView.setRecyclerViewAdapter(getCommentEntities(entity));
     }
@@ -176,7 +181,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     private void shareTextUrl() {
-        ShareHelper.shareLinkAction("Check out this cat!", url, context);
+        ShareHelper.shareLinkAction("Check out this cat!", catPostEntity.getImageUrl(), context);
     }
 
     private void downloadImage() {
@@ -213,7 +218,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
         };
 
         Picasso.with(context)
-                .load(url)
+                .load(catPostEntity.getImageUrl())
                 .into(target);
     }
 
