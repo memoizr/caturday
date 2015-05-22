@@ -25,7 +25,6 @@
     android:textSize="18dp"
     android:textStyle="bold"
     android:textColor="@color/deepblack"
-    android:text="Random Chool"
     android:id="@+id/user_name_TV"
     android:layout_marginTop="16dp"
     android:layout_width="match_parent"
@@ -34,7 +33,6 @@
     <TextView
     android:layout_toRightOf="@+id/user_image_IV"
     android:layout_below="@+id/user_name_TV"
-    android:text="3 hours ago"
     android:id="@+id/date_TV"
     android:layout_marginTop="4dp"
     android:layout_width="match_parent"

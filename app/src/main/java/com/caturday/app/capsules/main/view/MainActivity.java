@@ -352,7 +352,6 @@ public class MainActivity extends DrawerActivity implements
     protected void onResume() {
         super.onResume();
 
-        mainPresenter.performPlayServicesCheck();
         mainPresenter.onResume();
         closeDrawer();
     }

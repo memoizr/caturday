@@ -31,7 +31,7 @@ public class CatPostORM implements CatPostDb {
         CatPost catPost = getCatPostDao()
                 .queryBuilder()
                 .where(CatPostDao.Properties.ServerId.eq(id))
-                .uniqueOrThrow();
+                .unique();
 
         return Observable.just(CatPostMapper.toEntity(catPost));
     }

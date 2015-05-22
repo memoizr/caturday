@@ -36,7 +36,7 @@ public class ApiModule {
 
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.NONE)
                 .setRequestInterceptor(requestInterceptor)
                 .build();
         return adapter;

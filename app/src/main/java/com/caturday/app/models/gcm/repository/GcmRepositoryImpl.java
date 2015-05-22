@@ -16,7 +16,6 @@ public class GcmRepositoryImpl implements GcmRepository {
     public Observable<GcmRegistrationEntity> registerDevice(String regId) {
         GcmRegistrationEntity entity = new GcmRegistrationEntity();
         entity.setRegistrationId(regId);
-        System.out.println("registering now");
         return cloudDataStore.registerDevice(entity);
     }
 }

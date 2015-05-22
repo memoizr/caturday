@@ -30,6 +30,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class CatDetailPresenterImpl implements CatDetailPresenter {
+    
+    
 
     private final CatDetailInteractor catDetailInteractor;
     private final CatDetailView catDetailView;
@@ -37,6 +39,8 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     private Context context;
     private boolean showComment;
     private CatPostEntity catPostEntity;
+    private boolean fromNetwork;
+
 
     public CatDetailPresenterImpl(Context context,
                                   CatDetailView catDetailView,
@@ -50,6 +54,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     public void create(Bundle extras, Context context) {
         this.context = context;
         catPostServerId = extras.getString(EXTRA_SERVER_ID);
+        fromNetwork = extras.getBoolean(EXTRA_FROM_NETWORK);
         showComment = extras.getBoolean(EXTRA_SHOW_COMMENTS);
 
         getCatPostFromId(catPostServerId);
@@ -73,7 +78,7 @@ public class CatDetailPresenterImpl implements CatDetailPresenter {
     }
 
     private void getCatPostFromId(String serverId) {
-            catDetailInteractor.getPostFromId(serverId, false)
+            catDetailInteractor.getPostFromId(serverId, fromNetwork)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(

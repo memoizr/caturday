@@ -49,7 +49,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import rx.Observable;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -108,16 +107,14 @@ public class MainPresenterImpl implements MainPresenter {
             gcm = GoogleCloudMessaging.getInstance(mainViewContext.getApplicationContext());
             regid = getRegistrationId(mainViewContext);
 
-            System.out.println("reg id: " + regid);
-
-            if (true) {
-//            if (regid.isEmpty()) {
+            if (regid.isEmpty()) {
                 registerWithGcm()
-                        .flatMap(s ->
-                                mainInteractor.registerDevice(regid))
+                        .flatMap(s -> mainInteractor.registerDevice(regid))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(s -> System.out.println(s.getRegistrationId()), e -> e.printStackTrace());
+                        .subscribe(s -> {
+                            Log.i(TAG, s.getRegistrationId());
+                        }, e -> e.printStackTrace());
             }
         } else {
             Toast.makeText(mainViewContext, "You need Google Play Services to use this app", Toast.LENGTH_LONG);
