@@ -78,4 +78,8 @@ public class CatPostCloudDataStore implements CatPostDataStore {
             return catPostApi.uploadWithUrl(catPostEntity);
         }
     }
+
+    public Observable<Object> deleteCatPost(String postId) {
+       return catPostApi.deleteCatPost(postId);
+    }
 }

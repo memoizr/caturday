@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,6 +43,8 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     private List<CatPostEntity> mCatPosts = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    public static final int MENU_REPORT = 0;
+    public static final int MENU_DELETE = 1;
 
     public CatPostAdapter(Context context, CatStreamPresenter presenter) {
         this.context = context;
@@ -117,7 +120,14 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             myViewHolder.username_TV.setText(user.getUsername());
             Glide.with(context).load(user.getImageUrl()).into(myViewHolder.user_image_IV);
 
-            myViewHolder.options_B.setOnClickListener(this::showPopup);
+            if (presenter.isCurrentUser(user.getServerId())) {
+                ((CatsCardViewHolder) viewHolder).username_TV.setText("GotIt");
+            }
+
+            myViewHolder.options_B.setOnClickListener(v -> this.showPopup(v,
+                    presenter.isCurrentUser(user.getServerId()),
+                    catPostEntity.getServerId(),
+                    index));
 
             myViewHolder.share_B.setOnClickListener(view -> {
                 ShareHelper.shareLinkAction("Check out this cat!",
@@ -125,7 +135,7 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
                         context);
             });
 
-            myViewHolder.catContainer.setOnClickListener(view -> {
+            myViewHolder.catContainer.setOnClickListener(v -> {
                 ((MainActivity) context).toggleArrow(true);
                 presenter.openDetails(index, myViewHolder.cat_IV, catPostEntity, false);
             });
@@ -137,11 +147,21 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void showPopup(View v) {
+    public void showPopup(View v, boolean currentUser, String postId, int position) {
         Context wrapper = new ContextThemeWrapper(context, R.style.PopupMenuStyle);
         PopupMenu popupMenu = new PopupMenu(wrapper, v);
-        popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Report abuse");
+        popupMenu.getMenu().add(Menu.NONE, MENU_REPORT, Menu.NONE, "Report abuse");
+        if (currentUser) {
+            popupMenu.getMenu().add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete Post");
+        }
         popupMenu.show();
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == MENU_DELETE) {
+                presenter.deleteItem(postId, position);
+            }
+            return true;
+            });
     }
 
     @Override
@@ -161,6 +181,11 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         list.add(catPostEntity);
         list.addAll(mCatPosts);
         mCatPosts = list;
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        mCatPosts.remove(position);
         notifyDataSetChanged();
     }
 

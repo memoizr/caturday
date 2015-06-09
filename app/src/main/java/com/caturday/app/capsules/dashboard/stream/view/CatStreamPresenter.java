@@ -1,6 +1,7 @@
 package com.caturday.app.capsules.dashboard.stream.view;
 
 import android.app.Activity;
+import android.support.v7.widget.PopupMenu;
 import android.view.View;
 
 import com.caturday.app.models.catpost.CatPostEntity;
@@ -23,4 +24,8 @@ public abstract class CatStreamPresenter implements ObservableScrollViewCallback
     public abstract void openDetails(int i, View view, CatPostEntity catPostEntity, boolean showComments);
 
     public abstract void onDestroyView();
+
+    public abstract boolean isCurrentUser(String serverId);
+
+    public abstract void deleteItem(String postId, int position);
 }

@@ -18,6 +18,7 @@ import com.caturday.app.capsules.common.events.navigation.OnNavigationItemShownE
 import com.caturday.app.capsules.detail.view.CatDetailActivity;
 import com.caturday.app.capsules.detail.view.CatDetailPresenter;
 import com.caturday.app.models.catpost.CatPostEntity;
+import com.caturday.app.models.user.UserEntity;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPreparePageScroll;
@@ -45,6 +46,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     private String streamType;
     private int streamPosition;
     private String userId;
+    private UserEntity currentUser;
 
     public CatStreamPresenterImpl(CatStreamView catStreamView,
                                   CatStreamInteractor catStreamInteractor,
@@ -126,6 +128,9 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
         this.streamType = streamType;
         this.streamPosition = streamPosition;
         this.userId = userId;
+        if (catStreamInteractor.userLoggedIn()) {
+            this.currentUser = catStreamInteractor.getCurrentUser();
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         catStreamView.initializeRecyclerView(this, layoutManager);
@@ -228,5 +233,28 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     @Override
     public void onDestroyView() {
         eventBus.unregister(this);
+    }
+
+    @Override
+    public boolean isCurrentUser(String serverId) {
+        if (currentUser != null) {
+            return Objects.equals(serverId, currentUser.getServerId());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void deleteItem(String postId, int position) {
+        catStreamInteractor.deletePost(postId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        s -> {
+                            catStreamView.getAdapter().removeItem(position);
+                        }
+                        ,
+                        e -> {e.printStackTrace();}
+                );
     }
 }

@@ -4,6 +4,7 @@ import com.caturday.app.models.catpost.CatPostEntity;
 import java.util.List;
 
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -28,10 +29,16 @@ public interface CatPostApi {
 //                              @Part("caption") String caption);
 
     @Multipart
+
+
+
     @POST("/cat_post")
     Observable<CatPostEntity> upload(@Part("image_file") TypedFile file,
                                      @Part("category") String category,
                                      @Part("caption") String caption);
     @POST("/cat_post")
     Observable<CatPostEntity> uploadWithUrl(@Body CatPostEntity catPostEntity);
+
+    @DELETE("/cat_post/{id}")
+    Observable<Object> deleteCatPost(@Path("id") String postId);
 }

@@ -90,7 +90,7 @@ public class UserORM {
 
     private User currentUser() {
 
-        return getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).uniqueOrThrow();
+        return getUserDao().queryBuilder().where(UserDao.Properties.LoggedIn.eq(true)).unique();
     }
 
     private User setFavorites(String string) {
