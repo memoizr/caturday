@@ -2,6 +2,7 @@ package com.caturday.app.capsules.dashboard.stream.interactor;
 
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.catpost.repository.CatPostRepository;
+import com.caturday.app.models.user.UserEntity;
 import com.caturday.app.models.user.repository.UserRepository;
 import com.caturday.app.models.vote.VoteEntity;
 import com.caturday.app.models.vote.repository.VoteRepository;
@@ -9,6 +10,8 @@ import com.caturday.app.models.vote.repository.VoteRepository;
 import java.util.List;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class CatStreamInteractorImpl implements CatStreamInteractor {
 
@@ -60,5 +63,15 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     @Override
     public boolean userLoggedIn() {
         return userRepository.userLoggedIn();
+    }
+
+    @Override
+    public UserEntity getCurrentUser() {
+        return userRepository.getCurrentUser();
+    }
+
+    @Override
+    public Observable<Object> deletePost(String postId) {
+        return catPostRepository.deletePost(postId);
     }
 }

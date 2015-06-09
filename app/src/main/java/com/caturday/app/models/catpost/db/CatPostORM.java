@@ -136,6 +136,15 @@ public class CatPostORM implements CatPostDb {
         return catPostEntity;
     }
 
+    @Override
+    public void deletePost(String postId) {
+        CatPost catPost = getCatPostDao()
+                .queryBuilder()
+                .where(CatPostDao.Properties.ServerId.eq(postId)).uniqueOrThrow();
+
+        catPost.delete();
+    }
+
     private CatPost mapToCatPost(CatPostEntity catPostEntity){
 
         CatPost catPost = CatPostMapper.fromEntity(catPostEntity);

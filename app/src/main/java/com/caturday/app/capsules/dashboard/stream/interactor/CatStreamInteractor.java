@@ -1,6 +1,7 @@
 package com.caturday.app.capsules.dashboard.stream.interactor;
 
 import com.caturday.app.models.catpost.CatPostEntity;
+import com.caturday.app.models.user.UserEntity;
 
 import java.util.List;
 
@@ -19,4 +20,8 @@ public interface CatStreamInteractor {
     Observable<CatPostEntity> catPostVoted(String serverId);
 
     boolean userLoggedIn();
+
+    UserEntity getCurrentUser();
+
+    Observable<Object> deletePost(String postId);
 }

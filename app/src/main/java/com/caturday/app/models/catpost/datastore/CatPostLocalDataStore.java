@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 
 public class CatPostLocalDataStore implements CatPostDataStore {
 
@@ -58,5 +59,9 @@ public class CatPostLocalDataStore implements CatPostDataStore {
 
     public Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity) {
         return Observable.just(catPostDb.updateCatPost(catPostEntity));
+    }
+
+    public void deletePost(String postId) {
+        catPostDb.deletePost(postId);
     }
 }

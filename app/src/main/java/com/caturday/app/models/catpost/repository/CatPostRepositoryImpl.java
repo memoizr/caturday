@@ -81,4 +81,10 @@ public class CatPostRepositoryImpl implements CatPostRepository {
     public void eraseCache() {
         catPostLocalDataStore.eraseCache();
     }
+
+    @Override
+    public Observable<Object> deletePost(String postId) {
+        return catPostCloudDataStore.deleteCatPost(postId)
+                .doOnNext(s -> catPostLocalDataStore.deletePost(postId));
+    }
 }

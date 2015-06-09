@@ -25,4 +25,6 @@ public interface CatPostRepository {
     Observable<CatPostEntity> updateCatPost(CatPostEntity catPostEntity);
 
     void eraseCache();
+
+    Observable deletePost(String postId);
 }

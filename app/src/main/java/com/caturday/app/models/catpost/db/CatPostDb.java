@@ -31,4 +31,5 @@ public interface CatPostDb {
 
     CatPostEntity updateCatPost(CatPostEntity catPostEntity);
 
+    void deletePost(String postId);
 }
