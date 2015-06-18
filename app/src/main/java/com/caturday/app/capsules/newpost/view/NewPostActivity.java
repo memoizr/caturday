@@ -118,6 +118,8 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         FrameLayout.MarginLayoutParams layoutParams =
                 (FrameLayout.MarginLayoutParams) reveal.getLayoutParams();
 
+        FrameLayout.MarginLayoutParams oldLayoutParams = new FrameLayout.LayoutParams(layoutParams);
+
         final int targetTop = originTop - getStatusBarHeight() - layoutParams.topMargin;
 
         final int targetLeft = originLeft - layoutParams.leftMargin;
@@ -135,6 +137,8 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         aset.setInterpolator(HyperAccelerateDecelerateInterpolator.getInterpolator());
         aset.setDuration(700);
         aset.start();
+
+        new Handler().postDelayed(() -> reveal.setLayoutParams(oldLayoutParams), 750);
     }
 
     public int getStatusBarHeight() {
@@ -269,6 +273,7 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
     @Override
     public void choiceMade() {
         preview.setVisibility(View.VISIBLE);
+
         clear_B.setVisibility(View.VISIBLE);
         uploadButtonsVG.setVisibility(View.GONE);
     }
