@@ -123,7 +123,6 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
     }
 
     @Override
-
     public void onViewCreated(String streamType, String userId, int streamPosition) {
         this.streamType = streamType;
         this.streamPosition = streamPosition;

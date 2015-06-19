@@ -113,6 +113,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
         if (networkError) {
             EmptyView emptyView = new NoNetworkEmptyView(getActivity());
             container.addView(emptyView);
+            cats_stream_RV.setVisibility(View.GONE);
             return;
         }
 
@@ -120,13 +121,17 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
             EmptyView emptyView;
 
             if (!loggedIn) {
-                 emptyView = new LoggedOutEmptyView(getActivity());
+                emptyView = new LoggedOutEmptyView(getActivity());
             } else {
                 emptyView = new NoPostsEmptyView(getActivity());
             }
             container.addView(emptyView);
             cats_stream_RV.setVisibility(View.GONE);
         } else {
+            View emptyView = container.findViewById(R.id.empty_CV);
+            if (emptyView != null) {
+                container.removeView((View) emptyView.getParent());
+            }
             cats_stream_RV.setVisibility(View.VISIBLE);
         }
     }
