@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,13 +22,9 @@ import com.caturday.app.models.user.UserEntity;
 import com.caturday.app.util.helper.DateTimeHelper;
 import com.caturday.app.util.helper.ShareHelper;
 
-import org.ocpsoft.prettytime.PrettyTime;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -119,10 +114,6 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
             UserEntity user = catPostEntity.getUser();
             myViewHolder.username_TV.setText(user.getUsername());
             Glide.with(context).load(user.getImageUrl()).into(myViewHolder.user_image_IV);
-
-            if (presenter.isCurrentUser(user.getServerId())) {
-                ((CatsCardViewHolder) viewHolder).username_TV.setText("GotIt");
-            }
 
             myViewHolder.options_B.setOnClickListener(v -> this.showPopup(v,
                     presenter.isCurrentUser(user.getServerId()),

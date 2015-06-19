@@ -17,7 +17,7 @@ android {
         applicationId "com.caturday.app"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 9
+        versionCode 10
         versionName "1.4.0"
     }
     buildTypes {
