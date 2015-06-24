@@ -14,6 +14,9 @@ import com.caturday.app.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * An empty card view to show empty states and or errors
+ */
 public abstract class EmptyView extends FrameLayout {
 
     protected final Context context;

@@ -22,6 +22,12 @@ public class DashboardPageAdapter extends FragmentStatePagerAdapter{
         this.fragmentManager = fragmentManager;
     }
 
+    /**
+     * Return a CatStreamFragment for a given category
+     * @param streamCategory
+     * @param position
+     * @return
+     */
     private Fragment fragmentFactory(String streamCategory, int position){
         if (fragmentHashMap.get(position) == null) {
             Fragment fragment = new CatStreamFragment();
@@ -50,6 +56,9 @@ public class DashboardPageAdapter extends FragmentStatePagerAdapter{
         return Categories.getCategory(position);
     }
 
+    /**
+     * Clean up fragments when container is destroyed
+     */
     public void destroyItems() {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         for (int i : fragmentHashMap.keySet()) {

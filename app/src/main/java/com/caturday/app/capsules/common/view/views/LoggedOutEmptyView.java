@@ -14,8 +14,8 @@ public class LoggedOutEmptyView extends EmptyView{
 
     @Override
     protected void setContent() {
-        titleTV.setText("Who are you?");
-        subTitleTV.setText("Log in to see your activity");
+        titleTV.setText(R.string.logged_out_title);
+        subTitleTV.setText(R.string.logged_out_info);
         imageIV.setImageResource(R.drawable.logged_out);
     }
 

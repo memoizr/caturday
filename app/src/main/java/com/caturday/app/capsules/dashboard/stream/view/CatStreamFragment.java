@@ -20,7 +20,7 @@ import com.caturday.app.capsules.common.listener.EndlessScrollListener;
 import com.caturday.app.capsules.dashboard.stream.CatStreamModule;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,14 +38,12 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     @InjectView(R.id.cats_stream_RV) ObservableRecyclerView cats_stream_RV;
     @InjectView(R.id.container) ViewGroup container;
 
-    private CatPostAdapter catPostAdapter;
-
     public CatStreamFragment() {
     }
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new CatStreamModule(this));
+        return Collections.singletonList(new CatStreamModule(this));
     }
 
     @Override
@@ -146,7 +144,7 @@ public class CatStreamFragment extends BaseFragment implements CatStreamView {
     public void initializeRecyclerView(ObservableScrollViewCallbacks listener, RecyclerView.LayoutManager layoutManager) {
         cats_stream_RV.setLayoutManager(layoutManager);
 
-        catPostAdapter = new CatPostAdapter(getActivity(), catStreamPresenter);
+        CatPostAdapter catPostAdapter = new CatPostAdapter(getActivity(), catStreamPresenter);
         cats_stream_RV.setAdapter(catPostAdapter);
 
         cats_stream_RV.setScrollViewCallbacks(listener);

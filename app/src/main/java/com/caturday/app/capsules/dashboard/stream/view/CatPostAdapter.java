@@ -120,11 +120,10 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
                     catPostEntity.getServerId(),
                     index));
 
-            myViewHolder.share_B.setOnClickListener(view -> {
-                ShareHelper.shareLinkAction("Check out this cat!",
-                        mCatPosts.get(index).getImageUrl(),
-                        context);
-            });
+            myViewHolder.share_B.setOnClickListener(view ->
+                    ShareHelper.shareLinkAction(context.getString(R.string.share_message),
+                    mCatPosts.get(index).getImageUrl(),
+                    context));
 
             myViewHolder.catContainer.setOnClickListener(v -> {
                 ((MainActivity) context).toggleArrow(true);
@@ -141,10 +140,11 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
     public void showPopup(View v, boolean currentUser, String postId, int position) {
         Context wrapper = new ContextThemeWrapper(context, R.style.PopupMenuStyle);
         PopupMenu popupMenu = new PopupMenu(wrapper, v);
-        popupMenu.getMenu().add(Menu.NONE, MENU_REPORT, Menu.NONE, "Report abuse");
+        popupMenu.getMenu().add(Menu.NONE, MENU_REPORT, Menu.NONE, R.string.report_abuse);
         if (currentUser) {
-            popupMenu.getMenu().add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete Post");
+            popupMenu.getMenu().add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete_post);
         }
+
         popupMenu.show();
 
         popupMenu.setOnMenuItemClickListener(item -> {
@@ -180,7 +180,7 @@ public class CatPostAdapter extends HeaderAdapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    class CatsCardViewHolder extends RecyclerView.ViewHolder {
+    static final class CatsCardViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.cardCat_IV) ImageView cat_IV;
         @InjectView(R.id.catContainer) View catContainer;
         @InjectView(R.id.caption_TV) TextView caption_TV;

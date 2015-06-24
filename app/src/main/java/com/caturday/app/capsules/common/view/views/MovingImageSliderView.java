@@ -11,6 +11,9 @@ import com.caturday.app.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * Sets a custom layout for SliderView
+ */
 public class MovingImageSliderView extends BaseSliderView {
 
     @InjectView(R.id.slider_image) ImageView target;

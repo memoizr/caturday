@@ -5,6 +5,10 @@ import android.view.View;
 
 import com.caturday.app.models.catpost.CatPostEntity;
 
+/**
+ * Empty views for recyclerviews that need empty footers or headers
+ * @param <VH>
+ */
 public abstract class HeaderAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
 

@@ -24,4 +24,13 @@
     <string name="action_unfollow">Unfollow</string>
     <string name="action_follow">Follow</string>
     <string name="action_refresh">Refresh</string>
+    <string name="report_abuse">Report abuse</string>
+    <string name="delete_post">Delete Post</string>
+    <string name="share_message">Check out this cat!</string>
+    <string name="logged_out_title">Who are you?</string>
+    <string name="logged_out_info">Log in to see your activity</string>
+    <string name="connection_error_title">No Internet, no cats</string>
+    <string name="connection_error_info">Make sure you are connected and try again</string>
+    <string name="empty_state_title">Nothing to show</string>
+    <string name="empty_state_info">Create your first post</string>
 </resources>

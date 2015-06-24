@@ -17,6 +17,7 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
 
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
+    private final String CAT_POST = "CatPost";
     CatPostRepository catPostRepository;
 
     public CatStreamInteractorImpl(CatPostRepository catPostRepository,
@@ -53,7 +54,7 @@ public class CatStreamInteractorImpl implements CatStreamInteractor {
     public Observable<CatPostEntity> catPostVoted(String serverId) {
         VoteEntity voteEntity = new VoteEntity();
         voteEntity.setPositive(true);
-        voteEntity.setVoteableType("CatPost");
+        voteEntity.setVoteableType(CAT_POST);
         voteEntity.setVoteableId(serverId);
         return voteRepository.sendVote(voteEntity)
                 .flatMap(vote -> catPostRepository.getCatPost(serverId, true))

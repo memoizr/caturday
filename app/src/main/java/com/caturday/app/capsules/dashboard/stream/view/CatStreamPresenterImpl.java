@@ -249,11 +249,9 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        s -> {
-                            catStreamView.getAdapter().removeItem(position);
-                        }
+                        s -> catStreamView.getAdapter().removeItem(position)
                         ,
-                        e -> {e.printStackTrace();}
+                        Throwable::printStackTrace
                 );
     }
 }
