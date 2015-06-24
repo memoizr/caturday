@@ -32,6 +32,13 @@ android {
             versionNameSuffix '-debug'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     sourceSets {
         main {
             manifest.srcFile 'src/main/AndroidManifest.xml'
