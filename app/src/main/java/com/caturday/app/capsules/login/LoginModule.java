@@ -17,26 +17,27 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(
-        injects = {
-                LoginActivity.class,
-        },
-        includes = SessionModule.class,
-        addsTo = AppModule.class
+    injects = {
+            LoginActivity.class,
+    },
+    includes = SessionModule.class,
+    addsTo = AppModule.class
 )
 public class LoginModule {
 
-        private final LoginView loginView;
+    private final LoginView loginView;
 
-        public LoginModule(LoginView loginView){
-                this.loginView = loginView;
-        }
+    public LoginModule(LoginView loginView){
+            this.loginView = loginView;
+    }
 
-        @Provides @Singleton LoginInteractor provideLoginInteractor(SessionRepository sessionRepository) {
-                return new LoginInteractorImpl(sessionRepository);
-        }
+    @Provides @Singleton
+    LoginInteractor provideLoginInteractor(SessionRepository sessionRepository) {
+            return new LoginInteractorImpl(sessionRepository);
+    }
 
-        @Provides @Singleton
-        LoginPresenter provideLoginPresenter(LoginInteractor loginInteractor, Bus bus) {
-                return new LoginPresenterImpl(loginView, loginInteractor, bus);
-        }
+    @Provides @Singleton
+    LoginPresenter provideLoginPresenter(LoginInteractor loginInteractor, Bus bus) {
+            return new LoginPresenterImpl(loginView, loginInteractor, bus);
+    }
 }

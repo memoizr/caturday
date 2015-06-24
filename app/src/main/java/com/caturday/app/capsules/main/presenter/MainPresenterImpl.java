@@ -49,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -112,13 +113,57 @@ public class MainPresenterImpl implements MainPresenter {
                         .flatMap(s -> mainInteractor.registerDevice(regid))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(s -> {
-                            Log.i(TAG, s.getRegistrationId());
-                        }, e -> e.printStackTrace());
+                        .subscribe(s ->
+                                Log.i(TAG, s.getRegistrationId()),
+                                Throwable::printStackTrace);
             }
         } else {
-            Toast.makeText(mainViewContext, "You need Google Play Services to use this app", Toast.LENGTH_LONG);
+            Toast.makeText(mainViewContext, R.string.google_play_services_error, Toast.LENGTH_LONG);
         }
+    }
+
+    @Subscribe
+    public void onNavItemShown(OnNavigationItemShownEvent event) {
+
+        switch (event.getCurrentItem()){
+            case OnNavigationItemShownEvent.ITEM_DASHBOARD:
+                mainView.showTabs(true);
+                break;
+            default:
+                mainView.showTabs(false);
+                break;
+        }
+    }
+
+    @Subscribe
+    public void onScrollChangedEvent(OnScrollChangedEvent e) {
+        mainView.onScrollChanged(e.getScrollY(), e.isDragging());
+    }
+
+    @Subscribe
+    public void onUpOrCancelMotionEvent(OnUpOrCancelMotionEvent e) {
+        mainView.onUpOrCancelMotionEvent(e.getScrollState());
+    }
+
+    @Subscribe
+    public void onPagerScrolled(OnPostPagerScrolledEvent event) {
+        int offset = event.getOffset();
+        int position = event.getPosition();
+        int collapsedThreshold = mainView.getCollapsedThreshold();
+
+        if (offset >= 0) {
+            if (offset > collapsedThreshold) {
+                mainView.hideToolBarContainer(false);
+                bus.post(new OnPreparePageScroll(collapsedThreshold, position));
+            } else {
+                bus.post(new OnPreparePageScroll(offset, position));
+            }
+        }
+    }
+
+    @Subscribe
+    public void onRefreshComplete(StreamRefreshCompletedEvent event){
+        mainView.onRefreshCompleted();
     }
 
     private String getRegistrationId(Context context) {
@@ -152,23 +197,10 @@ public class MainPresenterImpl implements MainPresenter {
                         regid = gcm.register(SENDER_ID);
                         msg = "Device registered, registration ID=" + regid;
 
-                        // You should send the registration ID to your server over HTTP,
-                        // so it can use GCM/HTTP or CCS to send messages to your app.
-                        // The request to your server should be authenticated if your app
-                        // is using accounts.
-
-                        // For this demo: we don't need to send it because the device
-                        // will send upstream messages to a server that echo back the
-                        // message using the 'from' address in the message.
-
-                        // Persist the registration ID - no need to register again.
                         storeRegistrationId(mainViewContext.getApplicationContext(), regid);
                         s.onNext(regid);
                     } catch (IOException ex) {
                         msg = "Error :" + ex.getMessage();
-                        // If there is an error, don't just keep trying to register.
-                        // Require the user to click a button again, or perform
-                        // exponential back-off.
                         s.onError(ex);
                     }
                 }
@@ -182,12 +214,10 @@ public class MainPresenterImpl implements MainPresenter {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 
     private SharedPreferences getGCMPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the registration ID in your app is up to you.
         return mainViewContext.getSharedPreferences(MainActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
@@ -217,37 +247,6 @@ public class MainPresenterImpl implements MainPresenter {
             return false;
         }
         return true;
-    }
-
-    @Subscribe
-    public void onScrollChangedEvent(OnScrollChangedEvent e) {
-        mainView.onScrollChanged(e.getScrollY(), e.isDragging());
-    }
-
-    @Subscribe
-    public void onUpOrCancelMotionEvent(OnUpOrCancelMotionEvent e) {
-        mainView.onUpOrCancelMotionEvent(e.getScrollState());
-    }
-
-    @Subscribe
-    public void onPagerScrolled(OnPostPagerScrolledEvent event) {
-        int offset = event.getOffset();
-        int position = event.getPosition();
-        int collapsedThreshold = mainView.getCollapsedThreshold();
-
-        if (offset >= 0) {
-            if (offset > collapsedThreshold) {
-                mainView.hideToolBarContainer(false);
-                bus.post(new OnPreparePageScroll(collapsedThreshold, position));
-            } else {
-                bus.post(new OnPreparePageScroll(offset, position));
-            }
-        }
-    }
-
-    @Subscribe
-    public void onRefreshComplete(StreamRefreshCompletedEvent event){
-        mainView.onRefreshCompleted();
     }
 
 
@@ -309,7 +308,7 @@ public class MainPresenterImpl implements MainPresenter {
     private void initSliderLayout(SliderLayout sliderLayout) {
 
         this.sliderLayout = sliderLayout;
-        getRandomPosts(10)
+        Subscription subscribe = getRandomPosts(10)
                 .subscribeOn(Schedulers.io())
                 .flatMap(Observable::from)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -342,20 +341,6 @@ public class MainPresenterImpl implements MainPresenter {
         sliderLayout.setDuration(10000);
         sliderLayout.startAutoCycle();
     }
-
-    @Subscribe
-    public void onNavItemShown(OnNavigationItemShownEvent event) {
-
-        switch (event.getCurrentItem()){
-            case OnNavigationItemShownEvent.ITEM_DASHBOARD:
-                mainView.showTabs(true);
-                break;
-            default:
-                mainView.showTabs(false);
-                break;
-        }
-    }
-
 
     private void initMenuClickListener(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(

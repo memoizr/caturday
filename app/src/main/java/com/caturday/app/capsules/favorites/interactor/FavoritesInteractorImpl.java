@@ -22,8 +22,8 @@ public class FavoritesInteractorImpl implements FavoritesInteractor {
 
     @Override
     public Observable<Collection<CatPostEntity>> getFavoriteCatPosts() {
+
         Observable<HashSet<String>> favoriteIds = userRepository.getAllFavoritePost();
         return favoriteIds.flatMap(catPostRepository::getCatPostsForIds);
-
     }
 }

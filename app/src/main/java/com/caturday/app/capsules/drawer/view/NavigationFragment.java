@@ -42,6 +42,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
 
     @Override
     public void userLoggedIn(boolean loggedIn) {
+
         if (loggedIn) {
             userInfo.setVisibility(View.VISIBLE);
             loginInfo.setVisibility(View.GONE);
@@ -60,6 +61,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
 
     @Override
     public void setUserCoverImage(String imageUrl) {
+
         Glide.with(this)
                 .load(imageUrl)
                 .placeholder(R.drawable.default_user_profile_cover)
@@ -74,6 +76,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView =  inflater.inflate(R.layout.fragment_navigation, container, false);
 
         ButterKnife.inject(this, rootView);
@@ -87,13 +90,16 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
                 int y = (int) event.getY();
                 navigationPresenter.onProfileClicked(getActivity(), x, y);
             }
+
             return true;
         });
+
         return rootView;
     }
 
     @Override
     public void initializeListView(String[] values) {
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.li_navigation_item, R.id.text1, values);
         navigationListView.setAdapter(adapter);
         navigationListView.setOnItemClickListener(this);
@@ -126,6 +132,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
 
     @Override
     public void setSelected(int position) {
+
         setItemNormal(navigationListView);
         View v = navigationListView.getChildAt(position);
         TextView tv = (TextView) v.findViewById(R.id.text1);
@@ -138,21 +145,23 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position , long id) {
+
         navigationPresenter.onNavigationInteraction(getActivity(), position);
     }
 
     private void setItemNormal(ListView listview) {
-    for (int i=0; i < listview.getChildCount(); i++)
-    {
-        View v = listview.getChildAt(i);
-        TextView txtview = (TextView) v.findViewById(R.id.text1);
-        txtview.setTypeface(null, Typeface.NORMAL);
-        txtview.setTextColor(getResources().getColor(R.color.black));
 
-        ImageView iv = (ImageView) v.findViewById(R.id.icon);
-        iv.setColorFilter(R.color.black);
+        for (int i=0; i < listview.getChildCount(); i++) {
+            View v = listview.getChildAt(i);
+            TextView txtview = (TextView) v.findViewById(R.id.text1);
+            txtview.setTypeface(null, Typeface.NORMAL);
+            txtview.setTextColor(getResources().getColor(R.color.black));
+
+            ImageView iv = (ImageView) v.findViewById(R.id.icon);
+            iv.setColorFilter(R.color.black);
+        }
     }
-}
+
     @Override
     protected List<Object> getModules() {
         return Collections.singletonList(new NavigationModule(this));

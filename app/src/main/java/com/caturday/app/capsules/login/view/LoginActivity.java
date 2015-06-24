@@ -21,6 +21,7 @@ import com.caturday.app.capsules.login.LoginModule;
 import com.caturday.app.util.helper.AnimationHelper;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,9 +63,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
         setUpToolbar();
 
         setActivityToFullscreen(true);
-        new Handler().postDelayed(() -> {
-            setActivityToFullscreen(false);
-        }, 1000);
+        toolbar.postDelayed(() -> setActivityToFullscreen(false), 1000);
 
         rippleOriginX = getIntent().getExtras().getInt(RIPPLE_ORIGIN_X);
         rippleOriginY = getIntent().getExtras().getInt(RIPPLE_ORIGIN_Y);
@@ -73,7 +72,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
         showKeyboard();
 
         if (savedInstanceState == null)
-            login_reveal.postDelayed(() -> circularReveal(), 32);
+            login_reveal.postDelayed(this::circularReveal, 32);
         else
             login_reveal.setVisibility(View.VISIBLE);
     }
@@ -98,7 +97,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new LoginModule(this));
+        return Collections.singletonList(new LoginModule(this));
     }
 
     private void showKeyboard() {
@@ -126,7 +125,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
 
     @OnClick(R.id.create_account_B)
     public void showSignup() {
-        title_TV.setText("Signup");
+        title_TV.setText(R.string.signup);
         username_TV.setVisibility(View.VISIBLE);
         login_buttons.setVisibility(View.GONE);
         signup_buttons.setVisibility(View.VISIBLE);
@@ -135,7 +134,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     @OnClick(R.id.existing_account_B)
     public void showLogin() {
         username_TV.setVisibility(View.GONE);
-        title_TV.setText("Login");
+        title_TV.setText(R.string.login);
 
         signup_buttons.setVisibility(View.GONE);
         login_buttons.setVisibility(View.VISIBLE);
@@ -217,7 +216,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
                 AnimationHelper.circularReveal(
                         reveal_done, done.getLeft() + done.getWidth() / 2,
                         done.getTop() + done.getWidth() / 2, null), 1400);
-        progress_bar.postDelayed(() -> backPressed(), 2200);
+        progress_bar.postDelayed(this::backPressed, 2200);
     }
 
     @Override

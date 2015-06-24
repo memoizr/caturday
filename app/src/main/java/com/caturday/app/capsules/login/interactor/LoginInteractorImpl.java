@@ -17,6 +17,7 @@ public class LoginInteractorImpl implements LoginInteractor {
 
     @Override
     public Observable<UserEntity> performLogin(String email, String password) {
+
         SessionEntity sessionEntity = new SessionEntity();
         sessionEntity.setEmail(email);
         sessionEntity.setPassword(password);
@@ -25,6 +26,7 @@ public class LoginInteractorImpl implements LoginInteractor {
 
     @Override
     public Observable<UserEntity> performSignup(String username, String email, String password) {
+
         SessionEntity sessionEntity = new SessionEntity();
         sessionEntity.setEmail(email);
         sessionEntity.setPassword(password);
