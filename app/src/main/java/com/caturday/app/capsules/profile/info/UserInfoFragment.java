@@ -1,8 +1,6 @@
 package com.caturday.app.capsules.profile.info;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,7 @@ import android.widget.TextView;
 import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,7 +23,6 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
     @InjectView(R.id.username_TV) TextView username_TV;
 
     public UserInfoFragment() {
-
     }
 
     @Override
@@ -53,7 +50,7 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new UserInfoModule(this));
+        return Collections.singletonList(new UserInfoModule(this));
     }
 
     @Override
@@ -67,13 +64,16 @@ public class UserInfoFragment extends BaseFragment implements UserInfoView {
 
     @Override
     public void setDescription(String description) {
+        // TODO edit description
     }
 
     @Override
     public void showCoverImageSettings(boolean isVisible) {
+        // TODO edit cover image settings
     }
 
     @Override
     public void showProfileImageSettings(boolean isVisible) {
+        // TODO edit profile image settings
     }
 }

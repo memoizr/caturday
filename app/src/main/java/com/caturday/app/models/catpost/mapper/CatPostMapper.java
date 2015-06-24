@@ -13,6 +13,7 @@ import greendao.CatPost;
 public class CatPostMapper {
 
     public static CatPost fromEntity(CatPostEntity catPostEntity) {
+
         CatPost catPost = new CatPost();
         catPost.setCaption(catPostEntity.getCaption());
         catPost.setServerId(catPostEntity.getServerId());
@@ -28,6 +29,7 @@ public class CatPostMapper {
     }
 
     public static Collection<CatPost> fromEntity(Collection<CatPostEntity> catPostEntityCollection) {
+
         Collection<CatPost> catPostCollection;
         if (catPostEntityCollection != null && !catPostEntityCollection.isEmpty()) {
             catPostCollection = new ArrayList<>();
@@ -37,10 +39,12 @@ public class CatPostMapper {
         } else {
             catPostCollection = Collections.emptyList();
         }
+
         return catPostCollection;
     }
 
     public static CatPostEntity toEntity(CatPost catPost) {
+
         CatPostEntity catPostEntity = new CatPostEntity();
         catPostEntity.setCaption(catPost.getCaption());
         catPostEntity.setServerId(catPost.getServerId());
@@ -56,6 +60,7 @@ public class CatPostMapper {
     }
 
     public static Collection<CatPostEntity> toEntity(Collection<CatPost> catPostCollection) {
+
         Collection<CatPostEntity> catPostEntityCollection;
         if (catPostCollection != null && !catPostCollection.isEmpty()) {
             catPostEntityCollection = new ArrayList<>();

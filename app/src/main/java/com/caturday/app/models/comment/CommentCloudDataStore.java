@@ -14,7 +14,6 @@ public class CommentCloudDataStore {
     }
 
     public Observable<CatPostEntity> sendComment(CommentEntity comment) {
-
         return commentApi.postComment(comment);
     }
 }

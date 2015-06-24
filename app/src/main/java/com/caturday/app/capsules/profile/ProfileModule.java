@@ -39,15 +39,18 @@ public class ProfileModule {
         return profileModule;
     }
 
-    @Provides @Singleton public ProfileInteractor provideProfileInteractor(UserRepository userRepository) {
+    @Provides @Singleton
+    public ProfileInteractor provideProfileInteractor(UserRepository userRepository) {
         return new ProfileInteractorImpl(userRepository);
     }
 
-    @Provides @Singleton public ProfileView provideProfileView() {
+    @Provides @Singleton
+    public ProfileView provideProfileView() {
         return profileView;
     }
 
-    @Provides public ProfilePresenter provideProfilePresenter(
+    @Provides
+    public ProfilePresenter provideProfilePresenter(
             ProfileView profileView,
             ProfileInteractor profileInteractor,
             Bus bus) {

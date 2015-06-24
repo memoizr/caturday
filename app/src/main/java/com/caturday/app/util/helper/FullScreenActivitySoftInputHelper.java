@@ -21,6 +21,7 @@ public class FullScreenActivitySoftInputHelper {
     }
 
     private FullScreenActivitySoftInputHelper(Activity activity, VisibleSizeChangeListener visibleSizeChangeListener) {
+
         mVisibleSizeChangeListener = visibleSizeChangeListener;
         FrameLayout content = (FrameLayout) activity.findViewById(android.R.id.content);
         mChildOfContent = content.getChildAt(0);

@@ -43,6 +43,7 @@ public class SessionORM {
     }
 
     public SessionEntity currentSession() {
+
         List<Session> sessions = getSessionDao().loadAll();
         SessionEntity sessionEntity = new SessionEntity();
         if (sessions.size() > 0) {
