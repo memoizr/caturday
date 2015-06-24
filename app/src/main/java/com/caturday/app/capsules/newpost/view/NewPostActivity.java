@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -29,11 +28,10 @@ import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseAppCompatActivity;
 import com.caturday.app.capsules.newpost.NewPostModule;
 import com.caturday.app.models.catpost.CatPostEntity;
-import com.caturday.app.util.helper.AnimationHelper;
 import com.caturday.app.util.helper.MathHelper;
 import com.caturday.app.util.interpolators.HyperAccelerateDecelerateInterpolator;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,6 +39,13 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+
+import static com.caturday.app.util.helper.AnimationHelper.glideDownAndHide;
+import static com.caturday.app.util.helper.AnimationHelper.glideDownAndShow;
+import static com.caturday.app.util.helper.AnimationHelper.glideUpAndHide;
+import static com.caturday.app.util.helper.AnimationHelper.glideUpAndShow;
+import static com.caturday.app.util.helper.AnimationHelper.zoomInAndShow;
+import static com.caturday.app.util.helper.AnimationHelper.zoomOut;
 
 
 public class NewPostActivity extends BaseAppCompatActivity implements NewPostView {
@@ -54,13 +59,13 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     @Inject NewPostPresenter newPostPresenter;
     @InjectView(R.id.reveal_V) CardView reveal;
-    @InjectView(R.id.linear_container) LinearLayout linear_container;
+    @InjectView(R.id.linear_container) LinearLayout linearContainerVG;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.preview_IV) ImageView preview;
     @InjectView(R.id.caption_ET) EditText caption;
     @InjectView(R.id.link_ET) EditText link;
-    @InjectView(R.id.clear_B) ImageButton clear_B;
-    @InjectView(R.id.clear_link_B) ImageButton clear_link_B;
+    @InjectView(R.id.clear_B) ImageButton clearB;
+    @InjectView(R.id.clear_link_B) ImageButton clearLinkB;
     @InjectView(R.id.category_spinner) Spinner spinner;
     @InjectView(R.id.upload_buttons_LL) ViewGroup uploadButtonsVG;
     @InjectView(R.id.progress_bar) ProgressBar progressBar;
@@ -98,14 +103,14 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         } else
             reveal.setVisibility(View.VISIBLE);
 
-        containerHeight = linear_container.getHeight();
+        containerHeight = linearContainerVG.getHeight();
 
         setUpSpinner();
     }
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new NewPostModule(this));
+        return Collections.singletonList(new NewPostModule(this));
     }
 
     public void reveal() {
@@ -138,7 +143,7 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         aset.setDuration(700);
         aset.start();
 
-        new Handler().postDelayed(() -> reveal.setLayoutParams(oldLayoutParams), 750);
+        reveal.postDelayed(() -> reveal.setLayoutParams(oldLayoutParams), 750);
     }
 
     public int getStatusBarHeight() {
@@ -262,11 +267,11 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         int minSize = getResources().getDimensionPixelSize(R.dimen.size_xxxlarge);
 
         int delay = (origHeight < minSize) ? 600 : 300;
-        reveal.postDelayed(() -> reveal(), 200);
+        reveal.postDelayed(this::reveal, 200);
 
-        linear_container.postDelayed(() -> {
-            linear_container.setVisibility(View.VISIBLE);
-            AnimationHelper.glideUpAndShow(linear_container, linear_container.getHeight());
+        linearContainerVG.postDelayed(() -> {
+            linearContainerVG.setVisibility(View.VISIBLE);
+            glideUpAndShow(linearContainerVG, linearContainerVG.getHeight());
         }, delay);
     }
 
@@ -274,14 +279,14 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
     public void choiceMade() {
         preview.setVisibility(View.VISIBLE);
 
-        clear_B.setVisibility(View.VISIBLE);
+        clearB.setVisibility(View.VISIBLE);
         uploadButtonsVG.setVisibility(View.GONE);
     }
 
     @Override
     public void choiceUnmade() {
         preview.setVisibility(View.GONE);
-        clear_B.setVisibility(View.INVISIBLE);
+        clearB.setVisibility(View.INVISIBLE);
         uploadButtonsVG.setVisibility(View.VISIBLE);
         hideLinkET();
     }
@@ -306,30 +311,25 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
         Intent intent = new Intent();
         intent.putExtra(NEW_POST_ID, catPostEntity.getServerId());
         setResult(result, intent);
-        AnimationHelper.zoomOut(progressBar);
-        linear_container.postDelayed(() -> {
-            AnimationHelper.zoomInAndShow(doneV);
-        }, 300);
-        linear_container.postDelayed(() -> {
-            onBackPressed();
-        }, 600);
+        zoomOut(progressBar);
+        linearContainerVG.postDelayed(() -> zoomInAndShow(doneV), 300);
+        linearContainerVG.postDelayed(this::onBackPressed, 600);
     }
 
     @Override
     public void onSendPostProcessing() {
 
         submitB.setEnabled(false);
-        AnimationHelper.glideUpAndHide(linear_container, linear_container.getHeight() / 2);
-        linear_container.postDelayed(() -> {
-            AnimationHelper.glideUpAndShow(progressBar, linear_container.getHeight() / 2);
-        }, 700);
+        glideUpAndHide(linearContainerVG, linearContainerVG.getHeight() / 2);
+        linearContainerVG.postDelayed(() ->
+                glideUpAndShow(progressBar, linearContainerVG.getHeight() / 2), 700);
     }
 
     @Override
     public void onSendPostFailure() {
-        AnimationHelper.glideDownAndHide(progressBar, linear_container.getHeight() / 2);
-        linear_container.postDelayed(() -> {
-            AnimationHelper.glideDownAndShow(linear_container, linear_container.getHeight() / 2);
+        glideDownAndHide(progressBar, linearContainerVG.getHeight() / 2);
+        linearContainerVG.postDelayed(() -> {
+            glideDownAndShow(linearContainerVG, linearContainerVG.getHeight() / 2);
             submitB.setEnabled(true);
         }, 500);
     }
@@ -347,6 +347,7 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     @OnClick(R.id.link_image_B)
     public void attachLink() {
+
         showLinkET();
         link.addTextChangedListener(new TextWatcher() {
             @Override
@@ -369,7 +370,7 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     private void showLinkET() {
         link.setVisibility(View.VISIBLE);
-        clear_link_B.setVisibility(View.VISIBLE);
+        clearLinkB.setVisibility(View.VISIBLE);
         uploadButtonsVG.setVisibility(View.GONE);
     }
 
@@ -398,7 +399,7 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
 
     private void hideLinkET() {
         link.setVisibility(View.GONE);
-        clear_link_B.setVisibility(View.GONE);
+        clearLinkB.setVisibility(View.GONE);
         uploadButtonsVG.setVisibility(View.VISIBLE);
     }
 
@@ -412,13 +413,9 @@ public class NewPostActivity extends BaseAppCompatActivity implements NewPostVie
     public void onBackPressed() {
         if (!isClosing) {
             isClosing = true;
-            AnimationHelper.glideDownAndHide(linear_container, linear_container.getHeight() / 2);
-            new Handler().postDelayed(() -> {
-                hide();
-            }, 400);
-            new Handler().postDelayed(() -> {
-                super.onBackPressed();
-            }, 1000);
+            glideDownAndHide(linearContainerVG, linearContainerVG.getHeight() / 2);
+            linearContainerVG.postDelayed(this::hide, 400);
+            linearContainerVG.postDelayed(super::onBackPressed, 1000);
         }
     }
 
