@@ -33,4 +33,5 @@
     <string name="connection_error_info">Make sure you are connected and try again</string>
     <string name="empty_state_title">Nothing to show</string>
     <string name="empty_state_info">Create your first post</string>
+    <string name="logged_out_create_post_info">Log in to create new posts</string>
 </resources>

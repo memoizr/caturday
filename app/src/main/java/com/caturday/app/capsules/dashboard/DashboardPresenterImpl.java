@@ -4,11 +4,11 @@ import android.content.Intent;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.caturday.app.R;
 import com.caturday.app.capsules.common.events.OnPageSelectedEvent;
 import com.caturday.app.capsules.common.events.OnPagerScrolledEvent;
 import com.caturday.app.capsules.common.events.OnPostResult;
@@ -77,7 +77,7 @@ public class DashboardPresenterImpl extends DashboardPresenter {
             activity.startActivityForResult(intent, NewPostActivity.NEW_POST_REQUEST_CODE);
             dashboardView.hideFAB();
         } else {
-            Toast.makeText(activity, "Log in to create new posts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.logged_out_create_post_info, Toast.LENGTH_SHORT).show();
         }
     }
 

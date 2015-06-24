@@ -48,9 +48,7 @@ public class DashboardFragment extends BaseFragment implements DashboardView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        swipe_container.postDelayed(() -> {
-            dashboardPresenter.onViewCreated();
-        }, 100);
+        swipe_container.postDelayed(() -> dashboardPresenter.onViewCreated(), 100);
     }
 
     @Override
