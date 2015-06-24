@@ -71,7 +71,6 @@ public class CatPostORMTest {
         catPostEntity.setUserId("");
         catPostEntity.setDownloadCount("3");
 
-
         catPostORM = new CatPostORM(daoSession);
     }
 
@@ -93,14 +92,6 @@ public class CatPostORMTest {
 
     @Test
     public void testGetPostsForPageAndCategory() throws Exception {
-//        when(queryBuilder.offset(any(Integer.class))).thenReturn(queryBuilder);
-//        when(queryBuilder.limit(any(Integer.class))).thenReturn(queryBuilder);
-//        when(queryBuilder.list()).thenReturn(Collections.singletonList(catPost));
-//
-//        catPostORM.getCatPostForServerId("4")
-//                .subscribe(r ->
-//                        verify(queryBuilder, times(1)).list()
-//                );
 
     }
 
@@ -146,8 +137,8 @@ public class CatPostORMTest {
 
     @Test
     public void testUpdateCatPost() throws Exception {
-        catPostORM.updateCatPost(entity);
         when(queryBuilder.uniqueOrThrow()).thenReturn(catPost);
+        catPostORM.updateCatPost(catPostEntity);
         verify(catPostDao, times(1)).update(any(CatPost.class));
     }
 
