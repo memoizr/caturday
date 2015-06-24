@@ -41,4 +41,5 @@
     <string name="signup">Signup</string>
     <string name="login">Login</string>
     <string name="google_play_services_error">You need Google Play Services to use this app</string>
+    <string name="write_a_comment">Write a comment</string>
 </resources>
