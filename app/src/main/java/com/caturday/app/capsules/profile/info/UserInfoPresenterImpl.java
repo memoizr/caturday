@@ -15,7 +15,8 @@ import com.squareup.otto.Subscribe;
 public class UserInfoPresenterImpl implements UserInfoPresenter{
 
     private static final int SELECT_PHOTO = 100;
-    private static final int REQUEST_TAKE_PHOTO = 1;private final UserInfoView userInfoView;
+    private static final int REQUEST_TAKE_PHOTO = 1;
+    private final UserInfoView userInfoView;
 
     private final Bus bus;
     private boolean isCurrentUser;
@@ -42,7 +43,6 @@ public class UserInfoPresenterImpl implements UserInfoPresenter{
         }
     }
 
-
     @Override
     public void destroyView() {
         bus.unregister(this);
@@ -57,12 +57,12 @@ public class UserInfoPresenterImpl implements UserInfoPresenter{
 
     @Override
     public void onTakePhotoPressed() {
-
+        // TODO take picture
     }
 
     @Override
     public void onLinkImagePressed() {
-
+        // TODO link image
     }
 
     @Subscribe
@@ -87,6 +87,5 @@ public class UserInfoPresenterImpl implements UserInfoPresenter{
     private void initOtherUser() {
         userInfoView.showProfileImageSettings(false);
         userInfoView.showCoverImageSettings(false);
-
     }
 }

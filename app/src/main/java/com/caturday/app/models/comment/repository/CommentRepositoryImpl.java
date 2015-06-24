@@ -11,13 +11,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     private final CommentCloudDataStore commentCloudDataStore;
 
     public CommentRepositoryImpl(CommentCloudDataStore commentCloudDataStore) {
-
         this.commentCloudDataStore = commentCloudDataStore;
     }
 
     @Override
     public Observable<CatPostEntity> sendComment(CommentEntity commentEntity) {
-
         return commentCloudDataStore.sendComment(commentEntity);
     }
 }

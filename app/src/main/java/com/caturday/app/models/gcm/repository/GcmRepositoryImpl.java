@@ -12,8 +12,10 @@ public class GcmRepositoryImpl implements GcmRepository {
     public GcmRepositoryImpl(GcmCloudDataStore cloudDataStore) {
         this.cloudDataStore = cloudDataStore;
     }
+
     @Override
     public Observable<GcmRegistrationEntity> registerDevice(String regId) {
+
         GcmRegistrationEntity entity = new GcmRegistrationEntity();
         entity.setRegistrationId(regId);
         return cloudDataStore.registerDevice(entity);

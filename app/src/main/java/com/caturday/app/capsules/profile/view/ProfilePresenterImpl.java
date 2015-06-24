@@ -59,12 +59,14 @@ public class ProfilePresenterImpl implements ProfilePresenter<ProfileView> {
         if (savedInstanceState == null) {
             UserEntity currentUser = profileInteractor.getCurrentUser();
             isCurrentUser = Objects.equals(currentUser.getServerId(), id);
+
             if (profileInteractor.userLoggedIn() && isCurrentUser) {
                 user = currentUser;
                 setUser(profileInteractor.getCurrentUser(), true);
             } else {
                 getUser(id);
             }
+
         } else {
             userAvailable(user);
         }

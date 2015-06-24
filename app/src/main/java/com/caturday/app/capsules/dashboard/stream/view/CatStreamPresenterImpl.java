@@ -236,11 +236,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public boolean isCurrentUser(String serverId) {
-        if (currentUser != null) {
-            return Objects.equals(serverId, currentUser.getServerId());
-        } else {
-            return false;
-        }
+        return currentUser != null && Objects.equals(serverId, currentUser.getServerId());
     }
 
     @Override
@@ -249,11 +245,9 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        s -> {
-                            catStreamView.getAdapter().removeItem(position);
-                        }
+                        s -> catStreamView.getAdapter().removeItem(position)
                         ,
-                        e -> {e.printStackTrace();}
+                        Throwable::printStackTrace
                 );
     }
 }

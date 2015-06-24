@@ -27,14 +27,12 @@ public class DashboardModule {
         this.dashboardView = dashboardView;
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public DashboardView provideDashboardView() {
         return dashboardView;
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public DashboardInteractor provideDashboardInteractor(UserRepository userRepository) {
         return new DashboardInteractorImpl(userRepository);
     }

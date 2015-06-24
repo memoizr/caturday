@@ -1,7 +1,6 @@
 package com.caturday.app.capsules.dashboard.stream.view;
 
 import android.app.Activity;
-import android.support.v7.widget.PopupMenu;
 import android.view.View;
 
 import com.caturday.app.models.catpost.CatPostEntity;

@@ -5,6 +5,7 @@ import com.caturday.app.models.user.UserEntity;
 import rx.Observable;
 
 public class UserLocalDataStore implements UserDataStore {
+
     @Override
     public Observable<UserEntity> updateUser(UserEntity userEntity) {
         return null;

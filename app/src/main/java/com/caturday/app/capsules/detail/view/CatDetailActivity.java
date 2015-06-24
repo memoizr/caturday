@@ -4,13 +4,10 @@ import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
@@ -18,7 +15,6 @@ import android.transition.Transition;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -32,7 +28,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.caturday.app.util.helper.AnimationHelper;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -45,7 +40,7 @@ import com.caturday.app.models.comment.CommentEntity;
 import com.caturday.app.capsules.common.view.views.ExpandingView;
 import com.caturday.app.util.interpolators.HyperAccelerateDecelerateInterpolator;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,9 +50,13 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static com.caturday.app.util.helper.AnimationHelper.*;
+
 
 public class CatDetailActivity extends BaseAppCompatActivity
         implements CatDetailPresenter.CatDetailView {
+
+    private static final int TAP_DURATION_THRESHOLD_MS = 150;
     @InjectView(R.id.cat_detail_IV) ImageView cat_detail_IV;
     @InjectView(R.id.favorite_B) ImageButton favorite_B;
     @InjectView(R.id.toolbar) Toolbar toolbar;
@@ -71,12 +70,7 @@ public class CatDetailActivity extends BaseAppCompatActivity
     @Inject CatDetailPresenter catDetailPresenter;
 
     private int headerBottom;
-    private ViewGroup header;
     private int captionHeight;
-    private int vibrant;
-    private int muted;
-    private int darkMuted;
-    private int vibrantLight;
     private boolean activityClosed = false;
 
     @Override
@@ -94,17 +88,7 @@ public class CatDetailActivity extends BaseAppCompatActivity
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new CatDetailModule(this));
-    }
-
-    private void setupPalette(BitmapDrawable bitmapDrawable) {
-        Bitmap mBitmap = bitmapDrawable.getBitmap();
-        Palette palette = Palette.generate(mBitmap);
-        vibrant = palette.getVibrantColor(0x000000);
-        muted = palette.getMutedColor(0x000000);
-        darkMuted = palette.getDarkMutedColor(0x000000);
-        vibrantLight = palette.getLightVibrantColor(0x000000);
-        caption_V.setBackgroundColor(vibrant);
+        return Collections.singletonList(new CatDetailModule(this));
     }
 
     @Override
@@ -190,7 +174,8 @@ public class CatDetailActivity extends BaseAppCompatActivity
                                             comments_RV.smoothScrollBy(0, -heightDifference);
                                         } else {
                                             comments_RV.smoothScrollBy(0, -heightDifference);
-                                            comments_RV.postDelayed(() -> comments_RV.setPadding(0, 0, 0, 0), 416);
+                                            comments_RV.postDelayed(() ->
+                                                    comments_RV.setPadding(0, 0, 0, 0), 416);
                                         }
                                     }
 
@@ -255,7 +240,8 @@ public class CatDetailActivity extends BaseAppCompatActivity
         comments_RV.setOnTouchListener((v, event) -> {
             if (event.getY() > headerBottom - captionHeight) {
                 long duration = android.os.SystemClock.uptimeMillis() - event.getDownTime();
-                if (event.getAction() == MotionEvent.ACTION_UP && duration < 150) {
+                if (event.getAction() == MotionEvent.ACTION_UP
+                        && duration < TAP_DURATION_THRESHOLD_MS) {
                     showComment();
                 }
                 return false;
@@ -305,9 +291,8 @@ public class CatDetailActivity extends BaseAppCompatActivity
 
                 if (i < 2 * newCommentHeight) {
                     new_comment_V.setTranslationY((float) -i / 2 + newCommentHeight);
-                } else {
-//                    new_comment_V.setTranslationY((float) 0);
                 }
+                // TODO: ensure comment box is fully shown
             }
 
             @Override
@@ -365,31 +350,26 @@ public class CatDetailActivity extends BaseAppCompatActivity
     @Override
     public void animateCommentETProcessing() {
         int height = new_comment_V.getHeight();
-        AnimationHelper.glideUpAndHide(commentControlsV, height);
-        progressBarPB.postDelayed(() -> {
-            AnimationHelper.glideUpAndShow(progressBarPB, height);
-        }, 400);
+        glideUpAndHide(commentControlsV, height);
+        progressBarPB.postDelayed(() ->
+                glideUpAndShow(progressBarPB, height), 400);
     }
 
     @Override
     public void animateCommentETSuccess() {
         int height = new_comment_V.getHeight();
-        AnimationHelper.glideUpAndHide(progressBarPB, height);
-        progressBarPB.postDelayed(() -> {
-            AnimationHelper.glideUpAndShow(commentControlsV, height);
-        }, 400);
+        glideUpAndHide(progressBarPB, height);
+        progressBarPB.postDelayed(() ->
+                glideUpAndShow(commentControlsV, height), 400);
     }
 
     @Override
     public void animateCommentETFailure() {
         int height = new_comment_V.getHeight();
-        AnimationHelper.glideDownAndHide(progressBarPB, height);
-        progressBarPB.postDelayed(() -> {
-            AnimationHelper.glideDownAndShow(commentControlsV, height);
-        }, 400);
-        progressBarPB.postDelayed(() -> {
-            shakeCommentBox();
-        }, 800);
+        glideDownAndHide(progressBarPB, height);
+        progressBarPB.postDelayed(() ->
+                glideDownAndShow(commentControlsV, height), 400);
+        progressBarPB.postDelayed(this::shakeCommentBox, 800);
     }
 
     @Override

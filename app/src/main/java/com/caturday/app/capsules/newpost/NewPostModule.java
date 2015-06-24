@@ -32,18 +32,19 @@ public class NewPostModule {
         this.newPostView = newPostView;
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public NewPostInteractor provideNewPostInteractor(UserRepository userRepository,
                                                       CatPostRepository catPostRepository) {
         return new NewPostInteractorImpl(userRepository, catPostRepository);
     }
 
-    @Provides @Singleton public NewPostView provideNewPostView() {
+    @Provides @Singleton
+    public NewPostView provideNewPostView() {
         return newPostView;
     }
 
-    @Provides @Singleton public NewPostPresenter provideNewPostPresenter(
+    @Provides @Singleton
+    public NewPostPresenter provideNewPostPresenter(
             NewPostView newPostView,
             NewPostInteractor newPostInteractor,
             Bus bus) {

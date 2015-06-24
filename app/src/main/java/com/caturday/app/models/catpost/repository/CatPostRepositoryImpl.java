@@ -36,6 +36,7 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
     @Override
     public Observable<List<CatPostEntity>> getCatPostsForPageAndUserId(int page, String userId, boolean fromNetwork) {
+
         return catPostLocalDataStore.getCatPostsForPageAndUserId(page, userId)
                 .flatMap(collection -> {
                     if (collection.size() > 0) {
@@ -49,12 +50,14 @@ public class CatPostRepositoryImpl implements CatPostRepository {
 
     @Override
     public Observable<Collection<CatPostEntity>> getCatPostsForIds(HashSet<String> ids) {
+
         Collection<CatPostEntity> catPostEntities = catPostLocalDataStore.getCatPostsForServerIds(ids);
         return Observable.just(catPostEntities);
     }
 
     @Override
     public Observable<CatPostEntity> getCatPost(String serverId, boolean fromNetwork) {
+
         if (fromNetwork)
             return catPostCloudDataStore.getCatPost(serverId);
         else

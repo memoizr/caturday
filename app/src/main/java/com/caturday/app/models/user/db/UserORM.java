@@ -44,6 +44,7 @@ public class UserORM {
         for (User user : getUserDao().loadAll()) {
             user.setLoggedIn(false);
         }
+
         getUserDao().deleteAll();
     }
 

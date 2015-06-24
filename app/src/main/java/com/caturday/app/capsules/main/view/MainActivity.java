@@ -3,24 +3,17 @@ package com.caturday.app.capsules.main.view;
 import android.animation.Animator;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.caturday.app.R;
@@ -39,13 +32,9 @@ import com.caturday.app.util.interpolators.HyperTanAccelerateInterpolator;
 import com.caturday.app.util.interpolators.HyperTanDecelerateInterpolator;
 import com.daimajia.slider.library.SliderLayout;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -98,7 +87,7 @@ public class MainActivity extends DrawerActivity implements
 
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new MainModule(this));
+        return Collections.singletonList(new MainModule(this));
     }
 
     @Override
@@ -126,7 +115,7 @@ public class MainActivity extends DrawerActivity implements
     @Override
     public void setDrawer(Activity activity, Toolbar toolbar, DrawerLayout drawerLayout) {
         mDrawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.drawer_open_desc, R.string.drawer_close_desc);
-        mDrawerLayout.post(() -> mDrawerToggle.syncState());
+        mDrawerLayout.post(mDrawerToggle::syncState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -360,9 +349,7 @@ public class MainActivity extends DrawerActivity implements
     public void onRestart() {
         super.onRestart();
         resumeSliderAnimation();
-        toolbar.postDelayed(() -> {
-            toggleArrow(false);
-        }, 200);
+        toolbar.postDelayed(() -> toggleArrow(false), 200);
     }
 
     @Override
@@ -385,6 +372,7 @@ public class MainActivity extends DrawerActivity implements
                         .replace(R.id.container, new DashboardFragment())
                         .commit();
                 break;
+
             case 1:
                 Fragment fragment = new CatStreamFragment();
                 Bundle bundle = new Bundle();

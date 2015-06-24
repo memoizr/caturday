@@ -3,7 +3,6 @@ package com.caturday.app.capsules.detail.interactor;
 import com.caturday.app.models.comment.CommentEntity;
 
 import com.caturday.app.models.comment.repository.CommentRepository;
-import com.caturday.app.models.user.UserEntity;
 import com.caturday.app.models.user.repository.UserRepository;
 import com.caturday.app.models.catpost.CatPostEntity;
 import com.caturday.app.models.catpost.repository.CatPostRepository;
@@ -87,6 +86,4 @@ public class CatDetailInteractorImpl implements CatDetailInteractor {
     private void removeFavorite(String serverId) {
         userRepository.removeFavoritePost(serverId);
     }
-
-
 }

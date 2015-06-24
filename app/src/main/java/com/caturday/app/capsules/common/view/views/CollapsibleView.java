@@ -79,6 +79,10 @@ public class CollapsibleView extends FrameLayout {
         this(context, null);
     }
 
+    /**
+     * Sets the amount by which the view should be collapsed
+     * @param level
+     */
     public void setCollapseLevel(float level){
         if (level != collapseLevel) {
             collapseLevel = level;
@@ -87,6 +91,9 @@ public class CollapsibleView extends FrameLayout {
         }
     }
 
+    /**
+     * Updates the position of the logo within the view
+     */
     private void updateLogo() {
         MarginLayoutParams params =
                 (MarginLayoutParams) logo_IV.getLayoutParams();
@@ -114,6 +121,13 @@ public class CollapsibleView extends FrameLayout {
         profileContainer_RL.setLayoutParams(params);
     }
 
+    /**
+     * Interpolates between two values given a fraction
+     * @param min minimum value of the range
+     * @param max maximum value of the range
+     * @param level interopolation fraction
+     * @return
+     */
     private static float interpolate(float min, float max, float level) {
         return (max - min) * level + min;
     }

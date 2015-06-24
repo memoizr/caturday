@@ -12,9 +12,9 @@ public class NoNetworkEmptyView extends EmptyView {
 
     @Override
     protected void setContent() {
-        titleTV.setText("No Internet, no cats");
+        titleTV.setText(R.string.connection_error_title);
         titleTV.setTextColor(context.getResources().getColor(R.color.primary));
-        subTitleTV.setText("Make sure you are connected and try again");
+        subTitleTV.setText(R.string.connection_error_info);
         imageIV.setImageResource(R.drawable.no_connection);
     }
 

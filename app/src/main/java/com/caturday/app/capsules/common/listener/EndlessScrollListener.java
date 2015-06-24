@@ -52,5 +52,4 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
             loading = true;
         }
     }
-
 }

@@ -25,6 +25,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public Observable<UserEntity> login(SessionEntity sessionEntity) {
+
         return cloudDataStore.login(sessionEntity)
                 .doOnNext(user -> {
                     SessionEntity entity = new SessionEntity();
@@ -36,6 +37,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public Observable<UserEntity> signup(SessionEntity sessionEntity) {
+
         return cloudDataStore.signup(sessionEntity)
                 .doOnNext(user -> {
                     SessionEntity entity = new SessionEntity();

@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ProfileActivity extends BaseAppCompatActivity implements SlidingTabActivity, ProfileView {
+
     public static final String EXTRA_ID = "server_id";
 
     @InjectView(R.id.profile_VP) ViewPager profile_VP;
@@ -53,7 +54,7 @@ public class ProfileActivity extends BaseAppCompatActivity implements SlidingTab
 
     @Override
     protected void onRestart() {
-        super.onResume();
+        super.onRestart();
         profilePresenter.onResume();
     }
 
@@ -117,7 +118,6 @@ public class ProfileActivity extends BaseAppCompatActivity implements SlidingTab
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//       getMenuInflater().inflate(R.menu.menu_profile, menu);
         return false;
     }
 
@@ -129,7 +129,6 @@ public class ProfileActivity extends BaseAppCompatActivity implements SlidingTab
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-//        profilePresenter.prepareOptionsMenu(menu);
         return false;
     }
 

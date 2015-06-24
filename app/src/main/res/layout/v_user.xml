@@ -30,13 +30,11 @@
         <TextView
             android:layout_toRightOf="@id/user_image_IV"
             android:id="@+id/username_TV"
-            android:text="Random Chool"
             android:textStyle="bold"
             android:layout_centerVertical="true"
             android:textColor="@color/deepblack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

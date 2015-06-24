@@ -30,32 +30,10 @@ public class ProfilePageAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
+        // TODO add sections for following and followers
         switch (position) {
             case 0:
                 return new UserInfoFragment();
-
-//            case 1: {
-//                Fragment fragment = new FollowingFragment();
-//
-//                Bundle bundle = new Bundle();
-//                bundle.putInt(FollowingFragment.EXTRA_FOLLOWING_TYPE,
-//                        ProfileSections.SECTION_FOLLOWING.ordinal());
-//                fragment.setArguments(bundle);
-//
-//                return fragment;
-//            }
-//
-//            case 2: {
-//                Fragment fragment = new FollowingFragment();
-//
-//                Bundle bundle = new Bundle();
-//                bundle.putInt(FollowingFragment.EXTRA_FOLLOWING_TYPE,
-//                        ProfileSections.SECTION_FOLLOWERS.ordinal());
-//                fragment.setArguments(bundle);
-//
-//                return fragment;
-//            }
-
             default:
                 return new UserInfoFragment();
         }

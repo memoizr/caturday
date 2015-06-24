@@ -24,4 +24,22 @@
     <string name="action_unfollow">Unfollow</string>
     <string name="action_follow">Follow</string>
     <string name="action_refresh">Refresh</string>
+    <string name="report_abuse">Report abuse</string>
+    <string name="delete_post">Delete Post</string>
+    <string name="share_message">Check out this cat!</string>
+    <string name="logged_out_title">Who are you?</string>
+    <string name="logged_out_info">Log in to see your activity</string>
+    <string name="connection_error_title">No Internet, no cats</string>
+    <string name="connection_error_info">Make sure you are connected and try again</string>
+    <string name="empty_state_title">Nothing to show</string>
+    <string name="empty_state_info">Create your first post</string>
+    <string name="logged_out_create_post_info">Log in to create new posts</string>
+    <string name="logged_out_add_to_favorites_info">Log in to add a post to favorites</string>
+    <string name="share_message_title">Check out this cat!</string>
+    <string name="set_image_as">Set as:</string>
+    <string name="logged_out_post_comment_info">Log in to comment on posts</string>
+    <string name="signup">Signup</string>
+    <string name="login">Login</string>
+    <string name="google_play_services_error">You need Google Play Services to use this app</string>
+    <string name="write_a_comment">Write a comment</string>
 </resources>

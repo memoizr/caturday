@@ -32,22 +32,18 @@ public class FavoritesModule {
         this.favoritesView = favoritesView;
     }
 
-
-//    @Provides @Singleton public UserRepository provideUserRepository(DaoSession daoSession) {
-//        return new UserRepositoryImpl(new UserORM(daoSession));
-//    }
-
-    @Provides @Singleton FavoritesInteractor provideFavoriteInteractor(
+    @Provides @Singleton
+    FavoritesInteractor provideFavoriteInteractor(
             UserRepository userRepository,
             CatPostRepository catPostRepository) {
         return new FavoritesInteractorImpl(userRepository, catPostRepository);
     }
 
-    @Provides @Singleton FavoritesPresenter provideFavoritesPresenter(
+    @Provides @Singleton
+    FavoritesPresenter provideFavoritesPresenter(
             FavoritesInteractor favoritesInteractor,
             Bus bus) {
 
         return new FavoritesPresenterImpl(favoritesView, favoritesInteractor, bus);
     }
-
 }

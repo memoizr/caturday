@@ -42,12 +42,10 @@ public class LoginPresenterImpl implements LoginPresenter {
         if (error instanceof RetrofitError) {
 
             loginView.failureAnimation();
-            new Handler().postDelayed(() -> {
-
-                RetrofitErrorHelper.formatErrorMessageRx((RetrofitError) error)
-                        .subscribe(s ->
-                                loginView.toggleError(true, s));
-            }, 1200);
+            new Handler().postDelayed(() ->
+                    RetrofitErrorHelper.formatErrorMessageRx((RetrofitError) error)
+                    .subscribe(s ->
+                            loginView.toggleError(true, s)), 1200);
         }
         error.printStackTrace();
     }

@@ -31,6 +31,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     private static final int REQUEST_SELECT_PHOTO = 100;
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final String CACHE_FILENAME = "tempCache";
+    private static final String FOLDER_NAME = "/sdcard/caturday/";
 
     private final NewPostInteractor newPostInteractor;
     private final NewPostView newPostView;
@@ -142,9 +143,7 @@ public class NewPostPresenterImpl implements NewPostPresenter {
 
         ContentResolver c = mContext.getContentResolver() ;
 
-        Uri uri = c.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, v);
-
-        return uri;
+        return c.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, v);
     }
 
     private String getRealPathFromURI(Uri uri) {
@@ -211,30 +210,24 @@ public class NewPostPresenterImpl implements NewPostPresenter {
     }
 
     private void onSendingSuccess(CatPostEntity catPostEntity) {
-        new Handler().postDelayed(() -> {
-            newPostView.onSendPostSuccess(catPostEntity);
-        }, 700);
+        new Handler().postDelayed(() -> newPostView.onSendPostSuccess(catPostEntity), 700);
     }
 
     private void onSendingFailure(Throwable throwable) {
-        new Handler().postDelayed(() -> {
-            newPostView.onSendPostFailure();
-        }, 700);
+        new Handler().postDelayed(newPostView::onSendPostFailure, 700);
         throwable.printStackTrace();
     }
 
     private String getOrCreateDefaultFolder() {
-        String folderName = "/sdcard/caturday/";
-        File folder = new File(folderName);
+        File folder = new File(FOLDER_NAME);
         if (!folder.exists()) {
             folder.mkdir();
         }
-        return folderName;
+        return FOLDER_NAME;
     }
 
     private String generateRandomFilename() {
         String timestamp = Long.toString(new Date().getTime());
         return getOrCreateDefaultFolder() + timestamp + ".jpg";
     }
-
 }

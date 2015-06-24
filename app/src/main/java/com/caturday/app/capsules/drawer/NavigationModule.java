@@ -29,12 +29,13 @@ public class NavigationModule {
         this.navigationView = navigationView;
     }
 
-    @Provides @Singleton NavigationInteractor provideNavigationInteractor(UserRepository userRepository) {
+    @Provides @Singleton
+    NavigationInteractor provideNavigationInteractor(UserRepository userRepository) {
         return new NavigationInteractorImpl(userRepository);
     }
 
-    @Provides
-    @Singleton public NavigationPresenter.NavigationView provideNavigationView(NavigationInteractor navigationInteractor) {
+    @Provides @Singleton
+    public NavigationPresenter.NavigationView provideNavigationView(NavigationInteractor navigationInteractor) {
         return navigationView;
     }
 

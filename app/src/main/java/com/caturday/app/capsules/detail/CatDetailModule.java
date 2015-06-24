@@ -41,34 +41,28 @@ public class CatDetailModule {
         this.catDetailView = catDetailView;
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public CatDetailPresenter.CatDetailView provideCatDetailView() {
         return catDetailView;
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public CommentApi provideCommentApi(RestAdapter restAdapter) {
 
         return restAdapter.create(CommentApi.class);
     }
 
-
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public CommentCloudDataStore provideCommentCloudDataStore(CommentApi commentApi) {
         return new CommentCloudDataStore(commentApi);
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public CommentRepository provideCommentRepository(CommentCloudDataStore commentCloudDataStore) {
         return new CommentRepositoryImpl(commentCloudDataStore);
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public CatDetailInteractor provideCatDetailInteractor(
             CatPostRepository catPostRepository,
             UserRepository userRepository,
@@ -81,8 +75,7 @@ public class CatDetailModule {
                 voteRepository);
     }
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public CatDetailPresenter provideCatDetailPresenter(Context context, CatDetailPresenter.CatDetailView catDetailView,
                                                         CatDetailInteractor catDetailInteractor) {
         return new CatDetailPresenterImpl(context, catDetailView, catDetailInteractor);

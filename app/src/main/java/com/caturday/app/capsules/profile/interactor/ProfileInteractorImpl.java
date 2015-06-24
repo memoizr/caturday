@@ -30,7 +30,7 @@ public class ProfileInteractorImpl implements ProfileInteractor{
 
     @Override
     public void updateUserName(String userName) {
-//        userRepository.updateUserName(userName);
+        // TODO update user name
     }
 
     @Override

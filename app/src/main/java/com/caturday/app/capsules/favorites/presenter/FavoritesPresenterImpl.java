@@ -25,19 +25,17 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
         this.favoritesView = favoritesView;
         this.favoritesInteractor = favoritesInteractor;
         this.bus = bus;
-
     }
 
     @Override
     public void create(Context context) {
+
         this.context = context;
         favoritesView.initRecyclerView();
         favoritesInteractor.getFavoriteCatPosts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( s -> {
-                            favoritesView.setRecyclerViewAdapter(s);
-                        },
+                .subscribe(favoritesView::setRecyclerViewAdapter,
                                     Throwable::printStackTrace
                         );
 
@@ -45,7 +43,7 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
         bus.post(new OnNavigationItemShownEvent(OnNavigationItemShownEvent.ITEM_MY_OWN));
     }
 
-    // TODO do not use an eventbus for this sort of stuff!
+    // TODO use rx instead of churning memory like a madman
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {

@@ -15,9 +15,9 @@ public class NoPostsEmptyView extends EmptyView {
 
     @Override
     protected void setContent() {
-        titleTV.setText("Nothing to show");
+        titleTV.setText(R.string.empty_state_title);
         titleTV.setTextColor(context.getResources().getColor(R.color.primary));
-        subTitleTV.setText("Create your first post");
+        subTitleTV.setText(R.string.empty_state_info);
         imageIV.setImageResource(R.drawable.no_posts);
     }
 
