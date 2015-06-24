@@ -236,11 +236,7 @@ public class CatStreamPresenterImpl extends CatStreamPresenter {
 
     @Override
     public boolean isCurrentUser(String serverId) {
-        if (currentUser != null) {
-            return Objects.equals(serverId, currentUser.getServerId());
-        } else {
-            return false;
-        }
+        return currentUser != null && Objects.equals(serverId, currentUser.getServerId());
     }
 
     @Override

@@ -17,14 +17,13 @@ import com.caturday.app.R;
 import com.caturday.app.capsules.common.view.mvp.BaseFragment;
 import com.caturday.app.capsules.drawer.NavigationModule;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class NavigationFragment extends BaseFragment implements NavigationPresenter.NavigationView, AdapterView.OnItemClickListener{
 
@@ -122,9 +121,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        navigationListView.postDelayed(() -> {
-            navigationPresenter.onViewCreated();
-        }, 100);
+        navigationListView.postDelayed(navigationPresenter::onViewCreated, 100);
     }
 
     @Override
@@ -138,13 +135,6 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
         ImageView iv = (ImageView) v.findViewById(R.id.icon);
         iv.setColorFilter(R.color.accent);
     }
-
-//    @OnClick(R.id.profile_container_V)
-//    public void clickProfile(View v) {
-//        int x = (v.getHeight() / 2) + v.getTop();
-//        int y = (v.getWidth() / 2) + v.getLeft();
-//        navigationPresenter.onProfileClicked(getActivity(), x, y);
-//    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position , long id) {
@@ -165,7 +155,7 @@ public class NavigationFragment extends BaseFragment implements NavigationPresen
 }
     @Override
     protected List<Object> getModules() {
-        return Arrays.asList(new NavigationModule(this));
+        return Collections.singletonList(new NavigationModule(this));
     }
 
     @Override
